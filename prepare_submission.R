@@ -1,15 +1,3 @@
-# Important instructions
-#-----------------------
-
-# https://github.com/ThinkR-open/prepare-for-cran
-# https://cran.r-project.org/web/packages/submission_checklist.html
-
-# Issues
-#-------
-
-# When knitr::rmarkdown (vignette.Rmd) is used for making vignette with engine knitr 
-# (DESCRIPTION) check throws an error. If knit is used in both, html is created
-
 # Spell check
 #------------
 
