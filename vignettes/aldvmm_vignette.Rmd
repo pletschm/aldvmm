@@ -1,7 +1,6 @@
 ---
 title: "Adjusted Limited Dependent Variable Mixture Models of Health State Utilities in R"
-author: Mark Pletscher
-email: <pletscher.mark@gmail.com>
+author: Mark Pletscher^[Institute of Health Economics and Health Policy, Bern University of Applied Sciences, mark.pletscher@bfh.ch]
 date: "`r Sys.Date()`"
 package: aldvmm
 output: 
@@ -847,7 +846,7 @@ pred <- predict(fit,
 
 We obtain a summary table of regression results using the generic function summary(). The model converges at a log-likelihood of 706.32 and an Akaike information criterion value of -1'398.65 (table \@ref(tab:tab-sum-mod1bfgs)).
 
-The coefficients of the intercept and covariates for the expected values $E[y|c, X]$ of the normal distributions can be interpreted as marginal effects on component means. 'lnsigma' denotes the natural logarithm of the estimated standard deviation $\sigma^{c}$. The coefficients of covariates in the multinomial logit model of probabilities of component membership are log-transformed relative probabilities. Our model only includes two components, and the multinomial logit model collapses to a binomial logit model. The intercept of 0.7283 means that the average probability of an observation in the data to belong to the first component is $\text{exp}(0.7283)$ or 2.071556 times the probability to belong to component 2.
+The coefficients of the intercept and covariates for the expected values $E[y|c, X]$ of the normal distributions can be interpreted as marginal effects on component means. 'lnsigma' denotes the natural logarithm of the estimated standard deviation $\sigma^{c}$. The coefficients of covariates in the multinomial logit model of probabilities of component membership are log-transformed relative probabilities. Our model only includes two components, and the multinomial logit model collapses to a binomial logit model. The intercept of 0.7283 means that the average probability of an observation in the data to belong to component 1 is $\text{exp}(0.7283)$ or 2.071556 times the probability to belong to component 2.
 
 ```{r tab-sum-mod1, echo = FALSE, results = "asis"}
 
@@ -906,7 +905,7 @@ for (i in init.method) {
 
 The maximum likelihood varies considerably across optimization methods and initial values which confirms the sensitivity of the model to initial values and optimzation algorithms (table \@ref(tab:ll)). The most frequent log-likelihood is 706.32, but the Hooke and Jeeves Pattern Search Optimization ("hjn") with "zero" initial values converges at a log-likelihood 33'057.43.
 
-The optimization methods "Nelder-Mead", "BFGS", "CG", and "L-BFGS-B" are particularly sensitive to starting values. The methods "Rvmmin" coverge at a log-likelihood of 706.32 with three of four sets of initial values, and the method "hjn" with two of four sets of initial values. The methods "nlminb" and "Rcgmin" converge at a log-likelihood of 706.32 regardless of the sets of initial values.
+The optimization methods "Nelder-Mead", "BFGS", "CG", and "L-BFGS-B" are particularly sensitive to starting values. The method "Rvmmin" coverges at a log-likelihood of 706.32 with three of four sets of initial values, and the method "hjn" with two of four sets of initial values. The methods "nlminb" and "Rcgmin" converge at a log-likelihood of 706.32 regardless of the sets of initial values.
 
 ```{r tab-comp-ll, echo = FALSE, results = 'asis'}
 
@@ -950,7 +949,7 @@ rm(tab_comp_time)
 
 ```
 
-As a next step, we compare the parameter estimates from the "Nelder-Mead", "BFGS" and "hjn" algorithms with "zero" initial values. The "Nelder-Mead" and "BFGS" estimates differ clearly in terms of the split between the intercept and the coefficient of the Oxford Hip Score, the probabilities of component membership and the standard deviations (table \@ref(tab:tab-comp-coef)). The solution of the "hjn" method is rather extreme with no effect of the Oxford Hip Score in component 1, a standard deviation of almost 0 in component 1 and a very low probability of membership of component 1.
+As a next step, we compare the parameter estimates from the "Nelder-Mead", "BFGS" and "hjn" algorithms with "zero" initial values. The "Nelder-Mead" and "BFGS" estimates differ clearly in terms of the split between the intercept and the coefficient of the Oxford Hip Score, the probabilities of component membership and the standard deviations (table \@ref(tab:tab-comp-coef)). The solution of the "hjn" method is rather extreme with no effect of the Oxford Hip Score and a standard deviation of almost 0 in component 1 and a very low probability of membership of component 1.
 
 ```{r tab-comp-coef, echo = FALSE, results = "asis"}
 
@@ -1109,7 +1108,7 @@ An visual inspection of mean residuals over deciles of expected values shows tha
 
 ### Constrained optimization with user-defined initial values
 
-We can also fit model 1 with user-defined starting values and box constraints. When constraints are imposed the function aldvmm::aldvmm() uses the optimization method "L-BFGS-B". We set the initial value of the intercept of the probability of belonging to component 1 to 0.7283 as in the solution of the "BFGS" optimization method with "zero" starting values (table \@ref(tab:tab-comp-coef)). We impose a lower limit of -3 to the log-standard deviations in both components. The function aldvmm::aldvmm() returns a warning that the covariance matrix included negative values on the diagonal. We see that these values are the variances of the intercept and the log-standard deviation in component 2 (table \@ref(tab:tab-sum-cstr)). The log-likelihood amounts to -627.78, which is lower than the log-likelihood in the solution of the "Nelder-Mead" optimization method with "zero" starting values. The parameter estimates do not resemble any of the solutions of the unconstrained "Nelder-Mead", "BFGS" or "hjn" optimization methods with "zero" values (table \@ref(tab:tab-comp-coef)), which further emphasizes the difficulties in finding a global optimum of the likelihood with English EQ-5D-3L utilities after hip replacement.
+We can also fit model 1 with user-defined starting values and box constraints. When constraints are imposed, the function aldvmm::aldvmm() uses the optimization method "L-BFGS-B". We set the initial value of the intercept of the probability of belonging to component 1 to 0.7283 as in the solution of the "BFGS" optimization method with "zero" starting values (table \@ref(tab:tab-comp-coef)). We impose a lower limit of -3 to the log-standard deviations in both components. The function aldvmm::aldvmm() returns a warning that the covariance matrix included negative values on the diagonal. We see that these values are the variances of the intercept and the log-standard deviation in component 2 (table \@ref(tab:tab-sum-cstr)). The log-likelihood amounts to -627.78, which is even lower than the log-likelihood in the solution of the "Nelder-Mead" optimization method with "zero" starting values. The parameter estimates do not resemble any of the solutions of the unconstrained "Nelder-Mead", "BFGS" or "hjn" optimization methods with "zero" values (table \@ref(tab:tab-comp-coef)), which further emphasizes the difficulties in finding a global optimum of the likelihood with English EQ-5D-3L utilities after hip replacement.
 
 ```{r tab-cstr-show, echo = TRUE, eval = FALSE}
 init <- c(0,    0,   0,   0,    0,    0,    0.7283)
@@ -1306,7 +1305,7 @@ lindex[1] <- -1
 print(xtable::xtable(ctab, 
                      align = "lllrrrrrr",
                      label = "tab:tab-comp-stata",
-                     caption = "Comparison of point estimates of parameters in R and STATA\textsuperscript{\textregistered}"),
+                     caption = "Comparison of point estimates to results by Hernandez Alava and Wailoo (2015)"),
       type = "latex",
       include.colnames = FALSE,
       include.rownames = FALSE,
@@ -1320,7 +1319,7 @@ rm(ctab, lindex)
 
 # Discussion
 
-Adjusted limited dependent variable mixture models are powerful tools for regression analysis of health state utility data. Unlike standard regression models, adjusted limited dependent variable mixture models account for limits, gaps and multi-modal distributions.
+Adjusted limited dependent variable mixture models are powerful tools for regression analysis of health state utilities. Unlike standard regression models, adjusted limited dependent variable mixture models account for limits, gaps and multi-modal distributions.
 
 The comparison of different optimization methods in EQ-5D-3L utility data from English patients after hip replacement in 2011 and 2012 [@NHSDigital2013] shows that the likelihood function can be challenging to maximize and can converge at extreme solutions. The package 'aldvmm' offers a variety of optimization algorithms and methods for generating initial values which is an important strength in such challenging situations. It is essential to assess different optimization algorithms and methods for initial values before interpreting the parameter estimates or predictions of adjusted limited dependent variable mixture models. 
 
@@ -1328,19 +1327,11 @@ The analysis of the EQ-5D-3L utility data also suggests that simpler models with
 
 Although coefficients of expected values can be interpreted as marginal effects within each component, they cannot interpreted in terms of overall expected values. Thus, average marginal effects and average treatment effects need to be calculated from predictions using the generic function predict(). Standard errors of marginal effects or average treatment effects can be calculated using the standard errors of fitted values for observed and counterfactual covariate values. 
 
-In situations with repeated utility measures, the package 'aldvmm' only allows fixed effect estimations with individual/group and time fixed effects. This might be an important limitation in the analysis of clinical trial data when the statistical analysis plan of the clinical study specifies models with individual/group and time random effects. However, causal inference on treatment effects with repeated measures requires an adjustment of treatment effects for general time trends when there is dynamic selection in the population, e.g. because treated individuals survive longer and thus are over-represented in later measurements. The researcher who aims to make causal inference using repeated measures faces a trade-off between the efficiency of the random effects model and the causal interpretation of treatment effects in a fixed-effects model. It is recommended to assess the uncorrelatedness of random effects with the treatment using the Hausman test in a generalized linear model before making an informed modeling decision. 
+In situations with repeated utility measures, the package 'aldvmm' only allows fixed effects estimations with individual/group and time fixed effects. This might be an important limitation in the analysis of clinical trial data when the statistical analysis plan of the clinical study specifies models with individual/group and time random effects. However, causal inference on treatment effects with repeated measures requires an adjustment of treatment effects for general time trends when there is dynamic selection in the population, e.g. because treated individuals survive longer and thus are over-represented in later measurements. The researcher who aims to make causal inference using repeated measures faces a trade-off between the efficiency of the random effects model and the causal interpretation of treatment effects in a fixed-effects model. It is recommended to assess the uncorrelatedness of random effects with the treatment using the Hausman test in a generalized linear model before making an informed modeling decision. 
 
 Mixed effects implementations of 'aldvmm' would be an important improvement over the current implementation. However, a mixed effects implementation would require other optimization techniques than the package 'aldvmm'. A Bayesian implementation of the likelihood from @HernandezAlava2015 would be a pragmatic and powerful approach to introduce random effects to any parameter in the model. Obviously, Bayesian models would also provide relevant information about the full posterior distributions, but the definition of informative priors can be challenging with the fairly complex adjusted limited dependent variable mixture models.
 
-Possible extensions of 'aldvmm' could include the following features.
-
-- Adjusted limited dependent variable beta mixture models [@Gray2018b].
-
-- Mixed model implementation for repeated measures.
-
-- Generic function for the calculation of average marginal effects and their standard errors.
-
-Any suggestions are welcome.
+Possible extensions of 'aldvmm' could include adjusted limited dependent variable beta mixture models [@Gray2018b], a mixed model implementation for repeated measures and a method for the calculation of average marginal effects and their standard errors.
 
 \newpage
 
