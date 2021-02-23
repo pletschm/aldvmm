@@ -51,6 +51,8 @@
 #'   Constant distribution parameters that need to be non-negative (i.e.
 #'   the standard deviation of normal distributions) enter the likelihood function
 #'   as log-transformed values.
+#'   
+#'   As the "L-BFGS-B" and "Rcgmin" methods in \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}} fail if they encounter infinite values, the log-likelihood function takes the value -1e+20 if it is infinite during these algorithms.
 #'
 #' @references Alava, M. H. and Wailoo, A. (2015) Fitting adjusted limited
 #'   dependent variable mixture models to EQ-5D. \emph{The Stata Journal},

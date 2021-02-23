@@ -326,8 +326,8 @@ aldvmm <- function(formula,
                    se.fit = FALSE,
                    level = 0.95) {
   
-  # Labels of groups of values
-  #---------------------------
+  # Labels
+  #-------
   
   # Names of objects for distributions ("beta") and multinomial logit ("delta")
   lcoef <- c("beta", "delta")
@@ -373,8 +373,8 @@ aldvmm <- function(formula,
                init.hi = init.hi,
                se.fit = se.fit)
   
-  # Make design matrix
-  #-------------------
+  # Make list of design matrices
+  #-----------------------------
   
   mm <- aldvmm.mm(data = data,
                   formula = formula,
