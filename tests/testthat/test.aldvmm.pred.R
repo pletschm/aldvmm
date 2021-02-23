@@ -1,0 +1,65 @@
+test_that('Check prediction function.', {
+  
+  testdat <- as.data.frame(matrix(data     = runif(n = 12), 
+                                  nrow     = 4, 
+                                  ncol     = 4,
+                                  dimnames = list(NULL,
+                                                  c('dep', 
+                                                    'ind1', 
+                                                    'ind2', 
+                                                    'ind3'))))
+  testdat[2, 4] <- NA
+  
+  ncmp <- 2
+  
+  names <- c("Grp1_beta_(Intercept)", "Grp1_beta_ind1", "Grp1_beta_ind2", 
+             "Grp2_beta_(Intercept)", "Grp2_beta_ind1", "Grp2_beta_ind2", 
+             "Grp1_delta_(Intercept)", "Grp1_delta_ind2", "Grp1_delta_ind3", 
+             "Grp1_delta_ind2:ind3", "Grp1_sigma", "Grp2_sigma")
+  
+  mm <- list(beta = rbind('1' = c(1, 0.05933173, 0.4921575),
+                          '3' = c(1, 0.059,      0.49),
+                          '4' = c(1, 0.05775388, 0.06194975)),
+             delta = rbind('1' = c(1, 0.4921575,  0.9556145, 0.4703129),
+                           '3' = c(1, 0.5,        0.9,       0.5),
+                           '4' = c(1, 0.06194975, 0.1646918, 0.01020262)))  
+  
+  y <- runif(n = nrow(mm[[1]]))
+  
+  init <- rep(0, length(names))
+  names(init) <- names
+  
+  pred <- aldvmm.pred(par = init,
+                      X = mm,
+                      y = y,
+                      psi = c(0.883, -0.594),
+                      ncmp = 2,
+                      dist = 'normal',
+                      lcoef = c('beta', 'delta'),
+                      lcmp = 'Grp',
+                      lcpar = c('sigma'))
+  
+  testthat::expect(sum(unlist(lapply(pred, 
+                                     function(x) sum(!is.numeric(x)) )))==0,
+                   failure_message = 'Non-numeric elements in predictions.'
+  )
+  testthat::expect(sum(!is.na(pred[["yhat"]]))>0,
+                   failure_message = 'Only missing predicted outcomes.'
+  )
+  testthat::expect(sum(!is.na(pred[["yhat"]]))==
+                     nrow(testdat[complete.cases(testdat), ]),
+                   failure_message = 
+                     'Different number of miss. in data & predicted outcomes.'
+  )
+  testthat::expect(sum(unlist(lapply(pred, 
+                                     function(x) (Inf %in% x) | 
+                                       (-Inf %in% x))))==0,
+                   failure_message = 
+                     'Predicted outcomes include non-finite values.'
+  )
+  expect(sum(pred[["prob"]])==1,
+         failure_message = 
+           'Probabilities of group membership do not sum to 1.'
+  )
+  
+})

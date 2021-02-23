@@ -1,0 +1,13 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^doc$
+^Meta$
+^vignettes/fit1_all\.RData$
+^vignettes/fit1_cstr\.RData$
+^vignettes/fit1_cstr_stata\.RData$
+^vignettes/fit2\.RData$
+^vignettes/fit2_stata\.RData$
+^vignettes/fit1_tobit\.RData$
+^README\.Rmd$
+^cran-comments\.md$
+^prepare_submission\.R$
