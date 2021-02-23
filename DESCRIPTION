@@ -15,7 +15,7 @@ Description: The goal of the package ‘aldvmm’ is to fit adjusted limited
     by Hernandez Alava and Wailoo (2015) <doi:10.1177/1536867X1501500307> using 
     normal component distributions and a multinomial logit model of 
     probabilities of component membership.
-License: GPL-3
+License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1

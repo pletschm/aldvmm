@@ -13,11 +13,8 @@ multinomial logit model of probabilities of component membership.
 ## Installation
 
 <!-- You can install the released version of aldvmm from [CRAN](https://CRAN.R-project.org) with: -->
-
 <!-- ``` r -->
-
 <!-- install.packages("aldvmm") -->
-
 <!-- ``` -->
 
 You can install the development version from
@@ -92,11 +89,11 @@ yhat <- predict(fit,
 
 ## Vignette
 
-Please consult the [vignette](doc/aldvmm_vignette.pdf) for further
+Please consult the [vignette](vignettes/aldvmm_vignette.pdf) for further
 details on the methods and the usage of the package.
 
 ## References
 
 Hernández Alava, Mónica, and Allan Wailoo. 2015. “Fitting Adjusted
 Limited Dependent Variable Mixture Models to EQ-5D.” The Stata Journal
-15 (3): 737–50.
+15 (3): 737–50. <doi:10.1177/1536867X1501500307>
