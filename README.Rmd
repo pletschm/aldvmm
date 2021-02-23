@@ -56,4 +56,4 @@ Please consult the [vignette](vignettes/aldvmm_vignette.pdf) for further details
 
 ## References
 
-Hernández Alava, Mónica, and Allan Wailoo. 2015. “Fitting Adjusted Limited Dependent Variable Mixture Models to EQ-5D.” The Stata Journal 15 (3): 737–50. <doi:10.1177/1536867X1501500307>
+Hernández Alava, Mónica, and Allan Wailoo. 2015. “Fitting Adjusted Limited Dependent Variable Mixture Models to EQ-5D.” The Stata Journal 15 (3): 737–50. doi: 10.1177/1536867X1501500307

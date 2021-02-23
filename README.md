@@ -96,4 +96,4 @@ details on the methods and the usage of the package.
 
 Hernández Alava, Mónica, and Allan Wailoo. 2015. “Fitting Adjusted
 Limited Dependent Variable Mixture Models to EQ-5D.” The Stata Journal
-15 (3): 737–50. <doi:10.1177/1536867X1501500307>
+15 (3): 737–50. doi: 10.1177/1536867X1501500307
