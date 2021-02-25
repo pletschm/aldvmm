@@ -83,7 +83,6 @@ aldvmm.sefit <- function(par,
   if (sum(diag(cv)<=0)!=0) {
     warning("Negative diagonals in covariance matrix: ",
             "No standard errors of the fit obtained", 
-            "diagonals in covariance matrix.",
             "\n")
     return(NULL)
   }
