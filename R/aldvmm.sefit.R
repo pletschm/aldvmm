@@ -77,6 +77,7 @@ aldvmm.sefit <- function(par,
     warning("No standard errors of the fit obtained because of invalid ", 
             "diagonals in covariance matrix.",
             "\n")
+    return(NULL)
   }
 
   # Initialize vector of standard errors of all observations
