@@ -184,7 +184,9 @@ aldvmm.sum <- function(est,
     }
   }
   
-  reptab[[lcoef[[2]]]] <- as.data.frame(do.call('rbind', mlres))
+  if (ncmp>1) {
+    reptab[[lcoef[[2]]]] <- as.data.frame(do.call('rbind', mlres))
+  }
   
   # Combine outputs from different components
   #------------------------------------------
