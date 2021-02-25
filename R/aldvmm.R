@@ -514,7 +514,7 @@ aldvmm <- function(formula,
     (nrow(mm[[1]])- length(fit[["par"]]))
   
   if (is.na(gof[['mse']])) {
-    warning("no mse or mae obtained due to missing predictions",
+    warning("no mse or mae were obtained",
             "\n")
   }
   

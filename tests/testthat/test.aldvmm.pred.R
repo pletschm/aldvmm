@@ -57,7 +57,7 @@ test_that('Check prediction function.', {
                    failure_message = 
                      'Predicted outcomes include non-finite values.'
   )
-  expect(sum(pred[["prob"]])==1,
+  testthat::expect(sum(pred[["prob"]])==1,
          failure_message = 
            'Probabilities of group membership do not sum to 1.'
   )

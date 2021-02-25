@@ -72,7 +72,7 @@ aldvmm.pred <- function(par,
       p_c[, c] <- exp_xd[, c] / (1 + rowSums(exp_xd))
     }
     if (nrow(p_c)>1) {
-      p_c[, ncmp] <- 1 - rowSums(p_c[, 1:(ncmp - 1)])
+      p_c[, ncmp] <- 1 - rowSums(p_c[, 1:(ncmp - 1), drop = FALSE])
     } else {
       p_c[, ncmp] <- 1 - sum(p_c[1:(ncmp - 1)])
     }

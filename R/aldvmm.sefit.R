@@ -73,13 +73,21 @@ aldvmm.sefit <- function(par,
   # Check validity of covariance matrix
   #------------------------------------
   
-  if (sum(is.na(cv))!=0 | sum(diag(cv)<=0)!=0){
-    warning("No standard errors of the fit obtained because of invalid ", 
+  if (sum(is.na(cv))!=0) {
+    warning("Missing values in covariance matrix: ",
+            "No standard errors of the fit obtained",
+            "\n")
+    return(NULL)
+  }
+  
+  if (sum(diag(cv)<=0)!=0) {
+    warning("Negative diagonals in covariance matrix: ",
+            "No standard errors of the fit obtained", 
             "diagonals in covariance matrix.",
             "\n")
     return(NULL)
   }
-
+  
   # Initialize vector of standard errors of all observations
   #---------------------------------------------------------
   
@@ -103,7 +111,7 @@ aldvmm.sefit <- function(par,
       out <- t(x[i, ])
       rownames(out) <- rownames(x)[i]
       return(out)
-      })
+    })
     
     # Approximate gradient of predictions w.r.t. parameters numerically
     #------------------------------------------------------------------
@@ -133,7 +141,7 @@ aldvmm.sefit <- function(par,
     if (type=="fit") {
       se.fit[i] <- sqrt(t(grad_i) %*% cv %*% grad_i)
     } else {
-      if (!is.null(mse)) {
+      if (!is.null(mse) & !is.na(mse)) {
         se.fit[i] <- sqrt(mse + t(grad_i) %*% cv %*% grad_i)
       } else {
         se.fit[i] <- sqrt(t(grad_i) %*% cv %*% grad_i)

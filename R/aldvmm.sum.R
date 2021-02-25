@@ -132,7 +132,6 @@ aldvmm.sum <- function(est,
   rn <- lapply(tmp[[1]], function(x) rownames(x))
   
   lines <- rep("-", times = nc)
-  equal <- rep("=", times = nc)
   
   reptab <- list()
   
@@ -183,9 +182,9 @@ aldvmm.sum <- function(est,
                           format(round(tmp[[i]][[lcoef[2]]], 4),
                                  nsmall = 4))
     }
-    
-    reptab[[lcoef[[2]]]] <- as.data.frame(do.call('rbind', mlres))
   }
+  
+  reptab[[lcoef[[2]]]] <- as.data.frame(do.call('rbind', mlres))
   
   # Combine outputs from different components
   #------------------------------------------

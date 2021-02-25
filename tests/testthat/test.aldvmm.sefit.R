@@ -52,14 +52,15 @@ test_that("Check estimation of standard errors of fitted values.", {
                    failure_message = "Missing values not at same index as in 
                    data."
   )
-
+  
   # Missing values in covariance matrix
   #------------------------------------
   
   cvtmp <- fit$cov
   cvtmp[3, 4] <- NA
   
-  suppressWarnings(se.fit <- aldvmm.sefit(par = fit[["coef"]],
+  testthat::expect_warning(se.fit <- 
+                             aldvmm.sefit(par = fit[["coef"]],
                                           X = mm,
                                           type = "fit",
                                           formula = fit[["formula"]],
@@ -72,20 +73,10 @@ test_that("Check estimation of standard errors of fitted values.", {
                                           lcpar = fit[["label"]][["lcpar"]],
                                           lcmp = fit[["label"]][["lcmp"]]))
   
-  testthat::expect(length(se.fit)==sum(complete.cases(newdata)),
+  testthat::expect(is.null(se.fit),
                    failure_message = 
-                     "Only missing standard errors returned"
-  )
-  testthat::expect(sum(is.na(se.fit))==length(se.fit),
-                   failure_message = 
-                     "Non-missing standard errors produced when only missing 
-                   should be observed."
-  )
-  testthat::expect(is.logical(se.fit),
-                   failure_message = "Non-logical missing only matrix output"
-  )
-  testthat::expect(sum(se.fit[1]<=0, na.rm = TRUE)==0,
-                   failure_message = "Non-positive standard errors."
+                     "No standard errors of the fit should be returned with
+                   missing values in covariance matrix."
   )
   
   # Negative values in diagonal
@@ -94,7 +85,8 @@ test_that("Check estimation of standard errors of fitted values.", {
   cvtmp <- fit$cov
   cvtmp[3, 3] <- -1
   
-  suppressWarnings(se.fit <- aldvmm.sefit(par = fit[["coef"]],
+  testthat::expect_warning(se.fit <- 
+                             aldvmm.sefit(par = fit[["coef"]],
                                           X = mm,
                                           type = "fit",
                                           formula = fit[["formula"]],
@@ -107,18 +99,10 @@ test_that("Check estimation of standard errors of fitted values.", {
                                           lcpar = fit[["label"]][["lcpar"]],
                                           lcmp = fit[["label"]][["lcmp"]]))
   
-  testthat::expect(length(se.fit)==nrow(mm[[1]]),
-                   failure_message = "Only missing standard errors returned"
-  )
-  testthat::expect(sum(is.na(se.fit))==length(se.fit),
-                   failure_message = "Non-missing standard errors produced when 
-                   only missing should be observed."
-  )
-  testthat::expect(is.logical(se.fit),
-                   failure_message = "Non-logical missing only matrix output"
-  )
-  testthat::expect(sum(se.fit[1]<=0, na.rm = TRUE)==0,
-                   failure_message = "Non-positive standard errors."
+  testthat::expect(is.null(se.fit),
+                   failure_message = 
+                     "No standard errors of the fit should be returned with
+                   negative diagonals in covariance matrix."
   )
   
 })
