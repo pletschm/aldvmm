@@ -9,10 +9,10 @@
 \arguments{
 \item{object}{an object inheriting from class 'aldvmm'.}
 
-\item{newdata}{a data frame, list or environment (or object coercible to a data
-frame by \cr \ifelse{html}{\code{\link[base]{as.data.frame}}}{
-\code{base::as.data.frame()}}) including explanatory
-variables for prediction.}
+\item{newdata}{a data frame, list or environment (or object coercible to a
+data frame by \cr \ifelse{html}{\code{\link[base]{as.data.frame}}}{
+\code{base::as.data.frame()}}) including explanatory variables for
+prediction.}
 
 \item{se.fit}{an optional logical value indicating whether standard errors
 of the fit are calculated (see Details).}
@@ -21,8 +21,8 @@ of the fit are calculated (see Details).}
 standard error of the fit ('fit') or the standard error of predictions in
 new data ('pred') are calculated.}
 
-\item{level}{a numeric value of the significance level for confidence bands.
-The default is 0.95.}
+\item{level}{a numeric value of the significance level for confidence bands
+of fitted values. The default is 0.95.}
 
 \item{...}{further arguments passed to or from other methods.}
 }
@@ -33,8 +33,8 @@ a named list of numeric vectors of predicted outcomes, standard
 \description{
 The generic function
 \ifelse{html}{\code{\link[stats]{predict}}}{\code{stats::predict()}} calls
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm::aldvmm.pred()}} to predict outcomes and their standard errors in new
-data using
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm::aldvmm.pred()}}
+to predict outcomes and their standard errors in new data using
 \ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm::aldvmm.pred()}}
 and
 \ifelse{html}{\code{\link[aldvmm]{aldvmm.sefit}}}{\code{aldvmm::aldvmm.sefit()}}.

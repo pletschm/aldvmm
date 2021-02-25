@@ -2,7 +2,8 @@
 % Please edit documentation in R/aldvmm.check.R
 \name{aldvmm.check}
 \alias{aldvmm.check}
-\title{Checking the Validity of Objects Supplied to \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}}
+\title{Checking the Validity of Objects Supplied to
+\ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}}
 \usage{
 aldvmm.check(
   data,
@@ -123,11 +124,13 @@ of the fit are calculated (see Details).}
   validity checks fail.
 }
 \description{
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.check}}}{\code{aldvmm::aldvmm.check()}} runs validity checks of objects supplied to
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.check}}}{\code{aldvmm::aldvmm.check()}}
+runs validity checks of objects supplied to
 \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.
 }
 \details{
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.check}}}{\code{aldvmm::aldvmm.check()}} checks the validity of input values of
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.check}}}{\code{aldvmm::aldvmm.check()}}
+  checks the validity of input values of
   \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}} and
   of user settings.
 }

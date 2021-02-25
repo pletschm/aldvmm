@@ -31,11 +31,12 @@ in the extraction of parameters into nested lists using \ifelse{html}{
 \item{X}{a list of design matrices returned by
 \ifelse{html}{\code{\link[aldvmm]{aldvmm.mm}}}{\code{aldvmm::aldvmm.mm()}}.
  \code{'X'} is of length 2 and includes numeric design matrices for the
-models of component distributions (label \code{"beta"}) and the probabilities of
-group membership (label \code{"delta"}). The numeric matrices in \code{'X'} have
-rownames inherited from \code{'data'} supplied to
-\ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}. The
-rownames will be used in \ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{
+models of component distributions (label \code{"beta"}) and the
+probabilities of group membership (label \code{"delta"}). The numeric
+matrices in \code{'X'} have rownames inherited from \code{'data'} supplied
+to \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.
+The rownames will be used in
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{
 \code{aldvmm::aldvmm.pred()}} to return missing predictions for incomplete
 observations in \code{'data'}.}
 
@@ -96,7 +97,9 @@ coincide with column names in \code{'data'} supplied to
 \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.}
 }
 \value{
-a named numeric vector of standard errors of fitted or predicted outcomes. The names of the elements in the vector are identical to the row names of design matrices in \code{'X'}
+a named numeric vector of standard errors of fitted or predicted
+  outcomes. The names of the elements in the vector are identical to the row
+  names of design matrices in \code{'X'}
 }
 \description{
 \ifelse{html}{\code{\link[aldvmm]{aldvmm.sefit}}}{\code{aldvmm::aldvmm.sefit()}}
@@ -131,4 +134,7 @@ Whitmore, G. A. (1986). Prediction limits for a univariate
   Dowd, B. E., Greene, W. H., and Norton, E. C. (2014) Computation of
   standard errors. \emph{Health services research}, \bold{49(2)}, 731--750.
   \doi{10.1111/1475-6773.12122}
+}
+\author{
+Mark Pletscher, <pletscher.mark@gmail.com>
 }

@@ -1,21 +1,26 @@
 #' Creating Names of Parameter Vectors
 #'
 #' @description
-#'   \ifelse{html}{\code{\link[aldvmm]{aldvmm.getnames}}}{\code{aldvmm::aldvmm.getnames()}}
-#'   creates names of parameter vectors used in
-#'   \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}. The
-#'   order of the elements in \code{'lcoef'} and \code{'lcpar'} determines the
-#'   order of parameters and the structure of summary tables returned by
-#'   \ifelse{html}{\code{\link[aldvmm]{summary.aldvmm}}}{\code{aldvmm::summary.aldvmm()}}.
+#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.getnames}}}{\code{aldvmm::aldvmm.getnames()}}
+#' creates names of parameter vectors used in
+#' \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}. The
+#' order of the elements in \code{'lcoef'} and \code{'lcpar'} determines the
+#' order of parameters and the structure of summary tables returned by
+#' \ifelse{html}{\code{\link[aldvmm]{summary.aldvmm}}}{\code{aldvmm::summary.aldvmm()}}.
 #'
 #'
 #' @inheritParams aldvmm.ll
-#' @param names a character vector of names of considered elements (distributions
-#'   \code{"beta"}, multinomial logit \code{"delta"} or constant distribution
-#'   parameters, i.e. \code{"lnsigma"}). The elements in \code{'names'} are combined with covariate names in \code{'X'} and component labels in \code{'lcmp'} to create a vector of names of parameter vectors.
+#' @param names a character vector of names of considered elements
+#'   (distributions \code{"beta"}, multinomial logit \code{"delta"} or constant
+#'   distribution parameters, i.e. \code{"lnsigma"}). The elements in
+#'   \code{'names'} are combined with covariate names in \code{'X'} and
+#'   component labels in \code{'lcmp'} to create a vector of names of parameter
+#'   vectors.
 #'
 #' @return a character vector of names of parameter vectors used in
 #'   \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.
+#'
+#' @author Mark Pletscher, <pletscher.mark@gmail.com>
 #'
 #' @export
 

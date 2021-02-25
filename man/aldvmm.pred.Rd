@@ -19,11 +19,12 @@ in the extraction of parameters into nested lists using \ifelse{html}{
 \item{X}{a list of design matrices returned by
 \ifelse{html}{\code{\link[aldvmm]{aldvmm.mm}}}{\code{aldvmm::aldvmm.mm()}}.
  \code{'X'} is of length 2 and includes numeric design matrices for the
-models of component distributions (label \code{"beta"}) and the probabilities of
-group membership (label \code{"delta"}). The numeric matrices in \code{'X'} have
-rownames inherited from \code{'data'} supplied to
-\ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}. The
-rownames will be used in \ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{
+models of component distributions (label \code{"beta"}) and the
+probabilities of group membership (label \code{"delta"}). The numeric
+matrices in \code{'X'} have rownames inherited from \code{'data'} supplied
+to \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.
+The rownames will be used in
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{
 \code{aldvmm::aldvmm.pred()}} to return missing predictions for incomplete
 observations in \code{'data'}.}
 
@@ -67,16 +68,24 @@ summary tables returned by
 \code{aldvmm::summary.aldvmm()}}.}
 }
 \value{
-a named numeric vector of predicted outcomes. The names of the elements in the vector are identical to the row names of design matrices in \code{'X'}.
+a named numeric vector of predicted outcomes. The names of the
+  elements in the vector are identical to the row names of design matrices
+  in \code{'X'}.
 }
 \description{
 \ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm::aldvmm.pred()}}
-  makes predictions of observations in design matrices in \code{'X'} using the results of
-  \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.
+makes predictions of observations in design matrices in \code{'X'} using the
+results of
+\ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.
 }
 \details{
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm::aldvmm.pred()}} calculates expected values for observations in design matrices in \code{'X'} using the expected value function published in Hernandez Alava and Wailoo
-  (2015). Constant distribution parameters that need to be non-negative
-  (i.e. standard deviations of normal distributions) enter the expected value
-  function as log-transformed values.
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm::aldvmm.pred()}}
+  calculates expected values for observations in design matrices in
+  \code{'X'} using the expected value function published in Hernandez Alava
+  and Wailoo (2015). Constant distribution parameters that need to be
+  non-negative (i.e. standard deviations of normal distributions) enter the
+  expected value function as log-transformed values.
+}
+\author{
+Mark Pletscher, <pletscher.mark@gmail.com>
 }

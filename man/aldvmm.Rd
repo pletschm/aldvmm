@@ -94,8 +94,8 @@ follow the same order as parameter estimates appear in the return value
 \item{se.fit}{an optional logical value indicating whether standard errors
 of the fit are calculated (see Details).}
 
-\item{level}{a numeric value of the significance level for confidence bands.
-The default is 0.95.}
+\item{level}{a numeric value of the significance level for confidence bands
+of fitted values. The default is 0.95.}
 }
 \value{
 \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{
@@ -254,7 +254,8 @@ The function \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{
   distribution.  The method \code{"constant"} estimates a constant-only
   model and uses estimates as initial values of intercepts and standard
   errors and 0 for all other prameters.  The method \code{"sann"} estimates
-  the full model using the simulated annealing optimization method and uses
+  the full model using the simulated annealing optimization method in
+  \ifelse{html}{\code{\link[stats]{optim}}}{ \code{stats::optim()}} and uses
   all parameter estimates as initial values.  When user-specified initial
   values are supplied in \code{'init.est'}, the argument
   \code{'init.method'} is ignored.

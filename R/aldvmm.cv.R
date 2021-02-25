@@ -1,9 +1,9 @@
 #' Numerical Approximation of Covariance Matrix
 #'
 #' @description
-#'   \ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{\code{aldvmm::aldvmm.cv()}}
-#'   performs a numerical approximation of the covariance matrix of parameter
-#'   estimates.
+#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{\code{aldvmm::aldvmm.cv()}}
+#' performs a numerical approximation of the covariance matrix of parameter
+#' estimates.
 #'
 #' @inheritParams aldvmm.ll
 #' @inheritParams aldvmm
@@ -14,11 +14,11 @@
 #'   variable mixture model as a scalar result.
 #'
 #' @details
-#'   \ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{\code{aldvmm::aldvmm.cv()}}
-#'   uses
-#'   \ifelse{html}{\code{\link[numDeriv]{hessian}}}{\code{numDeriv::hessian()}}
-#'   to calculate the hessian matrix of the log-likelihood function in \code{'ll'}
-#'   at parameter values in \code{'par'}.
+#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{\code{aldvmm::aldvmm.cv()}}
+#' uses
+#' \ifelse{html}{\code{\link[numDeriv]{hessian}}}{\code{numDeriv::hessian()}}
+#' to calculate the hessian matrix of the log-likelihood function in
+#' \code{'ll'} at parameter values in \code{'par'}.
 #'
 #' @return \code{aldvmm.cv} returns a list with the following objects.
 #'   \item{\code{hessian}}{a numeric matrix with second-order partial
@@ -26,11 +26,12 @@
 #'   numeric matrix with covariances/variances of parameters in \code{'par'}.}
 #'   \item{\code{se}}{a numeric vector of standard errors of parameters in
 #'   \code{'par'}.} \item{\code{z}}{a numeric vector of z-values (parameter
-#'   values in \code{'par'} divided by standard error \code{'se'}).} \item{\code{p}}{a
-#'   numeric vector of p-values of parameter estimates (probabilities of \code{'z'} smaller than zero).} \item{\code{upper}}{a
+#'   values in \code{'par'} divided by standard error \code{'se'}).}
+#'   \item{\code{p}}{a numeric vector of p-values of parameter estimates
+#'   (probabilities of \code{'z'} smaller than zero).} \item{\code{upper}}{a
 #'   numeric vector of upper 95\% confindence limits of paramter estimates in
-#'   \code{'par'}.} \item{\code{lower}}{a numeric vector of lower 95\% confindence
-#'   limits of paramter estimates in \code{'par'}.}
+#'   \code{'par'}.} \item{\code{lower}}{a numeric vector of lower 95\%
+#'   confindence limits of paramter estimates in \code{'par'}.}
 #'
 #' @author Mark Pletscher, <pletscher.mark@gmail.com>
 #'
@@ -53,15 +54,15 @@ aldvmm.cv <- function(ll,
   # Hessian
   #--------
   
-  outlist[["hessian"]] <- numDeriv::hessian(func  = ll,
-                                            x     = par,
-                                            X     = X,
-                                            y     = y,
-                                            psi   = psi,
-                                            ncmp  = ncmp,
-                                            dist  = dist,
+  outlist[["hessian"]] <- numDeriv::hessian(func = ll,
+                                            x = par,
+                                            X = X,
+                                            y = y,
+                                            psi = psi,
+                                            ncmp = ncmp,
+                                            dist = dist,
                                             lcoef = lcoef,
-                                            lcmp  = lcmp,
+                                            lcmp = lcmp,
                                             lcpar = lcpar,
                                             optim.method = optim.method)
   

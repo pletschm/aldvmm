@@ -23,11 +23,12 @@ in the extraction of parameters into nested lists using \ifelse{html}{
 \item{X}{a list of design matrices returned by
 \ifelse{html}{\code{\link[aldvmm]{aldvmm.mm}}}{\code{aldvmm::aldvmm.mm()}}.
  \code{'X'} is of length 2 and includes numeric design matrices for the
-models of component distributions (label \code{"beta"}) and the probabilities of
-group membership (label \code{"delta"}). The numeric matrices in \code{'X'} have
-rownames inherited from \code{'data'} supplied to
-\ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}. The
-rownames will be used in \ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{
+models of component distributions (label \code{"beta"}) and the
+probabilities of group membership (label \code{"delta"}). The numeric
+matrices in \code{'X'} have rownames inherited from \code{'data'} supplied
+to \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.
+The rownames will be used in
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{
 \code{aldvmm::aldvmm.pred()}} to return missing predictions for incomplete
 observations in \code{'data'}.}
 
@@ -88,23 +89,24 @@ likelihood function (see details).}
   numeric matrix with covariances/variances of parameters in \code{'par'}.}
   \item{\code{se}}{a numeric vector of standard errors of parameters in
   \code{'par'}.} \item{\code{z}}{a numeric vector of z-values (parameter
-  values in \code{'par'} divided by standard error \code{'se'}).} \item{\code{p}}{a
-  numeric vector of p-values of parameter estimates (probabilities of \code{'z'} smaller than zero).} \item{\code{upper}}{a
+  values in \code{'par'} divided by standard error \code{'se'}).}
+  \item{\code{p}}{a numeric vector of p-values of parameter estimates
+  (probabilities of \code{'z'} smaller than zero).} \item{\code{upper}}{a
   numeric vector of upper 95\% confindence limits of paramter estimates in
-  \code{'par'}.} \item{\code{lower}}{a numeric vector of lower 95\% confindence
-  limits of paramter estimates in \code{'par'}.}
+  \code{'par'}.} \item{\code{lower}}{a numeric vector of lower 95\%
+  confindence limits of paramter estimates in \code{'par'}.}
 }
 \description{
 \ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{\code{aldvmm::aldvmm.cv()}}
-  performs a numerical approximation of the covariance matrix of parameter
-  estimates.
+performs a numerical approximation of the covariance matrix of parameter
+estimates.
 }
 \details{
 \ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{\code{aldvmm::aldvmm.cv()}}
-  uses
-  \ifelse{html}{\code{\link[numDeriv]{hessian}}}{\code{numDeriv::hessian()}}
-  to calculate the hessian matrix of the log-likelihood function in \code{'ll'}
-  at parameter values in \code{'par'}.
+uses
+\ifelse{html}{\code{\link[numDeriv]{hessian}}}{\code{numDeriv::hessian()}}
+to calculate the hessian matrix of the log-likelihood function in
+\code{'ll'} at parameter values in \code{'par'}.
 }
 \author{
 Mark Pletscher, <pletscher.mark@gmail.com>

@@ -18,11 +18,12 @@ in the extraction of parameters into nested lists using \ifelse{html}{
 \item{X}{a list of design matrices returned by
 \ifelse{html}{\code{\link[aldvmm]{aldvmm.mm}}}{\code{aldvmm::aldvmm.mm()}}.
  \code{'X'} is of length 2 and includes numeric design matrices for the
-models of component distributions (label \code{"beta"}) and the probabilities of
-group membership (label \code{"delta"}). The numeric matrices in \code{'X'} have
-rownames inherited from \code{'data'} supplied to
-\ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}. The
-rownames will be used in \ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{
+models of component distributions (label \code{"beta"}) and the
+probabilities of group membership (label \code{"delta"}). The numeric
+matrices in \code{'X'} have rownames inherited from \code{'data'} supplied
+to \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.
+The rownames will be used in
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{
 \code{aldvmm::aldvmm.pred()}} to return missing predictions for incomplete
 observations in \code{'data'}.}
 
@@ -77,18 +78,22 @@ cannot be used with the
 likelihood function (see details).}
 }
 \value{
-a named numeric vector of first derivatives of the negative log-likelihood of
-  the data with respect to parameters in \code{'par'}.
+a named numeric vector of first derivatives of the negative
+  log-likelihood of the data with respect to parameters in \code{'par'}.
 }
 \description{
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.gr}}}{\code{aldvmm::aldvmm.gr()}} calculates numeric gradients of the negative log-likelihood
-returned by
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.gr}}}{\code{aldvmm::aldvmm.gr()}}
+calculates numeric gradients of the negative log-likelihood returned by
 \ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm::aldvmm.ll()}}
 with respect to parameter values in \code{'par'}.
 }
 \details{
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.gr}}}{\code{aldvmm::aldvmm.gr()}} uses
-  \ifelse{html}{\code{\link[numDeriv]{grad}}}{\code{numDeriv::grad()}} to
-  perform numerical approximation of gradients of the negative log-likelihood returned by
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.gr}}}{\code{aldvmm::aldvmm.gr()}}
+  uses \ifelse{html}{\code{\link[numDeriv]{grad}}}{\code{numDeriv::grad()}}
+  to perform numerical approximation of gradients of the negative
+  log-likelihood returned by
   \ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm::aldvmm.ll()}}.
+}
+\author{
+Mark Pletscher, <pletscher.mark@gmail.com>
 }

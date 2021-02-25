@@ -102,8 +102,8 @@ NULL
 #'   \code{'par'}.
 #' @param se.fit an optional logical value indicating whether standard errors
 #'   of the fit are calculated (see Details).
-#' @param level a numeric value of the significance level for confidence bands.
-#'   The default is 0.95.
+#' @param level a numeric value of the significance level for confidence bands
+#'   of fitted values. The default is 0.95.
 #'
 #' @details \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{
 #'   \code{aldvmm::aldvmm()}} fits adjusted limited dependent variable mixture
@@ -165,7 +165,8 @@ NULL
 #'   distribution.  The method \code{"constant"} estimates a constant-only
 #'   model and uses estimates as initial values of intercepts and standard
 #'   errors and 0 for all other prameters.  The method \code{"sann"} estimates
-#'   the full model using the simulated annealing optimization method and uses
+#'   the full model using the simulated annealing optimization method in
+#'   \ifelse{html}{\code{\link[stats]{optim}}}{ \code{stats::optim()}} and uses
 #'   all parameter estimates as initial values.  When user-specified initial
 #'   values are supplied in \code{'init.est'}, the argument
 #'   \code{'init.method'} is ignored.
@@ -340,6 +341,31 @@ aldvmm <- function(formula,
   # Stub for labeling 1:K components
   lcmp <- "Comp"
   
+  # Set optimization method
+  #------------------------
+  
+  # The optimization method will be used in aldvmm.init(), the testing of 
+  # initial values and the model fitting.
+  
+  if (sum(init.lo!=-Inf)==0 & sum(init.hi!=Inf)==0 & is.null(optim.method)) {
+    # Default optimization method
+    optim.method <- "Nelder-Mead"
+  } else if ((!is.null(init.lo) | !is.null(init.hi))) {
+    # Constrained optimization with "L-BFGS-B"
+    optim.method <- "L-BFGS-B"
+  } else {
+    # User-defined optimization method
+  }
+  
+  # Attach gradient function for optimization if selected by the user
+  #------------------------------------------------------------------
+  
+  if (optim.grad==TRUE) {
+    grd <- aldvmm.gr
+  } else {
+    grd <- NULL
+  }
+  
   # Convert data to data.frame object
   #----------------------------------
   
@@ -384,9 +410,9 @@ aldvmm <- function(formula,
   # Outcome vector
   #---------------
   
-  y <- data[stats::complete.cases(data[, all.vars(formula)]), ]
-  y <- y[, all.vars(formula)[1]]
-  
+  complete <- stats::complete.cases(data[, all.vars(formula)])
+  y <- data[complete, all.vars(formula)[1]]
+
   # Generate initial values
   #------------------------
   
@@ -409,16 +435,6 @@ aldvmm <- function(formula,
   # Check feasibility of initial values
   #------------------------------------
   
-  if (sum(init.lo!=-Inf)==0 & sum(init.hi!=Inf)==0 & is.null(optim.method)) {
-    # Unconstrained Nelder-Mead optimization method
-    optim.method <- "Nelder-Mead"
-  } else if ((!is.null(init.lo) | !is.null(init.hi))) {
-    # Constrained optimization with "L-BFGS-B"
-    optim.method <- "L-BFGS-B"
-  } else {
-    # Unconstrained user-defined optimization method
-  }
-  
   test <- aldvmm.ll(par = init[["est"]],
                     X = mm,
                     y = y,
@@ -438,13 +454,6 @@ aldvmm <- function(formula,
   
   # Fit model
   #----------
-  
-  # Use gradient function in optimization if selected by the user
-  if (optim.grad==TRUE) {
-    grd <- aldvmm.gr
-  } else {
-    grd <- NULL
-  }
   
   fit <- optimr::optimr(fn = aldvmm.ll,
                         par = init[["est"]],
@@ -502,7 +511,7 @@ aldvmm <- function(formula,
   gof[["mse"]] <- sum(pred[["res"]]^2) / 
     (nrow(mm[[1]]) - length(fit[["par"]]))
   gof[["mae"]] <- sum(abs(pred[["res"]])) / 
-    (nrow(mm[[1]]) - length(fit[["par"]]))
+    (nrow(mm[[1]])- length(fit[["par"]]))
   
   if (is.na(gof[['mse']])) {
     warning("no mse or mae obtained due to missing predictions",
@@ -510,9 +519,8 @@ aldvmm <- function(formula,
   }
   
   gof[["ll"]] <- fit[["value"]]
-  gof[["aic"]] <- 2*length(fit[["par"]]) + 2*fit[["value"]]
-  gof[["bic"]] <- length(fit[["par"]]) * log(dim(mm[[1]])[1]) + 
-    2*fit[["value"]]
+  gof[["aic"]] <- 2 * length(fit[["par"]]) + 2 * fit[["value"]]
+  gof[["bic"]] <- length(fit[["par"]]) * log(nrow(mm[[1]])) + 2*fit[["value"]]
   
   # Standard errors of the fit (delta method)
   #------------------------------------------
@@ -532,13 +540,13 @@ aldvmm <- function(formula,
                                      lcpar = lcpar)
     
     pred[["upper.fit"]] <- matrix(data = pred[["yhat"]] + 
-                                    stats::qnorm(level + (1 - level)/2) * 
+                                    stats::qnorm((1 + level)/2) * 
                                     pred[["se.fit"]], 
                                   ncol = 1)
     pred[["upper.fit"]][pred[["upper.fit"]][, 1] > max(psi), 1] <- 1
     
     pred[["lower.fit"]] <- matrix(data = pred[["yhat"]] - 
-                                    stats::qnorm(level + (1 - level)/2) * 
+                                    stats::qnorm((1 + level)/2) * 
                                     pred[["se.fit"]], 
                                   ncol = 1)
     pred[["lower.fit"]][pred[["lower.fit"]][, 1] < min(psi), 1] <- min(psi)

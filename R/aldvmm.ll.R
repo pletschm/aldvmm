@@ -1,9 +1,10 @@
 #' Calculating the Negative Adjusted Limited Dependent Variable Mixture Model
 #' Log-Likelihood
 #'
-#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm::aldvmm.ll()}} calculates the negative log-likelihood of \code{'data'}
-#' supplied to
-#' \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}} for the parameter values in \code{'par'}.
+#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm::aldvmm.ll()}}
+#' calculates the negative log-likelihood of \code{'data'} supplied to
+#' \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}} for the
+#' parameter values in \code{'par'}.
 #'
 #' @param par a named numeric vector of parameter values used to calculate the
 #'   log-likelihood. The names of the parameter vector must be generated using
@@ -15,11 +16,12 @@
 #' @param X a list of design matrices returned by
 #'   \ifelse{html}{\code{\link[aldvmm]{aldvmm.mm}}}{\code{aldvmm::aldvmm.mm()}}.
 #'    \code{'X'} is of length 2 and includes numeric design matrices for the
-#'   models of component distributions (label \code{"beta"}) and the probabilities of
-#'   group membership (label \code{"delta"}). The numeric matrices in \code{'X'} have
-#'   rownames inherited from \code{'data'} supplied to
-#'   \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}. The
-#'   rownames will be used in \ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{
+#'   models of component distributions (label \code{"beta"}) and the
+#'   probabilities of group membership (label \code{"delta"}). The numeric
+#'   matrices in \code{'X'} have rownames inherited from \code{'data'} supplied
+#'   to \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.
+#'   The rownames will be used in
+#'   \ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{
 #'   \code{aldvmm::aldvmm.pred()}} to return missing predictions for incomplete
 #'   observations in \code{'data'}.
 #' @param y a numeric vector of observed outcomes from complete observations in
@@ -46,20 +48,27 @@
 #'
 #' @inheritParams aldvmm
 #'
-#' @details \ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm::aldvmm.ll()}} calculates the negative adjusted limited dependent variable mixture model log-likelihood using the
-#'   likelihood function published in Hernandez Alava and Wailoo (2015).
-#'   Constant distribution parameters that need to be non-negative (i.e.
-#'   the standard deviation of normal distributions) enter the likelihood function
-#'   as log-transformed values.
-#'   
-#'   As the "L-BFGS-B" and "Rcgmin" methods in \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}} fail if they encounter infinite values, the log-likelihood function takes the value -1e+20 if it is infinite during these algorithms.
+#' @details
+#'   \ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm::aldvmm.ll()}}
+#'   calculates the negative adjusted limited dependent variable mixture model
+#'   log-likelihood using the likelihood function published in Hernandez Alava
+#'   and Wailoo (2015). Constant distribution parameters that need to be
+#'   non-negative (i.e. the standard deviation of normal distributions) enter
+#'   the likelihood function as log-transformed values.
+#'
+#'   As the "L-BFGS-B" and "Rcgmin" methods in
+#'   \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}} fail
+#'   if they encounter infinite values, the log-likelihood function takes the
+#'   value -1e+20 if it is infinite during these algorithms.
 #'
 #' @references Alava, M. H. and Wailoo, A. (2015) Fitting adjusted limited
 #'   dependent variable mixture models to EQ-5D. \emph{The Stata Journal},
 #'   \bold{15(3)}, 737--750. \doi{10.1177/1536867X1501500307} \cr
 #'
-#' @return a scalar of the negative log-likelihood of the data for
-#'   the parameter values in \code{'par'}.
+#' @return a scalar of the negative log-likelihood of the data for the
+#'   parameter values in \code{'par'}.
+#'
+#' @author Mark Pletscher, <pletscher.mark@gmail.com>
 #'
 #' @export
 
@@ -74,9 +83,8 @@ aldvmm.ll <- function(par,
                       lcmp,
                       optim.method) {
   
-  #============================================================================
   # Prepare list of parameters
-  #============================================================================
+  #---------------------------
   
   parlist <- aldvmm.getpar(par   = par,
                            lcoef = lcoef,
@@ -120,8 +128,8 @@ aldvmm.ll <- function(par,
                                   paste0(lcmp, 1)))
   }
   
-  # Indicators of component membership
-  #-----------------------------------
+  # Indicators of value range of y
+  #-------------------------------
   
   I <- cbind(as.numeric(y>max(psi)),
              as.numeric(y<=min(psi)),
@@ -154,8 +162,6 @@ aldvmm.ll <- function(par,
       density[[c]] <- cbind(max, min, prob)
       
     }
-    
-    rm(max, min, prob)
     
   }
   

@@ -10,17 +10,21 @@ aldvmm.getnames(X, names, lcoef, lcpar, lcmp, ncmp)
 \item{X}{a list of design matrices returned by
 \ifelse{html}{\code{\link[aldvmm]{aldvmm.mm}}}{\code{aldvmm::aldvmm.mm()}}.
  \code{'X'} is of length 2 and includes numeric design matrices for the
-models of component distributions (label \code{"beta"}) and the probabilities of
-group membership (label \code{"delta"}). The numeric matrices in \code{'X'} have
-rownames inherited from \code{'data'} supplied to
-\ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}. The
-rownames will be used in \ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{
+models of component distributions (label \code{"beta"}) and the
+probabilities of group membership (label \code{"delta"}). The numeric
+matrices in \code{'X'} have rownames inherited from \code{'data'} supplied
+to \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.
+The rownames will be used in
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{
 \code{aldvmm::aldvmm.pred()}} to return missing predictions for incomplete
 observations in \code{'data'}.}
 
-\item{names}{a character vector of names of considered elements (distributions
-\code{"beta"}, multinomial logit \code{"delta"} or constant distribution
-parameters, i.e. \code{"lnsigma"}). The elements in \code{'names'} are combined with covariate names in \code{'X'} and component labels in \code{'lcmp'} to create a vector of names of parameter vectors.}
+\item{names}{a character vector of names of considered elements
+(distributions \code{"beta"}, multinomial logit \code{"delta"} or constant
+distribution parameters, i.e. \code{"lnsigma"}). The elements in
+\code{'names'} are combined with covariate names in \code{'X'} and
+component labels in \code{'lcmp'} to create a vector of names of parameter
+vectors.}
 
 \item{lcoef}{a character vector of the names of objects with values for
 component distributions (default \code{"beta"}) and for probabilities of
@@ -53,9 +57,12 @@ a character vector of names of parameter vectors used in
 }
 \description{
 \ifelse{html}{\code{\link[aldvmm]{aldvmm.getnames}}}{\code{aldvmm::aldvmm.getnames()}}
-  creates names of parameter vectors used in
-  \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}. The
-  order of the elements in \code{'lcoef'} and \code{'lcpar'} determines the
-  order of parameters and the structure of summary tables returned by
-  \ifelse{html}{\code{\link[aldvmm]{summary.aldvmm}}}{\code{aldvmm::summary.aldvmm()}}.
+creates names of parameter vectors used in
+\ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}. The
+order of the elements in \code{'lcoef'} and \code{'lcpar'} determines the
+order of parameters and the structure of summary tables returned by
+\ifelse{html}{\code{\link[aldvmm]{summary.aldvmm}}}{\code{aldvmm::summary.aldvmm()}}.
+}
+\author{
+Mark Pletscher, <pletscher.mark@gmail.com>
 }

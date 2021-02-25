@@ -2,17 +2,17 @@
 #'
 #' The generic function
 #' \ifelse{html}{\code{\link[stats]{predict}}}{\code{stats::predict()}} calls
-#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm::aldvmm.pred()}} to predict outcomes and their standard errors in new
-#' data using
+#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm::aldvmm.pred()}}
+#' to predict outcomes and their standard errors in new data using
 #' \ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm::aldvmm.pred()}}
 #' and
 #' \ifelse{html}{\code{\link[aldvmm]{aldvmm.sefit}}}{\code{aldvmm::aldvmm.sefit()}}.
 #'
 #' @param object an object inheriting from class 'aldvmm'.
-#' @param newdata a data frame, list or environment (or object coercible to a data
-#'   frame by \cr \ifelse{html}{\code{\link[base]{as.data.frame}}}{
-#'   \code{base::as.data.frame()}}) including explanatory
-#'   variables for prediction.
+#' @param newdata a data frame, list or environment (or object coercible to a
+#'   data frame by \cr \ifelse{html}{\code{\link[base]{as.data.frame}}}{
+#'   \code{base::as.data.frame()}}) including explanatory variables for
+#'   prediction.
 #' @inheritParams aldvmm.sefit
 #' @inheritParams aldvmm
 #' @param ... further arguments passed to or from other methods.
@@ -33,8 +33,8 @@ predict.aldvmm <- function(object,
                            level = 0.95,
                            ...) {
   
-  # Convert data to data.frame object
-  #----------------------------------
+  # Convert newdata to data.frame object
+  #-------------------------------------
   
   tryCatch({
     newdata <- as.data.frame(newdata)
@@ -54,8 +54,8 @@ predict.aldvmm <- function(object,
     rownames(newdata) <- as.character(1:nrow(newdata))
   }
   
-  # Make design matrix
-  #-------------------
+  # Make list of design matrices
+  #-----------------------------
   
   mm <- aldvmm.mm(data    = newdata,
                   formula = object[["formula"]],

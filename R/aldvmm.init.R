@@ -31,9 +31,10 @@
 #'   of the user defined \code{'optim.method'}.  It is possible to only set
 #'   either maximum or minimum limits.
 #'
-#' @return \ifelse{html}{\code{\link[aldvmm]{aldvmm.init}}}{\code{aldvmm::aldvmm.init()}} returns a list with the following objects.
-#'   \item{\code{est}}{a numeric vector of initial values of parameters
-#'   supplied to
+#' @return
+#'   \ifelse{html}{\code{\link[aldvmm]{aldvmm.init}}}{\code{aldvmm::aldvmm.init()}}
+#'   returns a list with the following objects. \item{\code{est}}{a numeric
+#'   vector of initial values of parameters supplied to
 #'   \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}} in
 #'   \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.}
 #'   \item{\code{lo}}{a numeric vector of lower limits of parameters in
@@ -71,7 +72,7 @@ aldvmm.init <- function(X,
   zero <- list()
   
   # Betas (coefficients on distribution parameters)
-  zero[[lcoef[1]]][["est"]] <- rep(0, times = ncmp*dim(X[[lcoef[1]]])[2])
+  zero[[lcoef[1]]][["est"]] <- rep(0, times = ncmp*ncol(X[[lcoef[1]]]))
   names(zero[[lcoef[1]]][["est"]]) <- aldvmm.getnames(X     = X,
                                                       names = c(lcoef[1]),
                                                       lcoef = lcoef,
@@ -83,7 +84,7 @@ aldvmm.init <- function(X,
   # Deltas (coefficients for multinomial logit for group membership)
   if (ncmp>1) {
     zero[[lcoef[2]]][["est"]] <- rep(0, 
-                                     times = (ncmp - 1)*dim(X[[lcoef[2]]])[2])
+                                     times = (ncmp - 1)*ncol(X[[lcoef[2]]]))
     names(zero[[lcoef[2]]][["est"]]) <- aldvmm.getnames(X     = X,
                                                         names = c(lcoef[2]),
                                                         lcoef = lcoef,
@@ -109,15 +110,15 @@ aldvmm.init <- function(X,
   if (is.null(init.est)) {
     if (init.method=="zero") {
       
-      # Zero-only regression coefficients (default)
-      #--------------------------------------------
+      # Zero-only initial values (default)
+      #-----------------------------------
       
       init <- zero  
       
     } else if (init.method=="random") {
       
-      # Random regression coefficients
-      #-------------------------------
+      # Random initial values
+      #----------------------
       
       init <- zero  
       
@@ -131,14 +132,19 @@ aldvmm.init <- function(X,
       # Estimate constant-only model
       #-----------------------------
       
-      # Make model matrix
-      X0 <- list()
-      for (i in lcoef[1:ncmp]) {
-        X0[[i]] <- matrix(1, nrow = dim(X[[i]])[1], ncol = 1)
-        colnames(X0[[i]]) <- "(Intercept)"
+      # Make list of model matrices
+      if (ncmp > 1) {
+        X0 <- lapply(lcoef, function(x) matrix(1, nrow = nrow(X[[x]]),
+                                               dimnames = list(NULL,
+                                                               "(Intercept)")))
+        names(X0) <- lcoef
+      } else {
+        X0 <- list( matrix(1, nrow = nrow(X[[1]]),
+                           dimnames = list(NULL, "(Intercept)")) )
+        names(X0) <- lcoef[1]
       }
-      
-      # Initial values of constant only model
+
+      # Initial values of constant-only model
       tmp <- list()
       for (i in names(zero)) {
         index <- grepl(paste("(Intercept)", lcpar, sep = "|"), 
@@ -172,14 +178,15 @@ aldvmm.init <- function(X,
                             gr           = grd,
                             hessian      = FALSE,
                             control      = optim.control)
+      
       # Make vector of initial values
       init <- zero
-      for(i in names(init)) {
+      for(i in names(zero)) {
         index <- which(names(init[[i]][["est"]]) %in% names(fit[["par"]]))
         init[[i]][["est"]][index] <- fit[["par"]][names(init[[i]][["est"]])[index]]
       }
       
-      rm(X0, fit, tmp)
+      rm(X0, fit, tmp, index)
       
     } else if (init.method=="sann") {
       
@@ -232,6 +239,9 @@ aldvmm.init <- function(X,
     
   } else {
     
+    # User-defined initial values
+    #----------------------------
+    
     init <- list()
     init[["est"]] <- init.est
     
@@ -243,8 +253,8 @@ aldvmm.init <- function(X,
                                             ncmp  = ncmp)
   }
   
-  # Limits
-  #-------
+  # Constraints
+  #------------
   
   # Lower limits
   if (!is.null(init.lo)) {

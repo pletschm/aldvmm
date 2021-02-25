@@ -1,12 +1,16 @@
-#' Checking the Validity of Objects Supplied to \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}
+#' Checking the Validity of Objects Supplied to
+#' \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}
 #'
-#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.check}}}{\code{aldvmm::aldvmm.check()}} runs validity checks of objects supplied to
+#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.check}}}{\code{aldvmm::aldvmm.check()}}
+#' runs validity checks of objects supplied to
 #' \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.
 #'
 #' @inheritParams aldvmm
 #' @inheritParams aldvmm.ll
 #'
-#' @details \ifelse{html}{\code{\link[aldvmm]{aldvmm.check}}}{\code{aldvmm::aldvmm.check()}} checks the validity of input values of
+#' @details
+#'   \ifelse{html}{\code{\link[aldvmm]{aldvmm.check}}}{\code{aldvmm::aldvmm.check()}}
+#'   checks the validity of input values of
 #'   \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}} and
 #'   of user settings.
 #'
@@ -39,7 +43,7 @@ aldvmm.check <- function(data,
   #-------------------------------
   
   complete <- stats::complete.cases(data[, all.vars(formula)])
-  if(sum(complete==FALSE)>0){
+  if(FALSE %in% complete){
     message("the data includes ", 
             sum(complete==FALSE), 
             " rows with missing values\n")
@@ -90,20 +94,20 @@ aldvmm.check <- function(data,
     stop("'lcpar' is wrong length for ",
          '"',
          dist, 
-         '" distribution\n')
+         '" distribution.\n')
   }
   
   if(length(lcoef)!=2) {
     stop("The length of 'lcoef' is ",
          length(lcoef),
-         " instead of 2",
+         " instead of 2.",
          "\n")
   }
   
   if(length(lcmp)!=1) {
     stop("The length of 'lcmp' is ",
          length(lcmp),
-         " instead of 1",
+         " instead of 1.",
          "\n")
   }
   
@@ -114,14 +118,14 @@ aldvmm.check <- function(data,
     stop("The variables ", 
          paste(all.vars(formula)[!(all.vars(formula) %in% names(data))], 
                collapse = ", "), 
-         " from 'formula' do not exist in 'data'",
+         " from 'formula' do not exist in 'data'.",
          "\n")
   }
   
   # Check if user-defined initial values are the right length.
   #-----------------------------------------------------------
   
-  mm <- aldvmm.mm(data = data[complete.cases(data), ][1, ],
+  mm <- aldvmm.mm(data = data[complete.cases(data[, all.vars(formula)]),][1, ],
                   formula = formula,
                   ncmp = ncmp,
                   lcoef = lcoef)
@@ -177,13 +181,17 @@ aldvmm.check <- function(data,
   # Check if model includes constants when init.method is set to "constant".
   #-------------------------------------------------------------------------
   
-  mm <- aldvmm.mm(data = data[complete.cases(data), ][1, ],
+  mm <- aldvmm.mm(data = data[complete.cases(data[, all.vars(formula)]),][1, ],
                   formula = formula,
                   ncmp = ncmp,
                   lcoef = lcoef)
   
-  checkcons <- unlist(lapply(lcoef[1:ncmp], 
-                             function(x) "(Intercept)" %in% colnames(mm[[x]])))
+  if (ncmp>1) {
+    checkcons <- unlist(lapply(lcoef, 
+                               function(x) "(Intercept)" %in% colnames(mm[[x]])))
+  } else {
+    checkcons <- "(Intercept)" %in% colnames(mm[[1]])
+  }
   
   if (init.method=="constant" & FALSE %in% checkcons) {
     stop("At least one equation in 'formula' does not include a constant, ",
@@ -197,8 +205,17 @@ aldvmm.check <- function(data,
   # Ensure data has row names to identify complete rows for predictions
   #--------------------------------------------------------------------
   
-  if(is.null(rownames(data))) {
+  if (is.null(rownames(data))) {
     rownames(data) <- as.character(1:nrow(data))
+  }
+
+  # Ensure the term "(Intercept)" is not used in column names of data
+  #--------------------------------------------------------------------
+  
+  if (TRUE %in% grepl("(Intercept)", names(data))) {
+    stop('"(Intercept)" is not allowed in column names of ',
+         "'data'",
+         "\n")
   }
   
 }

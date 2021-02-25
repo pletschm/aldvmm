@@ -19,11 +19,12 @@ in the extraction of parameters into nested lists using \ifelse{html}{
 \item{X}{a list of design matrices returned by
 \ifelse{html}{\code{\link[aldvmm]{aldvmm.mm}}}{\code{aldvmm::aldvmm.mm()}}.
  \code{'X'} is of length 2 and includes numeric design matrices for the
-models of component distributions (label \code{"beta"}) and the probabilities of
-group membership (label \code{"delta"}). The numeric matrices in \code{'X'} have
-rownames inherited from \code{'data'} supplied to
-\ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}. The
-rownames will be used in \ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{
+models of component distributions (label \code{"beta"}) and the
+probabilities of group membership (label \code{"delta"}). The numeric
+matrices in \code{'X'} have rownames inherited from \code{'data'} supplied
+to \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.
+The rownames will be used in
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{
 \code{aldvmm::aldvmm.pred()}} to return missing predictions for incomplete
 observations in \code{'data'}.}
 
@@ -78,25 +79,33 @@ cannot be used with the
 likelihood function (see details).}
 }
 \value{
-a scalar of the negative log-likelihood of the data for
-  the parameter values in \code{'par'}.
+a scalar of the negative log-likelihood of the data for the
+  parameter values in \code{'par'}.
 }
 \description{
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm::aldvmm.ll()}} calculates the negative log-likelihood of \code{'data'}
-supplied to
-\ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}} for the parameter values in \code{'par'}.
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm::aldvmm.ll()}}
+calculates the negative log-likelihood of \code{'data'} supplied to
+\ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}} for the
+parameter values in \code{'par'}.
 }
 \details{
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm::aldvmm.ll()}} calculates the negative adjusted limited dependent variable mixture model log-likelihood using the
-  likelihood function published in Hernandez Alava and Wailoo (2015).
-  Constant distribution parameters that need to be non-negative (i.e.
-  the standard deviation of normal distributions) enter the likelihood function
-  as log-transformed values.
-  
-  As the "L-BFGS-B" and "Rcgmin" methods in \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}} fail if they encounter infinite values, the log-likelihood function takes the value -1e+20 if it is infinite during these algorithms.
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm::aldvmm.ll()}}
+  calculates the negative adjusted limited dependent variable mixture model
+  log-likelihood using the likelihood function published in Hernandez Alava
+  and Wailoo (2015). Constant distribution parameters that need to be
+  non-negative (i.e. the standard deviation of normal distributions) enter
+  the likelihood function as log-transformed values.
+
+  As the "L-BFGS-B" and "Rcgmin" methods in
+  \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}} fail
+  if they encounter infinite values, the log-likelihood function takes the
+  value -1e+20 if it is infinite during these algorithms.
 }
 \references{
 Alava, M. H. and Wailoo, A. (2015) Fitting adjusted limited
   dependent variable mixture models to EQ-5D. \emph{The Stata Journal},
   \bold{15(3)}, 737--750. \doi{10.1177/1536867X1501500307} \cr
+}
+\author{
+Mark Pletscher, <pletscher.mark@gmail.com>
 }

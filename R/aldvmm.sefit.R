@@ -10,11 +10,13 @@
 #' @param cv a numeric matrix with covariances/variances of parameter estimates
 #'   returned by
 #'   \ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{\code{aldvmm::aldvmm.cv()}}.
+#'
 #' @param mse a scalar a numeric value of the mean squared error of observed
 #'   versus predicted outcomes \eqn{\sum{(y - \hat{y})^2}/(n_{obs} -
 #'   n_{par})}{\sum{(y - \hat{y})^2}/(nobs - npar)} for all observations in
 #'   \code{data} supplied to
 #'   \ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm::aldvmm.ll()}}.
+#'
 #'
 #' @inheritParams aldvmm
 #' @inheritParams aldvmm.ll
@@ -47,7 +49,11 @@
 #'   standard errors. \emph{Health services research}, \bold{49(2)}, 731--750.
 #'   \doi{10.1111/1475-6773.12122}
 #'
-#' @return a named numeric vector of standard errors of fitted or predicted outcomes. The names of the elements in the vector are identical to the row names of design matrices in \code{'X'}
+#' @return a named numeric vector of standard errors of fitted or predicted
+#'   outcomes. The names of the elements in the vector are identical to the row
+#'   names of design matrices in \code{'X'}
+#'
+#' @author Mark Pletscher, <pletscher.mark@gmail.com>
 #'
 #' @export
 
@@ -64,19 +70,23 @@ aldvmm.sefit <- function(par,
                          lcmp,
                          lcpar) {
   
-  se.fit <- rep(NA, times = nrow(X[[1]]))
-  names(se.fit) <- rownames(X[[1]])
-  
   # Check validity of covariance matrix
   #------------------------------------
   
   if (sum(is.na(cv))!=0 | sum(diag(cv)<=0)!=0){
-    warning('\nNo standard errors of the fit obtained because of invalid covariance matrix.\n')
-    return(se.fit)
+    warning("No standard errors of the fit obtained because of invalid ", 
+            "diagonals in covariance matrix.",
+            "\n")
   }
+
+  # Initialize vector of standard errors of all observations
+  #---------------------------------------------------------
   
-  # Loop over observations in design matrix
-  #----------------------------------------
+  se.fit <- rep(NA, times = nrow(X[[1]]))
+  names(se.fit) <- rownames(X[[1]])
+  
+  # Loop over all observations in design matrix
+  #--------------------------------------------
   
   pb <- utils::txtProgressBar(min = 1, max = nrow(X[[1]]), style = 3)
   message("calculating standard errors of the fit using delta method...")
@@ -94,8 +104,8 @@ aldvmm.sefit <- function(par,
       return(out)
       })
     
-    # Approximate gradient numerically
-    #---------------------------------
+    # Approximate gradient of predictions w.r.t. parameters numerically
+    #------------------------------------------------------------------
     
     grad_i <- numDeriv::grad(func = function(z) {
       aldvmm.pred(par   = z,
@@ -113,15 +123,22 @@ aldvmm.sefit <- function(par,
     # Calculate standard error
     #-------------------------
     
-    if (type=="fit") {
-      se.fit[i] <- sqrt(t(grad_i) %*% cv %*% grad_i)
-    } else if (type=="pred") {
-      se.fit[i] <- sqrt(mse + t(grad_i) %*% cv %*% grad_i)
-    } else {
+    if (!(type %in% c("fit", "pred"))) {
       warning("'type' ",
               'is not "fit" or "pred": "pred" is used.',
               "\n")
-      se.fit[i] <- sqrt(mse + t(grad_i) %*% cv %*% grad_i)
+    }
+    
+    if (type=="fit") {
+      se.fit[i] <- sqrt(t(grad_i) %*% cv %*% grad_i)
+    } else {
+      if (!is.null(mse)) {
+        se.fit[i] <- sqrt(mse + t(grad_i) %*% cv %*% grad_i)
+      } else {
+        se.fit[i] <- sqrt(t(grad_i) %*% cv %*% grad_i)
+        warning("'mse' is missing: Standard errors of the fit are generated.",
+                "\n")
+      }
     }
   }
   

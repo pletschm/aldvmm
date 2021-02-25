@@ -11,21 +11,17 @@
 #'   by \ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{
 #'   \code{aldvmm::aldvmm.cv()}}.
 #'
-#'
 #' @param z a named numeric vector of z scores (standardized coefficients) of
 #'   parameters returned by \ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{
 #'   \code{aldvmm::aldvmm.cv()}}.
-#'
 #'
 #' @param p a named numeric vector of p-values of parameters returned by
 #'   \ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{
 #'   \code{aldvmm::aldvmm.cv()}}.
 #'
-#'
 #' @param lower a named numeric vector of 95\% lower limits of parameters
 #'   returned by \ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{
 #'   \code{aldvmm::aldvmm.cv()}}.
-#'
 #'
 #' @param upper a named numeric vector of 95\% upper limits of parameters
 #'   returned by \ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{
@@ -140,7 +136,7 @@ aldvmm.sum <- function(est,
   
   reptab <- list()
   
-  # Distributioin parameters (modeled and constant)
+  # Distribution parameters (modeled and constant)
   for (i in paste0(lcmp, 1:ncmp)) {
     cparmat <- lapply(lcpar, function(x) cbind("", 
                                                rownames(tmp[[i]][[x]]), 
@@ -157,16 +153,35 @@ aldvmm.sum <- function(est,
   }
   
   # Multinomial logit parameters
-  if (ncmp > 1) {
+  if (ncmp==2) {
     mlres <- list()
-    for (i in paste0(lcmp, 1:(ncmp - 1))) {
-      mlres[[i]] <- rbind(lines,
-                          c('P[c|X]', rep("", times = nc - 1)),
-                          lines,
-                          cbind(c(i, rep("", times = length(rn[[lcoef[2]]]) - 1)), 
-                                rn[[lcoef[2]]], 
-                                format(round(tmp[[i]][[lcoef[2]]], 4),
-                                       nsmall = 4)))  
+    i <- paste0(lcmp, 1)
+    mlres[[i]] <- rbind(lines,
+                        c('P[c|X]', rep("", times = nc - 1)),
+                        lines,
+                        cbind(c(i, rep("", 
+                                       times = length(rn[[lcoef[2]]]) - 1)), 
+                              rn[[lcoef[2]]], 
+                              format(round(tmp[[i]][[lcoef[2]]], 4),
+                                     nsmall = 4)))
+    
+  } else if (ncmp > 2) {
+    mlres <- list()
+    i <- paste0(lcmp, 1)
+    mlres[[i]] <- rbind(lines,
+                        c('P[c|X]', rep("", times = nc - 1)),
+                        lines,
+                        cbind(c(i, rep("", 
+                                       times = length(rn[[lcoef[2]]]) - 1)), 
+                              rn[[lcoef[2]]], 
+                              format(round(tmp[[i]][[lcoef[2]]], 4),
+                                     nsmall = 4)))
+    
+    for (i in paste0(lcmp, 2:(ncmp - 1))) {
+      mlres[[i]] <- cbind(c(i, rep("", times = length(rn[[lcoef[2]]]) - 1)), 
+                          rn[[lcoef[2]]], 
+                          format(round(tmp[[i]][[lcoef[2]]], 4),
+                                 nsmall = 4))
     }
     
     reptab[[lcoef[[2]]]] <- as.data.frame(do.call('rbind', mlres))

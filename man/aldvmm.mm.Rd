@@ -32,19 +32,28 @@ coincide with column names in \code{'data'} supplied to
 \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.}
 }
 \value{
-a named list of numeric matrices. \item{\code{beta}}{a numeric matrix with the design matrix for the regression of component distributions.} \item{\code{delta}}{a numeric matrix with the design matrix for the multinomial logit model of probabilities of component membership.}
+a named list of numeric matrices. \item{\code{beta}}{a numeric
+  matrix with the design matrix for the regression of component
+  distributions.} \item{\code{delta}}{a numeric matrix with the design
+  matrix for the multinomial logit model of probabilities of component
+  membership.}
 }
 \description{
 \ifelse{html}{\code{\link[aldvmm]{aldvmm.mm}}}{\code{aldvmm::aldvmm.mm()}}
-creates design matrices for regressions of component distributions (\code{"beta"}) and probabilities of component membership (\code{"delta"}).
+creates design matrices for regressions of component distributions
+(\code{"beta"}) and probabilities of component membership (\code{"delta"}).
 }
 \details{
 \ifelse{html}{\code{\link[aldvmm]{aldvmm.mm}}}{\code{aldvmm::aldvmm.mm()}}
-  uses
-  \ifelse{html}{\code{\link[stats]{model.matrix}}}{\code{stats::model.matrix()}}
-   to create design matrices for regressions of component distributions (\code{"beta"}) and
-  probabilities of component membership (\code{"delta"}) based on \code{'formula'} supplied to
-  \ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm::aldvmm.ll()}}.
-   The design matrix for probabilities of group membership is only created
-  if more than one component are specified  in \code{'ncmp'}.
+uses
+\ifelse{html}{\code{\link[stats]{model.matrix}}}{\code{stats::model.matrix()}}
+to create design matrices for regressions of component distributions
+(\code{"beta"}) and probabilities of component membership (\code{"delta"})
+based on \code{'formula'} supplied to
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm::aldvmm.ll()}}.
+The design matrix for probabilities of group membership is only created if
+more than one component are specified  in \code{'ncmp'}.
+}
+\author{
+Mark Pletscher, <pletscher.mark@gmail.com>
 }

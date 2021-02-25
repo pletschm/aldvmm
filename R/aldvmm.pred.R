@@ -2,18 +2,26 @@
 #' Models
 #'
 #' @description
-#'   \ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm::aldvmm.pred()}}
-#'   makes predictions of observations in design matrices in \code{'X'} using the results of
-#'   \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.
+#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm::aldvmm.pred()}}
+#' makes predictions of observations in design matrices in \code{'X'} using the
+#' results of
+#' \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.
 #'
 #' @inheritParams aldvmm.ll
 #'
-#' @details \ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm::aldvmm.pred()}} calculates expected values for observations in design matrices in \code{'X'} using the expected value function published in Hernandez Alava and Wailoo
-#'   (2015). Constant distribution parameters that need to be non-negative
-#'   (i.e. standard deviations of normal distributions) enter the expected value
-#'   function as log-transformed values.
+#' @details
+#'   \ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm::aldvmm.pred()}}
+#'   calculates expected values for observations in design matrices in
+#'   \code{'X'} using the expected value function published in Hernandez Alava
+#'   and Wailoo (2015). Constant distribution parameters that need to be
+#'   non-negative (i.e. standard deviations of normal distributions) enter the
+#'   expected value function as log-transformed values.
 #'
-#' @return a named numeric vector of predicted outcomes. The names of the elements in the vector are identical to the row names of design matrices in \code{'X'}.
+#' @return a named numeric vector of predicted outcomes. The names of the
+#'   elements in the vector are identical to the row names of design matrices
+#'   in \code{'X'}.
+#'
+#' @author Mark Pletscher, <pletscher.mark@gmail.com>
 #'
 #' @export
 
@@ -63,7 +71,11 @@ aldvmm.pred <- function(par,
     for(c in 1:(ncmp - 1)) {
       p_c[, c] <- exp_xd[, c] / (1 + rowSums(exp_xd))
     }
-    p_c[, ncmp] <- 1 -  rowSums(as.matrix(p_c[, 1:(ncmp - 1)]))
+    if (nrow(p_c)>1) {
+      p_c[, ncmp] <- 1 - rowSums(p_c[, 1:(ncmp - 1)])
+    } else {
+      p_c[, ncmp] <- 1 - sum(p_c[1:(ncmp - 1)])
+    }
     
   } else {
     p_c <- matrix(data = 1, 
@@ -78,7 +90,7 @@ aldvmm.pred <- function(par,
   
   if (dist=="normal") {
     
-    density <- matrix(data = NA, 
+    ev <- matrix(data = NA, 
                       nrow = nrow(X[[1]]), 
                       ncol = ncmp,
                       dimnames = list(rownames(X[[1]]),
@@ -96,45 +108,43 @@ aldvmm.pred <- function(par,
                               mean = 0, 
                               sd   = 1) * min(psi)
       
-      prob_a <-  stats::pnorm((max(psi) - X[[1]] %*% parlist[[lcoef[1]]][[c]]) /
+      mid_a <-  stats::pnorm((max(psi) - X[[1]] %*% parlist[[lcoef[1]]][[c]]) /
                                 exp(parlist[[lcpar[1]]][[c]]), 
                               mean = 0, 
                               sd   = 1)
       
-      prob_b <-  stats::pnorm((min(psi) - X[[1]] %*% parlist[[lcoef[1]]][[c]]) /
+      mid_b <-  stats::pnorm((min(psi) - X[[1]] %*% parlist[[lcoef[1]]][[c]]) /
                                 exp(parlist[[lcpar[1]]][[c]]), 
                               mean = 0, 
                               sd   = 1)
       
-      prob_c <-  stats::dnorm((max(psi) - X[[1]] %*% parlist[[lcoef[1]]][[c]]) /
+      mid_c <-  stats::dnorm((max(psi) - X[[1]] %*% parlist[[lcoef[1]]][[c]]) /
                                 exp(parlist[[lcpar[1]]][[c]]), 
                               mean = 0, 
                               sd   = 1)
       
-      prob_d <-  stats::dnorm((min(psi) - X[[1]] %*% parlist[[lcoef[1]]][[c]]) /
+      mid_d <-  stats::dnorm((min(psi) - X[[1]] %*% parlist[[lcoef[1]]][[c]]) /
                                 exp(parlist[[lcpar[1]]][[c]]), 
                               mean = 0, 
                               sd   = 1)
       
-      prob_e <-  stats::pnorm((min(psi) - X[[1]] %*% parlist[[lcoef[1]]][[c]]) /
+      mid_e <-  stats::pnorm((min(psi) - X[[1]] %*% parlist[[lcoef[1]]][[c]]) /
                                 exp(parlist[[lcpar[1]]][[c]]), 
                               mean = 0, 
                               sd   = 1)
       
-      prob_f <-  stats::pnorm((max(psi) - X[[1]] %*% parlist[[lcoef[1]]][[c]]) /
+      mid_f <-  stats::pnorm((max(psi) - X[[1]] %*% parlist[[lcoef[1]]][[c]]) /
                                 exp(parlist[[lcpar[1]]][[c]]), 
                               mean = 0, 
                               sd   = 1)
       
-      prob   <-  (prob_a - prob_b) * (X[[1]] %*% parlist[[lcoef[1]]][[c]] +
+      mid   <-  (mid_a - mid_b) * (X[[1]] %*% parlist[[lcoef[1]]][[c]] +
                                         exp(parlist[[lcpar[1]]][[c]]) * 
-                                        (prob_c - prob_d) / (prob_e - prob_f))
+                                        (mid_c - mid_d) / (mid_e - mid_f))
       
-      density[, c] <- max + min + prob
+      ev[, c] <- max + min + mid
       
     }
-    
-    rm(max, min, prob)
     
   }
   
@@ -144,39 +154,33 @@ aldvmm.pred <- function(par,
   pred <- list()
   
   # Outcomes
-  yhat           <- rowSums(p_c * density)
-  names(yhat)    <- rownames(X[[1]])
-  pred[["yhat"]] <- rep(NA, times = nrow(X[[1]]))
+  pred[["yhat"]] <- rowSums(p_c * ev)
   names(pred[["yhat"]]) <- rownames(X[[1]])
-  pred[["yhat"]][names(yhat)] <- yhat
   
   if (!is.null(y)) {
-    pred[["y"]]    <- rep(NA, times = nrow(X[[1]]))
+    pred[["y"]] <- y
     names(pred[["y"]]) <- rownames(X[[1]])
-    pred[["y"]][names(yhat)] <- y
     
-    pred[["res"]]  <- rep(NA, times = nrow(X[[1]]))
-    names(pred[["res"]]) <- rownames(X[[1]])
     pred[["res"]]  <- pred[["y"]] - pred[["yhat"]]
+    names(pred[["res"]]) <- rownames(X[[1]])
   }
 
-  rm(yhat)
-  
-  # Probabilities of group membership
-  #----------------------------------
-  
-  pred[["prob"]] <- rep(NA, times = ncmp)
-  names(pred[["prob"]]) <- paste0(lcmp, 1:ncmp)
-  
-  for(i in 1:ncmp) {
-    pred[["prob"]][i] <- mean(p_c[, i])
-  }
-  
   if (sum(is.na(pred[["yhat"]]))!=0) {
     warning("fitted values include missing values",
             "\n")
   }
   
+  # Probabilities of group membership
+  #----------------------------------
+  
+  pred[["prob"]] <- colMeans(p_c)
+  names(pred[["prob"]]) <- paste0(lcmp, 1:ncmp)
+  
+  if (sum(is.na(p_c))!=0) {
+    warning("fitted probabilities of component membership include missing ", 
+            "values",
+            "\n")
+  }
   
   return(pred)
   

@@ -26,11 +26,12 @@ aldvmm.init(
 \item{X}{a list of design matrices returned by
 \ifelse{html}{\code{\link[aldvmm]{aldvmm.mm}}}{\code{aldvmm::aldvmm.mm()}}.
  \code{'X'} is of length 2 and includes numeric design matrices for the
-models of component distributions (label \code{"beta"}) and the probabilities of
-group membership (label \code{"delta"}). The numeric matrices in \code{'X'} have
-rownames inherited from \code{'data'} supplied to
-\ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}. The
-rownames will be used in \ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{
+models of component distributions (label \code{"beta"}) and the
+probabilities of group membership (label \code{"delta"}). The numeric
+matrices in \code{'X'} have rownames inherited from \code{'data'} supplied
+to \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.
+The rownames will be used in
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{
 \code{aldvmm::aldvmm.pred()}} to return missing predictions for incomplete
 observations in \code{'data'}.}
 
@@ -117,9 +118,9 @@ summary tables returned by
 \code{aldvmm::summary.aldvmm()}}.}
 }
 \value{
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.init}}}{\code{aldvmm::aldvmm.init()}} returns a list with the following objects.
-  \item{\code{est}}{a numeric vector of initial values of parameters
-  supplied to
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.init}}}{\code{aldvmm::aldvmm.init()}}
+  returns a list with the following objects. \item{\code{est}}{a numeric
+  vector of initial values of parameters supplied to
   \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}} in
   \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.}
   \item{\code{lo}}{a numeric vector of lower limits of parameters in

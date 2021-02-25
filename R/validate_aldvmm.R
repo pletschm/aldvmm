@@ -1,7 +1,7 @@
 validate_aldvmm <- function(object) {
   
-  # Test structure of vectors
-  #--------------------------
+  # Vectors
+  #--------
   
   names(object)
   vecnames <- c("coef", "se", "z", "p", "lower", "upper", "psi")
@@ -12,6 +12,9 @@ validate_aldvmm <- function(object) {
          paste(vecnames[novec], collapse = ", "),
          "\n")
   }
+
+  # Lists
+  #------
   
   listnames <- c("gof", "pred", "init", "label")
   nolist <- unlist(lapply(listnames, function(x) !is.list(object[[x]])))
@@ -21,6 +24,9 @@ validate_aldvmm <- function(object) {
          "\n")
     }
 
+  # Matrices
+  #---------
+  
   matnames <- c("hessian", "cov")
   nomat <- unlist(lapply(matnames, function(x) !is.matrix(object[[x]])))
   nomat <- c(nomat, 
@@ -33,6 +39,9 @@ validate_aldvmm <- function(object) {
          "\n")
   }
 
+  # Numeric objects
+  #----------------
+  
   numnames <- c("coef", "se", "z", "p", "lower", "upper", "hessian", "cov",
                 "n", "k", "psi")
   nonum <- unlist(lapply(numnames, function(x) !is.numeric(object[[x]])))
@@ -47,6 +56,9 @@ validate_aldvmm <- function(object) {
          "\n")
   }
 
+  # Character objects
+  #------------------
+  
   chrnames <- c("dist", "optim.method")
   nochr <- unlist(lapply(chrnames, function(x) !is.character(object[[x]])))
   nochr <- c(nochr, 
@@ -58,12 +70,17 @@ validate_aldvmm <- function(object) {
          "\n")
   }
   
+  # Formula objects
+  #----------------
+  
   if (class(object$formula)!="formula") {
     stop("'formula' ",
          'in object of class "aldvmm" is not of type "formula"',
          "\n")
   }
   
+  # Length of vectors
+  #------------------
   
   veclen <- unlist(lapply(object[c("coef", "se", "z", "p", "lower", "upper")],
                 function(x) length(x)))
