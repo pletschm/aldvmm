@@ -168,11 +168,13 @@ aldvmm.sum <- function(est,
     reptab[[j]] <- do.call("rbind", lapply(tmp, function(x) x[[j]]))
   }
   
-  reptab[["head2"]] <- rbind(lines,
-                             c('P[c|X]',    rep("", times = nc - 1)),
-                             lines)
-  
-  reptab[[lcoef[2]]] <- do.call("rbind", lapply(tmp, function(x) x[[lcoef[2]]]))
+  if (ncmp > 1) {
+    reptab[["head2"]] <- rbind(lines,
+                               c('P[c|X]',    rep("", times = nc - 1)),
+                               lines)
+    
+    reptab[[lcoef[2]]] <- do.call("rbind", lapply(tmp, function(x) x[[lcoef[2]]]))
+  }
   
   reptab[["end"]] <- lines
   
