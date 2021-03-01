@@ -93,7 +93,8 @@ aldvmm.sum <- function(est,
   for (i in 1:length(parlist)) {
     for (j in 1:length(parlist[[i]])) {
       for (k in 1:length(parlist[[i]][[j]])) {
-        parlist[[i]][[j]][[k]] <- format(round(as.numeric(parlist[[i]][[j]][[k]]),
+        val <- parlist[[i]][[j]][[k]]
+        parlist[[i]][[j]][[k]] <- format(round(as.numeric(val),
                                                digits = digits), 
                                          nsmall = digits)
       }
@@ -115,7 +116,6 @@ aldvmm.sum <- function(est,
                                   parlist[["p"]][[lcoef[1]]][[i]],
                                   parlist[["lower"]][[lcoef[1]]][[i]],
                                   parlist[["upper"]][[lcoef[1]]][[i]])
-    rownames(tmp[[i]][[lcoef[1]]]) <- lvar[[lcoef[1]]]
   }
   
   # Deltas (coefficients for multinomial logit for group membership)
@@ -129,7 +129,6 @@ aldvmm.sum <- function(est,
                                     parlist[["p"]][[lcoef[2]]][[i]],
                                     parlist[["lower"]][[lcoef[2]]][[i]],
                                     parlist[["upper"]][[lcoef[2]]][[i]])
-      rownames(tmp[[i]][[lcoef[2]]]) <- lvar[[lcoef[2]]]
     }
   }
   
@@ -144,7 +143,6 @@ aldvmm.sum <- function(est,
                              parlist[["p"]][[j]][[i]],
                              parlist[["lower"]][[j]][[i]],
                              parlist[["upper"]][[j]][[i]])
-      rownames(tmp[[i]][[j]]) <- j
     }
   }
   
@@ -204,6 +202,8 @@ aldvmm.sum <- function(est,
   }
   
   # Remove row and column names
+  #----------------------------
+  
   reptab <- as.data.frame(reptab)
   names(reptab) <- NULL
   rownames(reptab) <- NULL
