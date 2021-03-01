@@ -19,7 +19,8 @@ aldvmm.sum(
   lcoef,
   lcpar,
   lcmp,
-  lvar
+  lvar,
+  digits = 3
 )
 }
 \arguments{
@@ -91,6 +92,9 @@ summary tables returned by
 \item{lvar}{a named list of character vectors with column names of design
 matrices returned by \ifelse{html}{\code{\link[aldvmm]{aldvmm.mm}}}{
 \code{aldvmm::aldvmm.mm()}}.}
+
+\item{digits}{a numeric value of the number of digits in the reporting
+table.}
 }
 \value{
 a data frame with a summary table of regression results.

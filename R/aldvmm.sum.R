@@ -47,6 +47,9 @@
 #'   \code{'data'} supplied to
 #'   \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.
 #'
+#' @param digits a numeric value of the number of digits in the reporting
+#'   table.
+#'
 #' @inheritParams aldvmm.ll
 #'
 #' @return a data frame with a summary table of regression results.
@@ -67,7 +70,8 @@ aldvmm.sum <- function(est,
                        lcoef,
                        lcpar,
                        lcmp,
-                       lvar) {
+                       lvar,
+                       digits = 3) {
   
   options(scipen = 999)
   
@@ -83,6 +87,19 @@ aldvmm.sum <- function(est,
                                               ncmp  = ncmp))
   names(parlist) <- lstat
   
+  # Round results
+  #--------------
+  
+  for (i in 1:length(parlist)) {
+    for (j in 1:length(parlist[[i]])) {
+      for (k in 1:length(parlist[[i]][[j]])) {
+        parlist[[i]][[j]][[k]] <- format(round(as.numeric(parlist[[i]][[j]][[k]]),
+                                               digits = digits), 
+                                         nsmall = digits)
+      }
+    }
+  }
+
   # Make matrices of statistics by component and {beta, delta, constant}
   #---------------------------------------------------------------------
   
@@ -90,7 +107,9 @@ aldvmm.sum <- function(est,
   
   # Betas (coefficients on distribution parameters)
   for (i in paste0(lcmp, 1:ncmp)) {
-    tmp[[i]][[lcoef[1]]] <- cbind(parlist[["est"]][[lcoef[1]]][[i]],
+    tmp[[i]][[lcoef[1]]] <- cbind(c(i, rep("", length(lvar[[lcoef[1]]]) - 1)),
+                                  lvar[[lcoef[1]]],
+                                  parlist[["est"]][[lcoef[1]]][[i]],
                                   parlist[["se"]][[lcoef[1]]][[i]],
                                   parlist[["z"]][[lcoef[1]]][[i]],
                                   parlist[["p"]][[lcoef[1]]][[i]],
@@ -102,7 +121,9 @@ aldvmm.sum <- function(est,
   # Deltas (coefficients for multinomial logit for group membership)
   if (ncmp > 1) {
     for (i in paste0(lcmp, 1:(ncmp - 1))) {
-      tmp[[i]][[lcoef[2]]] <- cbind(parlist[["est"]][[lcoef[2]]][[i]],
+      tmp[[i]][[lcoef[2]]] <- cbind(c(i, rep("", length(lvar[[lcoef[2]]]) - 1)),
+                                    lvar[[lcoef[2]]],
+                                    parlist[["est"]][[lcoef[2]]][[i]],
                                     parlist[["se"]][[lcoef[2]]][[i]],
                                     parlist[["z"]][[lcoef[2]]][[i]],
                                     parlist[["p"]][[lcoef[2]]][[i]],
@@ -115,7 +136,9 @@ aldvmm.sum <- function(est,
   # Constant distribution parameters
   for (i in paste0(lcmp, 1:ncmp)) {
     for (j in lcpar) {
-      tmp[[i]][[j]] <- cbind(parlist[["est"]][[j]][[i]],
+      tmp[[i]][[j]] <- cbind("",
+                             j,
+                             parlist[["est"]][[j]][[i]],
                              parlist[["se"]][[j]][[i]],
                              parlist[["z"]][[j]][[i]],
                              parlist[["p"]][[j]][[i]],
@@ -125,110 +148,66 @@ aldvmm.sum <- function(est,
     }
   }
   
-  # Make list of data frames by component
-  #--------------------------------------
+  # Make list of elements of reporting table
+  #-----------------------------------------
   
-  nc <- ncol(tmp[[i]][[lcoef[1]]]) + 2
-  rn <- lapply(tmp[[1]], function(x) rownames(x))
-  
+  nc<- ncol(tmp[[i]][[lcoef[1]]])
   lines <- rep("-", times = nc)
   
   reptab <- list()
   
-  # Distribution parameters (modeled and constant)
-  for (i in paste0(lcmp, 1:ncmp)) {
-    cparmat <- lapply(lcpar, function(x) cbind("", 
-                                               rownames(tmp[[i]][[x]]), 
-                                               format(round(tmp[[i]][[x]], 4),
-                                                      nsmall = 4) ))
-    
-    mat <- rbind(cbind(c(i, rep("", times = length(rn[[lcoef[1]]]) - 1)), 
-                       rn[[lcoef[1]]], 
-                       format(round(tmp[[i]][[lcoef[1]]], 4),
-                              nsmall = 4) ),
-                 do.call("rbind", cparmat))
-    
-    reptab[[i]] <- as.data.frame(mat, check.names = FALSE) 
+  reptab[["head0"]] <- rbind(lines,
+                             c("", "", "Estimate", "Std. Err.", "z", "P>|z|", 
+                               "[95% Conf. ", "Interval]"))
+  
+  reptab[["head1"]] <- rbind(lines,
+                             c('E[Y|X, c]', rep("", times = nc - 1)),
+                             lines)
+  
+  reptab[[lcoef[1]]] <- do.call("rbind", lapply(tmp, function(x) x[[lcoef[1]]]))
+  
+  for (j in lcpar) {
+    reptab[[j]] <- do.call("rbind", lapply(tmp, function(x) x[[j]]))
   }
   
-  # Multinomial logit parameters
-  if (ncmp==2) {
-    mlres <- list()
-    i <- paste0(lcmp, 1)
-    mlres[[i]] <- rbind(lines,
-                        c('P[c|X]', rep("", times = nc - 1)),
-                        lines,
-                        cbind(c(i, rep("", 
-                                       times = length(rn[[lcoef[2]]]) - 1)), 
-                              rn[[lcoef[2]]], 
-                              format(round(tmp[[i]][[lcoef[2]]], 4),
-                                     nsmall = 4)))
-    
-  } else if (ncmp > 2) {
-    mlres <- list()
-    i <- paste0(lcmp, 1)
-    mlres[[i]] <- rbind(lines,
-                        c('P[c|X]', rep("", times = nc - 1)),
-                        lines,
-                        cbind(c(i, rep("", 
-                                       times = length(rn[[lcoef[2]]]) - 1)), 
-                              rn[[lcoef[2]]], 
-                              format(round(tmp[[i]][[lcoef[2]]], 4),
-                                     nsmall = 4)))
-    
-    for (i in paste0(lcmp, 2:(ncmp - 1))) {
-      mlres[[i]] <- cbind(c(i, rep("", times = length(rn[[lcoef[2]]]) - 1)), 
-                          rn[[lcoef[2]]], 
-                          format(round(tmp[[i]][[lcoef[2]]], 4),
-                                 nsmall = 4))
-    }
-  }
+  reptab[["head2"]] <- rbind(lines,
+                             c('P[c|X]',    rep("", times = nc - 1)),
+                             lines)
   
-  if (ncmp>1) {
-    reptab[[lcoef[[2]]]] <- as.data.frame(do.call('rbind', mlres))
-  }
+  reptab[[lcoef[2]]] <- do.call("rbind", lapply(tmp, function(x) x[[lcoef[2]]]))
   
-  # Combine outputs from different components
-  #------------------------------------------
+  reptab[["end"]] <- lines
   
-  # Make data frame
-  outdat <- do.call("rbind", reptab)
-  outdat <- rbind(lines,
-                  c("", "", "Estimate", "Std. Err.", "z", "P>|z|", 
-                    "[95% Conf. ", "Interval]"),
-                  lines,
-                  c("E[y|c, X]", rep("", times = nc - 1)),
-                  lines,
-                  outdat,
-                  lines,
-                  c(paste0("N = ", n), 
-                    paste0("ll = ", format(round(-value, digits = 2), 
-                                           nsmall = 2)),
-                    paste0("AIC = ", format(round(aic, digits = 2), 
-                                            nsmall = 2)),
-                    paste0("BIC = ", format(round(bic, digits = 2), 
-                                            nsmall = 2)),
-                    rep("", times = nc - 4)))
+  reptab[["gof"]] <- c(paste0("N = ", n), 
+                       paste0("ll = ", format(round(-value, digits = 2), 
+                                              nsmall = 2)),
+                       paste0("AIC = ", format(round(aic, digits = 2), 
+                                               nsmall = 2)),
+                       paste0("BIC = ", format(round(bic, digits = 2), 
+                                               nsmall = 2)),
+                       rep("", times = nc - 4))
+  
+  reptab <- do.call("rbind", reptab)
   
   # Expand lines to column widths
-  tmpdat <- outdat
-  tmpdat[is.na(tmpdat)] <- "NA"
-  width <- apply(apply(tmpdat, 2, nchar), 2, max)
-  rm(tmpdat)
+  #------------------------------
   
-  for (i in seq_len(nrow(outdat))) {
-    for (j in seq_along(outdat)) {
-      outdat[i, j] <- ifelse(outdat[i, j] %in% c("-", "="), 
-                             paste0(rep(outdat[i, j], times = width[j]), 
+  width <- apply(apply(reptab, 2, nchar), 2, max)
+  
+  for (i in seq_len(nrow(reptab))) {
+    for (j in seq_len(ncol(reptab))) {
+      reptab[i, j] <- ifelse(reptab[i, j]==lines[1], 
+                             paste0(rep(reptab[i, j], times = width[j]), 
                                     collapse = ""), 
-                             outdat[i, j])
+                             reptab[i, j])
     }
   }
   
   # Remove row and column names
-  names(outdat) <- NULL
-  rownames(outdat) <- NULL
+  reptab <- as.data.frame(reptab)
+  names(reptab) <- NULL
+  rownames(reptab) <- NULL
   
-  return(outdat)
+  return(reptab)
   
 }

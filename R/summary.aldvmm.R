@@ -22,23 +22,24 @@ summary.aldvmm <- function(object, ...) {
   # Create regression table
   #------------------------
   
-  regtab <- aldvmm.sum(est   = object$coef,
-                       se    = object$se,
-                       z     = object$z,
-                       p     = object$p,
-                       lower = object$lower,
-                       upper = object$upper,
-                       n     = object$n,
-                       value = object$gof$ll,
-                       aic   = object$gof$aic,
-                       bic   = object$gof$aic,
-                       ncmp  = object$k,
-                       lcoef = object$label$lcoef,
-                       lcmp  = object$label$lcmp,
-                       lcpar = object$label$lcpar,
-                       lvar  = object$label$lvar)
+  regtab <- aldvmm.sum(est    = object$coef,
+                       se     = object$se,
+                       z      = object$z,
+                       p      = object$p,
+                       lower  = object$lower,
+                       upper  = object$upper,
+                       n      = object$n,
+                       value  = object$gof$ll,
+                       aic    = object$gof$aic,
+                       bic    = object$gof$aic,
+                       ncmp   = object$k,
+                       lcoef  = object$label$lcoef,
+                       lcmp   = object$label$lcmp,
+                       lcpar  = object$label$lcpar,
+                       lvar   = object$label$lvar,
+                       digits = 3)
   
-  df <- format(regtab, 
+  df <- format(as.data.frame(regtab), 
               trim = TRUE)
   
   print(df,
