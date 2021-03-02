@@ -100,9 +100,9 @@ aldvmm.sum <- function(est,
       }
     }
   }
-
-  # Make matrices of statistics by component and {beta, delta, constant}
-  #---------------------------------------------------------------------
+  
+  # Make matrices of statistics by component and type of parameters
+  #----------------------------------------------------------------
   
   tmp <- list()
   
@@ -121,7 +121,7 @@ aldvmm.sum <- function(est,
   # Deltas (coefficients for multinomial logit for group membership)
   if (ncmp > 1) {
     for (i in paste0(lcmp, 1:(ncmp - 1))) {
-      tmp[[i]][[lcoef[2]]] <- cbind(c(i, rep("", length(lvar[[lcoef[2]]]) - 1)),
+      tmp[[i]][[lcoef[2]]] <- cbind(c(i,rep("", length(lvar[[lcoef[2]]]) - 1)),
                                     lvar[[lcoef[2]]],
                                     parlist[["est"]][[lcoef[2]]][[i]],
                                     parlist[["se"]][[lcoef[2]]][[i]],
@@ -162,10 +162,11 @@ aldvmm.sum <- function(est,
                              c('E[Y|X, c]', rep("", times = nc - 1)),
                              lines)
   
-  reptab[[lcoef[1]]] <- do.call("rbind", lapply(tmp, function(x) x[[lcoef[1]]]))
-  
-  for (j in lcpar) {
-    reptab[[j]] <- do.call("rbind", lapply(tmp, function(x) x[[j]]))
+  for (c in paste0(lcmp, 1:ncmp)) {
+    reptab[[paste(c, lcoef[1], sep = "_")]] <- tmp[[c]][[lcoef[1]]]
+    for (j in lcpar) {
+      reptab[[paste(c, j, sep = "_")]] <- tmp[[c]][[j]]
+    }
   }
   
   if (ncmp > 1) {
@@ -173,7 +174,8 @@ aldvmm.sum <- function(est,
                                c('P[c|X]',    rep("", times = nc - 1)),
                                lines)
     
-    reptab[[lcoef[2]]] <- do.call("rbind", lapply(tmp, function(x) x[[lcoef[2]]]))
+    reptab[[lcoef[2]]] <- do.call("rbind", 
+                                  lapply(tmp, function(x) x[[lcoef[2]]]))
   }
   
   reptab[["end"]] <- lines
@@ -187,7 +189,11 @@ aldvmm.sum <- function(est,
                                                nsmall = 2)),
                        rep("", times = nc - 4))
   
+  # Convert list to data.frame
+  #---------------------------
+  
   reptab <- do.call("rbind", reptab)
+  reptab <- as.data.frame(reptab)
   
   # Expand lines to column widths
   #------------------------------
@@ -206,7 +212,6 @@ aldvmm.sum <- function(est,
   # Remove row and column names
   #----------------------------
   
-  reptab <- as.data.frame(reptab)
   names(reptab) <- NULL
   rownames(reptab) <- NULL
   
