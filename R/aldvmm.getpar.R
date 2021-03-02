@@ -37,14 +37,14 @@ aldvmm.getpar <- function(par,
   stubs <- apply(expand.grid(paste0(lcmp, 1:ncmp), c(lcoef, lcpar)), 
                         1, 
                         paste, 
-                        collapse="_")
+                        collapse = "_")
            
   parlist <- list()
   
   # Betas (coefficients on distribution parameters)
   #------------------------------------------------
   
-  for(i in paste0(lcmp, 1:ncmp)) {
+  for (i in paste0(lcmp, 1:ncmp)) {
     
     val <- par[base::startsWith(names(par), stubs[grepl(lcoef[1], stubs) &
                                                     grepl(i, stubs)])]
@@ -56,8 +56,8 @@ aldvmm.getpar <- function(par,
   # Deltas (coefficients for multinomial logit for group membership)
   #-----------------------------------------------------------------
   
-  if (ncmp>1) {
-    for(i in paste0(lcmp, 1:(ncmp - 1))) {
+  if (ncmp > 1) {
+    for (i in paste0(lcmp, 1:(ncmp - 1))) {
       val <- par[base::startsWith(names(par), stubs[grepl(lcoef[2], stubs) &
                                                       grepl(i, stubs)])]
       parlist[[lcoef[2]]][[i]] <- val
@@ -69,7 +69,7 @@ aldvmm.getpar <- function(par,
   #---------------------------------
   
   for (i in lcpar) {
-    for(j in paste0(lcmp, 1:ncmp)) {
+    for (j in paste0(lcmp, 1:ncmp)) {
       val <- par[base::startsWith(names(par), stubs[grepl(i, stubs) &
                                                       grepl(j, stubs)])]
       parlist[[i]][[j]] <- val

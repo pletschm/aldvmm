@@ -73,14 +73,14 @@ aldvmm.sefit <- function(par,
   # Check validity of covariance matrix
   #------------------------------------
   
-  if (sum(is.na(cv))!=0) {
+  if (sum(is.na(cv)) != 0) {
     warning("Missing values in covariance matrix: ",
             "No standard errors of the fit obtained",
             "\n")
     return(NULL)
   }
   
-  if (sum(diag(cv)<=0)!=0) {
+  if (sum(diag(cv)<=0) != 0) {
     warning("Negative diagonals in covariance matrix: ",
             "No standard errors of the fit obtained", 
             "\n")
@@ -99,7 +99,7 @@ aldvmm.sefit <- function(par,
   pb <- utils::txtProgressBar(min = 1, max = nrow(X[[1]]), style = 3)
   message("calculating standard errors of the fit using delta method...")
   
-  for (i in 1:nrow(X[[1]])){
+  for (i in 1:nrow(X[[1]])) {
     
     utils::setTxtProgressBar(pb, i)
     
@@ -137,7 +137,7 @@ aldvmm.sefit <- function(par,
               "\n")
     }
     
-    if (type=="fit") {
+    if (type == "fit") {
       se.fit[i] <- sqrt(t(grad_i) %*% cv %*% grad_i)
     } else {
       if (!is.null(mse) & !is.na(mse)) {

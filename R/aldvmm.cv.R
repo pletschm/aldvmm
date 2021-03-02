@@ -84,20 +84,20 @@ aldvmm.cv <- function(ll,
   # Standard errors, significance and confidence intervals of parameters
   #---------------------------------------------------------------------
   
-  if (sum(is.na(outlist[["cv"]]))==nrow(outlist[["cv"]]) * 
+  if (sum(is.na(outlist[["cv"]])) == nrow(outlist[["cv"]]) * 
       ncol(outlist[["cv"]])) {
     warning("no covariance matrix was obtained.",
             "\n")
     outlist[["se"]] <- rep(NA, times = length(par))
-  } else if (sum(!is.na(diag(outlist[["cv"]])))==0) {
+  } else if (sum(!is.na(diag(outlist[["cv"]]))) == 0) {
     warning("covariance matrix includes only missing diagonals",
             "\n")
     outlist[["se"]] <- rep(NA, times = length(par))
-  } else if (sum(diag(outlist[["cv"]])<=0)>0) {
+  } else if (sum(diag(outlist[["cv"]]) <= 0) > 0) {
     warning("covariance matrix includes non-positive diagnoals",
             "\n")
     outlist[["se"]] <- sqrt(diag(outlist[["cv"]]))
-  } else if (sum(is.na(outlist[["se"]]))>0) {
+  } else if (sum(is.na(outlist[["se"]])) > 0) {
     warning("missing standard errors were obtained",
             "\n")
     outlist[["se"]] <- sqrt(diag(outlist[["cv"]]))
@@ -109,7 +109,7 @@ aldvmm.cv <- function(ll,
   outlist[["z"]] <- par / outlist[["se"]]
   names(outlist[["z"]]) <- names(par)
   
-  outlist[["p"]] <- stats::pnorm(outlist[["z"]], lower.tail=FALSE)
+  outlist[["p"]] <- stats::pnorm(outlist[["z"]], lower.tail = FALSE)
   names(outlist[["p"]]) <- names(par)
   
   outlist[["upper"]] <- par + stats::qnorm(0.975) * outlist[["se"]]

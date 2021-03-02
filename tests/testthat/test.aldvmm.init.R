@@ -42,22 +42,22 @@ test_that('Check generation of initial values.', {
                       optim.grad = TRUE)
   
   expect_named(init[["est"]])
-  testthat::expect(sum(init[["est"]])==0,
+  testthat::expect(sum(init[["est"]]) == 0,
                    failure_message = 
                      'Non-zero initial values with init.method=="zero".'
   )
-  testthat::expect(length(init[["est"]])==length(init[["lo"]]) & 
-                     length(init[["est"]])==length(init[["hi"]]),
+  testthat::expect(length(init[["est"]]) == length(init[["lo"]]) & 
+                     length(init[["est"]]) == length(init[["hi"]]),
                    failure_message = 
                      'Limits are not of same length as initial values.'
   )
-  testthat::expect(length(init[["est"]])==length(names),
+  testthat::expect(length(init[["est"]]) == length(names),
                    failure_message = 'Initial values are of unexpected length.'
   )
-  testthat::expect(sum(names(init[["est"]])!=names)==0,
+  testthat::expect(sum(names(init[["est"]]) != names) == 0,
                    failure_message = 'Initial values have unexpected names.'
   )
-  testthat::expect(sum(!is.finite(init[["est"]]))==0,
+  testthat::expect(sum(!is.finite(init[["est"]])) == 0,
                    failure_message = 
                      'Initial values include non-finite values.'
   )
@@ -68,8 +68,8 @@ test_that('Check generation of initial values.', {
   testthat::expect(is.numeric(init[["lo"]]) & is.numeric(init[["hi"]]),
                    failure_message = 'Limits are not numeric.'
   )
-  testthat::expect(sum(init[["est"]]>init[["hi"]]) + 
-                     sum(init[["est"]]<init[["lo"]])==0,
+  testthat::expect(sum(init[["est"]] > init[["hi"]]) + 
+                     sum(init[["est"]] < init[["lo"]]) == 0,
                    failure_message = 
                      'Initial values outside limits are generated.'
   )
@@ -94,24 +94,24 @@ test_that('Check generation of initial values.', {
                       optim.grad = TRUE)
   
   expect_named(init[["est"]])
-  testthat::expect(length(unique(init[["est"]]))==length(init[["est"]]),
+  testthat::expect(length(unique(init[["est"]])) == length(init[["est"]]),
                    failure_message = 
                      'Random initial values include repeated values.'
   )
-  testthat::expect(length(init[["est"]])==length(init[["lo"]]) & 
-                     length(init[["est"]])==length(init[["hi"]]),
+  testthat::expect(length(init[["est"]]) == length(init[["lo"]]) & 
+                     length(init[["est"]]) == length(init[["hi"]]),
                    failure_message = 
                      'Limits are not of same length as initial values.'
   )
-  testthat::expect(length(init[["est"]])==length(names),
+  testthat::expect(length(init[["est"]]) == length(names),
                    failure_message = 
                      'Initial values are of unexpected length.'
   )
-  testthat::expect(sum(names(init[["est"]])!=names)==0,
+  testthat::expect(sum(names(init[["est"]]) != names) == 0,
                    failure_message = 
                      'Initial values have unexpected names.'
   )
-  testthat::expect(sum(!is.finite(init[["est"]]))==0,
+  testthat::expect(sum(!is.finite(init[["est"]])) == 0,
                    failure_message = 
                      'Initial values include non-finite values.'
   )
@@ -122,8 +122,8 @@ test_that('Check generation of initial values.', {
   testthat::expect(is.numeric(init[["lo"]]) & is.numeric(init[["hi"]]),
                    failure_message = 'Limits are not numeric.'
   )
-  testthat::expect(sum(init[["est"]]>init[["hi"]]) + 
-                     sum(init[["est"]]<init[["lo"]])==0,
+  testthat::expect(sum(init[["est"]] > init[["hi"]]) + 
+                     sum(init[["est"]] < init[["lo"]]) == 0,
                    failure_message = 
                      'Initial values outside limits are generated.'
   )
@@ -149,24 +149,24 @@ test_that('Check generation of initial values.', {
   
   expect_named(init[["est"]])
   testthat::expect(sum(init[["est"]][!grepl('(Intercept)|sigma', 
-                                            names(init[["est"]]))])==0,
+                                            names(init[["est"]]))]) == 0,
                    failure_message = 
                      'Modeled parameters include non-zero initial values.'
   )
-  testthat::expect(length(init[["est"]])==length(init[["lo"]]) & 
-                     length(init[["est"]])==length(init[["hi"]]),
+  testthat::expect(length(init[["est"]]) == length(init[["lo"]]) & 
+                     length(init[["est"]]) == length(init[["hi"]]),
                    failure_message = 
                      'Limits are not of same length as initial values.'
   )
-  testthat::expect(length(init[["est"]])==length(names),
+  testthat::expect(length(init[["est"]]) == length(names),
                    failure_message = 
                      'Initial values are of unexpected length.'
   )
-  testthat::expect(sum(names(init[["est"]])!=names)==0,
+  testthat::expect(sum(names(init[["est"]]) != names) == 0,
                    failure_message = 
                      'Initial values have unexpected names.'
   )
-  testthat::expect(sum(!is.finite(init[["est"]]))==0,
+  testthat::expect(sum(!is.finite(init[["est"]])) == 0,
                    failure_message = 
                      'Initial values include non-finite values.'
   )
@@ -178,8 +178,8 @@ test_that('Check generation of initial values.', {
                    failure_message = 
                      'Limits are not numeric.'
   )
-  testthat::expect(sum(init[["est"]]>init[["hi"]]) + 
-                     sum(init[["est"]]<init[["lo"]])==0,
+  testthat::expect(sum(init[["est"]] > init[["hi"]]) + 
+                     sum(init[["est"]] < init[["lo"]]) == 0,
                    failure_message = 
                      'Initial values outside limits are generated.'
   )
@@ -204,19 +204,19 @@ test_that('Check generation of initial values.', {
                       optim.grad = TRUE)
   
   expect_named(init[["est"]])
-  testthat::expect(length(init[["est"]])==length(init[["lo"]]) & 
-                     length(init[["est"]])==length(init[["hi"]]),
+  testthat::expect(length(init[["est"]]) == length(init[["lo"]]) & 
+                     length(init[["est"]]) == length(init[["hi"]]),
                    failure_message = 
                      'Limits are not of same length as initial values.'
   )
-  testthat::expect(length(init[["est"]])==length(names),
+  testthat::expect(length(init[["est"]]) == length(names),
                    failure_message = 
                      'Initial values are of unexpected length.'
   )
-  testthat::expect(sum(names(init[["est"]])!=names)==0,
+  testthat::expect(sum(names(init[["est"]]) != names) == 0,
                    failure_message = 'Initial values have unexpected names.'
   )
-  testthat::expect(sum(!is.finite(init[["est"]]))==0,
+  testthat::expect(sum(!is.finite(init[["est"]])) == 0,
                    failure_message = 
                      'Initial values include non-finite values.'
   )
@@ -227,8 +227,8 @@ test_that('Check generation of initial values.', {
   testthat::expect(is.numeric(init[["lo"]]) & is.numeric(init[["hi"]]),
                    failure_message = 'Limits are not numeric.'
   )
-  testthat::expect(sum(init[["est"]]>init[["hi"]]) + 
-                     sum(init[["est"]]<init[["lo"]])==0,
+  testthat::expect(sum(init[["est"]] > init[["hi"]]) + 
+                     sum(init[["est"]] < init[["lo"]]) == 0,
                    failure_message = 
                      'Initial values outside limits are generated.'
   )
@@ -255,20 +255,21 @@ test_that('Check generation of initial values.', {
                       optim.grad = TRUE)
   
   expect_named(init[["est"]])
-  testthat::expect(sum(init[["est"]]!=est)==0,
+  testthat::expect(sum(init[["est"]] != est) == 0,
                    failure_message = 
                      'Initial values are not equal to user input.'
   )
-  testthat::expect(sum(init[["lo"]]!=est/10) + sum(init[["hi"]]!=est*10)==0,
+  testthat::expect(sum(init[["lo"]] != est/10) + 
+                     sum(init[["hi"]] != est*10) == 0,
                    failure_message = 'Limits are not equal to user input.'
   )
-  testthat::expect(length(init[["est"]])==length(names),
+  testthat::expect(length(init[["est"]]) == length(names),
                    failure_message = 'Initial values are of unexpected length.'
   )
-  testthat::expect(sum(names(init[["est"]])!=names)==0,
+  testthat::expect(sum(names(init[["est"]]) != names) == 0,
                    failure_message = 'Initial values have unexpected names.'
   )
-  testthat::expect(sum(!is.finite(init[["est"]]))==0,
+  testthat::expect(sum(!is.finite(init[["est"]])) == 0,
                    failure_message = 'Initial values include non-finite values.'
   )
   testthat::expect(is.numeric(init[["est"]]),
@@ -277,8 +278,8 @@ test_that('Check generation of initial values.', {
   )
   testthat::expect(is.numeric(init[["lo"]]) & is.numeric(init[["hi"]]),
                    failure_message = 'Limits are not numeric.')
-  testthat::expect(sum(init[["est"]]>init[["hi"]]) + 
-                     sum(init[["est"]]<init[["lo"]])==0,
+  testthat::expect(sum(init[["est"]] > init[["hi"]]) + 
+                     sum(init[["est"]] < init[["lo"]]) == 0,
                    failure_message = 
                      'Initial values outside limits are generated.'
   )

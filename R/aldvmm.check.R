@@ -43,9 +43,9 @@ aldvmm.check <- function(data,
   #-------------------------------
   
   complete <- stats::complete.cases(data[, all.vars(formula)])
-  if(FALSE %in% complete){
+  if (FALSE %in% complete) {
     message("the data includes ", 
-            sum(complete==FALSE), 
+            sum(complete == FALSE), 
             " rows with missing values\n")
   }
   
@@ -56,8 +56,8 @@ aldvmm.check <- function(data,
   checkmate::assertFormula(formula)  
   checkmate::assertVector(psi)
   checkmate::assertNumeric(psi)
-  checkmate::assert(length(psi)==2)
-  checkmate::assert(max(psi)<=1)
+  checkmate::assert(length(psi) == 2)
+  checkmate::assert(max(psi) <= 1)
   checkmate::assertCount(ncmp, positive = TRUE)
   checkmate::assertChoice(dist, c("normal"))
   checkmate::assertChoice(init.method, c("zero", "random", "constant", "sann"))
@@ -90,21 +90,21 @@ aldvmm.check <- function(data,
   
   checkmate::assertLogical(se.fit)
   
-  if(dist=="normal" & length(lcpar)!=1) {
+  if (dist == "normal" & length(lcpar) != 1) {
     stop("'lcpar' is wrong length for ",
          '"',
          dist, 
          '" distribution.\n')
   }
   
-  if(length(lcoef)!=2) {
+  if (length(lcoef) != 2) {
     stop("The length of 'lcoef' is ",
          length(lcoef),
          " instead of 2.",
          "\n")
   }
   
-  if(length(lcmp)!=1) {
+  if (length(lcmp) != 1) {
     stop("The length of 'lcmp' is ",
          length(lcmp),
          " instead of 1.",
@@ -114,7 +114,7 @@ aldvmm.check <- function(data,
   # Check if all variables in formula exist in data
   #------------------------------------------------
   
-  if (sum(!(all.vars(formula) %in% names(data)))>0) {
+  if (sum(!(all.vars(formula) %in% names(data))) > 0) {
     stop("The variables ", 
          paste(all.vars(formula)[!(all.vars(formula) %in% names(data))], 
                collapse = ", "), 
@@ -138,7 +138,7 @@ aldvmm.check <- function(data,
                               ncmp = ncmp)
   
   if (!is.null(init.est)) {
-    if (length(init.est)!=length(parnames)) {
+    if (length(init.est) != length(parnames)) {
       stop("The length of 'init.est' is ",
            length(init.est),
            " but should be ",
@@ -148,7 +148,7 @@ aldvmm.check <- function(data,
   }
   
   if (!is.null(init.lo)) {
-    if (length(init.lo)!=length(parnames)) {
+    if (length(init.lo) != length(parnames)) {
       stop("The length of 'init.lo' is ",
            length(init.lo),
            " but should be ",
@@ -158,7 +158,7 @@ aldvmm.check <- function(data,
   }
   
   if (!is.null(init.hi)) {
-    if (length(init.hi)!=length(parnames)) {
+    if (length(init.hi) != length(parnames)) {
       stop("The length of 'init.hi' is ",
            length(init.hi),
            " but should be ",
@@ -172,7 +172,7 @@ aldvmm.check <- function(data,
   # Only one component but pipe separator in formula
   #-------------------------------------------------
   
-  if (ncmp==1 & grepl("\\|", as.character(formula)[[3]])) {
+  if (ncmp == 1 & grepl("\\|", as.character(formula)[[3]])) {
     message("'ncmp' is set to 1, ",
             "and the second part of the formula will be ignored",
             "\n")
@@ -186,14 +186,15 @@ aldvmm.check <- function(data,
                   ncmp = ncmp,
                   lcoef = lcoef)
   
-  if (ncmp>1) {
+  if (ncmp > 1) {
     checkcons <- unlist(lapply(lcoef, 
-                               function(x) "(Intercept)" %in% colnames(mm[[x]])))
+                               function(x) "(Intercept)" %in% 
+                                 colnames(mm[[x]])))
   } else {
     checkcons <- "(Intercept)" %in% colnames(mm[[1]])
   }
   
-  if (init.method=="constant" & FALSE %in% checkcons) {
+  if (init.method == "constant" & FALSE %in% checkcons) {
     stop("At least one equation in 'formula' does not include a constant, ",
          "but 'init.method' is set to ",
          '"constant"',

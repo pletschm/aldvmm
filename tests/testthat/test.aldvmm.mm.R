@@ -21,7 +21,7 @@ test_that('Check creation of model matrices', {
                   lcoef = c('beta', 'delta'))
   
   expect_named(mm)
-  testthat::expect(length(mm)==min(2, ncmp),
+  testthat::expect(length(mm) == min(2, ncmp),
                    failure_message = 
                      'The list of model matrices is the wrong length.'
                    )
@@ -30,31 +30,35 @@ test_that('Check creation of model matrices', {
                      'aldvmm.mm output is not list.'
                    )
   testthat::expect(sum(unlist(lapply(mm, 
-                                     function(x) is.matrix(x))))==min(2, ncmp),
+                                     function(x) 
+                                       is.matrix(x)))) == min(2, ncmp),
                    failure_message = 
                      'Model matrices does not include matrix objects.'
                    )
   testthat::expect(sum(unlist(lapply(mm, 
-                                     function(x) is.null(colnames(x)) )))==0,
+                                     function(x) 
+                                       is.null(colnames(x)) ))) == 0,
                    failure_message = 
                      'Model matrices includes matrices wo column names.'
                    )
   testthat::expect(sum(unlist(lapply(mm, 
                                      function(x) 
-                                       !('(Intercept)' %in% colnames(x)))))==0,
+                                       !('(Intercept)' %in% 
+                                           colnames(x))))) == 0,
                    failure_message = 
                      'Some model matrices do not inlcude Intercept column.'
                    )
-  testthat::expect(sum(unlist(lapply(mm, function(x) is.na(x))))==0,
+  testthat::expect(sum(unlist(lapply(mm, function(x) is.na(x)))) == 0,
                    failure_message = 
                      'The model matrices include missing values.'
                    )
-  testthat::expect(sum(unlist(lapply(mm, function(x) !is.numeric(x))))==0,
+  testthat::expect(sum(unlist(lapply(mm, function(x) !is.numeric(x)))) == 0,
                    failure_message = 'The model matrices are not numeric.'
                    )
   testthat::expect(sum(unlist(lapply(mm, 
                                      function(x) 
-                                       rownames(mm[[1]])!=rownames(x))))==0,
+                                       rownames(mm[[1]]) != 
+                                       rownames(x)))) == 0,
                    failure_message = 
                      'Model matrices include different rows from orig. data.'
                    )

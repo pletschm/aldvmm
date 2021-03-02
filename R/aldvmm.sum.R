@@ -149,7 +149,7 @@ aldvmm.sum <- function(est,
   # Make list of elements of reporting table
   #-----------------------------------------
   
-  nc<- ncol(tmp[[i]][[lcoef[1]]])
+  nc <- ncol(tmp[[i]][[lcoef[1]]])
   lines <- rep("-", times = nc)
   
   reptab <- list()
@@ -202,7 +202,7 @@ aldvmm.sum <- function(est,
   
   for (i in seq_len(nrow(reptab))) {
     for (j in seq_len(ncol(reptab))) {
-      reptab[i, j] <- ifelse(reptab[i, j]==lines[1], 
+      reptab[i, j] <- ifelse(reptab[i, j] == lines[1], 
                              paste0(rep(reptab[i, j], times = width[j]), 
                                     collapse = ""), 
                              reptab[i, j])

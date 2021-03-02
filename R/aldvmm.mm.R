@@ -37,7 +37,7 @@ aldvmm.mm <- function(data,
   #--------------------------------
   
   complete <- stats::complete.cases(data[, all.vars(formula)])
-  if(FALSE %in% complete) {
+  if (FALSE %in% complete) {
     data <- data[complete, ]
   }
   

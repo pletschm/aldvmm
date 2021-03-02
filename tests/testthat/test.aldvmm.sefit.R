@@ -23,7 +23,7 @@ test_that("Check estimation of standard errors of fitted values.", {
                   ncmp = 2,
                   lcoef = c("beta", "delta"))
   
-  invisible(se.fit <- aldvmm.sefit(par = fit[["coef"]],
+  invisible({se.fit <- aldvmm.sefit(par = fit[["coef"]],
                                    X = mm,
                                    type = "fit",
                                    formula = fit[["formula"]],
@@ -34,21 +34,22 @@ test_that("Check estimation of standard errors of fitted values.", {
                                    dist = fit[["dist"]],
                                    lcoef = fit[["label"]][["lcoef"]],
                                    lcpar = fit[["label"]][["lcpar"]],
-                                   lcmp = fit[["label"]][["lcmp"]]))
+                                   lcmp = fit[["label"]][["lcmp"]])})
   
-  testthat::expect(length(se.fit)==nrow(mm[[1]]),
+  testthat::expect(length(se.fit) == nrow(mm[[1]]),
                    failure_message = "Only missing standard errors returned"
   )
-  testthat::expect(sum(is.na(se.fit))!=length(se.fit),
+  testthat::expect(sum(is.na(se.fit)) != length(se.fit),
                    failure_message = "Only missing standard errors returned"
   )
   testthat::expect(is.numeric(se.fit),
                    failure_message = "Non-numeric output"
   )
-  testthat::expect(sum(se.fit<=0, na.rm = TRUE)==0,
+  testthat::expect(sum(se.fit <= 0, na.rm = TRUE) == 0,
                    failure_message = "Non-positive standard errors."
   )
-  testthat::expect(sum(names(se.fit)!=rownames(newdata)[complete.cases(newdata)])==0,
+  testthat::expect(sum(names(se.fit) != 
+                         rownames(newdata)[complete.cases(newdata)]) == 0,
                    failure_message = "Missing values not at same index as in 
                    data."
   )
@@ -59,7 +60,7 @@ test_that("Check estimation of standard errors of fitted values.", {
   cvtmp <- fit$cov
   cvtmp[3, 4] <- NA
   
-  testthat::expect_warning(se.fit <- 
+  testthat::expect_warning({se.fit <- 
                              aldvmm.sefit(par = fit[["coef"]],
                                           X = mm,
                                           type = "fit",
@@ -71,7 +72,7 @@ test_that("Check estimation of standard errors of fitted values.", {
                                           dist = fit[["dist"]],
                                           lcoef = fit[["label"]][["lcoef"]],
                                           lcpar = fit[["label"]][["lcpar"]],
-                                          lcmp = fit[["label"]][["lcmp"]]))
+                                          lcmp = fit[["label"]][["lcmp"]])})
   
   testthat::expect(is.null(se.fit),
                    failure_message = 
@@ -85,7 +86,7 @@ test_that("Check estimation of standard errors of fitted values.", {
   cvtmp <- fit$cov
   cvtmp[3, 3] <- -1
   
-  testthat::expect_warning(se.fit <- 
+  testthat::expect_warning({se.fit <- 
                              aldvmm.sefit(par = fit[["coef"]],
                                           X = mm,
                                           type = "fit",
@@ -97,7 +98,7 @@ test_that("Check estimation of standard errors of fitted values.", {
                                           dist = fit[["dist"]],
                                           lcoef = fit[["label"]][["lcoef"]],
                                           lcpar = fit[["label"]][["lcpar"]],
-                                          lcmp = fit[["label"]][["lcmp"]]))
+                                          lcmp = fit[["label"]][["lcmp"]])})
   
   testthat::expect(is.null(se.fit),
                    failure_message = 

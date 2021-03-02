@@ -7,7 +7,7 @@ validate_aldvmm <- function(object) {
   vecnames <- c("coef", "se", "z", "p", "lower", "upper", "psi")
   novec <- unlist(lapply(vecnames, function(x) !is.vector(object[[x]])))
   novec <- c(novec, !is.vector(unlist(object[["label"]])))
-  if (sum(novec)!=0) {
+  if (sum(novec) != 0) {
     stop('Some elements in object of class "aldvmm" are not of type "vector": ',
          paste(vecnames[novec], collapse = ", "),
          "\n")
@@ -18,7 +18,7 @@ validate_aldvmm <- function(object) {
   
   listnames <- c("gof", "pred", "init", "label")
   nolist <- unlist(lapply(listnames, function(x) !is.list(object[[x]])))
-  if (sum(nolist)!=0) {
+  if (sum(nolist) != 0) {
     stop('Some elements in object of class "aldvmm" are not of type "list": ',
          paste(listnames[nolist], collapse = ", "),
          "\n")
@@ -33,7 +33,7 @@ validate_aldvmm <- function(object) {
              unlist((lapply(object[["pred"]][c("yhat", "y", "res")], 
                                 function(x) !is.matrix(x)))))
   
-  if (sum(nomat)!=0) {
+  if (sum(nomat) != 0) {
     stop('Some elements in object of class "aldvmm" are not of type "matrix": ',
          paste(matnames[nomat], collapse = ", "),
          "\n")
@@ -50,7 +50,7 @@ validate_aldvmm <- function(object) {
                             function(x) !is.numeric(x)))))
   
   
-  if (sum(nonum)!=0) {
+  if (sum(nonum) != 0) {
     stop('Some elements in object of class "aldvmm" are not "numeric": ',
          paste(numnames[nonum], collapse = ", "),
          "\n")
@@ -64,7 +64,7 @@ validate_aldvmm <- function(object) {
   nochr <- c(nochr, 
              unlist((lapply(unlist(object[["label"]]), 
                             function(x) !is.character(x)))))
-  if (sum(nochr)!=0) {
+  if (sum(nochr) != 0) {
     stop('Some elements in object of class "aldvmm" are not "character": ',
          paste(chrnames[nochr], collapse = ", "),
          "\n")
@@ -73,7 +73,7 @@ validate_aldvmm <- function(object) {
   # Formula objects
   #----------------
   
-  if (class(object$formula)!="formula") {
+  if (class(object$formula) != "formula") {
     stop("'formula' ",
          'in object of class "aldvmm" is not of type "formula"',
          "\n")
@@ -86,9 +86,9 @@ validate_aldvmm <- function(object) {
                 function(x) length(x)))
   veclen <- c(veclen, unlist(lapply(object[c("hessian", "cov")],
                    function(x) dim(x)[1])))
-  if (sum(veclen!=veclen[1])!=0) {
+  if (sum(veclen != veclen[1]) != 0) {
     stop('Some elements in object of class "aldvmm" are of wrong length: ',
-         paste(veclen[veclen!=veclen[1]], collapse = ", "),
+         paste(veclen[veclen != veclen[1]], collapse = ", "),
          "\n")
   }
   

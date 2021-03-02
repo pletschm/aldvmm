@@ -334,7 +334,7 @@ aldvmm <- function(formula,
   lcoef <- c("beta", "delta")
   
   # Names of constant distribution parameters (e.g. lnsigma in dist=="normal")
-  if (dist=="normal") {
+  if (dist == "normal") {
     lcpar <- c("lnsigma")
   }
   
@@ -347,7 +347,8 @@ aldvmm <- function(formula,
   # The optimization method will be used in aldvmm.init(), the testing of 
   # initial values and the model fitting.
   
-  if (sum(init.lo!=-Inf)==0 & sum(init.hi!=Inf)==0 & is.null(optim.method)) {
+  if (sum(init.lo != -Inf) == 0 & sum(init.hi != Inf) == 0 & 
+      is.null(optim.method)) {
     # Default optimization method
     optim.method <- "Nelder-Mead"
   } else if ((!is.null(init.lo) | !is.null(init.hi))) {
@@ -360,7 +361,7 @@ aldvmm <- function(formula,
   # Attach gradient function for optimization if selected by the user
   #------------------------------------------------------------------
   
-  if (optim.grad==TRUE) {
+  if (optim.grad == TRUE) {
     grd <- aldvmm.gr
   } else {
     grd <- NULL
@@ -511,7 +512,7 @@ aldvmm <- function(formula,
   gof[["mse"]] <- sum(pred[["res"]]^2) / 
     (nrow(mm[[1]]) - length(fit[["par"]]))
   gof[["mae"]] <- sum(abs(pred[["res"]])) / 
-    (nrow(mm[[1]])- length(fit[["par"]]))
+    (nrow(mm[[1]]) - length(fit[["par"]]))
   
   if (is.na(gof[['mse']])) {
     warning("no mse or mae were obtained",
@@ -525,7 +526,7 @@ aldvmm <- function(formula,
   # Standard errors of the fit (delta method)
   #------------------------------------------
   
-  if (se.fit==TRUE) {
+  if (se.fit == TRUE) {
     pred[["se.fit"]] <- aldvmm.sefit(par = fit[["par"]],
                                      X = mm,
                                      type = "fit",

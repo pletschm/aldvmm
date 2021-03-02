@@ -50,7 +50,7 @@ aldvmm.getnames <- function(X,
   # Deltas (coefficients for multinomial logit for group membership)
   #-----------------------------------------------------------------
   
-  if (ncmp>1 & lcoef[2] %in% names) {
+  if (ncmp > 1 & lcoef[2] %in% names) {
     name.delta <- c(paste(paste0(lcmp, 
                                  rep(1:(ncmp - 1), 
                                      each = dim(X[[lcoef[2]]])[2])),
@@ -67,9 +67,9 @@ aldvmm.getnames <- function(X,
   # Constant distribution parameters
   #---------------------------------
   
-  if (sum(lcpar %in% names)>0){
+  if (sum(lcpar %in% names) > 0) {
     name.cpar <- c()
-    for (i in lcpar){
+    for (i in lcpar) {
       name.cpar <- c(name.cpar, paste(paste0(lcmp, 1:ncmp),
                                       rep(lcpar, times = ncmp),
                                       sep = "_"))

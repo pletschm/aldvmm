@@ -105,7 +105,7 @@ aldvmm.ll <- function(par,
                      dimnames = list(rownames(X[[2]]),
                                      paste0(lcmp, 1:(ncmp - 1))))
     
-    for(c in 1:(ncmp - 1)) {
+    for (c in 1:(ncmp - 1)) {
       exp_xd[, c] <- exp(X[[2]] %*% parlist[[lcoef[2]]][[c]])
     }
     
@@ -115,7 +115,7 @@ aldvmm.ll <- function(par,
                   dimnames = list(rownames(X[[2]]),
                                   paste0(lcmp, 1:ncmp)))
     
-    for(c in 1:(ncmp - 1)) {
+    for (c in 1:(ncmp - 1)) {
       p_c[, c] <- exp_xd[, c] / (1 + rowSums(exp_xd))
     }
     p_c[, ncmp] <- 1 -  rowSums(p_c, na.rm = TRUE)
@@ -131,18 +131,18 @@ aldvmm.ll <- function(par,
   # Indicators of value range of y
   #-------------------------------
   
-  I <- cbind(as.numeric(y>max(psi)),
-             as.numeric(y<=min(psi)),
-             as.numeric(y<=max(psi) & y>min(psi)))
+  I <- cbind(as.numeric(y >  max(psi)),
+             as.numeric(y <= min(psi)),
+             as.numeric(y <= max(psi) & y > min(psi)))
   
   # Densities
   #----------
   
   density <- list()
   
-  if (dist=="normal") {
+  if (dist == "normal") {
     
-    for(c in 1:ncmp) {
+    for (c in 1:ncmp) {
       
       max  <- 1 - stats::pnorm((max(psi) - 
                                   X[[1]] %*% parlist[[lcoef[1]]][[c]]) /
@@ -174,7 +174,7 @@ aldvmm.ll <- function(par,
                  dimnames = list(rownames(X[[1]]),
                                  paste0(lcmp, 1:ncmp)))
   
-  for(c in 1:ncmp) {
+  for (c in 1:ncmp) {
     cont[, c] <- p_c[, c] * rowSums(I * density[[c]])
   }
   

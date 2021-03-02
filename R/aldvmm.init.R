@@ -82,7 +82,7 @@ aldvmm.init <- function(X,
   
   
   # Deltas (coefficients for multinomial logit for group membership)
-  if (ncmp>1) {
+  if (ncmp > 1) {
     zero[[lcoef[2]]][["est"]] <- rep(0, 
                                      times = (ncmp - 1)*ncol(X[[lcoef[2]]]))
     names(zero[[lcoef[2]]][["est"]]) <- aldvmm.getnames(X     = X,
@@ -108,14 +108,14 @@ aldvmm.init <- function(X,
   #-------------------------------------------------
   
   if (is.null(init.est)) {
-    if (init.method=="zero") {
+    if (init.method == "zero") {
       
       # Zero-only initial values (default)
       #-----------------------------------
       
       init <- zero  
       
-    } else if (init.method=="random") {
+    } else if (init.method == "random") {
       
       # Random initial values
       #----------------------
@@ -127,7 +127,7 @@ aldvmm.init <- function(X,
         names(init[[i]][["est"]]) <- names(zero[[i]][["est"]])
       }
       
-    } else if (init.method=="constant") {
+    } else if (init.method == "constant") {
       
       # Estimate constant-only model
       #-----------------------------
@@ -157,7 +157,7 @@ aldvmm.init <- function(X,
       names(tmp) <- tmpnames
       
       # Fit
-      if (optim.grad==TRUE) {
+      if (optim.grad == TRUE) {
         grd <- aldvmm.gr
       } else {
         grd <- NULL
@@ -181,14 +181,14 @@ aldvmm.init <- function(X,
       
       # Make vector of initial values
       init <- zero
-      for(i in names(zero)) {
+      for (i in names(zero)) {
         index <- which(names(init[[i]][["est"]]) %in% names(fit[["par"]]))
         init[[i]][["est"]][index] <- fit[["par"]][names(init[[i]][["est"]])[index]]
       }
       
       rm(X0, fit, tmp, index)
       
-    } else if (init.method=="sann") {
+    } else if (init.method == "sann") {
       
       # Estimate simulated annealing (SANN) algorithm
       #----------------------------------------------
@@ -218,7 +218,7 @@ aldvmm.init <- function(X,
       
       # Make vector of initial values
       init <- zero
-      for(i in names(init)) {
+      for (i in names(init)) {
         index <- which(names(init[[i]][["est"]]) %in% names(fit[["par"]]))
         init[[i]][["est"]][index] <- fit[["par"]][names(init[[i]][["est"]])[index]]
       }

@@ -1,6 +1,6 @@
 test_that('Check likelihood function.', {
   
-  mm <- list('beta' = matrix(dat      = c(rep(1, 4), runif(n = 8)), 
+  mm <- list('beta' = matrix(data      = c(rep(1, 4), runif(n = 8)), 
                              nrow     = 4, 
                              ncol     = 3,
                              dimnames = list(NULL,

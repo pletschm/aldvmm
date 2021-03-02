@@ -50,7 +50,7 @@ predict.aldvmm <- function(object,
   # Ensure data has row names to identify complete rows for preds correctly
   #------------------------------------------------------------------------
   
-  if(is.null(rownames(newdata))) {
+  if (is.null(rownames(newdata))) {
     rownames(newdata) <- as.character(1:nrow(newdata))
   }
   
@@ -85,7 +85,7 @@ predict.aldvmm <- function(object,
   # Estimate standard errors of predictions and prediction intervals
   #-----------------------------------------------------------------
   
-  if (se.fit==TRUE) {
+  if (se.fit == TRUE) {
     # Standard errors
     tmp <- list()
     tmp[["se.fit"]] <- aldvmm.sefit(par     = object[["coef"]],

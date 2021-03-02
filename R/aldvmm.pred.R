@@ -50,7 +50,7 @@ aldvmm.pred <- function(par,
   # Multinomial logit (parameters are only estimated for the first K - 1 
   # components).
   
-  if (ncmp>1) {
+  if (ncmp > 1) {
     
     exp_xd <- matrix(data = NA, 
                      nrow = nrow(X[[2]]), 
@@ -58,7 +58,7 @@ aldvmm.pred <- function(par,
                      dimnames = list(rownames(X[[2]]),
                                      paste0(lcmp, 1:(ncmp - 1))))
     
-    for(c in 1:(ncmp - 1)) {
+    for (c in 1:(ncmp - 1)) {
       exp_xd[, c] <- exp(X[[2]] %*% parlist[[lcoef[2]]][[c]])
     }
     
@@ -68,10 +68,10 @@ aldvmm.pred <- function(par,
                   dimnames = list(rownames(X[[2]]),
                                   paste0(lcmp, 1:ncmp)))
     
-    for(c in 1:(ncmp - 1)) {
+    for (c in 1:(ncmp - 1)) {
       p_c[, c] <- exp_xd[, c] / (1 + rowSums(exp_xd))
     }
-    if (nrow(p_c)>1) {
+    if (nrow(p_c) > 1) {
       p_c[, ncmp] <- 1 - rowSums(p_c[, 1:(ncmp - 1), drop = FALSE])
     } else {
       p_c[, ncmp] <- 1 - sum(p_c[1:(ncmp - 1)])
@@ -88,7 +88,7 @@ aldvmm.pred <- function(par,
   # Densities
   #----------
   
-  if (dist=="normal") {
+  if (dist == "normal") {
     
     ev <- matrix(data = NA, 
                       nrow = nrow(X[[1]]), 
@@ -96,7 +96,7 @@ aldvmm.pred <- function(par,
                       dimnames = list(rownames(X[[1]]),
                                       paste0(lcmp, 1:ncmp)))
     
-    for(c in 1:ncmp) {
+    for (c in 1:ncmp) {
       
       max <- 1 - stats::pnorm((max(psi) - X[[1]] %*% parlist[[lcoef[1]]][[c]]) /
                                 exp(parlist[[lcpar[1]]][[c]]),
@@ -165,7 +165,7 @@ aldvmm.pred <- function(par,
     names(pred[["res"]]) <- rownames(X[[1]])
   }
 
-  if (sum(is.na(pred[["yhat"]]))!=0) {
+  if (sum(is.na(pred[["yhat"]])) != 0) {
     warning("fitted values include missing values",
             "\n")
   }
@@ -176,7 +176,7 @@ aldvmm.pred <- function(par,
   pred[["prob"]] <- colMeans(p_c)
   names(pred[["prob"]]) <- paste0(lcmp, 1:ncmp)
   
-  if (sum(is.na(p_c))!=0) {
+  if (sum(is.na(p_c)) != 0) {
     warning("fitted probabilities of component membership include missing ", 
             "values",
             "\n")

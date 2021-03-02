@@ -46,5 +46,5 @@ aldvmm.gr <- function(par,
                                                       optim.method = optim.method), 
                          x = par)
   
-  return (grad)
+  return(grad)
 }
