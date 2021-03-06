@@ -22,6 +22,15 @@ RoxygenNote: 7.1.1
 Imports: numDeriv, stats, checkmate, utils, optimr
 URL: https://github.com/pletschm/aldvmm/
 BugReports: https://github.com/pletschm/aldvmm/issues
-Suggests: knitr, rmarkdown, markdown, bookdown, ggplot2, scales, 
-    xtable, tinytex
+Suggests: 
+    knitr,
+    rmarkdown,
+    markdown,
+    bookdown,
+    ggplot2,
+    scales,
+    xtable,
+    tinytex,
+    testthat (>= 3.0.0)
 VignetteBuilder: knitr
+Config/testthat/edition: 3

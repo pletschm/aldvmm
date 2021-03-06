@@ -3,6 +3,14 @@
 
 spelling::spell_check_package()
 
+# Test coverage
+#--------------
+
+#usethis::use_testthat()
+detach("package:aldvmm", unload = TRUE)
+ct <- covr::package_coverage()
+covr::report(ct)
+
 # Register qpdf and ghostscript
 #------------------------------
 

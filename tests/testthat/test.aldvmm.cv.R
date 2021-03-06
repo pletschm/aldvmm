@@ -1,5 +1,8 @@
 test_that("Check covariance function.", {
   
+  # Valid covariance matrix
+  #------------------------
+  
   mm <- matrix(data     = c(rep(1, 4), runif(n = 8)), 
                nrow     = 4, 
                ncol     = 3,
@@ -53,16 +56,76 @@ test_that("Check covariance function.", {
   wlength <- unlist(lapply(cov, function(c) sum(dim(c) != length(init))))
   testthat::expect(sum(wlength) == 0,
                    failure_message = 
-                     "Some elements of output are of wrong length."
-  )
+                     "Some elements of output are of wrong length.")
   rm(wlength)
   testthat::expect(sum(init < cov[["lower"]]) + 
                      sum(init > cov[["upper"]]) == 0,
-                   failure_message = "Estimates outside confidence bands."
-  )
+                   failure_message = "Estimates outside confidence bands.")
+  
   testthat::expect(sum(cov[["se"]] != sqrt(diag(cov[["cv"]]))) == 0,
                    failure_message = 
-                     "Standard errors are not square root of diagnonal CV."
+                     "Standard errors are not square root of diagnonal CV.")
+  testthat::expect(length(cov[["se"]]) == nrow(cov[["cv"]]),
+                   failure_message = 
+                     "Standard errors are wrong length.")
+  testthat::expect(length(cov[["z"]]) == nrow(cov[["cv"]]),
+                   failure_message = 
+                     "Z-values are wrong length.")
+  testthat::expect(length(cov[["p"]]) == nrow(cov[["cv"]]),
+                   failure_message = 
+                     "P-values are wrong length.")
+  
+  # Covariance matrix with missing values
+  #--------------------------------------
+  
+  data(utility)
+  
+  formula <- eq5d ~ age + female | age + female
+  
+  psi <- c(0.883, -0.594)
+  ncmp <- 2
+  
+  suppressWarnings({
+    fit <- aldvmm(data = utility[1:100, ],
+                  formula = formula,
+                  psi = psi,
+                  ncmp = ncmp)
+  })
+  
+  mm <- aldvmm.mm(data = utility,
+                  formula = formula,
+                  ncmp = ncmp,
+                  lcoef = fit$label$lcoef)
+  
+  suppressWarnings(
+  testthat::expect_warning(aldvmm.cv(ll = aldvmm.ll,
+                                     par = fit$coef,
+                                     X = mm,
+                                     y = utility$eq5d,
+                                     psi = psi,
+                                     ncmp = ncmp,
+                                     dist = "normal",
+                                     lcoef = fit$label$lcoef,
+                                     lcmp = fit$label$lcmp,
+                                     lcpar = fit$label$lcpar,
+                                     optim.method = fit$optim.method))
   )
+  
+  testthat::expect(all(is.na(cov[["p"]]) == is.na(cov[["se"]])),
+                   failure_message = 
+                     "Missing p-values do not match missing standard errors.")
+  testthat::expect(all(is.na(cov[["z"]]) == is.na(cov[["se"]])),
+                   failure_message = 
+                     "Missing z-values do not match missing standard errors.")
+  testthat::expect(all(is.na(cov[["lower"]]) == is.na(cov[["se"]])),
+                   failure_message = 
+                     "Missing lower limits do not match missing standard 
+                   errors.")
+  testthat::expect(all(is.na(cov[["upper"]]) == is.na(cov[["se"]])),
+                   failure_message = 
+                     "Missing lower limits do not match missing standard 
+                   errors.")
+  
+  
   
 })
