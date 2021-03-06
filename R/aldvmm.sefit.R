@@ -4,6 +4,7 @@
 #' calculates standard errors of fitted and predicted outcomes using the delta
 #' method.
 #'
+#' @param yhat a numeric vector of predicted outcomes from \ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm::aldvmm.pred()}}.
 #' @param type a character value from 'fit' or 'pred' indicating whether the
 #'   standard error of the fit ('fit') or the standard error of predictions in
 #'   new data ('pred') are calculated.
@@ -58,6 +59,7 @@
 #' @export
 
 aldvmm.sefit <- function(par,
+                         yhat,
                          X,
                          type,
                          formula,
@@ -66,6 +68,7 @@ aldvmm.sefit <- function(par,
                          mse,
                          ncmp,
                          dist,
+                         level,
                          lcoef,
                          lcmp,
                          lcpar) {
@@ -150,6 +153,25 @@ aldvmm.sefit <- function(par,
     }
   }
   
-  return(se.fit)
+  # Confidence / prediction interval
+  #---------------------------------
+  
+  # ul <- matrix(data = yhat + stats::qnorm((1 + level)/2) * se.fit, ncol = 1)
+  # ul[ul[, 1] > max(psi), 1] <- 1
+  # 
+  # ll <- matrix(data = yhat - stats::qnorm((1 + level)/2) * se.fit, ncol = 1)
+  # ll[ll[, 1] < min(psi), 1] <- min(psi)
+
+  ul <- yhat + stats::qnorm((1 + level)/2) * se.fit
+  ul[ul > max(psi)] <- 1
+  names(ul) <- rownames(X[[1]])
+  
+  ll <- yhat - stats::qnorm((1 + level)/2) * se.fit
+  ll[ll < min(psi)] <- min(psi)
+  names(ll) <- rownames(X[[1]])
+  
+  return(list(se.fit    = se.fit,
+              upper.fit = ul,
+              lower.fit = ll))
   
 }

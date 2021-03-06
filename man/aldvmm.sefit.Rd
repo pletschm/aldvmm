@@ -6,6 +6,7 @@
 \usage{
 aldvmm.sefit(
   par,
+  yhat,
   X,
   type,
   formula,
@@ -14,6 +15,7 @@ aldvmm.sefit(
   mse,
   ncmp,
   dist,
+  level,
   lcoef,
   lcmp,
   lcpar
@@ -27,6 +29,8 @@ log-likelihood. The names of the parameter vector must be generated using
 values of functions in package \code{'aldvmm'}, and the names will be used
 in the extraction of parameters into nested lists using \ifelse{html}{
 \code{\link[aldvmm]{aldvmm.getpar}}}{\code{aldvmm::aldvmm.getpar()}}.}
+
+\item{yhat}{a numeric vector of predicted outcomes from \ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm::aldvmm.pred()}}.}
 
 \item{X}{a list of design matrices returned by
 \ifelse{html}{\code{\link[aldvmm]{aldvmm.mm}}}{\code{aldvmm::aldvmm.mm()}}.
@@ -74,6 +78,9 @@ between 1 and the maximum value in \code{'psi'}.}
 \item{dist}{an optional character value of the distribution used in the
 finite mixture. In this release, only the normal distribution is
 available, and the default value is \code{"normal"}.}
+
+\item{level}{a numeric value of the significance level for confidence bands
+of fitted values. The default is 0.95.}
 
 \item{lcoef}{a character vector of the names of objects with values for
 component distributions (default \code{"beta"}) and for probabilities of

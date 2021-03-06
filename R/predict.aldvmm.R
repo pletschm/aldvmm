@@ -89,7 +89,8 @@ predict.aldvmm <- function(object,
     # Standard errors
     tmp <- list()
     tmp[["se.fit"]] <- aldvmm.sefit(par     = object[["coef"]],
-                                    X      = mm,
+                                    yhat    = object[["pred"]][["yhat"]],
+                                    X       = mm,
                                     type    = type,
                                     formula = object[["formula"]],
                                     cv      = object[["cov"]],
@@ -97,26 +98,24 @@ predict.aldvmm <- function(object,
                                     psi     = object[["psi"]],
                                     ncmp    = object[["k"]],
                                     dist    = object[["dist"]],
+                                    level   = object[["level"]],
                                     lcoef   = object[["label"]][["lcoef"]],
                                     lcpar   = object[["label"]][["lcpar"]],
                                     lcmp    = object[["label"]][["lcmp"]])
     
-    # Add missing standard errors for incomplete observations in newdata
+    # Add missing standard errors and confidence bands for incomplete 
+    # observations in newdata
     pred[["se.fit"]] <- rep(NA,times = nrow(newdata))
     names(pred[["se.fit"]]) <- rownames(newdata)
-    
     pred[["se.fit"]][names(tmp[["se.fit"]])] <- tmp[['se.fit']]
     
-    # Confidence/prediction intervals
-    pred[["ul"]] <- pred[["yhat"]] + stats::qnorm(level + (1 - level)/2) * 
-      pred[["se.fit"]]
-    names(pred[["ul"]]) <- names(pred[["se.fit"]])
-    pred[["ul"]][pred[["ul"]] > max(object[["psi"]])] <- 1
+    pred[["ll"]] <- rep(NA,times = nrow(newdata))
+    names(pred[["ll"]]) <- rownames(newdata)
+    pred[["ll"]][names(tmp[["ll"]])] <- tmp[['lower.fit']]
     
-    pred[["ll"]] <- pred[["yhat"]] -  stats::qnorm(level + (1 - level)/2) * 
-      pred[["se.fit"]]
-    names(pred[["ll"]]) <- names(pred[["se.fit"]])
-    pred[["ll"]][pred[["ll"]] < min(object[["psi"]])] <- min(object[["psi"]])
+    pred[["ul"]] <- rep(NA,times = nrow(newdata))
+    names(pred[["ul"]]) <- rownames(newdata)
+    pred[["ul"]][names(tmp[["ul"]])] <- tmp[['upper.fit']]
     
   }
   

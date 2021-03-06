@@ -413,7 +413,7 @@ aldvmm <- function(formula,
   
   complete <- stats::complete.cases(data[, all.vars(formula)])
   y <- data[complete, all.vars(formula)[1]]
-
+  
   # Generate initial values
   #------------------------
   
@@ -527,30 +527,24 @@ aldvmm <- function(formula,
   #------------------------------------------
   
   if (se.fit == TRUE) {
-    pred[["se.fit"]] <- aldvmm.sefit(par = fit[["par"]],
-                                     X = mm,
-                                     type = "fit",
-                                     formula = formula,
-                                     cv = cov[["cv"]],
-                                     mse = gof[["mse"]],
-                                     psi = psi,
-                                     ncmp = ncmp,
-                                     dist = dist,
-                                     lcoef = lcoef,
-                                     lcmp = lcmp,
-                                     lcpar = lcpar)
-    
-    pred[["upper.fit"]] <- matrix(data = pred[["yhat"]] + 
-                                    stats::qnorm((1 + level)/2) * 
-                                    pred[["se.fit"]], 
-                                  ncol = 1)
-    pred[["upper.fit"]][pred[["upper.fit"]][, 1] > max(psi), 1] <- 1
-    
-    pred[["lower.fit"]] <- matrix(data = pred[["yhat"]] - 
-                                    stats::qnorm((1 + level)/2) * 
-                                    pred[["se.fit"]], 
-                                  ncol = 1)
-    pred[["lower.fit"]][pred[["lower.fit"]][, 1] < min(psi), 1] <- min(psi)
+    pred.se <- aldvmm.sefit(par = fit[["par"]],
+                            yhat = pred[["yhat"]],
+                            X = mm,
+                            type = "fit",
+                            formula = formula,
+                            cv = cov[["cv"]],
+                            mse = gof[["mse"]],
+                            psi = psi,
+                            ncmp = ncmp,
+                            dist = dist,
+                            lcoef = lcoef,
+                            lcmp = lcmp,
+                            lcpar = lcpar,
+                            level = level)
+   
+    pred[["se.fit"]] <- pred.se[["se.fit"]]
+    pred[["lower.fit"]] <- pred.se[["lower.fit"]]
+    pred[["upper.fit"]] <- pred.se[["upper.fit"]]
     
   }
   
