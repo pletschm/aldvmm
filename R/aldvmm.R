@@ -380,6 +380,13 @@ aldvmm <- function(formula,
     stop("'data' cannot be converted to data.frame.")
   })
   
+  # Ensure data has row names to identify complete rows for predictions
+  #--------------------------------------------------------------------
+  
+  if (is.null(rownames(data))) {
+    rownames(data) <- as.character(1:nrow(data))
+  }
+  
   # Checks
   #-------
   
@@ -398,7 +405,8 @@ aldvmm <- function(formula,
                init.est = init.est,
                init.lo = init.lo,
                init.hi = init.hi,
-               se.fit = se.fit)
+               se.fit = se.fit,
+               level = level)
   
   # Make list of design matrices
   #-----------------------------

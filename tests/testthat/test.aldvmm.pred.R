@@ -29,10 +29,12 @@ test_that('Check prediction function.', {
   init <- rep(0, length(names))
   names(init) <- names
   
+  psi <- c(0.883, -0.594)
+  
   pred <- aldvmm.pred(par = init,
                       X = mm,
                       y = y,
-                      psi = c(0.883, -0.594),
+                      psi = psi,
                       ncmp = 2,
                       dist = 'normal',
                       lcoef = c('beta', 'delta'),
@@ -61,5 +63,12 @@ test_that('Check prediction function.', {
          failure_message = 
            'Probabilities of group membership do not sum to 1.'
   )
+  
+  testthat::expect(all(pred[["yhat"]] <= 1),
+                   failure_message = "Predictions larger than one.")
+  testthat::expect(all(pred[["yhat"]] >= min(psi)),
+                   failure_message = "Predictions smaller than minimum in 
+                   'psi'.")
+  
   
 })

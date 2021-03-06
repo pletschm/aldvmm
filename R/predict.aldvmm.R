@@ -88,7 +88,7 @@ predict.aldvmm <- function(object,
   if (se.fit == TRUE) {
     # Standard errors
     tmp <- list()
-    tmp[["se.fit"]] <- aldvmm.sefit(par     = object[["coef"]],
+    tmp <- aldvmm.sefit(par     = object[["coef"]],
                                     yhat    = object[["pred"]][["yhat"]],
                                     X       = mm,
                                     type    = type,
@@ -111,11 +111,11 @@ predict.aldvmm <- function(object,
     
     pred[["ll"]] <- rep(NA,times = nrow(newdata))
     names(pred[["ll"]]) <- rownames(newdata)
-    pred[["ll"]][names(tmp[["ll"]])] <- tmp[['lower.fit']]
+    pred[["ll"]][names(tmp[["lower.fit"]])] <- tmp[['lower.fit']]
     
     pred[["ul"]] <- rep(NA,times = nrow(newdata))
     names(pred[["ul"]]) <- rownames(newdata)
-    pred[["ul"]][names(tmp[["ul"]])] <- tmp[['upper.fit']]
+    pred[["ul"]][names(tmp[["upper.fit"]])] <- tmp[['upper.fit']]
     
   }
   

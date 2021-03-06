@@ -22,8 +22,8 @@
 #'
 #' @export
 
-aldvmm.check <- function(data, 
-                         formula, 
+aldvmm.check <- function(formula, 
+                         data, 
                          psi, 
                          ncmp, 
                          dist,
@@ -37,25 +37,26 @@ aldvmm.check <- function(data,
                          init.lo,
                          init.hi,
                          optim.control,
-                         se.fit) {
-  
-  # Count rows with missing values
-  #-------------------------------
-  
-  complete <- stats::complete.cases(data[, all.vars(formula)])
-  if (FALSE %in% complete) {
-    message("the data includes ", 
-            sum(complete == FALSE), 
-            " rows with missing values\n")
-  }
+                         se.fit,
+                         level) {
   
   # Check format of input values
   #-----------------------------
   
-  checkmate::assertDataFrame(data)  
+  checkmate::assertDataFrame(data)
+  if (is.null(names(data))) {
+    stop("'data' has no column names",
+         "\n")
+  }
+  if (is.null(rownames(data))) {
+    stop("'data' has no row names",
+         "\n")
+  }
+  
   checkmate::assertFormula(formula)  
-  checkmate::assertVector(psi)
+  checkmate::assertVector(psi, strict = TRUE)
   checkmate::assertNumeric(psi)
+  checkmate::assert(psi[1] != psi[2])
   checkmate::assert(length(psi) == 2)
   checkmate::assert(max(psi) <= 1)
   checkmate::assertCount(ncmp, positive = TRUE)
@@ -68,17 +69,17 @@ aldvmm.check <- function(data,
                                           "Rcgmin", "Rvmmin", "hjn"))
   }
   if (!is.null(init.est)) {
-    checkmate::assertVector(init.est)
+    checkmate::assertVector(init.est, strict = TRUE)
     checkmate::assertNumeric(init.est)
   }
   
   if (!is.null(init.lo)) {
-    checkmate::assertVector(init.lo)
+    checkmate::assertVector(init.lo, strict = TRUE)
     checkmate::assertNumeric(init.lo)
   }
   
   if (!is.null(init.hi)) {
-    checkmate::assertVector(init.hi)
+    checkmate::assertVector(init.hi, strict = TRUE)
     checkmate::assertNumeric(init.hi)
   }
   
@@ -109,6 +110,21 @@ aldvmm.check <- function(data,
          length(lcmp),
          " instead of 1.",
          "\n")
+  }
+  
+  checkmate::assert(length(level) == 1)
+  checkmate::assertNumeric(level)
+  checkmate::assert(level > 0)
+  checkmate::assert(level < 1)
+  
+  # Count rows with missing values
+  #-------------------------------
+  
+  complete <- stats::complete.cases(data[, all.vars(formula)])
+  if (FALSE %in% complete) {
+    message("the data includes ", 
+            sum(complete == FALSE), 
+            " rows with missing values\n")
   }
   
   # Check if all variables in formula exist in data
@@ -203,13 +219,6 @@ aldvmm.check <- function(data,
   
   rm(checkcons) 
   
-  # Ensure data has row names to identify complete rows for predictions
-  #--------------------------------------------------------------------
-  
-  if (is.null(rownames(data))) {
-    rownames(data) <- as.character(1:nrow(data))
-  }
-
   # Ensure the term "(Intercept)" is not used in column names of data
   #--------------------------------------------------------------------
   

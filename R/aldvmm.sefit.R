@@ -156,12 +156,6 @@ aldvmm.sefit <- function(par,
   # Confidence / prediction interval
   #---------------------------------
   
-  # ul <- matrix(data = yhat + stats::qnorm((1 + level)/2) * se.fit, ncol = 1)
-  # ul[ul[, 1] > max(psi), 1] <- 1
-  # 
-  # ll <- matrix(data = yhat - stats::qnorm((1 + level)/2) * se.fit, ncol = 1)
-  # ll[ll[, 1] < min(psi), 1] <- min(psi)
-
   ul <- yhat + stats::qnorm((1 + level)/2) * se.fit
   ul[ul > max(psi)] <- 1
   names(ul) <- rownames(X[[1]])

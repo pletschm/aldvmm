@@ -6,8 +6,8 @@
 \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}}
 \usage{
 aldvmm.check(
-  data,
   formula,
+  data,
   psi,
   ncmp,
   dist,
@@ -21,21 +21,22 @@ aldvmm.check(
   init.lo,
   init.hi,
   optim.control,
-  se.fit
+  se.fit,
+  level
 )
 }
 \arguments{
-\item{data}{a data frame, list or environment (or object coercible to a data
-frame by \cr \ifelse{html}{\code{\link[base]{as.data.frame}}}{
-\code{base::as.data.frame()}}) including data on outcomes and explanatory
-variables in \code{'formula'}.}
-
 \item{formula}{an object of class \code{"formula"} with a symbolic
 description of the model to be fitted. The model formula takes the form
 \code{y ~ x1 + x2 | x1 + x4}, where the \code{|} delimiter separates the
 model for expected values of normal distributions (left) and the
 multinomial logit model of probabilities of component membership (right)
 (see details).}
+
+\item{data}{a data frame, list or environment (or object coercible to a data
+frame by \cr \ifelse{html}{\code{\link[base]{as.data.frame}}}{
+\code{base::as.data.frame()}}) including data on outcomes and explanatory
+variables in \code{'formula'}.}
 
 \item{psi}{a numeric vector of minimum and maximum possible utility values
 smaller than 1 (e.g. \code{c(-0.594, 0.884)}). The gap between the maximum
@@ -117,6 +118,9 @@ control parameters.}
 
 \item{se.fit}{an optional logical value indicating whether standard errors
 of the fit are calculated (see Details).}
+
+\item{level}{a numeric value of the significance level for confidence bands
+of fitted values. The default is 0.95.}
 }
 \value{
 \code{aldvmm.check} returns warnings or stops the execution of
