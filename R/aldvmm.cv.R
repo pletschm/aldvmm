@@ -84,26 +84,32 @@ aldvmm.cv <- function(ll,
   # Standard errors, significance and confidence intervals of parameters
   #---------------------------------------------------------------------
   
-  if (sum(is.na(outlist[["cv"]])) == nrow(outlist[["cv"]]) * 
-      ncol(outlist[["cv"]])) {
-    warning("no covariance matrix was obtained.",
-            "\n")
+  if (all(is.na(outlist[["cv"]]))) {
+    
+    warning("no covariance matrix was obtained\n")
     outlist[["se"]] <- rep(NA, times = length(par))
-  } else if (sum(!is.na(diag(outlist[["cv"]]))) == 0) {
-    warning("covariance matrix includes only missing diagonals",
-            "\n")
-    outlist[["se"]] <- rep(NA, times = length(par))
-  } else if (sum(diag(outlist[["cv"]]) <= 0) > 0) {
-    warning("covariance matrix includes non-positive diagnoals",
-            "\n")
-    outlist[["se"]] <- sqrt(diag(outlist[["cv"]]))
-  } else if (sum(is.na(outlist[["se"]])) > 0) {
-    warning("missing standard errors were obtained",
-            "\n")
-    outlist[["se"]] <- sqrt(diag(outlist[["cv"]]))
+    
   } else {
-    outlist[["se"]] <- sqrt(diag(outlist[["cv"]]))
+    
+    suppressWarnings(
+      outlist[["se"]] <- sqrt(diag(outlist[["cv"]]))
+    )
+    
+    if (all(is.na(diag(outlist[["cv"]])))) {
+      warning("covariance matrix includes only missing diagonals\n")
+    } 
+    
+    if (any(diag(outlist[["cv"]]) <= 0)) {
+      warning("covariance matrix includes non-positive diagnoals\n")
+    } 
+    if (any(is.na(outlist[["se"]]))) {
+      warning("missing standard errors were obtained\n")
+    }
+    
   }
+  
+
+  
   names(outlist[["se"]]) <- names(par)
   
   outlist[["z"]] <- par / outlist[["se"]]

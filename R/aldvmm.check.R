@@ -141,7 +141,7 @@ aldvmm.check <- function(formula,
   # Check if user-defined initial values are the right length.
   #-----------------------------------------------------------
   
-  mm <- aldvmm.mm(data = data[complete.cases(data[, all.vars(formula)]),][1, ],
+  mm <- aldvmm.mm(data = data[complete.cases(data[, all.vars(formula)]),],
                   formula = formula,
                   ncmp = ncmp,
                   lcoef = lcoef)
@@ -197,7 +197,7 @@ aldvmm.check <- function(formula,
   # Check if model includes constants when init.method is set to "constant".
   #-------------------------------------------------------------------------
   
-  mm <- aldvmm.mm(data = data[complete.cases(data[, all.vars(formula)]),][1, ],
+  mm <- aldvmm.mm(data = data[complete.cases(data[, all.vars(formula)]),],
                   formula = formula,
                   ncmp = ncmp,
                   lcoef = lcoef)

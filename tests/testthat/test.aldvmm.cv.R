@@ -75,8 +75,8 @@ test_that("Check covariance function.", {
                    failure_message = 
                      "P-values are wrong length.")
   
-  # Covariance matrix with missing values
-  #--------------------------------------
+  # Covariance matrix with non-positive diagonals
+  #----------------------------------------------
   
   data(utility)
   
@@ -98,17 +98,17 @@ test_that("Check covariance function.", {
                   lcoef = fit$label$lcoef)
   
   suppressWarnings(
-  testthat::expect_warning(aldvmm.cv(ll = aldvmm.ll,
-                                     par = fit$coef,
-                                     X = mm,
-                                     y = utility$eq5d,
-                                     psi = psi,
-                                     ncmp = ncmp,
-                                     dist = "normal",
-                                     lcoef = fit$label$lcoef,
-                                     lcmp = fit$label$lcmp,
-                                     lcpar = fit$label$lcpar,
-                                     optim.method = fit$optim.method))
+    testthat::expect_warning(aldvmm.cv(ll = aldvmm.ll,
+                                       par = fit$coef,
+                                       X = mm,
+                                       y = utility$eq5d,
+                                       psi = psi,
+                                       ncmp = ncmp,
+                                       dist = "normal",
+                                       lcoef = fit$label$lcoef,
+                                       lcmp = fit$label$lcmp,
+                                       lcpar = fit$label$lcpar,
+                                       optim.method = fit$optim.method))
   )
   
   testthat::expect(all(is.na(cov[["p"]]) == is.na(cov[["se"]])),
@@ -126,6 +126,41 @@ test_that("Check covariance function.", {
                      "Missing lower limits do not match missing standard 
                    errors.")
   
+  # No covariance matrix obtained
+  #------------------------------
   
+  data(utility)
+  
+  formula <- eq5d ~ female + age | female + age
+  
+  psi <- c(0.883, -0.594)
+  ncmp <- 2
+  
+  suppressWarnings({
+    fit <- aldvmm(formula = formula,
+                  data = utility[1:20, ],
+                  psi = psi,
+                  ncmp = ncmp)
+  })
+  
+  
+  mm <- aldvmm.mm(data = utility,
+                  formula = formula,
+                  ncmp = ncmp,
+                  lcoef = fit$label$lcoef)
+  
+  suppressWarnings(
+    testthat::expect_warning(aldvmm.cv(ll = aldvmm.ll,
+                                       par = fit$coef,
+                                       X = mm,
+                                       y = utility$eq5d,
+                                       psi = psi,
+                                       ncmp = ncmp,
+                                       dist = "normal",
+                                       lcoef = fit$label$lcoef,
+                                       lcmp = fit$label$lcmp,
+                                       lcpar = fit$label$lcpar,
+                                       optim.method = fit$optim.method))
+  )
   
 })
