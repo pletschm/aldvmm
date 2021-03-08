@@ -5,15 +5,6 @@ test_that('Check aldvmm fitting function.', {
   utility[34, 1] <- NA
   utility[77, 2] <- NA
   
-  # Warning for missing or invalid values of covariance matrix
-  suppressWarnings(
-    testthat::expect_warning({
-      fit <- aldvmm(eq5d ~ age | female,
-                    data = utility,
-                    psi = c(-0.594, 0.883))
-    })
-  )
-  
   # Message for incomplete observations in data
   suppressWarnings(
     testthat::expect_message(
