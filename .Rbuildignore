@@ -14,3 +14,4 @@
 ^vignettes/aldvmm_vignette\.pdf$
 ^\.travis\.yml$
 ^\.github$
+^codecov\.yml$
