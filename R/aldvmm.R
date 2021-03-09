@@ -524,7 +524,7 @@ aldvmm <- function(formula,
   
   if (is.na(gof[['mse']])) {
     warning("no mse or mae were obtained",
-            "\n")
+            call. = FALSE)
   }
   
   gof[["ll"]] <- fit[["value"]]

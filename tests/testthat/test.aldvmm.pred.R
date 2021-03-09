@@ -43,26 +43,20 @@ test_that('Check prediction function.', {
   
   testthat::expect(sum(unlist(lapply(pred, 
                                      function(x) sum(!is.numeric(x)) ))) == 0,
-                   failure_message = 'Non-numeric elements in predictions.'
-  )
-  testthat::expect(sum(!is.na(pred[["yhat"]])) > 0,
-                   failure_message = 'Only missing predicted outcomes.'
-  )
-  testthat::expect(sum(!is.na(pred[["yhat"]])) == 
-                     nrow(testdat[complete.cases(testdat), ]),
+                   failure_message = 'Non-numeric elements in predictions.')
+  testthat::expect(all(!is.na(pred[["yhat"]])),
+                   failure_message = 'Only missing predicted outcomes.')
+  testthat::expect(sum(!is.na(pred[["yhat"]])) == sum(complete.cases(testdat)),
                    failure_message = 
-                     'Different number of miss. in data & predicted outcomes.'
-  )
+                     'Different number of miss. in data & predicted outcomes.')
   testthat::expect(sum(unlist(lapply(pred, 
                                      function(x) (Inf %in% x) | 
                                        (-Inf %in% x)))) == 0,
                    failure_message = 
-                     'Predicted outcomes include non-finite values.'
-  )
+                     'Predicted outcomes include non-finite values.')
   testthat::expect(sum(pred[["prob"]]) == 1,
          failure_message = 
-           'Probabilities of group membership do not sum to 1.'
-  )
+           "Probabilities of group membership do not sum to 1.")
   
   testthat::expect(all(pred[["yhat"]] <= 1),
                    failure_message = "Predictions larger than one.")

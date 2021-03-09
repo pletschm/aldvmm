@@ -86,7 +86,8 @@ aldvmm.cv <- function(ll,
   
   if (all(is.na(outlist[["cv"]]))) {
     
-    warning("no covariance matrix was obtained\n")
+    base::warning("no covariance matrix was obtained",
+            call. = FALSE)
     outlist[["se"]] <- rep(NA, times = length(par))
     
   } else {
@@ -96,14 +97,18 @@ aldvmm.cv <- function(ll,
     )
     
     if (all(is.na(diag(outlist[["cv"]])))) {
-      warning("covariance matrix includes only missing diagonals\n")
+      
+      base::warning("covariance matrix includes only missing diagonals",
+              call. = FALSE)
     } 
     
     if (any(diag(outlist[["cv"]]) <= 0)) {
-      warning("covariance matrix includes non-positive diagnoals\n")
+      base::warning("covariance matrix includes non-positive diagnoals",
+              call. = FALSE)
     } 
     if (any(is.na(outlist[["se"]]))) {
-      warning("missing standard errors were obtained\n")
+      base::warning("missing standard errors were obtained",
+              call. = FALSE)
     }
     
   }

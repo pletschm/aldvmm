@@ -167,7 +167,7 @@ aldvmm.pred <- function(par,
 
   if (sum(is.na(pred[["yhat"]])) != 0) {
     warning("fitted values include missing values",
-            "\n")
+            call. = FALSE)
   }
   
   # Probabilities of group membership
@@ -179,7 +179,7 @@ aldvmm.pred <- function(par,
   if (sum(is.na(p_c)) != 0) {
     warning("fitted probabilities of component membership include missing ", 
             "values",
-            "\n")
+            call. = FALSE)
   }
   
   return(pred)
