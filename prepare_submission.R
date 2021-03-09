@@ -27,7 +27,6 @@ devtools::check(pkg = ".", cran = TRUE)
 
 devtools::build()
 
-
 # Winbuilder
 #------------
 

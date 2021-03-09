@@ -33,7 +33,7 @@ devtools::install_github("pletschm/aldvmm", ref = "main")
 
 The package 'aldvmm' includes a simulated sample data set to run simple examples.
 
-```{r example}
+```{r example, results = 'hide'}
 library("aldvmm")
 
 data(utility)
@@ -42,10 +42,11 @@ fit <- aldvmm(data = utility,
               formula = eq5d ~ age + female | 1,
               psi = c(0.883, -0.594),
               ncmp = 2,
-              init.method = "zero",
+              init.method = "constant",
               optim.method = "Nelder-Mead")
 
 summary(fit)
+
 yhat <- predict(fit,
                 newdata = utility)
 ```
