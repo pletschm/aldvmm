@@ -35,10 +35,10 @@ frame by \cr \ifelse{html}{\code{\link[base]{as.data.frame}}}{
 variables in \code{'formula'}.}
 
 \item{psi}{a numeric vector of minimum and maximum possible utility values
-smaller than 1 (e.g. \code{c(-0.594, 0.884)}). The gap between the maximum
-value and 1 represents an area with zero density in the value set from
-which utilities were obtained. The order of the minimum and maximum limits
-in \code{'psi'} does not matter.}
+smaller than or equal to 1 (e.g. \code{c(-0.594, 0.883)}). The potential
+gap between the maximum value and 1 represents an area with zero density
+in the value set from which utilities were obtained. The order of the
+minimum and maximum limits in \code{'psi'} does not matter.}
 
 \item{ncmp}{a numeric value of the number of components that are mixed. The
 default value is 2. A value of 1 represents a tobit model with a gap
@@ -81,15 +81,15 @@ in the return value \code{'par'}.}
 
 \item{init.lo}{an optional numeric vector of user-defined lower limits for
 constrained optimization. When \code{'init.lo'} is not \code{NULL}, the
-method \code{"L-BFGS-B"} is used. Lower limits of parameters have to
-follow the same order as parameter estimates appear in the return value
-\code{'par'}.}
+optimization method \code{"L-BFGS-B"} is used. Lower limits of parameters
+have to follow the same order as parameter estimates appear in the return
+value \code{'par'}.}
 
 \item{init.hi}{an optional numeric vector of user-defined upper limits for
 constrained optimization. When \code{'init.hi'} is not \code{NULL}, the
-method \code{"L-BFGS-B"} is used. Upper limits of parameters have to
-follow the same order as parameter estimates appear in the return value
-\code{'par'}.}
+optimization method \code{"L-BFGS-B"} is used. Upper limits of parameters
+have to follow the same order as parameter estimates appear in the return
+value \code{'par'}.}
 
 \item{se.fit}{an optional logical value indicating whether standard errors
 of the fit are calculated (see Details).}
@@ -198,18 +198,15 @@ The function \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{
   \code{aldvmm::aldvmm()}} fits adjusted limited dependent variable mixture
   models using the likelihood and expected value functions from Hernandez
   Alava and Wailoo (2015).  The model accounts for multi-modality, minimum
-  and maximum utility values (e.g. -0.594 and 1) and gaps between 1 and the
-  next smaller observed utility value (e.g. 0.883).  Adjusted limited
-  dependent variable mixture models combine multiple distributions in
-  different components with a multinomial logit model of the probabilities
-  of component membership.  An observation's overall expected value is
-  calculated as the average of its expected values in all components
-  weighted by the observation's probabilities of component membership. The
-  standard deviations of normal distributions are estimated and reported as
-  log-transformed values which enter the likelihood function as
+  and maximum utility values and potential gaps between 1 and the next
+  smaller observed utility value.  Adjusted limited dependent variable
+  mixture models combine multiple distributions in different components with
+  a multinomial logit model of the probabilities of component membership.
+  The standard deviations of normal distributions are estimated and reported
+  as log-transformed values which enter the likelihood function as
   exponentiated values to ensure non-negative values.
 
-  The minimum utility and the largest utility smaller than 1 are supplied in
+  The minimum utility and the largest utility smaller than or equal to 1 are supplied in
   the argument \code{'psi'}.  The number of distributions/components that
   are mixed is set by the argument \code{'ncmp'}. When \code{'ncmp'} is set
   to 1 the procedure estimates a tobit model with a gap between 1 and the
@@ -256,9 +253,9 @@ The function \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{
   errors and 0 for all other prameters.  The method \code{"sann"} estimates
   the full model using the simulated annealing optimization method in
   \ifelse{html}{\code{\link[stats]{optim}}}{ \code{stats::optim()}} and uses
-  all parameter estimates as initial values.  When user-specified initial
-  values are supplied in \code{'init.est'}, the argument
-  \code{'init.method'} is ignored.
+  parameter estimates as initial values.  When user-specified initial values
+  are supplied in \code{'init.est'}, the argument \code{'init.method'} is
+  ignored.
 
   By default, \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{
   \code{aldvmm::aldvmm()}} performs unconstrained optimization with upper

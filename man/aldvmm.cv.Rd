@@ -41,10 +41,10 @@ finite mixture. In this release, only the normal distribution is
 available, and the default value is \code{"normal"}.}
 
 \item{psi}{a numeric vector of minimum and maximum possible utility values
-smaller than 1 (e.g. \code{c(-0.594, 0.884)}). The gap between the maximum
-value and 1 represents an area with zero density in the value set from
-which utilities were obtained. The order of the minimum and maximum limits
-in \code{'psi'} does not matter.}
+smaller than or equal to 1 (e.g. \code{c(-0.594, 0.883)}). The potential
+gap between the maximum value and 1 represents an area with zero density
+in the value set from which utilities were obtained. The order of the
+minimum and maximum limits in \code{'psi'} does not matter.}
 
 \item{ncmp}{a numeric value of the number of components that are mixed. The
 default value is 2. A value of 1 represents a tobit model with a gap
