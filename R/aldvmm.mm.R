@@ -24,8 +24,6 @@
 #'   matrix for the multinomial logit model of probabilities of component
 #'   membership.}
 #'
-#' @author Mark Pletscher, <pletscher.mark@gmail.com>
-#'
 #' @export
 
 aldvmm.mm <- function(data,

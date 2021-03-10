@@ -8,7 +8,6 @@
 #' order of parameters and the structure of summary tables returned by
 #' \ifelse{html}{\code{\link[aldvmm]{summary.aldvmm}}}{\code{aldvmm::summary.aldvmm()}}.
 #'
-#'
 #' @inheritParams aldvmm.ll
 #' @param names a character vector of names of considered elements
 #'   (distributions \code{"beta"}, multinomial logit \code{"delta"} or constant
@@ -19,8 +18,6 @@
 #'
 #' @return a character vector of names of parameter vectors used in
 #'   \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.
-#'
-#' @author Mark Pletscher, <pletscher.mark@gmail.com>
 #'
 #' @export
 

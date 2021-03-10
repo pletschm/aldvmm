@@ -63,6 +63,3 @@ order of the elements in \code{'lcoef'} and \code{'lcpar'} determines the
 order of parameters and the structure of summary tables returned by
 \ifelse{html}{\code{\link[aldvmm]{summary.aldvmm}}}{\code{aldvmm::summary.aldvmm()}}.
 }
-\author{
-Mark Pletscher, <pletscher.mark@gmail.com>
-}

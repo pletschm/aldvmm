@@ -142,6 +142,3 @@ Whitmore, G. A. (1986). Prediction limits for a univariate
   standard errors. \emph{Health services research}, \bold{49(2)}, 731--750.
   \doi{10.1111/1475-6773.12122}
 }
-\author{
-Mark Pletscher, <pletscher.mark@gmail.com>
-}

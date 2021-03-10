@@ -68,8 +68,6 @@
 #' @return a scalar of the negative log-likelihood of the data for the
 #'   parameter values in \code{'par'}.
 #'
-#' @author Mark Pletscher, <pletscher.mark@gmail.com>
-#'
 #' @export
 
 aldvmm.ll <- function(par,

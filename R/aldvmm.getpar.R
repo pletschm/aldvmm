@@ -21,8 +21,6 @@
 #'   names of the list correspond to the labels in \code{'lcoef'},
 #'   \code{'lcpar'} and \code{'lcmp'}.
 #'
-#' @author Mark Pletscher, <pletscher.mark@gmail.com>
-#'
 #' @export
 
 aldvmm.getpar <- function(par,

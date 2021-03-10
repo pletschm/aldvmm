@@ -138,6 +138,3 @@ runs validity checks of objects supplied to
   \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}} and
   of user settings.
 }
-\author{
-Mark Pletscher, <pletscher.mark@gmail.com>
-}

@@ -21,8 +21,6 @@
 #'   elements in the vector are identical to the row names of design matrices
 #'   in \code{'X'}.
 #'
-#' @author Mark Pletscher, <pletscher.mark@gmail.com>
-#'
 #' @export
 
 aldvmm.pred <- function(par,

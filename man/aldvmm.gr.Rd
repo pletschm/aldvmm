@@ -94,6 +94,3 @@ with respect to parameter values in \code{'par'}.
   log-likelihood returned by
   \ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm::aldvmm.ll()}}.
 }
-\author{
-Mark Pletscher, <pletscher.mark@gmail.com>
-}

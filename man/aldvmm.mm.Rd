@@ -54,6 +54,3 @@ based on \code{'formula'} supplied to
 The design matrix for probabilities of group membership is only created if
 more than one component are specified  in \code{'ncmp'}.
 }
-\author{
-Mark Pletscher, <pletscher.mark@gmail.com>
-}

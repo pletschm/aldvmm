@@ -33,8 +33,6 @@
 #'   \code{'par'}.} \item{\code{lower}}{a numeric vector of lower 95\%
 #'   confindence limits of paramter estimates in \code{'par'}.}
 #'
-#' @author Mark Pletscher, <pletscher.mark@gmail.com>
-#'
 #' @export
 
 aldvmm.cv <- function(ll,

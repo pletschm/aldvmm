@@ -42,8 +42,6 @@
 #'   \item{\code{hi}}{a numeric vector of upper limits of parameters in
 #'   \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}.}
 #'
-#' @author Mark Pletscher, <pletscher.mark@gmail.com>
-#'
 #' @export
 
 aldvmm.init <- function(X,

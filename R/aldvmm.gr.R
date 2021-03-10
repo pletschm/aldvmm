@@ -19,8 +19,6 @@
 #' @return a named numeric vector of first derivatives of the negative
 #'   log-likelihood of the data with respect to parameters in \code{'par'}.
 #'
-#' @author Mark Pletscher, <pletscher.mark@gmail.com>
-#'
 #' @export
 
 aldvmm.gr <- function(par,

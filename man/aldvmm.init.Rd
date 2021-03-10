@@ -157,6 +157,3 @@ using \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}.
   of the user defined \code{'optim.method'}.  It is possible to only set
   either maximum or minimum limits.
 }
-\author{
-Mark Pletscher, <pletscher.mark@gmail.com>
-}

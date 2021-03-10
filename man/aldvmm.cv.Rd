@@ -108,6 +108,3 @@ uses
 to calculate the hessian matrix of the log-likelihood function in
 \code{'ll'} at parameter values in \code{'par'}.
 }
-\author{
-Mark Pletscher, <pletscher.mark@gmail.com>
-}

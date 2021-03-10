@@ -206,12 +206,13 @@ The function \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{
   as log-transformed values which enter the likelihood function as
   exponentiated values to ensure non-negative values.
 
-  The minimum utility and the largest utility smaller than or equal to 1 are supplied in
-  the argument \code{'psi'}.  The number of distributions/components that
-  are mixed is set by the argument \code{'ncmp'}. When \code{'ncmp'} is set
-  to 1 the procedure estimates a tobit model with a gap between 1 and the
-  maximum utility value in \code{'psi'}.  The current version only allows
-  finite mixtures of normal distributions.
+  The minimum utility and the largest utility smaller than or equal to 1 are
+  supplied in the argument \code{'psi'}.  The number of
+  distributions/components that are mixed is set by the argument
+  \code{'ncmp'}. When \code{'ncmp'} is set to 1 the procedure estimates a
+  tobit model with a gap between 1 and the maximum utility value in
+  \code{'psi'}.  The current version only allows finite mixtures of normal
+  distributions.
 
   The \code{'formula'} object can include a \code{|} delimiter to separate
   formulae for expected values in components (left) and the multinomial
@@ -311,7 +312,4 @@ Alava, M. H. and Wailoo, A. (2015) Fitting adjusted limited
   Whitmore, G. A. (1986) Prediction limits for a univariate normal
   observation. \emph{The American Statistician}, \bold{40(2)}, 141--143.
   \doi{10.1080/00031305.1986.10475378} \cr
-}
-\author{
-Mark Pletscher, <pletscher.mark@gmail.com>
 }

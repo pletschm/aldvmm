@@ -86,6 +86,3 @@ results of
   non-negative (i.e. standard deviations of normal distributions) enter the
   expected value function as log-transformed values.
 }
-\author{
-Mark Pletscher, <pletscher.mark@gmail.com>
-}
