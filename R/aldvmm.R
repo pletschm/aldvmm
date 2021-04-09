@@ -519,7 +519,8 @@ aldvmm <- function(formula,
     (nrow(mm[[1]]) - length(fit[["par"]]))
   
   if (is.na(gof[['mse']])) {
-    warning("no mse or mae were obtained", call. = FALSE)
+    base::warning("no mse or mae were obtained", 
+                  call. = FALSE)
   }
   
   gof[["ll"]] <- fit[["value"]]
