@@ -29,8 +29,8 @@ aldvmm.getpar <- function(par,
                           lcpar,
                           ncmp) {
   
-  # Create vector of starting characters to identify groups of values
-  #------------------------------------------------------------------
+  # Create vector of first characters of names to identify groups of values
+  #------------------------------------------------------------------------
   
   stubs <- apply(expand.grid(paste0(lcmp, 1:ncmp), c(lcoef, lcpar)), 
                         1, 
