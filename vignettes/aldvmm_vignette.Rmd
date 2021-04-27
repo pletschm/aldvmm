@@ -790,15 +790,15 @@ url <- paste0("https://files.digital.nhs.uk/publicationimport/pub11xxx/",
 download.file(url, temp)
 
 df <- read.table(unz(description = temp,
-                     filename = 'Hip Replacement 1112.csv'),
-                 sep = ',',
+                     filename = "Hip Replacement 1112.csv"),
+                 sep = "",",
                  header = TRUE)
 
 unlink(temp)
 rm(temp)
 
 df <- df[, c("AGEBAND", "SEX", "eq5d", "HR_Q2_SCORE")]
-df <- df[df$AGEBAND!='*' & df$SEX!='*', ]
+df <- df[df$AGEBAND!="*" & df$SEX!="*", ]
 d[, "hr"] <- d[, "HR_Q2_SCORE"]/10
 df <- df[stats::complete.cases(df), ]
 
