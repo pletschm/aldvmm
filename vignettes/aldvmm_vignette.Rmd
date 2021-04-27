@@ -1226,7 +1226,7 @@ To validate the R implementation of adjusted limited dependent variable models w
 
 - Model 1 with default optimization settings.
 
-- Model 1 initial values from constant-only model.
+- Model 1 with initial values from constant-only model.
 
 - Model 2 with user-defined initial values.
 
