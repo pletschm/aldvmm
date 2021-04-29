@@ -23,13 +23,11 @@ multinomial logit model of probabilities of component membership (right)
 default value is 2. A value of 1 represents a tobit model with a gap
 between 1 and the maximum value in \code{'psi'}.}
 
-\item{lcoef}{a character vector of the names of objects with values for
-component distributions (default \code{"beta"}) and for probabilities of
-component membership (default \code{"delta"}). The order in which the
-labels in the two parts appear affects ordering of results in parameter
-vectors and summary tables. The names in \code{'lcoef'} are allowed to
-coincide with column names in \code{'data'} supplied to
-\ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.}
+\item{lcoef}{a character vector of length 2 with labels of objects including
+regression coefficients. The first element is the label of coefficients
+for component distributions (default \code{"beta"}), and the second
+element is the label of coefficients on probabilities of component
+membership (default \code{"delta"}).}
 }
 \value{
 a named list of numeric matrices. \item{\code{beta}}{a numeric

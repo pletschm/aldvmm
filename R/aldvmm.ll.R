@@ -27,21 +27,18 @@
 #' @param y a numeric vector of observed outcomes from complete observations in
 #'   \code{'data'} supplied to
 #'   \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.
-#' @param lcoef a character vector of the names of objects with values for
-#'   component distributions (default \code{"beta"}) and for probabilities of
-#'   component membership (default \code{"delta"}). The order in which the
-#'   labels in the two parts appear affects ordering of results in parameter
-#'   vectors and summary tables. The names in \code{'lcoef'} are allowed to
-#'   coincide with column names in \code{'data'} supplied to
-#'   \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.
-#' @param lcpar a character vector of the names of objects with values of
-#'   constant parameters of component distributions. The names of constant
-#'   parameters depend on the chosen distribution (\code{"lnsigma"} for
-#'   \code{dist = "normal"}). The names in \code{'lcpar'} are allowed to
-#'   coincide with column names in \code{'data'} supplied to
-#'   \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.
-#' @param lcmp a character value of the names of objects with values for a
-#'   specific component (default \code{"Comp"}). This label is also used in
+#' @param lcoef a character vector of length 2 with labels of objects including
+#'   regression coefficients. The first element is the label of coefficients
+#'   for component distributions (default \code{"beta"}), and the second
+#'   element is the label of coefficients on probabilities of component
+#'   membership (default \code{"delta"}).
+#' @param lcpar a character vector with the labels of objects including
+#'   constant parameters of component distributions (e.g. the standard
+#'   deviation with the normal distribution). The length of \code{'lcpar'}
+#'   depends on the distribution supplied to \code{'dist'}.
+#' @param lcmp a character value representing a stub (default \code{"Comp"})
+#'   for labeling objects including regression coefficients in different
+#'   components (e.g. "Comp1", "Comp2", ...). This label is also used in
 #'   summary tables returned by
 #'   \ifelse{html}{\code{\link[aldvmm]{summary.aldvmm}}}{
 #'   \code{aldvmm::summary.aldvmm()}}.
@@ -49,17 +46,17 @@
 #' @inheritParams aldvmm
 #'
 #' @details
-#'   \ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm::aldvmm.ll()}}
-#'   calculates the negative adjusted limited dependent variable mixture model
-#'   log-likelihood using the likelihood function published in Hernandez Alava
-#'   and Wailoo (2015). Constant distribution parameters that need to be
-#'   non-negative (i.e. the standard deviation of normal distributions) enter
-#'   the likelihood function as log-transformed values.
+#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm::aldvmm.ll()}}
+#' calculates the negative adjusted limited dependent variable mixture model
+#' log-likelihood using the likelihood function published in Hernandez Alava
+#' and Wailoo (2015). Constant distribution parameters that need to be
+#' non-negative (i.e. the standard deviation of normal distributions) enter the
+#' likelihood function as log-transformed values.
 #'
-#'   As the "L-BFGS-B" and "Rcgmin" methods in
-#'   \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}} fail
-#'   if they encounter infinite values, the log-likelihood function takes the
-#'   value -1e+20 if it is infinite during these algorithms.
+#' As the "L-BFGS-B" and "Rcgmin" methods in
+#' \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}} fail if
+#' they encounter infinite values, the log-likelihood function takes the value
+#' -1e+20 if it is infinite during these algorithms.
 #'
 #' @references Alava, M. H. and Wailoo, A. (2015) Fitting adjusted limited
 #'   dependent variable mixture models to EQ-5D. \emph{The Stata Journal},
