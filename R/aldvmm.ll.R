@@ -34,7 +34,7 @@
 #'   membership (default \code{"delta"}).
 #' @param lcpar a character vector with the labels of objects including
 #'   constant parameters of component distributions (e.g. the standard
-#'   deviation with the normal distribution). The length of \code{'lcpar'}
+#'   deviation of the normal distribution). The length of \code{'lcpar'}
 #'   depends on the distribution supplied to \code{'dist'}.
 #' @param lcmp a character value representing a stub (default \code{"Comp"})
 #'   for labeling objects including regression coefficients in different
