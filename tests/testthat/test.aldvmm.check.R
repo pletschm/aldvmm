@@ -119,4 +119,23 @@ test_that("Check input value checks.", {
                                `hide(Intercept)female` | `hide(Intercept)age`,
                              data = testdf))
   
+  # Check if the data includes outcome values outside limits
+  #---------------------------------------------------------
+  
+  formula <- eq5d ~ female | age
+  
+  outdat <- utility[, as.character(formula)[[2]]]
+  
+  # Lower bound larger than observed minimum
+  minobs <- min(outdat, na.rm = TRUE) + 0.0001
+  maxobs <- max(outdat[outdat < 1], na.rm = TRUE)
+  
+  testthat::expect_error(aux(psi = c(minobs, maxobs)))
+  
+  # Upper bound larger than observed minimum
+  minobs <- min(outdat, na.rm = TRUE)
+  maxobs <- max(outdat[outdat < 1], na.rm = TRUE) - 0.0001
+  
+  testthat::expect_error(aux(psi = c(minobs, maxobs)))
+  
 })

@@ -8,14 +8,14 @@ output:
     toc: false
 bibliography: aldvmm_bib.bib
 vignette: >
-  %\VignetteIndexEntry{Adjusted Limited Dependent Variable Mixture Models of Health State Utilities in R}
+%\VignetteIndexEntry{Adjusted Limited Dependent Variable Mixture Models of Health State Utilities in R}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
----
-
-<!-- Setup -->
-
-```{r setup, hide, eval = TRUE, echo = FALSE, results = 'hide'}
+  ---
+  
+  <!-- Setup -->
+  
+  ```{r setup, hide, eval = TRUE, echo = FALSE, results = 'hide'}
 
 # Load packages
 #--------------
@@ -28,31 +28,31 @@ library("scales")
 # Custom ggplot theme
 #--------------------
 
-ggplot_theme <- theme(panel.background = element_rect(fill = "white",
-                                                      colour = "white",
-                                                      size = 0.5, 
-                                                      linetype = "solid"),
-                      panel.grid.major = element_blank(), 
-                      panel.grid.minor = element_blank(),
-                      panel.grid.major.y = element_line(size = 0.25, 
-                                                        linetype = 'dashed', 
-                                                        colour = "grey"),
-                      text = element_text(size = 11),
-                      plot.margin = margin(10, 10, 0, 10),
-                      axis.line = element_line(size = 0.25),
-                      axis.text = element_text(size = 11),
-                      #legend.title=element_text(size = 11),
-                      legend.title = element_blank(),
-                      legend.text=element_text(size = 11),
-                      legend.position = 'bottom',
-                      legend.direction = "vertical",
-                      legend.key = element_blank())
+ggplot_theme <- ggplot2::theme(panel.background = ggplot2::element_rect(fill = "white",
+colour = "white",
+size = 0.5, 
+linetype = "solid"),
+panel.grid.major = ggplot2::element_blank(), 
+panel.grid.minor = ggplot2::element_blank(),
+panel.grid.major.y = ggplot2::element_line(size = 0.25, 
+linetype = 'dashed', 
+colour = "grey"),
+text = ggplot2::element_text(size = 11),
+plot.margin = ggplot2::margin(10, 10, 0, 10),
+axis.line = ggplot2::element_line(size = 0.25),
+axis.text = ggplot2::element_text(size = 11),
+#legend.title = ggplot2::element_text(size = 11),
+legend.title = ggplot2::element_blank(),
+legend.text = ggplot2::element_text(size = 11),
+legend.position = 'bottom',
+legend.direction = "vertical",
+legend.key = ggplot2::element_blank())
 
 ```
 
 <!-- Computationally heavy calculations -->
 
-```{r calc, hide, eval = FALSE, echo = FALSE, results = 'hide'}
+```{r calc, hide, eval = TRUE, echo = FALSE, results = 'hide'}
 
 #------------------------------------------------------------------------------
 # Helper functions
@@ -66,7 +66,7 @@ reptab.fit <- function(fit) {
   tmp <- summary(fit)
   
   valindex <- apply(tmp, 1, function(x)
-    sum("-" != strsplit(paste(x, collapse = ""), "")[[1]])!=0
+    sum("-" != strsplit(paste(x, collapse = ""), "")[[1]]) != 0
   )
   tmp <- tmp[valindex, ]
   
@@ -111,21 +111,21 @@ reptab.stata <- function(file) {
 #-------------
 
 ggplot_theme <- theme(panel.background = element_rect(fill = "white",
-                                                      colour = "white",
-                                                      size = 0.5, 
-                                                      linetype = "solid"),
+                                                               colour = "white",
+                                                               size = 0.5, 
+                                                               linetype = "solid"),
                       panel.grid.major = element_blank(), 
                       panel.grid.minor = element_blank(),
                       panel.grid.major.y = element_line(size = 0.25, 
-                                                        linetype = 'dashed', 
-                                                        colour = "grey"),
+                                                                 linetype = 'dashed', 
+                                                                 colour = "grey"),
                       text = element_text(size = 11),
                       plot.margin = margin(10, 10, 0, 10),
                       axis.line = element_line(size = 0.25),
                       axis.text = element_text(size = 11),
-                      #legend.title=element_text(size = 11),
+                      #legend.title = element_text(size = 11),
                       legend.title = element_blank(),
-                      legend.text=element_text(size = 11),
+                      legend.text = element_text(size = 11),
                       legend.position = 'bottom',
                       legend.direction = "vertical",
                       legend.key = element_blank())
@@ -146,7 +146,7 @@ est_mhl <- function(fit, ngroup) {
   res <- res[sample]
   
   # Make groups
-  group <- as.numeric(cut(yhat, breaks = ngroup), na.rm=TRUE)
+  group <- as.numeric(cut(yhat, breaks = ngroup), na.rm = TRUE)
   
   # Auxiliary regression
   fit <- lm(res ~ factor(group))
@@ -208,8 +208,8 @@ df <- read.table(unz(description = temp,
 unlink(temp)
 rm(temp)
 
-df <- df[df$AGEBAND!='*' & df$SEX!='*', c('AGEBAND', 'SEX', 'Q2_EQ5D_INDEX',
-                                          'HR_Q2_SCORE')]
+df <- df[df$AGEBAND != '*' & df$SEX != '*', 
+         c('AGEBAND', 'SEX', 'Q2_EQ5D_INDEX', 'HR_Q2_SCORE')]
 
 df$eq5d <- df$Q2_EQ5D_INDEX
 df$hr <- df$HR_Q2_SCORE/10
@@ -499,11 +499,12 @@ tab_comp_mae <- tab_comp_ll
 
 for (i in names(fit1_all[["fit"]])) { # Initial value methods
   for (j in names(fit1_all[["fit"]][[1]])) { # Optimization methods
-    if (length(fit1_all[["fit"]][[i]][[j]])!=0) {
+    if (length(fit1_all[["fit"]][[i]][[j]]) != 0) {
       tab_comp_ll[i, j] <- -fit1_all[["fit"]][[i]][[j]][["gof"]][["ll"]]
       tab_comp_time[i, j] <- fit1_all[["time"]][[i]][[j]]
       cov <- fit1_all[["fit"]][[i]][[j]][["cov"]]
-      tab_comp_cov[i, j] <- sum(diag(cov)<0)==0 & sum(is.na(diag(cov)))==0
+      tab_comp_cov[i, j] <- sum(diag(cov) < 0) == 0 & 
+        sum(is.na(diag(cov))) == 0
       rm(cov)
       tab_comp_mse[i, j] <- fit1_all[["fit"]][[i]][[j]][["gof"]][["mse"]]
       tab_comp_mae[i, j] <- fit1_all[["fit"]][[i]][[j]][["gof"]][["mae"]]
@@ -788,6 +789,7 @@ url <- paste0("https://files.digital.nhs.uk/publicationimport/pub11xxx/",
               "pub11359/final-proms-eng-apr11-mar12-data-pack-csv.zip")
 
 download.file(url, temp)
+rm(url)
 
 df <- read.table(unz(description = temp,
                      filename = "Hip Replacement 1112.csv"),
@@ -797,9 +799,12 @@ df <- read.table(unz(description = temp,
 unlink(temp)
 rm(temp)
 
-df <- df[, c("AGEBAND", "SEX", "eq5d", "HR_Q2_SCORE")]
-df <- df[df$AGEBAND!="*" & df$SEX!="*", ]
-d[, "hr"] <- d[, "HR_Q2_SCORE"]/10
+df <- df[, c("AGEBAND", "SEX", "Q2_EQ5D_INDEX", "HR_Q2_SCORE")]
+df <- df[df$AGEBAND != "*" & df$SEX != "*", ]
+
+df$eq5d <- df$Q2_EQ5D_INDEX
+df$hr <- df$HR_Q2_SCORE/10
+
 df <- df[stats::complete.cases(df), ]
 
 set.seed(101010101)
@@ -1410,7 +1415,7 @@ plot <- ggplot2::ggplot(plotdat, aes(x = factor(as.numeric(group)),
                                      group = factor(outcome))) +
   geom_line(aes(linetype = factor(outcome)))
 ```  
-  
+
 ```{r plot-comp-mhl1, echo = FALSE, results = "asis", fig.height = 2.5, fig.width = 6, fig.cap = 'Mean residuals over deciles of expected values, "Nelder-Mead" with "zero" starting values'}
 
 load("plot_comp_mhl1.RData")
