@@ -326,7 +326,8 @@ aldvmm <- function(formula,
   # Labels
   #-------
   
-  # Names of objects for distributions ("beta") and multinomial logit ("delta")
+  # Labels of objects including regression coefficients for component 
+  # distributions ("beta") and multinomial logit ("delta")
   lcoef <- c("beta", "delta")
   
   # Names of constant distribution parameters (e.g. lnsigma in dist=="normal")
