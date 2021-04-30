@@ -132,7 +132,7 @@ test_that("Check input value checks.", {
   
   testthat::expect_error(aux(psi = c(minobs, maxobs)))
   
-  # Upper bound larger than observed minimum
+  # Upper bound smaller than observed minimum
   minobs <- min(outdat, na.rm = TRUE)
   maxobs <- max(outdat[outdat < 1], na.rm = TRUE) - 0.0001
   
