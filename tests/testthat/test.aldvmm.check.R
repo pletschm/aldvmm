@@ -128,14 +128,19 @@ test_that("Check input value checks.", {
   
   # Lower bound larger than observed minimum
   minobs <- min(outdat, na.rm = TRUE) + 0.0001
-  maxobs <- max(outdat[outdat < 1], na.rm = TRUE)
+  gapobs <- max(outdat[outdat < 1], na.rm = TRUE)
   
-  testthat::expect_error(aux(psi = c(minobs, maxobs)))
+  testthat::expect_error(aux(psi = c(minobs, gapobs)))
   
   # Upper bound smaller than observed minimum
   minobs <- min(outdat, na.rm = TRUE)
-  maxobs <- max(outdat[outdat < 1], na.rm = TRUE) - 0.0001
+  gapobs <- max(outdat[outdat < 1], na.rm = TRUE) - 0.0001
   
-  testthat::expect_error(aux(psi = c(minobs, maxobs)))
+  testthat::expect_error(aux(psi = c(minobs, gapobs)))
   
+  # Values larger than 1
+  tmpdat <- utility
+  tmpdat$eq5d <- tmpdat$eq5d + 0.00001
+  testthat::expect_error(aux(data = tmpdat))
+  rm(tmpdat)
 })

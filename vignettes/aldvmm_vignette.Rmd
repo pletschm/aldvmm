@@ -5,17 +5,19 @@ date: "`r Sys.Date()`"
 package: aldvmm
 output: 
   bookdown::pdf_document2:
+    includes:
+            in_header: header.tex
     toc: false
 bibliography: aldvmm_bib.bib
 vignette: >
-%\VignetteIndexEntry{Adjusted Limited Dependent Variable Mixture Models of Health State Utilities in R}
+  %\VignetteIndexEntry{Adjusted Limited Dependent Variable Mixture Models of Health State Utilities in R}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-  ---
+---
   
-  <!-- Setup -->
+<!-- Setup -->
   
-  ```{r setup, hide, eval = TRUE, echo = FALSE, results = 'hide'}
+```{r setup, hide, eval = TRUE, echo = FALSE, results = 'hide'}
 
 # Load packages
 #--------------
@@ -25,177 +27,46 @@ library("xtable")
 library("ggplot2")
 library("scales")
 
+# Load functions
+#---------------
+
+source("rep_tab_fit.R")
+source("rep_tab_stata.R")
+source("est_mhl.R")
+
 # Custom ggplot theme
 #--------------------
 
 ggplot_theme <- ggplot2::theme(panel.background = ggplot2::element_rect(fill = "white",
-colour = "white",
-size = 0.5, 
-linetype = "solid"),
-panel.grid.major = ggplot2::element_blank(), 
-panel.grid.minor = ggplot2::element_blank(),
-panel.grid.major.y = ggplot2::element_line(size = 0.25, 
-linetype = 'dashed', 
-colour = "grey"),
-text = ggplot2::element_text(size = 11),
-plot.margin = ggplot2::margin(10, 10, 0, 10),
-axis.line = ggplot2::element_line(size = 0.25),
-axis.text = ggplot2::element_text(size = 11),
-#legend.title = ggplot2::element_text(size = 11),
-legend.title = ggplot2::element_blank(),
-legend.text = ggplot2::element_text(size = 11),
-legend.position = 'bottom',
-legend.direction = "vertical",
-legend.key = ggplot2::element_blank())
+                                                                        colour = "white",
+                                                                        size = 0.5, 
+                                                                        linetype = "solid"),
+                               panel.grid.major = ggplot2::element_blank(), 
+                               panel.grid.minor = ggplot2::element_blank(),
+                               panel.grid.major.y = ggplot2::element_line(size = 0.25, 
+                                                                          linetype = 'dashed', 
+                                                                          colour = "grey"),
+                               text = ggplot2::element_text(size = 11),
+                               plot.margin = ggplot2::margin(10, 10, 0, 10),
+                               axis.line = ggplot2::element_line(size = 0.25),
+                               axis.text = ggplot2::element_text(size = 11),
+                               #legend.title = ggplot2::element_text(size = 11),
+                               legend.title = ggplot2::element_blank(),
+                               legend.text = ggplot2::element_text(size = 11),
+                               legend.position = 'bottom',
+                               legend.direction = "vertical",
+                               legend.key = ggplot2::element_blank())
+
+# List to collect results used in text
+#-------------------------------------
+
+textout <- list()
 
 ```
 
-<!-- Computationally heavy calculations -->
+<!-- Load data -->
 
-```{r calc, hide, eval = TRUE, echo = FALSE, results = 'hide'}
-
-#------------------------------------------------------------------------------
-# Helper functions
-#------------------------------------------------------------------------------
-
-# Summary table print function
-#-----------------------------
-
-reptab.fit <- function(fit) {
-  
-  tmp <- summary(fit)
-  
-  valindex <- apply(tmp, 1, function(x)
-    sum("-" != strsplit(paste(x, collapse = ""), "")[[1]]) != 0
-  )
-  tmp <- tmp[valindex, ]
-  
-  colnames(tmp) <- tmp[1, ]
-  tmp <- tmp[-1, ]
-  #tmp[nrow(tmp), 3] <- ""
-  #tmp[nrow(tmp), 4] <- ""
-  
-  eindex <- match("E[y|c, X]", tmp[, 1])
-  pindex <- match("P[c|X]", tmp[, 1])
-  
-  lindex <- c(-1, eindex - 1, eindex, pindex - 1, pindex, nrow(tmp) - 1)
-  
-  list(table = tmp,
-       lindex = lindex[!is.na(lindex)])
-}
-
-# Stata table print function
-#---------------------------
-
-reptab.stata <- function(file) {
-  
-  stata <- read.table(file, 
-                      header = FALSE, 
-                      sep = ";", 
-                      dec = ".")
-  
-  stata[1, 1] <- ""
-  names(stata) <- stata[1, ]
-  stata <- stata[-1, ]
-  
-  eindex <- match("E[y|c, X]", stata[, 1])
-  pindex <- match("P[c|X]", stata[, 1])
-  
-  lindex <- c(-1, eindex - 1, eindex, pindex - 1, pindex, nrow(stata) - 1)
-  
-  list(table = stata,
-       lindex = lindex[!is.na(lindex)])
-}
-
-# ggplot theme
-#-------------
-
-ggplot_theme <- theme(panel.background = element_rect(fill = "white",
-                                                               colour = "white",
-                                                               size = 0.5, 
-                                                               linetype = "solid"),
-                      panel.grid.major = element_blank(), 
-                      panel.grid.minor = element_blank(),
-                      panel.grid.major.y = element_line(size = 0.25, 
-                                                                 linetype = 'dashed', 
-                                                                 colour = "grey"),
-                      text = element_text(size = 11),
-                      plot.margin = margin(10, 10, 0, 10),
-                      axis.line = element_line(size = 0.25),
-                      axis.text = element_text(size = 11),
-                      #legend.title = element_text(size = 11),
-                      legend.title = element_blank(),
-                      legend.text = element_text(size = 11),
-                      legend.position = 'bottom',
-                      legend.direction = "vertical",
-                      legend.key = element_blank())
-
-# Modified Hosmer-Lemeshow test function
-#---------------------------------------
-
-est_mhl <- function(fit, ngroup) {
-  
-  # Select sample
-  yhat <- fit[["pred"]][["yhat"]]
-  res <- fit[["pred"]][["res"]]
-  
-  nsample <- length(yhat)
-  sample <- sample(1:length(yhat), nsample, replace = FALSE)
-  
-  yhat <- yhat[sample]
-  res <- res[sample]
-  
-  # Make groups
-  group <- as.numeric(cut(yhat, breaks = ngroup), na.rm = TRUE)
-  
-  # Auxiliary regression
-  fit <- lm(res ~ factor(group))
-  
-  # Data set of predictions from auxiliary regressions
-  tmpdat <- data.frame(group = unique(group)[order(unique(group))])
-  predict <- predict(fit, 
-                     newdata = tmpdat, 
-                     se.fit = TRUE, 
-                     interval = 'confidence', 
-                     level = 0.95)
-  
-  plotdat <- as.data.frame(rbind(
-    cbind(group = tmpdat$group, 
-          outcome = "mean",
-          value = predict$fit[ , 'fit']),
-    cbind(group = tmpdat$group, 
-          outcome = "ll",
-          value = predict$fit[ , 'lwr']),
-    cbind(group = tmpdat$group, 
-          outcome = "ul",
-          value = predict$fit[ , 'upr'])
-  ))
-  
-  
-  # Make plot
-  lab <- paste0(seq(from = 1/ngroup, to = 1, by = 1/ngroup)*100, '%')
-  
-  plot <- ggplot2::ggplot(plotdat, 
-                          aes(x = factor(as.numeric(group)), 
-                              y = as.numeric(value), 
-                              group = factor(outcome))) +
-    geom_line(aes(linetype = factor(outcome))) +
-    geom_hline(yintercept = 0) +
-    scale_linetype_manual(values=c("dashed", "solid", "dashed")) +
-    scale_x_discrete(breaks = 1:ngroup, labels = lab) +
-    coord_cartesian(ylim = c(-0.2, 0.2)) +
-    xlab("Precentiles of expected values") +
-    ylab("Mean residuals") +
-    ggplot_theme +
-    theme(legend.position = "none")
-  
-  return(plot)
-  
-}
-
-#------------------------------------------------------------------------------
-# Download data
-#------------------------------------------------------------------------------
+```{r load_data, hide, eval = TRUE, echo = FALSE, results = 'hide'}
 
 temp <- tempfile()
 download.file(paste0("https://files.digital.nhs.uk/publicationimport",
@@ -214,10 +85,19 @@ df <- df[df$AGEBAND != '*' & df$SEX != '*',
 df$eq5d <- df$Q2_EQ5D_INDEX
 df$hr <- df$HR_Q2_SCORE/10
 
+textout[["n"]] <- nrow(df)
 df <- df[stats::complete.cases(df), ]
+textout[["ncplt"]] <- nrow(df)
 
 set.seed(101010101)
 df <- df[sample(1:nrow(df), size = nrow(df)*0.3), ]
+textout[["nspl"]] <- nrow(df)
+
+```
+
+<!-- Computationally heavy calculations -->
+
+```{r calc_fit, hide, eval = FALSE, echo = FALSE, results = 'hide'}
 
 #------------------------------------------------------------------------------
 # Fit model 1
@@ -295,7 +175,7 @@ save(fit1_cstr,
 
 rm(fit1_cstr, init, lo, hi)
 
-# Constrained optimization Hernandez Alava and Wailoo (2015)
+# Constrained optimization, Hernandez Alava and Wailoo (2015)
 #-----------------------------------------------------------
 
 init <- c(-.0883435, .2307964, 100, 0, 7.320611, -1.646109, 1.00e-30)
@@ -323,7 +203,7 @@ fit1_tobit <- aldvmm::aldvmm(data = df,
                              formula = formula,
                              psi = c(0.883, -0.594),
                              ncmp = 1,
-                             optim.method = "hjn")
+                             optim.method = "nlminb")
 
 save(fit1_tobit, 
      file = "fit1_tobit.RData",
@@ -345,7 +225,7 @@ fit2 <- aldvmm::aldvmm(data = df,
                        formula = formula,
                        psi = c(0.883, -0.594),
                        ncmp = 2,
-                       optim.method = "hjn")
+                       optim.method = "nlminb")
 
 save(fit2, 
      file = "fit2.RData",
@@ -364,7 +244,7 @@ fit2_stata <- aldvmm::aldvmm(data = df,
                              psi = c(0.883, -0.594),
                              ncmp = 2,
                              init.est = init,
-                             optim.method = "hjn")
+                             optim.method = "nlminb")
 
 save(fit2_stata, 
      file = "fit2_stata.RData",
@@ -374,9 +254,11 @@ rm(fit2_stata, init)
 
 rm(formula)
 
-#------------------------------------------------------------------------------
-# Plots
-#------------------------------------------------------------------------------
+```
+
+<!-- Make plots -->
+
+```{r calc_plot, hide, eval = TRUE, echo = FALSE, results = 'hide'}
 
 # Histogram of observed outcomes
 #-------------------------------
@@ -394,12 +276,12 @@ save(plot_hist_obs,
 
 rm(plot_hist_obs)
 
-# Histogram of predicted outcomes Model 1, zero starting values, Nelder-Mead
+# Histogram of predicted outcomes Model 1, zero starting values, nlminb
 #---------------------------------------------------------------------------
 
 load("fit1_all.RData")
 
-yhat <- fit1_all[["fit"]][["zero"]][["Nelder-Mead"]][["pred"]][["yhat"]]
+yhat <- fit1_all[["fit"]][["zero"]][["nlminb"]][["pred"]][["yhat"]]
 
 plot_hist_pred <- ggplot2::ggplot(as.data.frame(yhat), aes(x = yhat)) + 
   geom_histogram(binwidth = 0.02, color="black", fill="white") +
@@ -420,12 +302,12 @@ rm(yhat, plot_hist_pred, fit1_all)
 load("fit1_all.RData")
 
 a <- fit1_all[["fit"]][["zero"]][["Nelder-Mead"]][["pred"]][["yhat"]]
-b <- fit1_all[["fit"]][["zero"]][["BFGS"]][["pred"]][["yhat"]]
+b <- fit1_all[["fit"]][["zero"]][["nlminb"]][["pred"]][["yhat"]]
 c <- fit1_all[["fit"]][["zero"]][["hjn"]][["pred"]][["yhat"]]
 
 tmpdf <- as.data.frame(rbind(cbind(y = c, bl = c, alg = "45° line"),
                              cbind(y = a, bl = c, alg = "Nelder-Mead"),
-                             cbind(y = b, bl = c, alg = "BFGS")))
+                             cbind(y = b, bl = c, alg = "nlminb")))
 
 tmpdf$y <- as.numeric(tmpdf$y)
 tmpdf$bl <- as.numeric(tmpdf$bl)
@@ -461,7 +343,7 @@ save(plot_comp_mhl1,
 rm(plot_comp_mhl1)
 
 set.seed(101010101)
-plot_comp_mhl2 <- est_mhl(fit1_all[["fit"]][["zero"]][["BFGS"]],
+plot_comp_mhl2 <- est_mhl(fit1_all[["fit"]][["zero"]][["nlminb"]],
                           ngroup = 10)
 save(plot_comp_mhl2, 
      file = "plot_comp_mhl2.RData",
@@ -478,9 +360,11 @@ rm(plot_comp_mhl3)
 
 rm(fit1_all)
 
-#------------------------------------------------------------------------------
-# Tables
-#------------------------------------------------------------------------------
+```
+
+<!-- Make summary tables -->
+
+```{r calc_tab, hide, eval = TRUE, echo = FALSE, results = 'hide'}
 
 # Model 1, comparison of optimization methods
 #--------------------------------------------
@@ -540,15 +424,15 @@ rm(fit1_all)
 
 load("fit1_all.RData")
 
-tmplist1 <- reptab.fit(fit1_all[["fit"]][["zero"]][["Nelder-Mead"]])
-tmplist2 <- reptab.fit(fit1_all[["fit"]][["zero"]][["BFGS"]])
-tmplist3 <- reptab.fit(fit1_all[["fit"]][["zero"]][["hjn"]])
+tmplist1 <- rep_tab_fit(fit1_all[["fit"]][["zero"]][["Nelder-Mead"]])
+tmplist2 <- rep_tab_fit(fit1_all[["fit"]][["zero"]][["nlminb"]])
+tmplist3 <- rep_tab_fit(fit1_all[["fit"]][["zero"]][["hjn"]])
 
 tab_comp_coef <- cbind(tmplist1$table[, 1:3], 
                        tmplist2$table[, 3], 
                        tmplist3$table[, 3]) 
 
-names(tab_comp_coef)  <- c("", "", "Nelder-Mead", "BFGS", "hjn")
+names(tab_comp_coef)  <- c("", "", "Nelder-Mead", "nlminb", "hjn")
 
 save(tab_comp_coef, 
      file = "tab_comp_coef.RData",
@@ -562,7 +446,7 @@ rm(fit1_all)
 
 load("fit1_all.RData")
 
-tab_sum_mod1 <- reptab.fit(fit1_all[["fit"]][["zero"]][["Nelder-Mead"]])
+tab_sum_mod1 <- rep_tab_fit(fit1_all[["fit"]][["zero"]][["Nelder-Mead"]])
 
 save(tab_sum_mod1, 
      file = "tab_sum_mod1.RData",
@@ -576,7 +460,7 @@ rm(fit1_all)
 
 load("fit1_all.RData")
 
-tab_sum_mod1bfgs <- reptab.fit(fit1_all[["fit"]][["zero"]][["BFGS"]])
+tab_sum_mod1bfgs <- rep_tab_fit(fit1_all[["fit"]][["zero"]][["BFGS"]])
 
 save(tab_sum_mod1bfgs, 
      file = "tab_sum_mod1bfgs.RData",
@@ -585,12 +469,26 @@ save(tab_sum_mod1bfgs,
 rm(tab_sum_mod1bfgs)
 rm(fit1_all)
 
-# Summary table model 1, constant-only model as starting values, BFGS 
-#--------------------------------------------------------------------
+# Summary table model 1, zero, nlminb
+#------------------------------------
 
 load("fit1_all.RData")
 
-tab_sum_const <- reptab.fit(fit1_all[["fit"]][["constant"]][["BFGS"]])
+tab_sum_mod1nlminb <- rep_tab_fit(fit1_all[["fit"]][["zero"]][["nlminb"]])
+
+save(tab_sum_mod1nlminb, 
+     file = "tab_sum_mod1nlminb.RData",
+     compress = TRUE)
+
+rm(tab_sum_mod1nlminb)
+rm(fit1_all)
+
+# Summary table model 1, constant-only model as starting values, nlminb
+#----------------------------------------------------------------------
+
+load("fit1_all.RData")
+
+tab_sum_const <- rep_tab_fit(fit1_all[["fit"]][["constant"]][["nlminb"]])
 
 save(tab_sum_const, 
      file = "tab_sum_const.RData",
@@ -604,7 +502,7 @@ rm(fit1_all)
 
 load("fit1_cstr.RData")
 
-tab_sum_cstr <- reptab.fit(fit1_cstr)
+tab_sum_cstr <- rep_tab_fit(fit1_cstr)
 
 save(tab_sum_cstr, 
      file = "tab_sum_cstr.RData",
@@ -617,7 +515,7 @@ rm(fit1_cstr, tab_sum_cstr)
 
 load("fit1_cstr_stata.RData")
 
-tab_sum_cstata <- reptab.fit(fit1_cstr_stata)
+tab_sum_cstata <- rep_tab_fit(fit1_cstr_stata)
 
 save(tab_sum_cstata, 
      file = "tab_sum_cstata.RData",
@@ -625,12 +523,12 @@ save(tab_sum_cstata,
 
 rm(fit1_cstr_stata, tab_sum_cstata)
 
-# Summary table model 1, single-component, zero starting values, hjn 
-#-------------------------------------------------------------------
+# Summary table model 1, single-component, zero starting values, nlminb 
+#----------------------------------------------------------------------
 
 load("fit1_tobit.RData")
 
-tab_sum_tobit <- reptab.fit(fit1_tobit)
+tab_sum_tobit <- rep_tab_fit(fit1_tobit)
 
 save(tab_sum_tobit, 
      file = "tab_sum_tobit.RData",
@@ -638,12 +536,12 @@ save(tab_sum_tobit,
 
 rm(fit1_tobit, tab_sum_tobit)
 
-# Summary table model 2
-#----------------------
+# Summary table model 2, nlminb
+#------------------------------
 
 load("fit2.RData")
 
-tab_sum_mod2 <- reptab.fit(fit2)
+tab_sum_mod2 <- rep_tab_fit(fit2)
 
 save(tab_sum_mod2, 
      file = "tab_sum_mod2.RData",
@@ -651,12 +549,12 @@ save(tab_sum_mod2,
 
 rm(fit2, tab_sum_mod2)
 
-# Summary table model 2, stata estimates as starting values
-#----------------------------------------------------------
+# Summary table model 2, stata estimates as starting values, nlminb
+#------------------------------------------------------------------
 
 load("fit2_stata.RData")
 
-tab_sum_mod2stata <- reptab.fit(fit2_stata)
+tab_sum_mod2stata <- rep_tab_fit(fit2_stata)
 
 save(tab_sum_mod2stata, 
      file = "tab_sum_mod2stata.RData",
@@ -664,10 +562,16 @@ save(tab_sum_mod2stata,
 
 rm(fit2_stata, tab_sum_mod2stata)
 
-# Stata 1 summary table
-#----------------------
+```
 
-tab_sum_stata1 <- reptab.stata("hernandez_2015_model1_default.csv")
+<!-- Make tables of STATA results -->
+
+```{r calc_tab_stata, hide, eval = TRUE, echo = FALSE, results = 'hide'}
+
+# Model 1, default options
+#-------------------------
+
+tab_sum_stata1 <- rep_tab_stata("stata_model1_default.csv")
 
 save(tab_sum_stata1, 
      file = "tab_sum_stata1.RData",
@@ -675,10 +579,10 @@ save(tab_sum_stata1,
 
 rm(tab_sum_stata1)
 
-# Stata 2 summary table
+# Model 1, constraints
 #----------------------
 
-tab_sum_stata2 <- reptab.stata("hernandez_2015_model1_cons.csv")
+tab_sum_stata2 <- rep_tab_stata("stata_model1_cstr.csv")
 
 save(tab_sum_stata2, 
      file = "tab_sum_stata2.RData",
@@ -686,10 +590,10 @@ save(tab_sum_stata2,
 
 rm(tab_sum_stata2)
 
-# Stata 3 summary table
-#----------------------
+# Model 1, constant-only initial values
+#--------------------------------------
 
-tab_sum_stata3 <- reptab.stata("hernandez_2015_model2.csv")
+tab_sum_stata3 <- rep_tab_stata("stata_model1_cons.csv")
 
 save(tab_sum_stata3, 
      file = "tab_sum_stata3.RData",
@@ -697,9 +601,29 @@ save(tab_sum_stata3,
 
 rm(tab_sum_stata3)
 
+# Model 2, user-defined initial values
+#-------------------------------------
+
+tab_sum_stata4 <- rep_tab_stata("stata_model2.csv")
+
+save(tab_sum_stata4, 
+     file = "tab_sum_stata4.RData",
+     compress = TRUE)
+
+rm(tab_sum_stata4)
+
 rm(list = ls(pattern = "fit"))
 rm(list = ls(pattern = "reptab"))
-rm(ggplot_theme, df, est_mhl)
+rm(df, est_mhl)
+
+# Save output for text
+#---------------------
+
+save(textout,
+     file = "textout.RData",
+     compress = TRUE)
+
+rm(textout)
 
 ```  
 
@@ -811,7 +735,13 @@ set.seed(101010101)
 df <- df[sample(1:nrow(df), size = nrow(df)*0.3), ]
 ```
 
-The data includes 35'166 observations with complete information on patients' post-operative utilities, Oxford Hip Scores, age and sex. Like @HernandezAlava2015, we draw a 30% sub-sample of 10'549 observations from the population of complete observations of these variables. Although we follow the same approach as  @HernandezAlava2015 in the preparation of the data, our random sample is not identical to the data used in their study. Post-operative EQ-5D-3L utilities from English value sets [@Dolan1997] show a bimodal distribution, limits at -0.594 and 1 and a gap between 1 and 0.883 (figure \@ref(fig:plot-hist-obs)).
+```{r loadtextout, eval = TRUE, echo = FALSE}
+
+load("textout.RData")
+
+```
+
+The data includes `r format(textout$ncplt, big.mark="'")` observations with complete information on patients' post-operative utilities, Oxford Hip Scores, age and sex. Like @HernandezAlava2015, we draw a 30% sub-sample of `r format(textout$nspl, big.mark="'")` observations from the population of complete observations of these variables. Although we follow the same approach as  @HernandezAlava2015 in the preparation of the data, our random sample is not identical to the data used in their study. Post-operative EQ-5D-3L utilities from English value sets [@Dolan1997] show a bimodal distribution, limits at -0.594 and 1 and a gap between 1 and 0.883 (figure \@ref(fig:plot-hist-obs)).
 
 ```{r plot-hist-obs, echo = FALSE, results = 'asis', fig.height = 2.9, fig.width = 6, fig.cap = "Frequency distribtution of observed EQ-5D-3L utilities"}
 
@@ -834,8 +764,8 @@ We first fit model 1 with the "BFGS" optimization method and "zero" initial valu
 ```{r model1-fit, echo = TRUE, eval = FALSE}
 library("aldvmm")
 
-fit <- aldvmm::aldvmm(data = df,
-                      formula = eq5d ~ hr | 1,
+fit <- aldvmm::aldvmm(eq5d ~ hr | 1,
+                      data = df,
                       psi = c(0.883, -0.594),
                       ncmp = 2,
                       init.method = "zero",
@@ -849,13 +779,41 @@ pred <- predict(fit,
                 type = "fit")
 ```
 
-We obtain a summary table of regression results using the generic function summary(). The model converges at a log-likelihood of 706.32 and an Akaike information criterion value of -1'398.65 (table \@ref(tab:tab-sum-mod1bfgs)).
+```{r tab-sum-mod1-load, echo = FALSE}
+load("tab_sum_mod1bfgs.RData")
+textout[["mod1bfgs"]][["aic"]] <- format(
+  as.numeric(
+    gsub("[^0-9.-]", 
+         "",
+         tab_sum_mod1bfgs$table[nrow(tab_sum_mod1bfgs$table), 3])
+  ), 
+  big.mark = "'"
+)
 
-The coefficients of the intercept and covariates for the expected values $E[y|c, X]$ of the normal distributions can be interpreted as marginal effects on component means. 'lnsigma' denotes the natural logarithm of the estimated standard deviation $\sigma^{c}$. The coefficients of covariates in the multinomial logit model of probabilities of component membership are log-transformed relative probabilities. Our model only includes two components, and the multinomial logit model collapses to a binomial logit model. The intercept of 0.7283 means that the average probability of an observation in the data to belong to component 1 is $\text{exp}(0.7283)$ or 2.071556 times the probability to belong to component 2.
+textout[["mod1bfgs"]][["ll"]] <- format(
+  as.numeric(
+    gsub("[^0-9.-]", 
+         "",
+         tab_sum_mod1bfgs$table[nrow(tab_sum_mod1bfgs$table), 2])
+  ), 
+  big.mark = "'"
+)
+
+textout[["mod1bfgs"]][["intp1"]] <- format(
+  as.numeric(
+    gsub("[^0-9.-]", 
+         "",
+         tab_sum_mod1bfgs$table[nrow(tab_sum_mod1bfgs$table) - 1, 3])
+  ), 
+  big.mark = "'"
+)
+
+```
+We obtain a summary table of regression results using the generic function summary(). The model converges at a log-likelihood of `r textout[["mod1bfgs"]][["ll"]]` and an Akaike information criterion value of `r textout[["mod1bfgs"]][["aic"]]` (table \@ref(tab:tab-sum-mod1bfgs)).
+
+The coefficients of the intercept and covariates for the expected values $E[y|c, X]$ of the normal distributions can be interpreted as marginal effects on component means. 'lnsigma' denotes the natural logarithm of the estimated standard deviation $\sigma^{c}$. The coefficients of covariates in the multinomial logit model of probabilities of component membership are log-transformed relative probabilities. Our model only includes two components, and the multinomial logit model collapses to a binomial logit model. The intercept of `r textout[["mod1bfgs"]][["intp1"]]` means that the average probability of an observation in the data to belong to component 1 is $\text{exp}(`r textout[["mod1bfgs"]][["intp1"]]`)$ or `r exp(as.numeric(textout[["mod1bfgs"]][["intp1"]]))` times the probability to belong to component 2.
 
 ```{r tab-sum-mod1, echo = FALSE, results = "asis"}
-
-load("tab_sum_mod1bfgs.RData")
 
 print(xtable::xtable(tab_sum_mod1bfgs$table, 
                      align = "lllrrrrrr",
@@ -896,8 +854,8 @@ fit1_all <- list()
 for (i in init.method) {
   for (j in optim.method) {
     set.seed(101010101) # Seed for random starting values
-    fit1_all[[i]][[j]] <- aldvmm::aldvmm(data         = df,
-                                         formula      = formula,
+    fit1_all[[i]][[j]] <- aldvmm::aldvmm(eq5d ~ hr | 1,
+                                         data         = df,
                                          psi          = c(0.883, -0.594),
                                          ncmp         = 2,
                                          init.method  = i,
@@ -906,15 +864,17 @@ for (i in init.method) {
 }
 ```
 
+```{r tab-comp-ll-load, echo = FALSE}
+load("tab_comp_ll.RData")
+```
+
 @HernandezAlava2015 suggested that the likelihood function of the adjusted limited dependent variable mixture model with the English EQ-5D-3L data might have multiple local optima, and that the estimation is sensitive to initial values. We thus fit model 1 with all optimization algorithms and methods for generating initial values available in aldvmm::aldvmm() to assess the sensitivity of the model to optimization settings and to find the maximum likelihood estimates.
 
-The maximum likelihood varies considerably across optimization methods and initial values which confirms the sensitivity of the model to initial values and optimzation algorithms (table \@ref(tab:ll)). The most frequent log-likelihood is 706.32, but the Hooke and Jeeves Pattern Search Optimization ("hjn") with "zero" initial values converges at a log-likelihood 33'057.43.
+The maximum likelihood varies considerably across optimization methods and initial values which confirms the sensitivity of the model to initial values and optimzation algorithms (table \@ref(tab:ll)). The most frequent log-likelihood is `r format( names( which.max(table(round(tab_comp_ll, 2)) ) ), big.mark = "'")`, but the Hooke and Jeeves Pattern Search Optimization ("hjn") with "zero" initial values converges at a log-likelihood `r format(max(round(tab_comp_ll, 2)), big.mark = "'")`.
 
-The optimization methods "Nelder-Mead", "BFGS", "CG", and "L-BFGS-B" are particularly sensitive to starting values. The method "Rvmmin" coverges at a log-likelihood of 706.32 with three of four sets of initial values, and the method "hjn" with two of four sets of initial values. The methods "nlminb" and "Rcgmin" converge at a log-likelihood of 706.32 regardless of the sets of initial values.
+The optimization methods "Nelder-Mead", "CG", "L-BFGS-B", and "Rvmmin" are particularly sensitive to starting values. The method "BFGS" coverges at a log-likelihood of `r format( names( which.max(table(round(tab_comp_ll[, "BFGS"], 2)) ) ), big.mark = "'")` with three of four sets of initial values, and the method "hjn" with two of four sets of initial values. The methods "nlminb" and "Rcgmin" converge at a log-likelihood of `r format( names( which.max(table(round(tab_comp_ll[, "nlminb"], 2)) ) ), big.mark = "'")` regardless of initial values.
 
 ```{r tab-comp-ll, echo = FALSE, results = 'asis'}
-
-load("tab_comp_ll.RData")
 
 print(xtable::xtable(tab_comp_ll, 
                      align = paste0("l", 
@@ -932,11 +892,15 @@ rm(tab_comp_ll)
 
 ```
 
-The computation times of optimization routines vary considerably across methods (table \@ref(tab:time)). The optimization methods "Nelder-Mead", "BFGS", "L-BFGS-B" and "Rvmmin" are the fastest methods, but this speed comes at the cost of a higher risk of convergence at local optima. Naturally, the generation of initial values using simulated annealing ("sann") is the slowest method for generating initial values which results in long overall computation times of aldvmm::aldvmm(). The Hooke and Jeeves Pattern Search Optimization ("hjn") with "zero" starting values that converges at the largest log-likelihood is the slowest approach with a computation time of 14.98 minutes.
-
-```{r tab-comp-time, echo = FALSE, results = 'asis'}
+```{r tab-comp-time-load, echo = FALSE, results = 'asis'}
 
 load("tab_comp_time.RData")
+
+```
+
+The computation times of optimization routines vary considerably across methods (table \@ref(tab:time)). The optimization methods "Nelder-Mead", "BFGS", "L-BFGS-B" and "Rvmmin" are the fastest methods, but this speed comes at the cost of a higher risk of convergence at local optima. Naturally, the generation of initial values using simulated annealing ("sann") is the slowest method for generating initial values which results in long overall computation times of aldvmm::aldvmm(). The Hooke and Jeeves Pattern Search Optimization ("hjn") with "zero" starting values that converges at the largest log-likelihood is the slowest approach with a computation time of `r format(round(tab_comp_time["zero", "hjn"], 2), big.mark = "'")` minutes.
+
+```{r tab-comp-time, echo = FALSE, results = 'asis'}
 
 print(xtable::xtable(tab_comp_time, 
                      align = paste0("l", 
@@ -954,7 +918,7 @@ rm(tab_comp_time)
 
 ```
 
-As a next step, we compare the parameter estimates from the "Nelder-Mead", "BFGS" and "hjn" algorithms with "zero" initial values. The "Nelder-Mead" and "BFGS" estimates differ clearly in terms of the split between the intercept and the coefficient of the Oxford Hip Score, the probabilities of component membership and the standard deviations (table \@ref(tab:tab-comp-coef)). The solution of the "hjn" method is rather extreme with no effect of the Oxford Hip Score and a standard deviation of almost 0 in component 1 and a very low probability of membership of component 1.
+As a next step, we compare the parameter estimates from the "Nelder-Mead", "nlminb" and "hjn" algorithms with "zero" initial values. The "Nelder-Mead" and "nlminb" estimates differ clearly in terms of the split between the intercept and the coefficient of the Oxford Hip Score, the probabilities of component membership and the standard deviations (table \@ref(tab:tab-comp-coef)). The solution of the "hjn" method is rather extreme with no effect of the Oxford Hip Score and a standard deviation of almost 0 in component 1 and a very low probability of membership of component 1.
 
 ```{r tab-comp-coef, echo = FALSE, results = "asis"}
 
@@ -966,7 +930,7 @@ print(xtable::xtable(tab_comp_coef,
                      align = "lllrrr",
                      label = "tab:tab-comp-coef",
                      caption = 'Regression results of model1 with zero starting 
-                     values in "Nelder-Mead", "BFGS" and "hjn" algorithms'),
+                     values in "Nelder-Mead", "nlminb" and "hjn" algorithms'),
       type = "latex",
       include.rownames = FALSE,
       hline.after = tab_sum_mod1$lindex,
@@ -977,7 +941,7 @@ rm(tab_comp_coef, tab_sum_mod1)
 
 ```
 
-To get a better understanding of the differences between the results of the "Nelder-Mead", "BFGS" and "hjn" algorithms we plot the densities of each component weighted by the probability of component membership.
+To get a better understanding of the differences between the results of the "Nelder-Mead", "nlminb" and "hjn" algorithms we plot the densities of each component weighted by the probability of component membership.
 
 ```{r fig-comp-dens1_show, echo = TRUE, eval = FALSE}
 
@@ -1003,7 +967,7 @@ ggplot2::ggplot(data = data.frame(x = c(-1, 1)), aes(x)) +
 
 ```
 
-The densities in the solution of the "Nelder-Mead" method resemble the bi-model distribution observed in the data (figure \@ref(fig:fig-comp-dens1)). The densities in the solution of the "BFGS" method include two distributions with similar means but different standard deviations (figure \@ref(fig:fig-comp-dens2)). The densities in the solution of the "hjn" method include two distributions with similar means, but the distribution in component 1 shows low density mass due to the low probability of membership to component 1 (figure \@ref(fig:fig-comp-dens3)). The density plots also suggest that the model fit benefits more from improving the modeling of the distribution at the more frequently observed higher utilities rather than replicating the bi-modal distribution observed in the data. Overall, the differences between optimization methods show that it is very difficult to fit a two-component model to the data. We suspect that a simple one-component model would be more likely to converge towards a global optimum and would fit the data similarly well as the two-component model. 
+The densities in the solution of the "Nelder-Mead" method resemble the bi-model distribution observed in the data (figure \@ref(fig:fig-comp-dens1)). The densities in the solution of the "nlminb" method include two distributions with similar means but different standard deviations (figure \@ref(fig:fig-comp-dens2)). The densities in the solution of the "hjn" method include two distributions with similar means, but the distribution in component 1 shows low density mass due to the low probability of membership to component 1 (figure \@ref(fig:fig-comp-dens3)). The density plots also suggest that the model fit benefits more from improving the modeling of the distribution at the more frequently observed higher utilities rather than replicating the bi-modal distribution observed in the data. Overall, the differences between optimization methods show that it is very difficult to fit a two-component model to the data. We suspect that a simple one-component model would be more likely to converge towards a global optimum and would fit the data similarly well as the two-component model. 
 
 ```{r fig-comp-dens1, echo = FALSE, results = "asis", fig.height = 2.9, fig.width = 6,  fig.cap = 'Densities in components based on "Nelder-Mead" parameter estimates (observation with population average Oxford Hip Score 3.8489)'}
 
@@ -1036,7 +1000,7 @@ rm(n1, mean1, sd1, n2, mean2, sd2, nsim)
 
 ```
 
-```{r fig-comp-dens2, echo = FALSE, results = "asis", fig.height = 2.9, fig.width = 6, fig.cap = 'Densities in components based on "BFGS" parameter estimates (observation with population average Oxford Hip Score 3.8489)'}
+```{r fig-comp-dens2, echo = FALSE, results = "asis", fig.height = 2.9, fig.width = 6, fig.cap = 'Densities in components based on "nlminb" parameter estimates (observation with population average Oxford Hip Score 3.8489)'}
 
 nsim <- 100
 hr <- 3.825244 # Population average Oxford Hip Score
@@ -1097,9 +1061,9 @@ rm(n1, mean1, sd1, n2, mean2, sd2, nsim)
 
 ```
 
-The differences in parameter estimates from different optimization methods show that the choice of the optimization algorithm and initial values is very important for parameter identification. As adjusted limited dependent variable mixture models are frequently used for tasks that rely on predictions, we also compare expected values from the "Nelder-Mead" and "BFGS" methods to the expected values from the "hjn" method. Expected values from the "Nelder-Mead" and "BFGS" methods differed from expected values from the "hjn" method in particular for observations with lower expected values (figure \@ref(fig:plot-comp-pred)). Interestingly, the expected values from the "Nelder-Mead" method deviate less from the expected values from the "hjn" method than the expected values from the "BFGS" method although the "BFGS" method yielded a higher log-likelihood in the optimum, and the "BFGS" results are mixtures of densities with higher means similar to the solution of the "hjn" algorithm.
+The differences in parameter estimates from different optimization methods show that the choice of the optimization algorithm and initial values is very important for parameter identification. As adjusted limited dependent variable mixture models are frequently used for tasks that rely on predictions, we also compare expected values from the "Nelder-Mead" and "nlminb" methods to the expected values from the "hjn" method. Expected values from the "Nelder-Mead" and "nlminb" methods differed from expected values from the "hjn" method in particular for observations with lower expected values (figure \@ref(fig:plot-comp-pred)). Interestingly, the expected values from the "Nelder-Mead" method deviate less from the expected values from the "hjn" method than the expected values from the "nlminb" method although the "nlminb" method yielded a higher log-likelihood in the optimum, and the "nlminb" results are mixtures of densities with higher means similar to the solution of the "hjn" algorithm.
 
-```{r plot-comp-pred, echo = FALSE, results = "asis", fig.height = 2.9, fig.width = 6, fig.cap = 'Expected values from model 1, "Nelder-Mead" and "BFGS" versus "hjn" with zero starting values'}
+```{r plot-comp-pred, echo = FALSE, results = "asis", fig.height = 2.9, fig.width = 6, fig.cap = 'Expected values from model 1, "Nelder-Mead" and "nlminb" versus "hjn" with zero starting values'}
 
 load("plot_comp_pred.RData")
 
@@ -1113,15 +1077,30 @@ An visual inspection of mean residuals over deciles of expected values shows tha
 
 ### Constrained optimization with user-defined initial values
 
-We can also fit model 1 with user-defined starting values and box constraints. When constraints are imposed, the function aldvmm::aldvmm() uses the optimization method "L-BFGS-B". We set the initial value of the intercept of the probability of belonging to component 1 to 0.7283 as in the solution of the "BFGS" optimization method with "zero" starting values (table \@ref(tab:tab-comp-coef)). We impose a lower limit of -3 to the log-standard deviations in both components. The function aldvmm::aldvmm() returns a warning that the covariance matrix included negative values on the diagonal. We see that these values are the variances of the intercept and the log-standard deviation in component 2 (table \@ref(tab:tab-sum-cstr)). The log-likelihood amounts to -627.78, which is even lower than the log-likelihood in the solution of the "Nelder-Mead" optimization method with "zero" starting values. The parameter estimates do not resemble any of the solutions of the unconstrained "Nelder-Mead", "BFGS" or "hjn" optimization methods with "zero" values (table \@ref(tab:tab-comp-coef)), which further emphasizes the difficulties in finding a global optimum of the likelihood with English EQ-5D-3L utilities after hip replacement.
+```{r tab-sum-cstr-load, echo = FALSE, results = "asis"}
+
+load("tab_sum_cstr.RData")
+
+textout[["cstr"]][["ll"]] <- format(
+  as.numeric(
+    gsub("[^0-9.-]", 
+         "",
+         tab_sum_cstr[[1]][nrow(tab_sum_cstr[[1]]), 2])
+  ), 
+  big.mark = "'"
+)
+
+```
+
+We can also fit model 1 with user-defined starting values and box constraints. When constraints are imposed, the function aldvmm::aldvmm() uses the optimization method "L-BFGS-B". We set the initial value of the intercept of the probability of belonging to component 1 to 0.7283 as in the solution of the "nlminb" optimization method with "zero" starting values (table \@ref(tab:tab-comp-coef)). We impose a lower limit of -3 to the log-standard deviations in both components. The function aldvmm::aldvmm() returns a warning that the covariance matrix included negative values on the diagonal. We see that these values are the variances of the intercept and the log-standard deviation in component 2 (table \@ref(tab:tab-sum-cstr)). The log-likelihood amounts to `r textout[["cstr"]][["ll"]]`, which is even lower than the log-likelihood in the solution of the "Nelder-Mead" optimization method with "zero" starting values. The parameter estimates do not resemble any of the solutions of the unconstrained "Nelder-Mead", "nlminb" or "hjn" optimization methods with "zero" values (table \@ref(tab:tab-comp-coef)), which further emphasizes the difficulties in finding a global optimum of the likelihood with English EQ-5D-3L utilities after hip replacement.
 
 ```{r tab-cstr-show, echo = TRUE, eval = FALSE}
 init <- c(0,    0,   0,   0,    0,    0,    0.7283)
 lo   <- c(-Inf, -Inf, -3,  -Inf, -Inf, -3, -Inf)
 hi   <- c(Inf,  Inf,  Inf, Inf,  Inf,  Inf,  Inf)
 
-fit1_cstr <- aldvmm::aldvmm(data = df,
-                            formula = formula,
+fit1_cstr <- aldvmm::aldvmm(eq5d ~ hr | 1,
+                            data = df,
                             psi = c(0.883, -0.594),
                             ncmp = 2,
                             init.est = init,
@@ -1154,8 +1133,8 @@ rm(tab_sum_cstr)
 As the solution of the "hjn" algorithm included a component with very low probability, we also estimate a single-component model.
 
 ```{r tobit-fit, echo = TRUE, eval = FALSE}
-fit <- aldvmm::aldvmm(data = df,
-                      formula = eq5d ~ hr | 1,
+fit <- aldvmm::aldvmm(eq5d ~ hr | 1,
+                      data = df,
                       psi = c(0.883, -0.594),
                       ncmp = 1,
                       init.method = "zero",
@@ -1164,11 +1143,45 @@ fit <- aldvmm::aldvmm(data = df,
 summary(fit)
 ```
 
-The coefficients of the single-component model are relatively similar to the solution of the "hjn" algorithm for the two-component model (table \@ref(tab:tab-sum-tobit)). The Akaike information criterion amounts to 1'275.61 which is larger than the values of the "BFGS" (-1'398.65) and "hjn" (-66'100.87) solutions of the two-component model and thus suggests worse fit.
-
-```{r tab-sum-tobit, echo = FALSE, results = "asis"}
+```{r tab-sum-tobit-load, echo = FALSE, results = "asis"}
 
 load("tab_sum_tobit.RData")
+load("tab_comp_coef.RData")
+
+textout[["tobit"]][["aic"]] <- format(
+  as.numeric(
+    gsub("[^0-9.-]", 
+         "",
+         tab_sum_tobit[[1]][nrow(tab_sum_tobit[[1]]), 3])
+  ), 
+  big.mark = "'"
+)
+
+textout[["comp"]][["nlminb"]] <- format(
+  as.numeric(
+    gsub("[^0-9.-]", 
+         "",
+         tab_comp_coef[nrow(tab_comp_coef), "nlminb"])
+  ), 
+  big.mark = "'"
+)
+
+textout[["comp"]][["hjn"]] <- format(
+  as.numeric(
+    gsub("[^0-9.-]", 
+         "",
+         tab_comp_coef[nrow(tab_comp_coef), "hjn"])
+  ), 
+  big.mark = "'"
+)
+
+rm(tab_comp_coef)
+
+```
+
+The coefficients of the single-component model are relatively similar to the solution of the "hjn" algorithm for the two-component model (table \@ref(tab:tab-sum-tobit)). The Akaike information criterion amounts to `r textout[["tobit"]][["aic"]]` which is larger than the values of the "nlminb" (`r textout[["comp"]][["nlminb"]]`) and "hjn" (`r textout[["comp"]][["hjn"]]`) solutions of the two-component model and thus suggests worse fit of the single-component model.
+
+```{r tab-sum-tobit, echo = FALSE, results = "asis"}
 
 print(xtable::xtable(tab_sum_tobit$table, 
                      align = "lllrrrrrr",
@@ -1193,8 +1206,8 @@ Because model 1 is difficult to fit and shows poor fit to the data, we also esti
 init <- c(-.40293118, .30502755, .22614716, .14801581, -.70755741, 0, 
           -1.2632051, -2.4541401)
 
-fit2 <- aldvmm::aldvmm(data = df,
-                       formula = eq5d ~ hr | hr,
+fit2 <- aldvmm::aldvmm(eq5d ~ hr | hr,
+                       data = df,
                        psi = c(0.883, -0.594),
                        ncmp = 2,
                        init.est = init,
@@ -1204,11 +1217,25 @@ summary(fit2)
 
 ```
 
-The log-likelihood of model 2 in the "hjn" optimum is larger than the log-likelihood of model 1 in the "hjn" optimum due to the extra parameter (table \@ref(tab:tab-sum-mod2)). However, the Akaike information criterion of model 2 (-1'866.97) is larger than the Akaike information criterion of model 1 (-66'100.87), which suggests that the increase in the log-likelihood does not justify the extra parameter in the multinomial logit part.\footnote{In the aldvmm::aldvmm() output, smaller values of the Akaike information criterion indicate better goodness of fit.} 
-
-```{r tab-sum-mod2, echo = FALSE, results = "asis"}
+```{r tab-sum-mod2-load, echo = FALSE, results = "asis"}
 
 load("tab_sum_mod2.RData")
+
+textout[["mod2"]][["aic"]] <- format(
+  as.numeric(
+    gsub("[^0-9.-]", 
+         "",
+         tab_sum_mod2[[1]][nrow(tab_sum_mod2[[1]]), 3])
+  ), 
+  big.mark = "'"
+)
+
+
+```
+
+The log-likelihood of model 2 in the "hjn" optimum is larger than the log-likelihood of model 1 in the "hjn" optimum due to the extra parameter (table \@ref(tab:tab-sum-mod2)). However, the Akaike information criterion of model 2 (`r textout[["mod2"]][["aic"]]`) is larger than the Akaike information criterion of model 1 (`r textout[["comp"]][["hjn"]]`), which suggests that the increase in the log-likelihood does not justify the extra parameter in the multinomial logit part.\footnote{In the aldvmm::aldvmm() output, smaller values of the Akaike information criterion indicate better goodness of fit.} 
+
+```{r tab-sum-mod2, echo = FALSE, results = "asis"}
 
 print(xtable::xtable(tab_sum_mod2$table, 
                      align = "lllrrrrrr",
@@ -1225,92 +1252,120 @@ rm(tab_sum_mod2)
 
 ```
 
-## Comparison to results by @HernandezAlava2015
+## Comparison to STATA\textsuperscript{\textregistered} results
 
-To validate the R implementation of adjusted limited dependent variable models we compare the results of three models to the results from the STATA\textsuperscript{\textregistered} ALDVMM package published in @HernandezAlava2015.
+STATA\textsuperscript{\textregistered}.
 
-- Model 1 with default optimization settings.
+- (1)
 
-- Model 1 with initial values from constant-only model.
+- (2)
 
-- Model 2 with user-defined initial values.
+- (3)
 
-Because we draw a random sub-sample of the data, we do not expect identical results, but similar findings would be expected if the model is implemented in a similar manner as in STATA\textsuperscript{\textregistered}.
+- (4)
 
-We use the results of the "BFGS" method with "zero" starting values as default estimates of model 1, as this solution is found most frequently by different optimization methods (table \@ref(tab:ll)), and the results of the "hjn" method with "zero" starting values are rather extreme and difficult to interpret.
 
 ```{r tab-comp-stata-show, echo = TRUE, eval = FALSE}
 # Model 1 with default optimization settings
-fit1_default <- aldvmm::aldvmm(data = df,
-                               formula = eq5d ~ hr | 1,
+fit1_default <- aldvmm::aldvmm(eq5d ~ hr | 1,
+                               data = df,
                                psi = c(0.883, -0.594),
                                ncmp = 2,
                                init.method = "zero",
-                               optim.method = "BFGS")
+                               optim.method = "nlminb")
 
 # Model 1 initial values from constant-only model
-fit1_const <- aldvmm::aldvmm(data = df,
-                             formula = eq5d ~ hr | 1,
+fit1_const <- aldvmm::aldvmm(eq5d ~ hr | 1,
+                             data = df,
                              psi = c(0.883, -0.594),
                              ncmp = 2,
                              init.method = "constant",
-                             optim.method = "hjn")
+                             optim.method = "nlminb")
 
 # Model 2 with user-defined initial values.
 init <- c(-.40293118, .30502755, .22614716, .14801581, -.70755741, 0, 
           -1.2632051, -2.4541401)
 
-fit2 <- aldvmm::aldvmm(data = df,
-                       formula = eq5d ~ hr | hr,
+fit2 <- aldvmm::aldvmm(eq5d ~ hr | hr,
+                       data = df,
                        psi = c(0.883, -0.594),
                        ncmp = 2,
                        init.est = init,
-                       optim.method = "hjn")
+                       optim.method = "nlminb")
 ```
 
-The results of model 1 from the "BFGS" method with "zero" starting values differed considerably from the default estimates reported by @HernandezAlava2015 (table \@ref(tab:tab-comp-stata)). However, the default estimates by @HernandezAlava2015 include extreme estimates without standard errors in component 2 (table \@ref(tab:stata1) in the appendix). Our estimates of parameters, standard errors and the log-likelihood of model 1 with initial values from a constant-only model are very similar to the results from @HernandezAlava2015 (tables \@ref(tab:stata2) and \@ref(tab:tab-sum-const) in the appendix). The parameter estimates of model 2 with user-defined starting values are somewhat similar, and the standard errors of parameters with similar point estimates are fairly consistent (tables \@ref(tab:stata3) and \@ref(tab:tab-sum-mod2stata) in the appendix). Differences in the analyzed sub-samples could be a possible reason for the observed discrepancies. We do not deem these findings indications of errors in the 'aldvmm' implementation of adjusted limited dependent variable mixture models.
+<!-- \newpage -->
+<!-- \blandscape -->
 
 ```{r tab-calc-stata, echo = FALSE, results = "asis"}
 
-load("tab_sum_mod1bfgs.RData")
+# Load summary tables
+load("tab_sum_mod1nlminb.RData")
+load("tab_sum_cstata.RData")
 load("tab_sum_const.RData")
 load("tab_sum_mod2stata.RData")
 load("tab_sum_stata1.RData")
 load("tab_sum_stata2.RData")
 load("tab_sum_stata3.RData")
+load("tab_sum_stata4.RData")
 
+# Model keys
+tabvec <- c("tab_sum_mod1nlminb",  "tab_sum_stata1", 
+            "tab_sum_cstata",     "tab_sum_stata2", 
+            "tab_sum_const", "tab_sum_stata3",
+            "tab_sum_mod2stata", "tab_sum_stata4")
+
+# Matrix of coefficients
 ctab <- matrix(NA, 
                nrow = nrow(tab_sum_mod2stata$table),
-               ncol = 8)
+               ncol = length(tabvec) + 2)
 
 ctab[, 1:2] <- as.matrix(tab_sum_mod2stata$table[, 1:2])
 ctab[nrow(ctab), 2] <- ""
 
-tabvec <- c("tab_sum_mod1bfgs",  "tab_sum_stata1", 
-            "tab_sum_const",     "tab_sum_stata2", 
-            "tab_sum_mod2stata", "tab_sum_stata3")
+# Matrix of standard errors
+stab <- ctab
 
+# Populate tables
 for (i in tabvec){
   nr <- nrow(get(i)$table)
   for (j in 1:(nr - 1)){
+    
+    lltmp <- format( 
+      as.numeric(gsub("[^0-9.-]", "", as.matrix(get(i)$table)[nr, 2])), 
+      big.mark = "'"
+    )
+
     ctab[j, 2 + match(i, tabvec)] <- as.matrix(get(i)$table)[j, 3]
-    ctab[nrow(ctab), 2 + match(i, tabvec)] <- as.matrix(get(i)$table)[nr, 2]
+    ctab[nrow(ctab), 2 + match(i, tabvec)] <- lltmp
+    ctab[nrow(ctab), 2] <- "ll"
+    
+    stab[j, 2 + match(i, tabvec)] <- as.matrix(get(i)$table)[j, 4]
+    stab[nrow(stab), 2 + match(i, tabvec)] <- lltmp
+    stab[nrow(stab), 2] <- "ll"
+
   }
   rm(nr)
 }
-rm(i, j, tabvec)
+rm(i, j, lltmp)
 
-ctab <- rbind(c("", "", "default", "", "constant", "", "model 2", ""),
-              c("", "", "R", "STATA", "R", "STATA", "R", "STATA"),
+ctab <- rbind(c("", "", "(1)", "", "(2)", "", "(3)", "", "(4)", ""),
+              c("", "", "R", "STATA", "R", "STATA", "R", "STATA", "R", "STATA"),
               ctab)
+
+stab <- rbind(c("", "", "(1)", "", "(2)", "", "(3)", "", "(4)", ""),
+              c("", "", "R", "STATA", "R", "STATA", "R", "STATA", "R", "STATA"),
+              stab)
 
 lindex <- tab_sum_mod2stata$lindex + 2
 lindex[1] <- -1
 
-print(xtable::xtable(ctab, 
-                     align = "lllrrrrrr",
+print(xtable::xtable(ctab,
+                     align = paste0("lll", 
+                                   paste(rep("r", length(tabvec)), 
+                                         collapse = "")),
                      label = "tab:tab-comp-stata",
-                     caption = "Comparison of point estimates to results by Hernandez Alava and Wailoo (2015)"),
+                     caption = "Comparison of point estimates to XXXXXXXXXXXXXXXXXXXXXXXXXXXXX"),
       type = "latex",
       include.colnames = FALSE,
       include.rownames = FALSE,
@@ -1318,9 +1373,26 @@ print(xtable::xtable(ctab,
       comment = FALSE,
       caption.placement = "top")
 
+print(xtable::xtable(stab,
+                     align = paste0("lll", 
+                                   paste(rep("r", length(tabvec)), 
+                                         collapse = "")),
+                     label = "tab:tab-compse-stata",
+                     caption = "Comparison of standard errors to the results of the STATA package."),
+      type = "latex",
+      include.colnames = FALSE,
+      include.rownames = FALSE,
+      hline.after = lindex,
+      comment = FALSE,
+      caption.placement = "top",
+      table.placement = "!ht")
+
 rm(list = ls(pattern = "tab_sum"))
-rm(ctab, lindex)
+rm(ctab, lindex, tabvec)
+
 ```
+
+<!-- \elandscape -->
 
 # Discussion
 
@@ -1447,7 +1519,31 @@ rm(plot_comp_mhl3)
 ```
 
 \newpage
-## Comparison to results by @HernandezAlava2015
+## STATA\textsuperscript{\textregistered} code
+
+```{r stata_code, echo = TRUE, eval = FALSE}
+* Model 1
+aldvmm eq5d hr, ncomponents(2)
+
+* Model 1 with constraints
+matrix a = e(b)
+constraint 1 [Comp_2]:hr10 = 0
+constraint 2 [Comp_2]:_cons = 100
+constraint 3 [lns_2]:_cons = 1e-30
+aldvmm eq5d hr, ncomp(2) from(a) c(1 2 3)
+
+* Model 1 initital values from constant-only model
+aldvmm eq5d hr, ncomp(2) inim(cons)
+
+* Model 2 user-defined initial values
+matrix start2lc=e(b)
+matrix start = start2lc[1,1..4] , 0, start2lc[1,5..7]
+matrix list start
+aldvmm eq5d hr, ncomp(2) prob(hr) from(start)
+```
+
+\newpage
+## Detailed STATA\textsuperscript{\textregistered} results
 
 ```{r tab-sum-stata1, echo = FALSE, results = "asis"}
 
@@ -1531,7 +1627,7 @@ load("tab_sum_stata3.RData")
 print(xtable::xtable(tab_sum_stata3$table, 
                      align = "lllrrrrrr",
                      label = "tab:stata3",
-                     caption = "Regression results from Hernandez Alava and Wailoo 2015, model 2 with user-defined initial values"),
+                     caption = "Regression results from Hernandez Alava and Wailoo 2015, model 1 with user-defined initial values"),
       type = "latex",
       include.rownames = FALSE,
       hline.after = tab_sum_stata3$lindex,
@@ -1539,6 +1635,24 @@ print(xtable::xtable(tab_sum_stata3$table,
       caption.placement = "top")
 
 rm(tab_sum_stata3)
+
+```
+
+```{r tab-sum-stata4, echo = FALSE, results = "asis"}
+
+load("tab_sum_stata4.RData")
+
+print(xtable::xtable(tab_sum_stata4$table, 
+                     align = "lllrrrrrr",
+                     label = "tab:stata4",
+                     caption = "Regression results from Hernandez Alava and Wailoo 2015, model 2 with user-defined initial values"),
+      type = "latex",
+      include.rownames = FALSE,
+      hline.after = tab_sum_stata4$lindex,
+      comment = FALSE,
+      caption.placement = "top")
+
+rm(tab_sum_stata4)
 
 ```
 
