@@ -57,11 +57,6 @@ ggplot_theme <- ggplot2::theme(panel.background = ggplot2::element_rect(fill = "
                                legend.direction = "vertical",
                                legend.key = ggplot2::element_blank())
 
-# List to collect results used in text
-#-------------------------------------
-
-textout <- list()
-
 # Logical value for computations
 #-------------------------------
 
@@ -72,6 +67,14 @@ docalc <- FALSE
 <!-- Load data -->
 
 ```{r load_data, hide, eval = docalc, echo = FALSE, results = 'hide'}
+
+# List to collect results used in text
+#-------------------------------------
+
+textout <- list()
+
+# Download data
+#--------------
 
 temp <- tempfile()
 download.file(paste0("https://files.digital.nhs.uk/publicationimport",
@@ -84,11 +87,17 @@ df <- read.table(unz(description = temp,
 unlink(temp)
 rm(temp)
 
+# Recode data
+#------------
+
 df <- df[df$AGEBAND != '*' & df$SEX != '*', 
          c('AGEBAND', 'SEX', 'Q2_EQ5D_INDEX', 'HR_Q2_SCORE')]
 
 df$eq5d <- df$Q2_EQ5D_INDEX
 df$hr <- df$HR_Q2_SCORE/10
+
+# Select sample
+#--------------
 
 textout[["n"]] <- nrow(df)
 df <- df[stats::complete.cases(df), ]
@@ -571,7 +580,7 @@ rm(fit2_stata, tab_sum_mod2stata)
 
 <!-- Make tables of STATA results -->
 
-```{r calc_tab_stata, hide, eval = TRUE, echo = FALSE, results = 'hide'}
+```{r calc_tab_stata, hide, eval = docalc, echo = FALSE, results = 'hide'}
 
 # Model 1, default options
 #-------------------------
@@ -640,7 +649,7 @@ Adjusted limited dependent variable mixture models are finite mixtures of multip
 
 The R package 'aldvmm' is an implementation of the adjusted limited dependent variable model mixture model proposed by @HernandezAlava2015 using normal component distributions and a multinomial logit model of probabilities of component membership.
 
-The objective of this vignette is to demonstrate the usage of the 'aldvmm' package, show important challenges of fitting adjusted limited dependent variable mixture models and to compare its results to the published results from the STATA\textsuperscript{\textregistered} package [@HernandezAlava2015] using publicly available data.
+The objective of this vignette is to demonstrate the usage of the 'aldvmm' package, show important challenges of fitting adjusted limited dependent variable mixture models and validate the R implementation against the STATA\textsuperscript{\textregistered} package [@HernandezAlava2015] using publicly available data.
 
 # Methods
 
@@ -848,6 +857,12 @@ rm(plot_hist_pred)
 
 ### Comparison of optimization methods
 
+```{r tab-comp-ll-load, echo = FALSE}
+load("tab_comp_ll.RData")
+```
+
+@HernandezAlava2015 suggested that the likelihood function of the adjusted limited dependent variable mixture model with the English EQ-5D-3L data might have multiple local optima, and that the estimation is sensitive to initial values. We thus fit model 1 with all optimization algorithms and methods for generating initial values available in aldvmm::aldvmm() to assess the sensitivity of the model to optimization settings and to find the maximum likelihood estimates.
+
 ```{r fit-comp, echo = TRUE, eval = FALSE}
 init.method <- c("zero", "random", "constant", "sann")
 
@@ -868,12 +883,6 @@ for (i in init.method) {
   }
 }
 ```
-
-```{r tab-comp-ll-load, echo = FALSE}
-load("tab_comp_ll.RData")
-```
-
-@HernandezAlava2015 suggested that the likelihood function of the adjusted limited dependent variable mixture model with the English EQ-5D-3L data might have multiple local optima, and that the estimation is sensitive to initial values. We thus fit model 1 with all optimization algorithms and methods for generating initial values available in aldvmm::aldvmm() to assess the sensitivity of the model to optimization settings and to find the maximum likelihood estimates.
 
 The maximum likelihood varies considerably across optimization methods and initial values which confirms the sensitivity of the model to initial values and optimzation algorithms (table \@ref(tab:ll)). The most frequent log-likelihood is `r format( names( which.max(table(round(tab_comp_ll, 2)) ) ), big.mark = "'")`, but the Hooke and Jeeves Pattern Search Optimization ("hjn") with "zero" initial values converges at a log-likelihood `r format(max(round(tab_comp_ll, 2)), big.mark = "'")`.
 
@@ -1143,7 +1152,7 @@ fit <- aldvmm::aldvmm(eq5d ~ hr | 1,
                       psi = c(0.883, -0.594),
                       ncmp = 1,
                       init.method = "zero",
-                      optim.method = "hjn")
+                      optim.method = "nlminb")
 
 summary(fit)
 ```
@@ -1191,8 +1200,8 @@ The coefficients of the single-component model are relatively similar to the sol
 print(xtable::xtable(tab_sum_tobit$table, 
                      align = "lllrrrrrr",
                      label = "tab:tab-sum-tobit",
-                     caption = 'Regression results of model1 with 1 component, zero starting 
-                     values in "hjn" algorithm'),
+                     caption = 'Regression results of model1 with 1 component, 
+                     zero starting values in "nlminb" algorithm'),
       type = "latex",
       include.rownames = FALSE,
       hline.after = tab_sum_tobit$lindex,
@@ -1205,7 +1214,7 @@ rm(tab_sum_tobit)
 
 ## Model 2
 
-Because model 1 is difficult to fit and shows poor fit to the data, we also estimate model 2 with a coefficient of the Oxford Hip score in the multinomial logit model of component membership. For this fit, we use the method "hjn" with estimates from @HernandezAlava2015 as starting values.
+As an alternative specification, we explore model 2 with a coefficient of the Oxford Hip score in the multinomial logit model of component membership. For this fit, we use the method "nlminb" with estimates from @HernandezAlava2015 as starting values.
 
 ```{r model2-fit, echo = TRUE, eval = FALSE}
 init <- c(-.40293118, .30502755, .22614716, .14801581, -.70755741, 0, 
@@ -1216,7 +1225,7 @@ fit2 <- aldvmm::aldvmm(eq5d ~ hr | hr,
                        psi = c(0.883, -0.594),
                        ncmp = 2,
                        init.est = init,
-                       optim.method = "hjn")
+                       optim.method = "nlminb")
 
 summary(fit2)
 
@@ -1238,7 +1247,7 @@ textout[["mod2"]][["aic"]] <- format(
 
 ```
 
-The log-likelihood of model 2 in the "hjn" optimum is larger than the log-likelihood of model 1 in the "hjn" optimum due to the extra parameter (table \@ref(tab:tab-sum-mod2)). However, the Akaike information criterion of model 2 (`r textout[["mod2"]][["aic"]]`) is larger than the Akaike information criterion of model 1 (`r textout[["comp"]][["hjn"]]`), which suggests that the increase in the log-likelihood does not justify the extra parameter in the multinomial logit part.\footnote{In the aldvmm::aldvmm() output, smaller values of the Akaike information criterion indicate better goodness of fit.} 
+The Akaike information criterion of model 2 fitted using the "nlminb" method amounts to `r textout[["mod2"]][["aic"]]` which is smaller than the Akaike information criterion of model 1 (`r textout[["comp"]][["nlminb"]]`) with the same method. The smaller Akaike information criterion  suggests that the increase in the log-likelihood after inclusion of a coefficient of the Oxford Hip Score on the probability of component membership is sufficiently large to justify the extra parameter.\footnote{In the aldvmm::aldvmm() output, smaller values of the Akaike information criterion indicate better goodness of fit.} 
 
 ```{r tab-sum-mod2, echo = FALSE, results = "asis"}
 
@@ -1246,7 +1255,7 @@ print(xtable::xtable(tab_sum_mod2$table,
                      align = "lllrrrrrr",
                      label = "tab:tab-sum-mod2",
                      caption = 'Regression results of model 2 with user-defined 
-                     starting values in the "hjn" algorithm'),
+                     starting values in the "nlminb" algorithm'),
       type = "latex",
       include.rownames = FALSE,
       hline.after = tab_sum_mod2$lindex,
@@ -1259,19 +1268,10 @@ rm(tab_sum_mod2)
 
 ## Comparison to STATA\textsuperscript{\textregistered} results
 
-STATA\textsuperscript{\textregistered}.
-
-- (1)
-
-- (2)
-
-- (3)
-
-- (4)
-
+To validate the R implementation of adjusted limited dependent variable mixture models, we compare the results of four reference models to the results of the STATA\textsuperscript{\textregistered} package using the same data.\footnote{The STATA\textsuperscript{\textregistered} code is included in the appendix.}
 
 ```{r tab-comp-stata-show, echo = TRUE, eval = FALSE}
-# Model 1 with default optimization settings
+# (1) Model 1 with default optimization settings
 fit1_default <- aldvmm::aldvmm(eq5d ~ hr | 1,
                                data = df,
                                psi = c(0.883, -0.594),
@@ -1279,7 +1279,20 @@ fit1_default <- aldvmm::aldvmm(eq5d ~ hr | 1,
                                init.method = "zero",
                                optim.method = "nlminb")
 
-# Model 1 initial values from constant-only model
+# (2) Model 1 with user-defined initial values and constraints on parameters
+init <- c(0,    0,   0,   0,    0,    0,    0.7283)
+lo   <- c(-Inf, -Inf, -3,  -Inf, -Inf, -3, -Inf)
+hi   <- c(Inf,  Inf,  Inf, Inf,  Inf,  Inf,  Inf)
+
+fit1_cstr <- aldvmm::aldvmm(eq5d ~ hr | 1,
+                            data = df,
+                            psi = c(0.883, -0.594),
+                            ncmp = 2,
+                            init.est = init,
+                            init.lo = lo,
+                            init.hi = hi)
+
+# (3) Model 1 initial values from constant-only model
 fit1_const <- aldvmm::aldvmm(eq5d ~ hr | 1,
                              data = df,
                              psi = c(0.883, -0.594),
@@ -1287,7 +1300,7 @@ fit1_const <- aldvmm::aldvmm(eq5d ~ hr | 1,
                              init.method = "constant",
                              optim.method = "nlminb")
 
-# Model 2 with user-defined initial values.
+# (4) Model 2 with user-defined initial values.
 init <- c(-.40293118, .30502755, .22614716, .14801581, -.70755741, 0, 
           -1.2632051, -2.4541401)
 
@@ -1545,120 +1558,6 @@ matrix start2lc=e(b)
 matrix start = start2lc[1,1..4] , 0, start2lc[1,5..7]
 matrix list start
 aldvmm eq5d hr, ncomp(2) prob(hr) from(start)
-```
-
-\newpage
-## Detailed STATA\textsuperscript{\textregistered} results
-
-```{r tab-sum-stata1, echo = FALSE, results = "asis"}
-
-load("tab_sum_stata1.RData")
-
-print(xtable::xtable(tab_sum_stata1$table, 
-                     align = "lllrrrrrr",
-                     label = "tab:stata1",
-                     caption = "Regression results from Hernandez Alava and Wailoo 2015, model 1 with default initial values from function ml"),
-      type = "latex",
-      include.rownames = FALSE,
-      hline.after = tab_sum_stata1$lindex,
-      comment = FALSE,
-      caption.placement = "top")
-
-rm(tab_sum_stata1)
-
-```
-
-```{r tab-sum-const, echo = FALSE, results = "asis"}
-
-load("tab_sum_const.RData")
-
-print(xtable::xtable(tab_sum_const$table, 
-                     align = "lllrrrrrr",
-                     label = "tab:tab-sum-const",
-                     caption = 'Regression results of model 2 with user-defined 
-                     starting values in the "hjn" algorithm'),
-      type = "latex",
-      include.rownames = FALSE,
-      hline.after = tab_sum_const$lindex,
-      comment = FALSE,
-      caption.placement = "top")
-
-rm(tab_sum_const)
-
-```
-
-
-```{r tab-sum-stata2, echo = FALSE, results = "asis"}
-
-load("tab_sum_stata2.RData")
-
-print(xtable::xtable(tab_sum_stata2$table, 
-                     align = "lllrrrrrr",
-                     label = "tab:stata2",
-                     caption = "Regression results from Hernandez Alava and Wailoo 2015, model 1 with initial values from a constant-only model"),
-      type = "latex",
-      include.rownames = FALSE,
-      hline.after = tab_sum_stata2$lindex,
-      comment = FALSE,
-      caption.placement = "top")
-
-rm(tab_sum_stata2)
-
-```
-
-```{r tab-sum-mod2stata, echo = FALSE, results = "asis"}
-
-load("tab_sum_mod2stata.RData")
-
-print(xtable::xtable(tab_sum_mod2stata$table, 
-                     align = "lllrrrrrr",
-                     label = "tab:tab-sum-mod2stata",
-                     caption = 'Regression results of model 2 with user-defined 
-                     starting values in the "hjn" algorithm'),
-      type = "latex",
-      include.rownames = FALSE,
-      hline.after = tab_sum_mod2stata$lindex,
-      comment = FALSE,
-      caption.placement = "top")
-
-rm(tab_sum_mod2stata)
-
-```
-
-```{r tab-sum-stata3, echo = FALSE, results = "asis"}
-
-load("tab_sum_stata3.RData")
-
-print(xtable::xtable(tab_sum_stata3$table, 
-                     align = "lllrrrrrr",
-                     label = "tab:stata3",
-                     caption = "Regression results from Hernandez Alava and Wailoo 2015, model 1 with user-defined initial values"),
-      type = "latex",
-      include.rownames = FALSE,
-      hline.after = tab_sum_stata3$lindex,
-      comment = FALSE,
-      caption.placement = "top")
-
-rm(tab_sum_stata3)
-
-```
-
-```{r tab-sum-stata4, echo = FALSE, results = "asis"}
-
-load("tab_sum_stata4.RData")
-
-print(xtable::xtable(tab_sum_stata4$table, 
-                     align = "lllrrrrrr",
-                     label = "tab:stata4",
-                     caption = "Regression results from Hernandez Alava and Wailoo 2015, model 2 with user-defined initial values"),
-      type = "latex",
-      include.rownames = FALSE,
-      hline.after = tab_sum_stata4$lindex,
-      comment = FALSE,
-      caption.placement = "top")
-
-rm(tab_sum_stata4)
-
 ```
 
 ```{r end, echo = FALSE, results = "hide"}
