@@ -62,11 +62,16 @@ ggplot_theme <- ggplot2::theme(panel.background = ggplot2::element_rect(fill = "
 
 textout <- list()
 
+# Logical value for computations
+#-------------------------------
+
+docalc <- FALSE
+
 ```
 
 <!-- Load data -->
 
-```{r load_data, hide, eval = TRUE, echo = FALSE, results = 'hide'}
+```{r load_data, hide, eval = docalc, echo = FALSE, results = 'hide'}
 
 temp <- tempfile()
 download.file(paste0("https://files.digital.nhs.uk/publicationimport",
@@ -97,7 +102,7 @@ textout[["nspl"]] <- nrow(df)
 
 <!-- Computationally heavy calculations -->
 
-```{r calc_fit, hide, eval = FALSE, echo = FALSE, results = 'hide'}
+```{r calc_fit, hide, eval = docalc, echo = FALSE, results = 'hide'}
 
 #------------------------------------------------------------------------------
 # Fit model 1
@@ -258,7 +263,7 @@ rm(formula)
 
 <!-- Make plots -->
 
-```{r calc_plot, hide, eval = TRUE, echo = FALSE, results = 'hide'}
+```{r calc_plot, hide, eval = docalc, echo = FALSE, results = 'hide'}
 
 # Histogram of observed outcomes
 #-------------------------------
@@ -364,7 +369,7 @@ rm(fit1_all)
 
 <!-- Make summary tables -->
 
-```{r calc_tab, hide, eval = TRUE, echo = FALSE, results = 'hide'}
+```{r calc_tab, hide, eval = docalc, echo = FALSE, results = 'hide'}
 
 # Model 1, comparison of optimization methods
 #--------------------------------------------
