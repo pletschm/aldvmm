@@ -76,14 +76,14 @@ aldvmm.sefit <- function(par,
   
   if (any(is.na(cv))) {
     warning("missing values in covariance matrix: ",
-            "No standard errors of the fit obtained",
+            "No standard errors of the fit obtained\n",
             call. = FALSE)
     return(NULL)
   }
   
   if (any(diag(cv) <= 0)) {
     warning("non-positive diagonals in covariance matrix: ",
-            "No standard errors of the fit obtained", 
+            "No standard errors of the fit obtained\n", 
             call. = FALSE)
     return(NULL)
   }
@@ -134,7 +134,7 @@ aldvmm.sefit <- function(par,
     
     if (!(type %in% c("fit", "pred"))) {
       warning("'type' ",
-              'is not "fit" or "pred": "pred" is used',
+              'is not "fit" or "pred": "pred" is used\n',
               call. = FALSE)
     }
     
@@ -145,7 +145,7 @@ aldvmm.sefit <- function(par,
         se.fit[i] <- sqrt(mse + t(grad_i) %*% cv %*% grad_i)
       } else {
         se.fit[i] <- sqrt(t(grad_i) %*% cv %*% grad_i)
-        warning("'mse' is missing: Standard errors of the fit are generated.",
+        warning("'mse' is missing: Standard errors of the fit are generated\n",
                 call. = FALSE)
       }
     }

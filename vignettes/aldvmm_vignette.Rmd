@@ -166,6 +166,24 @@ save(fit1_all,
 
 rm(fit1_all, init.method, optim.method, i, j)
 
+# Default model ("nlminb")
+#-------------------------
+
+# With standard errors of fitted values for comparison to STATA
+
+fit1_nlminb <- aldvmm::aldvmm(data = df,
+                            formula = formula,
+                            psi = c(0.883, -0.594),
+                            ncmp = 2,
+                            optim.method = "nlminb",
+                            se.fit = TRUE)
+
+save(fit1_nlminb, 
+     file = "fit1_nlminb.RData",
+     compress = TRUE)
+
+rm(fit1_nlminb)
+
 # Constrained optimization
 #-------------------------
 
@@ -192,6 +210,8 @@ rm(fit1_cstr, init, lo, hi)
 # Constrained optimization, Hernandez Alava and Wailoo (2015)
 #-----------------------------------------------------------
 
+# With standard errors of fitted values for comparison to STATA
+
 init <- c(-.0883435, .2307964, 100, 0, 7.320611, -1.646109, 1.00e-30)
 lo <- c(-Inf, -Inf, 100, -Inf, -Inf, -Inf, 1e-30)
 hi <- c(Inf,   Inf, Inf,    0,  Inf,  Inf, Inf)
@@ -202,13 +222,33 @@ fit1_cstr_stata <- aldvmm::aldvmm(data = df,
                                   ncmp = 2,
                                   init.est = init,
                                   init.lo = lo,
-                                  init.hi = hi)
+                                  init.hi = hi,
+                                  se.fit = TRUE)
 
 save(fit1_cstr_stata, 
      file = "fit1_cstr_stata.RData",
      compress = TRUE)
 
 rm(fit1_cstr_stata, init, lo, hi)
+
+# Constant-only initial values ("nlminb")
+#----------------------------------------
+
+# With standard errors of fitted values for comparison to STATA
+
+fit1_cons <- aldvmm::aldvmm(data = df,
+                            formula = formula,
+                            psi = c(0.883, -0.594),
+                            ncmp = 2,
+                            init.method = "constant",
+                            optim.method = "nlminb",
+                            se.fit = TRUE)
+
+save(fit1_cons, 
+     file = "fit1_cons.RData",
+     compress = TRUE)
+
+rm(fit1_cons)
 
 # Single-component model
 #-----------------------
@@ -250,6 +290,8 @@ rm(fit2)
 # Starting values from Hernandez Alava and Wailoo (2015)
 #-------------------------------------------------------
 
+# With standard errors of fitted values for comparison to STATA
+
 init <- c(-.40293118, .30502755, .22614716, .14801581, -.70755741, 0, 
           -1.2632051, -2.4541401)
 
@@ -258,7 +300,8 @@ fit2_stata <- aldvmm::aldvmm(data = df,
                              psi = c(0.883, -0.594),
                              ncmp = 2,
                              init.est = init,
-                             optim.method = "nlminb")
+                             optim.method = "nlminb",
+                             se.fit = TRUE)
 
 save(fit2_stata, 
      file = "fit2_stata.RData",
@@ -1268,52 +1311,17 @@ rm(tab_sum_mod2)
 
 ## Comparison to STATA\textsuperscript{\textregistered} results
 
-To validate the R implementation of adjusted limited dependent variable mixture models, we compare the results of four reference models to the results of the STATA\textsuperscript{\textregistered} package using the same data.\footnote{The STATA\textsuperscript{\textregistered} code is included in the appendix.}
+To validate the R implementation of adjusted limited dependent variable mixture models, we compare the results of four reference models in R to the results of the same models in STATA\textsuperscript{\textregistered}.\footnote{The STATA\textsuperscript{\textregistered} and R code is included in the appendix.}
 
-```{r tab-comp-stata-show, echo = TRUE, eval = FALSE}
-# (1) Model 1 with default optimization settings
-fit1_default <- aldvmm::aldvmm(eq5d ~ hr | 1,
-                               data = df,
-                               psi = c(0.883, -0.594),
-                               ncmp = 2,
-                               init.method = "zero",
-                               optim.method = "nlminb")
+1. Model 1 with default options
 
-# (2) Model 1 with user-defined initial values and constraints on parameters
-init <- c(0,    0,   0,   0,    0,    0,    0.7283)
-lo   <- c(-Inf, -Inf, -3,  -Inf, -Inf, -3, -Inf)
-hi   <- c(Inf,  Inf,  Inf, Inf,  Inf,  Inf,  Inf)
+2. Model 1 with parameter constraints
 
-fit1_cstr <- aldvmm::aldvmm(eq5d ~ hr | 1,
-                            data = df,
-                            psi = c(0.883, -0.594),
-                            ncmp = 2,
-                            init.est = init,
-                            init.lo = lo,
-                            init.hi = hi)
+3. Model 1 with initial values from constant-only model
 
-# (3) Model 1 initial values from constant-only model
-fit1_const <- aldvmm::aldvmm(eq5d ~ hr | 1,
-                             data = df,
-                             psi = c(0.883, -0.594),
-                             ncmp = 2,
-                             init.method = "constant",
-                             optim.method = "nlminb")
+4. Model 2 with user-defined initial values
 
-# (4) Model 2 with user-defined initial values.
-init <- c(-.40293118, .30502755, .22614716, .14801581, -.70755741, 0, 
-          -1.2632051, -2.4541401)
-
-fit2 <- aldvmm::aldvmm(eq5d ~ hr | hr,
-                       data = df,
-                       psi = c(0.883, -0.594),
-                       ncmp = 2,
-                       init.est = init,
-                       optim.method = "nlminb")
-```
-
-<!-- \newpage -->
-<!-- \blandscape -->
+The parameter estimates and standard errors obtained in R are very similar to the results of the STATA\textsuperscript{\textregistered} package (table \@ref(tab:tab-comp-stata) and table \@ref(tab:tab-compse-stata)). The R package does not return any standard errors of reference model 2, while the STATA\textsuperscript{\textregistered} package returns standard errors for coefficients in component 1 and the multinomial logit. The values of the log-likelihood function in the optimum are consistently smaller in R than in STATA\textsuperscript{\textregistered} but the relative ordering of models is consistent across the two implementations. Overall, the comparison of the two implementations is not indicative of errors in the R implementation of adjusted limited dependent variable mixture models.
 
 ```{r tab-calc-stata, echo = FALSE, results = "asis"}
 
@@ -1383,7 +1391,7 @@ print(xtable::xtable(ctab,
                                    paste(rep("r", length(tabvec)), 
                                          collapse = "")),
                      label = "tab:tab-comp-stata",
-                     caption = "Comparison of point estimates to XXXXXXXXXXXXXXXXXXXXXXXXXXXXX"),
+                     caption = "Comparison of point estimates to the results of the STATA package"),
       type = "latex",
       include.colnames = FALSE,
       include.rownames = FALSE,
@@ -1410,7 +1418,71 @@ rm(ctab, lindex, tabvec)
 
 ```
 
-<!-- \elandscape -->
+```{r tab-pred-stata, echo = FALSE, results = "asis"}
+
+# Load aldvmm objects
+load("fit1_nlminb.RData")
+load("fit1_cstr_stata.RData")
+load("fit1_cons.RData")
+load("fit2_stata.RData")
+stata_yhat <- read.table("stata_yhat.csv", 
+                                    header = TRUE, 
+                                    sep = ";", 
+                                    dec = ".")
+
+stata_se <- read.table("stata_se.csv", 
+                                    header = TRUE, 
+                                    sep = ";", 
+                                    dec = ".")
+
+# Extract fitted values in estimation data
+sumhat <- list()
+
+sumhat[["yhat"]][["(1)"]] <- summary(stata_yhat[, 1] - fit1_nlminb[["pred"]][["yhat"]])
+sumhat[["yhat"]][["(2)"]] <- summary(stata_yhat[, 2] - fit1_cstr_stata[["pred"]][["yhat"]])
+sumhat[["yhat"]][["(3)"]] <- summary(stata_yhat[, 3] - fit1_cons[["pred"]][["yhat"]])
+sumhat[["yhat"]][["(4)"]] <- summary(stata_yhat[, 4] - fit2_stata[["pred"]][["yhat"]])
+
+ymat <- suppressWarnings( round(do.call("cbind", sumhat[["yhat"]]), 6) )
+ymat <- ymat[1:6, ]
+
+print(xtable::xtable(ymat, 
+                     align = paste0("l", 
+                                    paste(rep("r", ncol(ymat)), 
+                                          collapse = "")),
+                     label = "tab:compyhat",
+                     caption = "Summary statistics of differences between R and STATA predictions of all observations in the estimation data",
+                     digits = 6),
+      type = "latex",
+      include.rownames = TRUE,
+      hline.after = c(-1, 0, nrow(ymat)),
+      comment = FALSE,
+      caption.placement = "top")
+
+
+sumhat[["se"]][["(1)"]] <- summary(stata_se[, 1] - fit1_nlminb[["pred"]][["se.fit"]])
+sumhat[["se"]][["(2)"]] <- summary(stata_se[, 2] - fit1_cstr_stata[["pred"]][["se.fit"]])
+sumhat[["se"]][["(3)"]] <- summary(stata_se[, 3] - fit1_cons[["pred"]][["se.fit"]])
+sumhat[["se"]][["(4)"]] <- summary(stata_se[, 4] - fit2_stata[["pred"]][["se.fit"]])
+
+semat <- suppressWarnings( round(do.call("cbind", sumhat[["se"]]), 6) )
+semat <- semat[1:6, ]
+
+print(xtable::xtable(semat, 
+                     align = paste0("l", 
+                                    paste(rep("r", ncol(semat)), 
+                                          collapse = "")),
+                     label = "tab:compse",
+                     caption = "Summary statistics of differences between R and STATA standard errors of predictions of all observations in the estimation data",
+                     digits = 6),
+      type = "latex",
+      include.rownames = TRUE,
+      hline.after = c(-1, 0, nrow(semat)),
+      comment = FALSE,
+      caption.placement = "top")
+
+
+```
 
 # Discussion
 
@@ -1537,23 +1609,68 @@ rm(plot_comp_mhl3)
 ```
 
 \newpage
-## STATA\textsuperscript{\textregistered} code
+## R code for the estimation of reference models
+
+```{r tab-comp-stata-show, echo = TRUE, eval = FALSE}
+# (1) Model 1 with default optimization settings
+fit1_default <- aldvmm::aldvmm(eq5d ~ hr | 1,
+                               data = df,
+                               psi = c(0.883, -0.594),
+                               ncmp = 2,
+                               init.method = "zero",
+                               optim.method = "nlminb")
+
+# (2) Model 1 with user-defined initial values and constraints on parameters
+init <- c(0,    0,   0,   0,    0,    0,    0.7283)
+lo   <- c(-Inf, -Inf, -3,  -Inf, -Inf, -3, -Inf)
+hi   <- c(Inf,  Inf,  Inf, Inf,  Inf,  Inf,  Inf)
+
+fit1_cstr <- aldvmm::aldvmm(eq5d ~ hr | 1,
+                            data = df,
+                            psi = c(0.883, -0.594),
+                            ncmp = 2,
+                            init.est = init,
+                            init.lo = lo,
+                            init.hi = hi)
+
+# (3) Model 1 with initial values from constant-only model
+fit1_const <- aldvmm::aldvmm(eq5d ~ hr | 1,
+                             data = df,
+                             psi = c(0.883, -0.594),
+                             ncmp = 2,
+                             init.method = "constant",
+                             optim.method = "nlminb")
+
+# (4) Model 2 with user-defined initial values.
+init <- c(-.40293118, .30502755, .22614716, .14801581, -.70755741, 0, 
+          -1.2632051, -2.4541401)
+
+fit2 <- aldvmm::aldvmm(eq5d ~ hr | hr,
+                       data = df,
+                       psi = c(0.883, -0.594),
+                       ncmp = 2,
+                       init.est = init,
+                       optim.method = "nlminb")
+```
+
+\newpage
+## STATA\textsuperscript{\textregistered} code for the estimation of reference models
 
 ```{r stata_code, echo = TRUE, eval = FALSE}
-* Model 1
+* (1) Model 1
 aldvmm eq5d hr, ncomponents(2)
 
-* Model 1 with constraints
+* (2) Model 1 with constraints
 matrix a = e(b)
 constraint 1 [Comp_2]:hr10 = 0
 constraint 2 [Comp_2]:_cons = 100
 constraint 3 [lns_2]:_cons = 1e-30
 aldvmm eq5d hr, ncomp(2) from(a) c(1 2 3)
 
-* Model 1 initital values from constant-only model
+* (3) Model 1 initital values from constant-only model
 aldvmm eq5d hr, ncomp(2) inim(cons)
 
-* Model 2 user-defined initial values
+* (4) Model 2 user-defined initial values
 matrix start2lc=e(b)
 matrix start = start2lc[1,1..4] , 0, start2lc[1,5..7]
 matrix list start
