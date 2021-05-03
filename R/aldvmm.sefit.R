@@ -4,7 +4,9 @@
 #' calculates standard errors of fitted and predicted outcomes using the delta
 #' method.
 #'
-#' @param yhat a numeric vector of predicted outcomes from \ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm::aldvmm.pred()}}.
+#' @param yhat a numeric vector of predicted outcomes from
+#'   \ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm::aldvmm.pred()}}.
+#'
 #' @param type a character value from 'fit' or 'pred' indicating whether the
 #'   standard error of the fit ('fit') or the standard error of predictions in
 #'   new data ('pred') are calculated.
@@ -12,11 +14,13 @@
 #'   returned by
 #'   \ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{\code{aldvmm::aldvmm.cv()}}.
 #'
+#'
 #' @param mse a scalar a numeric value of the mean squared error of observed
 #'   versus predicted outcomes \eqn{\sum{(y - \hat{y})^2}/(n_{obs} -
 #'   n_{par})}{\sum{(y - \hat{y})^2}/(nobs - npar)} for all observations in
 #'   \code{data} supplied to
 #'   \ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm::aldvmm.ll()}}.
+#'
 #'
 #'
 #' @inheritParams aldvmm
@@ -38,9 +42,7 @@
 #' outcomes in the original estimation data (Whitmore, 1986).  The gradients of
 #' fitted values with respect to parameter estimates are approximated
 #' numerically using
-#' \ifelse{html}{\code{\link[numDeriv]{grad}}}{\code{numDeriv::grad()}}. This
-#' numerical approach is executed in a loop over all observations and can be
-#' very slow in large data sets.
+#' \ifelse{html}{\code{\link[numDeriv]{jacobian}}}{\code{numDeriv::jacobian()}}.
 #'
 #' @references Whitmore, G. A. (1986). Prediction limits for a univariate
 #'   normal observation. The American Statistician, 40(2), 141-143.
@@ -113,12 +115,7 @@ aldvmm.sefit <- function(par,
   # Loop over all observations in design matrix
   #--------------------------------------------
   
-  pb <- utils::txtProgressBar(min = 1, max = nrow(X[[1]]), style = 3)
-  message("calculating standard errors of the fit using delta method...")
-  
   for (i in 1:nrow(X[[1]])) {
-    
-    utils::setTxtProgressBar(pb, i)
     
     # Calculate standard error
     #-------------------------
