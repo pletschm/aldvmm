@@ -93,7 +93,23 @@ aldvmm.sefit <- function(par,
   
   se.fit <- rep(NA, times = nrow(X[[1]]))
   names(se.fit) <- rownames(X[[1]])
+
+  # Calculate jacobian matrix numerically
+  #--------------------------------------
   
+  jacobian <- numDeriv::jacobian(func = function(z) {
+    aldvmm.pred(par   = z,
+                X     = X,
+                y     = rep(0, nrow(X[[1]])),
+                psi   = psi,
+                ncmp  = ncmp,
+                dist  = dist,
+                lcoef = lcoef,
+                lcmp  = lcmp,
+                lcpar = lcpar)[["yhat"]]
+  },
+  x = par)
+    
   # Loop over all observations in design matrix
   #--------------------------------------------
   
@@ -103,31 +119,6 @@ aldvmm.sefit <- function(par,
   for (i in 1:nrow(X[[1]])) {
     
     utils::setTxtProgressBar(pb, i)
-    
-    # Make model matrix for i-th observation
-    #---------------------------------------
-    
-    X_i <- lapply(X, function(x) {
-      out <- t(x[i, ])
-      rownames(out) <- rownames(x)[i]
-      return(out)
-    })
-    
-    # Approximate gradient of predictions w.r.t. parameters numerically
-    #------------------------------------------------------------------
-    
-    grad_i <- numDeriv::grad(func = function(z) {
-      aldvmm.pred(par   = z,
-                  X     = X_i,
-                  y     = 0,
-                  psi   = psi,
-                  ncmp  = ncmp,
-                  dist  = dist,
-                  lcoef = lcoef,
-                  lcmp  = lcmp,
-                  lcpar = lcpar)[["yhat"]]
-    },
-    x = par)
     
     # Calculate standard error
     #-------------------------
@@ -139,12 +130,12 @@ aldvmm.sefit <- function(par,
     }
     
     if (type == "fit") {
-      se.fit[i] <- sqrt(t(grad_i) %*% cv %*% grad_i)
+      se.fit[i] <- sqrt(t(jacobian[i, ]) %*% cv %*% jacobian[i, ])
     } else {
       if (!is.null(mse) & !is.na(mse)) {
-        se.fit[i] <- sqrt(mse + t(grad_i) %*% cv %*% grad_i)
+        se.fit[i] <- sqrt(mse + t(jacobian[i, ]) %*% cv %*% jacobian[i, ])
       } else {
-        se.fit[i] <- sqrt(t(grad_i) %*% cv %*% grad_i)
+        se.fit[i] <- sqrt(t(jacobian[i, ]) %*% cv %*% jacobian[i, ])
         warning("'mse' is missing: Standard errors of the fit are generated\n",
                 call. = FALSE)
       }
