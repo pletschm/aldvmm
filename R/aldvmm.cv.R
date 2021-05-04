@@ -84,7 +84,7 @@ aldvmm.cv <- function(ll,
   
   if (all(is.na(outlist[["cv"]]))) {
     
-    base::warning("no covariance matrix was obtained\n",
+    base::warning("no covariance matrix is obtained\n",
             call. = FALSE)
     outlist[["se"]] <- rep(NA, times = length(par))
     
@@ -105,7 +105,7 @@ aldvmm.cv <- function(ll,
     }
     
     if (any(is.na(outlist[["se"]]))) {
-      base::warning("missing standard errors were obtained\n",
+      base::warning("missing standard errors are obtained\n",
               call. = FALSE)
     }
     

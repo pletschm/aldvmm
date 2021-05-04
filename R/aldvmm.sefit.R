@@ -95,7 +95,7 @@ aldvmm.sefit <- function(par,
   
   se.fit <- rep(NA, times = nrow(X[[1]]))
   names(se.fit) <- rownames(X[[1]])
-
+  
   # Calculate jacobian matrix numerically
   #--------------------------------------
   
@@ -111,33 +111,34 @@ aldvmm.sefit <- function(par,
                 lcpar = lcpar)[["yhat"]]
   },
   x = par)
-    
-  # Loop over all observations in design matrix
-  #--------------------------------------------
   
-  for (i in 1:nrow(X[[1]])) {
-    
-    # Calculate standard error
-    #-------------------------
-    
-    if (!(type %in% c("fit", "pred"))) {
-      warning("'type' ",
-              'is not "fit" or "pred": "pred" is used\n',
-              call. = FALSE)
-    }
-    
-    if (type == "fit") {
+  # Calculate standard errors in loop over all observations
+  #--------------------------------------------------------
+  
+  if (!(type %in% c("fit", "pred"))) {
+    warning("'type' ",
+            'is not "fit" or "pred": "pred" is used\n',
+            call. = FALSE)
+  }
+
+  if (type == "fit") {
+    for (i in 1:nrow(X[[1]])) {
       se.fit[i] <- sqrt(t(jacobian[i, ]) %*% cv %*% jacobian[i, ])
-    } else {
-      if (!is.null(mse) & !is.na(mse)) {
+    }
+  } else {
+    if (!is.null(mse) & !is.na(mse)) {
+      for (i in 1:nrow(X[[1]])) {
         se.fit[i] <- sqrt(mse + t(jacobian[i, ]) %*% cv %*% jacobian[i, ])
-      } else {
+      }
+    } else {
+      warning("'mse' is missing: Standard errors of the fit are generated\n",
+              call. = FALSE)
+      for (i in 1:nrow(X[[1]])) {
         se.fit[i] <- sqrt(t(jacobian[i, ]) %*% cv %*% jacobian[i, ])
-        warning("'mse' is missing: Standard errors of the fit are generated\n",
-                call. = FALSE)
       }
     }
   }
+  
   
   # Confidence / prediction interval
   #---------------------------------

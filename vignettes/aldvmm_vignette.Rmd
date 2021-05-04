@@ -107,6 +107,20 @@ set.seed(101010101)
 df <- df[sample(1:nrow(df), size = nrow(df)*0.3), ]
 textout[["nspl"]] <- nrow(df)
 
+# Population average Oxford Hip Score
+#------------------------------------
+
+textout[["meanhr"]] <- mean(df[, "hr"], na.rm = TRUE)
+
+# Save output for text
+#---------------------
+
+save(textout,
+     file = "textout.RData",
+     compress = TRUE)
+
+rm(textout)
+
 ```
 
 <!-- Computationally heavy calculations -->
@@ -673,15 +687,6 @@ rm(list = ls(pattern = "fit"))
 rm(list = ls(pattern = "reptab"))
 rm(df, est_mhl)
 
-# Save output for text
-#---------------------
-
-save(textout,
-     file = "textout.RData",
-     compress = TRUE)
-
-rm(textout)
-
 ```  
 
 # Introduction
@@ -1028,15 +1033,23 @@ The densities in the solution of the "Nelder-Mead" method resemble the bi-model 
 
 ```{r fig-comp-dens1, echo = FALSE, results = "asis", fig.height = 2.9, fig.width = 6,  fig.cap = 'Densities in components based on "Nelder-Mead" parameter estimates (observation with population average Oxford Hip Score 3.8489)'}
 
-nsim <- 100
-hr <- 3.825244 # Population average Oxford Hip Score
+load("fit1_all.RData")
 
-n1    <- nsim*exp(3.8489)/(1 + exp(3.8489))
-mean1 <- -0.0575 + 0.2233 * hr
-sd1   <- exp(-1.8381)
-n2    <- nsim*(1 - exp(3.8489)/(1 + exp(3.8489)))
-mean2 <- 4.4022 + -0.9974 * hr
-sd2   <- exp(0.1250)
+nsim <- 100
+hr <- textout[["meanhr"]] # Population average Oxford Hip Score
+
+# Component 1
+n1    <- nsim*exp(fit1_all[["fit"]][["zero"]][["Nelder-Mead"]][["coef"]]["Comp1_delta_(Intercept)"])/(1 + exp(fit1_all[["fit"]][["zero"]][["Nelder-Mead"]][["coef"]]["Comp1_delta_(Intercept)"]))
+mean1 <- fit1_all[["fit"]][["zero"]][["Nelder-Mead"]][["coef"]]["Comp1_beta_(Intercept)"] +
+  hr*fit1_all[["fit"]][["zero"]][["Nelder-Mead"]][["coef"]]["Comp1_beta_hr"]
+sd1   <- exp(fit1_all[["fit"]][["zero"]][["Nelder-Mead"]][["coef"]]["Comp1_lnsigma"])
+
+# Component 2
+n2    <- nsim*(1 - exp(fit1_all[["fit"]][["zero"]][["Nelder-Mead"]][["coef"]]["Comp1_delta_(Intercept)"]) /
+  (1 + exp(fit1_all[["fit"]][["zero"]][["Nelder-Mead"]][["coef"]]["Comp1_delta_(Intercept)"])))
+mean2 <- fit1_all[["fit"]][["zero"]][["Nelder-Mead"]][["coef"]]["Comp2_beta_(Intercept)"] +
+  hr*fit1_all[["fit"]][["zero"]][["Nelder-Mead"]][["coef"]]["Comp2_beta_hr"]
+sd2   <- exp(fit1_all[["fit"]][["zero"]][["Nelder-Mead"]][["coef"]]["Comp2_lnsigma"])
 
 ggplot2::ggplot(data = data.frame(x = c(-1, 1)), aes(x)) +
   ggplot2::stat_function(fun = dnorm, 
@@ -1060,14 +1073,20 @@ rm(n1, mean1, sd1, n2, mean2, sd2, nsim)
 ```{r fig-comp-dens2, echo = FALSE, results = "asis", fig.height = 2.9, fig.width = 6, fig.cap = 'Densities in components based on "nlminb" parameter estimates (observation with population average Oxford Hip Score 3.8489)'}
 
 nsim <- 100
-hr <- 3.825244 # Population average Oxford Hip Score
+hr <- textout[["meanhr"]] # Population average Oxford Hip Score
 
-n1    <- nsim*exp(0.7283)/(1 + exp(0.7283))
-mean1 <- 0.2358 + 0.1459 * hr
-sd1   <- exp(-2.4623)
-n2    <- nsim*(1 - exp(0.7283)/(1 + exp(0.7283)))
-mean2 <- -0.4306 + 0.3135 * hr
-sd2   <- exp(-1.2480)
+# Component 1
+n1    <- nsim*exp(fit1_all[["fit"]][["zero"]][["nlminb"]][["coef"]]["Comp1_delta_(Intercept)"])/(1 + exp(fit1_all[["fit"]][["zero"]][["nlminb"]][["coef"]]["Comp1_delta_(Intercept)"]))
+mean1 <- fit1_all[["fit"]][["zero"]][["nlminb"]][["coef"]]["Comp1_beta_(Intercept)"] +
+  hr*fit1_all[["fit"]][["zero"]][["nlminb"]][["coef"]]["Comp1_beta_hr"]
+sd1   <- exp(fit1_all[["fit"]][["zero"]][["nlminb"]][["coef"]]["Comp1_lnsigma"])
+
+# Component 2
+n2    <- nsim*(1 - exp(fit1_all[["fit"]][["zero"]][["nlminb"]][["coef"]]["Comp1_delta_(Intercept)"]) /
+  (1 + exp(fit1_all[["fit"]][["zero"]][["nlminb"]][["coef"]]["Comp1_delta_(Intercept)"])))
+mean2 <- fit1_all[["fit"]][["zero"]][["nlminb"]][["coef"]]["Comp2_beta_(Intercept)"] +
+  hr*fit1_all[["fit"]][["zero"]][["nlminb"]][["coef"]]["Comp2_beta_hr"]
+sd2   <- exp(fit1_all[["fit"]][["zero"]][["nlminb"]][["coef"]]["Comp2_lnsigma"])
 
 ggplot2::ggplot(data = data.frame(x = c(-1, 1)), aes(x)) +
   ggplot2::stat_function(fun = dnorm, 
@@ -1091,13 +1110,20 @@ rm(n1, mean1, sd1, n2, mean2, sd2, nsim)
 ```{r fig-comp-dens3, echo = FALSE, results = "asis", fig.height = 2.9, fig.width = 6, fig.cap = 'Densities in components based on "hjn" parameter estimates (observation with population average Oxford Hip Score 3.8489)'}
 
 nsim <- 100
+hr <- textout[["meanhr"]] # Population average Oxford Hip Score
 
-n1    <- nsim*exp(-2.1900)/(1 + exp(-2.1900))
-mean1 <- 0.6910 + 0 * 3.825244
-sd1   <- exp(-36.7370)
-n2    <- nsim*(1 - exp(-2.1900))/(1 + exp(-2.1900))
-mean2 <- -0.1490 + 0.2500 * 3.825244
-sd2   <- exp(-1.5890)
+# Component 1
+n1    <- nsim*exp(fit1_all[["fit"]][["zero"]][["hjn"]][["coef"]]["Comp1_delta_(Intercept)"])/(1 + exp(fit1_all[["fit"]][["zero"]][["hjn"]][["coef"]]["Comp1_delta_(Intercept)"]))
+mean1 <- fit1_all[["fit"]][["zero"]][["hjn"]][["coef"]]["Comp1_beta_(Intercept)"] +
+  hr*fit1_all[["fit"]][["zero"]][["hjn"]][["coef"]]["Comp1_beta_hr"]
+sd1   <- exp(fit1_all[["fit"]][["zero"]][["hjn"]][["coef"]]["Comp1_lnsigma"])
+
+# Component 2
+n2    <- nsim*(1 - exp(fit1_all[["fit"]][["zero"]][["hjn"]][["coef"]]["Comp1_delta_(Intercept)"]) /
+  (1 + exp(fit1_all[["fit"]][["zero"]][["hjn"]][["coef"]]["Comp1_delta_(Intercept)"])))
+mean2 <- fit1_all[["fit"]][["zero"]][["hjn"]][["coef"]]["Comp2_beta_(Intercept)"] +
+  hr*fit1_all[["fit"]][["zero"]][["hjn"]][["coef"]]["Comp2_beta_hr"]
+sd2   <- exp(fit1_all[["fit"]][["zero"]][["hjn"]][["coef"]]["Comp2_lnsigma"])
 
 ggplot2::ggplot(data = data.frame(x = c(-1, 1)), aes(x)) +
   ggplot2::stat_function(fun = dnorm, 
@@ -1115,6 +1141,7 @@ ggplot2::ggplot(data = data.frame(x = c(-1, 1)), aes(x)) +
   ggplot_theme
 
 rm(n1, mean1, sd1, n2, mean2, sd2, nsim)
+rm(fit1_all)
 
 ```
 
@@ -1321,7 +1348,7 @@ To validate the R implementation of adjusted limited dependent variable mixture 
 
 4. Model 2 with user-defined initial values
 
-The parameter estimates and standard errors obtained in R are very similar to the results of the STATA\textsuperscript{\textregistered} package (table \@ref(tab:tab-comp-stata) and table \@ref(tab:tab-compse-stata)). The R package does not return any standard errors of reference model 2, while the STATA\textsuperscript{\textregistered} package returns standard errors for coefficients in component 1 and the multinomial logit. The values of the log-likelihood function in the optimum are consistently smaller in R than in STATA\textsuperscript{\textregistered} but the relative ordering of models is consistent across the two implementations. Overall, the comparison of the two implementations is not indicative of errors in the R implementation of adjusted limited dependent variable mixture models.
+The parameter estimates and standard errors obtained in R are very similar to the results of the STATA\textsuperscript{\textregistered} package (table \@ref(tab:tab-comp-stata) and table \@ref(tab:tab-compse-stata)). The coefficient of the Oxford Hip Score in component 2 of model 2 differs between R and STATA\textsuperscript{\textregistered}, and the R package does not return standard errors of parameters. Although models 1 and 3 yield different parameter estimates, they converged at the same log-likelihood. This further supports the hypothesis of multiple local optima of the likelihood. The log-likelihood is consistently smaller in R than in STATA\textsuperscript{\textregistered}, but the relative ordering of models is consistent across the two implementations. Overall, the comparison of the two implementations is not indicative of errors in the R implementation of adjusted limited dependent variable mixture models.
 
 ```{r tab-calc-stata, echo = FALSE, results = "asis"}
 
@@ -1451,7 +1478,7 @@ print(xtable::xtable(ymat,
                                     paste(rep("r", ncol(ymat)), 
                                           collapse = "")),
                      label = "tab:compyhat",
-                     caption = "Summary statistics of differences between R and STATA predictions of all observations in the estimation data",
+                     caption = "Summary statistics of differences between R and STATA predictions of all observations in the estimation data (positive values suggest larger values in STATA)",
                      digits = 6),
       type = "latex",
       include.rownames = TRUE,
@@ -1473,7 +1500,7 @@ print(xtable::xtable(semat,
                                     paste(rep("r", ncol(semat)), 
                                           collapse = "")),
                      label = "tab:compse",
-                     caption = "Summary statistics of differences between R and STATA standard errors of predictions of all observations in the estimation data",
+                     caption = "Summary statistics of differences between R and STATA standard errors of predictions of all observations in the estimation data (positive values suggest larger values in STATA)",
                      digits = 6),
       type = "latex",
       include.rownames = TRUE,
@@ -1481,6 +1508,77 @@ print(xtable::xtable(semat,
       comment = FALSE,
       caption.placement = "top")
 
+```
+
+```{r box-pred-yhat-stata, echo = FALSE, results = "asis", warning = FALSE, fig.height = 2.9, fig.width = 6, fig.cap = 'Fitted values in R and STATA'}
+
+stata_yhat_long <- stata_yhat
+names(stata_yhat_long) <- c("Model 1", "Model 2", "Model 3", "Model 4")
+suppressMessages(stata_yhat_long <- reshape2::melt(stata_yhat_long))
+stata_yhat_long$variable <- as.character(stata_yhat_long$variable)
+stata_yhat_long$software <- "STATA"
+
+r_yhat_long <- rbind(cbind(variable = "Model 1",
+                           value = fit1_nlminb[["pred"]][["yhat"]],
+                           software = "R"),
+                     cbind(variable = "Model 2",
+                           value = fit1_cstr_stata[["pred"]][["yhat"]],
+                           software = "R"),
+                     cbind(variable = "Model 3",
+                           value = fit1_cons[["pred"]][["yhat"]],
+                           software = "R"),
+                     cbind(variable = "Model 4",
+                           value = fit2_stata[["pred"]][["yhat"]],
+                           software = "R"))
+
+r_yhat_long <- as.data.frame(r_yhat_long)
+
+plotdf <- rbind(stata_yhat_long, r_yhat_long)
+
+suppressWarnings(
+  ggplot(plotdf, aes(x = variable, y = as.numeric(value), fill = software)) +
+    geom_boxplot() +
+    ylab("Fitted values") +
+    ggplot_theme +
+    theme(axis.title.x = element_blank()) +
+    guides(fill = guide_legend(nrow = 1, byrow = TRUE))
+)
+
+```
+
+```{r box-pred-se-stata, echo = FALSE, results = "asis", warning = FALSE, fig.height = 2.9, fig.width = 6, fig.cap = 'Standard errors of fitted values in R and STATA'}
+
+stata_se_long <- stata_se
+names(stata_se_long) <- c("Model 1", "Model 2", "Model 3", "Model 4")
+suppressMessages(stata_se_long <- reshape2::melt(stata_se_long))
+stata_se_long$variable <- as.character(stata_se_long$variable)
+stata_se_long$software <- "STATA"
+
+r_se_long <- rbind(cbind(variable = "Model 1",
+                           value = fit1_nlminb[["pred"]][["se.fit"]],
+                           software = "R"),
+                     # cbind(variable = "Model 2",
+                     #       value = fit1_cstr_stata[["pred"]][["se.fit"]],
+                     #       software = "R"),
+                     cbind(variable = "Model 3",
+                           value = fit1_cons[["pred"]][["se.fit"]],
+                           software = "R"),
+                     cbind(variable = "Model 4",
+                           value = fit2_stata[["pred"]][["se.fit"]],
+                           software = "R"))
+
+r_se_long <- as.data.frame(r_se_long)
+
+plotdf <- rbind(stata_se_long, r_se_long)
+
+suppressWarnings(
+  ggplot(plotdf, aes(x = variable, y = as.numeric(value), fill = software)) +
+    geom_boxplot() +
+    ylab("Standard errors of fitted values") +
+    ggplot_theme +
+    theme(axis.title.x = element_blank()) +
+    guides(fill = guide_legend(nrow = 1, byrow = TRUE))
+)
 
 ```
 
