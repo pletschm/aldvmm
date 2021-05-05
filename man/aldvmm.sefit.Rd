@@ -30,7 +30,8 @@ values of functions in package \code{'aldvmm'}, and the names will be used
 in the extraction of parameters into nested lists using \ifelse{html}{
 \code{\link[aldvmm]{aldvmm.getpar}}}{\code{aldvmm::aldvmm.getpar()}}.}
 
-\item{yhat}{a numeric vector of predicted outcomes from \ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm::aldvmm.pred()}}.}
+\item{yhat}{a numeric vector of predicted outcomes from
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm::aldvmm.pred()}}.}
 
 \item{X}{a list of design matrices returned by
 \ifelse{html}{\code{\link[aldvmm]{aldvmm.mm}}}{\code{aldvmm::aldvmm.mm()}}.
@@ -126,9 +127,7 @@ where \eqn{MSE}{mse} is the mean squared error of fitted versus observed
 outcomes in the original estimation data (Whitmore, 1986).  The gradients of
 fitted values with respect to parameter estimates are approximated
 numerically using
-\ifelse{html}{\code{\link[numDeriv]{grad}}}{\code{numDeriv::grad()}}. This
-numerical approach is executed in a loop over all observations and can be
-very slow in large data sets.
+\ifelse{html}{\code{\link[numDeriv]{jacobian}}}{\code{numDeriv::jacobian()}}.
 }
 \references{
 Whitmore, G. A. (1986). Prediction limits for a univariate

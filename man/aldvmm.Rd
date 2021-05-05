@@ -282,9 +282,7 @@ The function \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{
   outcomes in the original estimation data (Whitmore, 1986).  The gradients
   of fitted values with respect to parameter estimates are approximated
   numerically using
-  \ifelse{html}{\code{\link[numDeriv]{grad}}}{\code{numDeriv::grad()}}. This
-  numerical approach is executed in a loop over all observations and can be
-  very slow in large data sets.
+  \ifelse{html}{\code{\link[numDeriv]{jacobian}}}{\code{numDeriv::jacobian()}}.
 }
 \examples{
 data(utility)

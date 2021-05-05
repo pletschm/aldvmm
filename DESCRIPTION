@@ -29,6 +29,7 @@ Suggests:
     bookdown,
     ggplot2,
     scales,
+    reshape2,
     xtable,
     tinytex,
     testthat (>= 3.0.0),
