@@ -693,11 +693,11 @@ rm(df, est_mhl)
 
 Health-related quality of life is a key outcome in health technology assessments because it is patient-relevant and it is needed to calculate quality adjusted life years in economic evaluations of health care interventions. Quality of life instruments typically measure health problems in multiple domains using ordinal Likert scales. Value sets or valuation functions are used to convert these profiles of ordinal measures into cardinal health-related utilities between 1 (perfect health) and minus infinity, where 0 represents death, and negative values represent health states worse than death. Because perfect health is defined as 100% quality of life, health state utilities are limited at 1. The lowest possible utility in a local value set further defines a lower limit of health state utilities in a local population. Thus, health state utilities are limited dependent variables. In addition, health state utilities often show gaps between 1 and the next smaller utility in the value set. These gaps occur more frequently in  quality of life instruments with few levels in the Likert scales such as the EQ-5D-3L [@Mulhern2018]. A last but important particularity of health state utilities is that they can be the consequence of multiple latent classes, or they can exhibit multi-modal marginal densities [@HernandezAlava2014].
 
-Adjusted limited dependent variable mixture models are finite mixtures of multiple normal distributions that account for limits, gaps between 1 and the next smaller utility value and multi-modality [@HernandezAlava2012; @HernandezAlava2013; @HernandezAlava2014; @HernandezAlava2015; @Mukuria2019]. These features can improve empirical fit, parameter identification and predictive accuracy compared to standard regression models. Thus, adjusted limited dependent variable mixture models are particularly useful for mapping studies [@Gray2018a; @Gray2018; @Dixon2020; @Yang2019; @Xu2020; @Fuller2017; @Pennington2020] and the identification of incremental effects and average marginal effects of medical interventions or health problems (e.g. @Hvidberg2016).
+Adjusted limited dependent variable mixture models are finite mixtures of multiple normal distributions that account for limits, gaps between 1 and the next smaller utility value and multi-modality [@HernandezAlava2012; @HernandezAlava2013; @HernandezAlava2014; @HernandezAlava2015; @Mukuria2019]. These features can improve empirical fit, parameter identification and predictive accuracy compared to standard regression models. Thus, adjusted limited dependent variable mixture models are particularly useful for mapping studies [@Gray2018a; @Gray2018; @Dixon2020; @Yang2019; @Xu2020; @Fuller2017; @Pennington2020] and the identification of incremental and average marginal effects of medical interventions or health problems (e.g. @Hvidberg2016).
 
 The R package 'aldvmm' is an implementation of the adjusted limited dependent variable model mixture model proposed by @HernandezAlava2015 using normal component distributions and a multinomial logit model of probabilities of component membership.
 
-The objective of this vignette is to demonstrate the usage of the 'aldvmm' package, show important challenges of fitting adjusted limited dependent variable mixture models and validate the R implementation against the STATA\textsuperscript{\textregistered} package [@HernandezAlava2015] using publicly available data.
+The objectives of this vignette are to demonstrate the usage of the 'aldvmm' package, show important challenges of fitting adjusted limited dependent variable mixture models and validate the R implementation against the STATA\textsuperscript{\textregistered} package [@HernandezAlava2015] using publicly available data.
 
 # Methods
 
@@ -1338,7 +1338,7 @@ rm(tab_sum_mod2)
 
 ## Comparison to STATA\textsuperscript{\textregistered} results
 
-To validate the R implementation of adjusted limited dependent variable mixture models, we compare the results of four reference models in R to the results of the same models in STATA\textsuperscript{\textregistered}.\footnote{The STATA\textsuperscript{\textregistered} and R code is included in the appendix.}
+To validate the R implementation of adjusted limited dependent variable mixture models, we estimate the four models presented in @HernandezAlava2015 as reference models and compare the results to the results in STATA\textsuperscript{\textregistered}.\footnote{The STATA\textsuperscript{\textregistered} and R code for model estimation is included in the appendix.}
 
 1. Model 1 with default options
 
@@ -1348,7 +1348,9 @@ To validate the R implementation of adjusted limited dependent variable mixture 
 
 4. Model 2 with user-defined initial values
 
-The parameter estimates and standard errors obtained in R are very similar to the results of the STATA\textsuperscript{\textregistered} package (table \@ref(tab:tab-comp-stata) and table \@ref(tab:tab-compse-stata)). The coefficient of the Oxford Hip Score in component 2 of model 2 differs between R and STATA\textsuperscript{\textregistered}, and the R package does not return standard errors of parameters. Although models 1 and 3 yield different parameter estimates, they converged at the same log-likelihood. This further supports the hypothesis of multiple local optima of the likelihood. The log-likelihood is consistently smaller in R than in STATA\textsuperscript{\textregistered}, but the relative ordering of models is consistent across the two implementations. Overall, the comparison of the two implementations is not indicative of errors in the R implementation of adjusted limited dependent variable mixture models.
+The parameter estimates and standard errors obtained in R are very similar to the results of the STATA\textsuperscript{\textregistered} package (table \@ref(tab:tab-comp-stata) and table \@ref(tab:tab-compse-stata)). The coefficient of the Oxford Hip Score in component 2 of model 2 differs between R and STATA\textsuperscript{\textregistered}, and the R package does not return standard errors of parameters. However, model 2 uses quite extreme settings. Although models 1 and 3 yield different parameter estimates, they converged at the same log-likelihood. This further supports the hypothesis of multiple local optima of the likelihood. The log-likelihood is consistently smaller in R than in STATA\textsuperscript{\textregistered}, but the relative ordering of models is consistent across the two implementations. 
+
+The comparison the R and STATA\textsuperscript{\textregistered} packages showed that the R implementation sometimes behaves differently than the STATA\textsuperscript{\textregistered} package, but the results are not indicative of technical errors in the R implementation of adjusted limited dependent variable mixture models.
 
 ```{r tab-calc-stata, echo = FALSE, results = "asis"}
 
@@ -1445,7 +1447,11 @@ rm(ctab, lindex, tabvec)
 
 ```
 
-```{r tab-pred-stata, echo = FALSE, results = "asis"}
+Fitted values show very similar marginal distributions on both platforms (figure \@ref(fig:box-pred-yhat-stata)). R does not return fitted values in model 2 due to non-finite predictions for all observations with the obtained parameter estimates. The summary statistics of differences between R and STATA\textsuperscript{\textregistered} in fitted values for all observations also suggests that individual predictions are quite similar across platforms (table \@ref(tab:compyhat).
+
+Standard errors of fitted values differ more between platforms than fitted values (figure \@ref(fig:box-pred-se-stata) and table \@ref(tab:compse). The difference is particularly pronounced in model 1, but the standard errors from STATA\textsuperscript{\textregistered} seem quite extreme compared to all other reference models. R does not return standard errors of fitted values in model 2.
+
+```{r load-r-stata, echo = FALSE, results = "asis"}
 
 # Load aldvmm objects
 load("fit1_nlminb.RData")
@@ -1461,53 +1467,6 @@ stata_se <- read.table("stata_se.csv",
                                     header = TRUE, 
                                     sep = ";", 
                                     dec = ".")
-
-# Extract fitted values in estimation data
-sumhat <- list()
-
-sumhat[["yhat"]][["(1)"]] <- summary(stata_yhat[, 1] - fit1_nlminb[["pred"]][["yhat"]])
-sumhat[["yhat"]][["(2)"]] <- summary(stata_yhat[, 2] - fit1_cstr_stata[["pred"]][["yhat"]])
-sumhat[["yhat"]][["(3)"]] <- summary(stata_yhat[, 3] - fit1_cons[["pred"]][["yhat"]])
-sumhat[["yhat"]][["(4)"]] <- summary(stata_yhat[, 4] - fit2_stata[["pred"]][["yhat"]])
-
-ymat <- suppressWarnings( round(do.call("cbind", sumhat[["yhat"]]), 6) )
-ymat <- ymat[1:6, ]
-
-print(xtable::xtable(ymat, 
-                     align = paste0("l", 
-                                    paste(rep("r", ncol(ymat)), 
-                                          collapse = "")),
-                     label = "tab:compyhat",
-                     caption = "Summary statistics of differences between R and STATA predictions of all observations in the estimation data (positive values suggest larger values in STATA)",
-                     digits = 6),
-      type = "latex",
-      include.rownames = TRUE,
-      hline.after = c(-1, 0, nrow(ymat)),
-      comment = FALSE,
-      caption.placement = "top")
-
-
-sumhat[["se"]][["(1)"]] <- summary(stata_se[, 1] - fit1_nlminb[["pred"]][["se.fit"]])
-sumhat[["se"]][["(2)"]] <- summary(stata_se[, 2] - fit1_cstr_stata[["pred"]][["se.fit"]])
-sumhat[["se"]][["(3)"]] <- summary(stata_se[, 3] - fit1_cons[["pred"]][["se.fit"]])
-sumhat[["se"]][["(4)"]] <- summary(stata_se[, 4] - fit2_stata[["pred"]][["se.fit"]])
-
-semat <- suppressWarnings( round(do.call("cbind", sumhat[["se"]]), 6) )
-semat <- semat[1:6, ]
-
-print(xtable::xtable(semat, 
-                     align = paste0("l", 
-                                    paste(rep("r", ncol(semat)), 
-                                          collapse = "")),
-                     label = "tab:compse",
-                     caption = "Summary statistics of differences between R and STATA standard errors of predictions of all observations in the estimation data (positive values suggest larger values in STATA)",
-                     digits = 6),
-      type = "latex",
-      include.rownames = TRUE,
-      hline.after = c(-1, 0, nrow(semat)),
-      comment = FALSE,
-      caption.placement = "top")
-
 ```
 
 ```{r box-pred-yhat-stata, echo = FALSE, results = "asis", warning = FALSE, fig.height = 2.9, fig.width = 6, fig.cap = 'Fitted values in R and STATA'}
@@ -1579,6 +1538,56 @@ suppressWarnings(
     theme(axis.title.x = element_blank()) +
     guides(fill = guide_legend(nrow = 1, byrow = TRUE))
 )
+
+```
+
+```{r tab-pred-stata, echo = FALSE, results = "asis"}
+
+# Extract fitted values in estimation data
+sumhat <- list()
+
+sumhat[["yhat"]][["(1)"]] <- summary(stata_yhat[, 1] - fit1_nlminb[["pred"]][["yhat"]])
+sumhat[["yhat"]][["(2)"]] <- summary(stata_yhat[, 2] - fit1_cstr_stata[["pred"]][["yhat"]])
+sumhat[["yhat"]][["(3)"]] <- summary(stata_yhat[, 3] - fit1_cons[["pred"]][["yhat"]])
+sumhat[["yhat"]][["(4)"]] <- summary(stata_yhat[, 4] - fit2_stata[["pred"]][["yhat"]])
+
+ymat <- suppressWarnings( round(do.call("cbind", sumhat[["yhat"]]), 6) )
+ymat <- ymat[1:6, ]
+
+print(xtable::xtable(ymat, 
+                     align = paste0("l", 
+                                    paste(rep("r", ncol(ymat)), 
+                                          collapse = "")),
+                     label = "tab:compyhat",
+                     caption = "Summary statistics of differences of fitted values between R and STATA (positive values suggest larger values in STATA)",
+                     digits = 6),
+      type = "latex",
+      include.rownames = TRUE,
+      hline.after = c(-1, 0, nrow(ymat)),
+      comment = FALSE,
+      caption.placement = "top")
+
+
+sumhat[["se"]][["(1)"]] <- summary(stata_se[, 1] - fit1_nlminb[["pred"]][["se.fit"]])
+sumhat[["se"]][["(2)"]] <- summary(stata_se[, 2] - fit1_cstr_stata[["pred"]][["se.fit"]])
+sumhat[["se"]][["(3)"]] <- summary(stata_se[, 3] - fit1_cons[["pred"]][["se.fit"]])
+sumhat[["se"]][["(4)"]] <- summary(stata_se[, 4] - fit2_stata[["pred"]][["se.fit"]])
+
+semat <- suppressWarnings( round(do.call("cbind", sumhat[["se"]]), 6) )
+semat <- semat[1:6, ]
+
+print(xtable::xtable(semat, 
+                     align = paste0("l", 
+                                    paste(rep("r", ncol(semat)), 
+                                          collapse = "")),
+                     label = "tab:compse",
+                     caption = "Summary statistics of differences of standard errors of fitted values between R and STATA (positive values suggest larger values in STATA)",
+                     digits = 6),
+      type = "latex",
+      include.rownames = TRUE,
+      hline.after = c(-1, 0, nrow(semat)),
+      comment = FALSE,
+      caption.placement = "top")
 
 ```
 
