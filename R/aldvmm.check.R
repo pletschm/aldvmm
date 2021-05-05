@@ -225,5 +225,20 @@ aldvmm.check <- function(formula,
          "'data'",
          "\n")
   }
+
+  # Check if the data includes outcome values outside limits
+  #---------------------------------------------------------
   
+  outdat <- data[, as.character(formula)[[2]]]
+  
+  minobs <- min(outdat, na.rm = TRUE)
+  gapobs <- max(outdat[outdat < 1], na.rm = TRUE)
+  maxobs <- max(outdat, na.rm = TRUE)
+  
+  if (minobs < min(psi) | gapobs > max(psi) | maxobs > 1) {
+    stop("Observed values of ",
+         as.character(formula)[[2]],
+         " include values outside the limits supplied to 'psi' or larger than 1",
+         "\n")
+  }
 }

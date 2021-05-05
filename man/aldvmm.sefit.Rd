@@ -30,7 +30,8 @@ values of functions in package \code{'aldvmm'}, and the names will be used
 in the extraction of parameters into nested lists using \ifelse{html}{
 \code{\link[aldvmm]{aldvmm.getpar}}}{\code{aldvmm::aldvmm.getpar()}}.}
 
-\item{yhat}{a numeric vector of predicted outcomes from \ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm::aldvmm.pred()}}.}
+\item{yhat}{a numeric vector of predicted outcomes from
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm::aldvmm.pred()}}.}
 
 \item{X}{a list of design matrices returned by
 \ifelse{html}{\code{\link[aldvmm]{aldvmm.mm}}}{\code{aldvmm::aldvmm.mm()}}.
@@ -82,26 +83,23 @@ available, and the default value is \code{"normal"}.}
 \item{level}{a numeric value of the significance level for confidence bands
 of fitted values. The default is 0.95.}
 
-\item{lcoef}{a character vector of the names of objects with values for
-component distributions (default \code{"beta"}) and for probabilities of
-component membership (default \code{"delta"}). The order in which the
-labels in the two parts appear affects ordering of results in parameter
-vectors and summary tables. The names in \code{'lcoef'} are allowed to
-coincide with column names in \code{'data'} supplied to
-\ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.}
+\item{lcoef}{a character vector of length 2 with labels of objects including
+regression coefficients. The first element is the label of coefficients
+for component distributions (default \code{"beta"}), and the second
+element is the label of coefficients on probabilities of component
+membership (default \code{"delta"}).}
 
-\item{lcmp}{a character value of the names of objects with values for a
-specific component (default \code{"Comp"}). This label is also used in
+\item{lcmp}{a character value representing a stub (default \code{"Comp"})
+for labeling objects including regression coefficients in different
+components (e.g. "Comp1", "Comp2", ...). This label is also used in
 summary tables returned by
 \ifelse{html}{\code{\link[aldvmm]{summary.aldvmm}}}{
 \code{aldvmm::summary.aldvmm()}}.}
 
-\item{lcpar}{a character vector of the names of objects with values of
-constant parameters of component distributions. The names of constant
-parameters depend on the chosen distribution (\code{"lnsigma"} for
-\code{dist = "normal"}). The names in \code{'lcpar'} are allowed to
-coincide with column names in \code{'data'} supplied to
-\ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.}
+\item{lcpar}{a character vector with the labels of objects including
+constant parameters of component distributions (e.g. the standard
+deviation of the normal distribution). The length of \code{'lcpar'}
+depends on the distribution supplied to \code{'dist'}.}
 }
 \value{
 a named numeric vector of standard errors of fitted or predicted
@@ -129,9 +127,7 @@ where \eqn{MSE}{mse} is the mean squared error of fitted versus observed
 outcomes in the original estimation data (Whitmore, 1986).  The gradients of
 fitted values with respect to parameter estimates are approximated
 numerically using
-\ifelse{html}{\code{\link[numDeriv]{grad}}}{\code{numDeriv::grad()}}. This
-numerical approach is executed in a loop over all observations and can be
-very slow in large data sets.
+\ifelse{html}{\code{\link[numDeriv]{jacobian}}}{\code{numDeriv::jacobian()}}.
 }
 \references{
 Whitmore, G. A. (1986). Prediction limits for a univariate

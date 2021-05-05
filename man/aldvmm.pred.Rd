@@ -46,23 +46,20 @@ between 1 and the maximum value in \code{'psi'}.}
 finite mixture. In this release, only the normal distribution is
 available, and the default value is \code{"normal"}.}
 
-\item{lcoef}{a character vector of the names of objects with values for
-component distributions (default \code{"beta"}) and for probabilities of
-component membership (default \code{"delta"}). The order in which the
-labels in the two parts appear affects ordering of results in parameter
-vectors and summary tables. The names in \code{'lcoef'} are allowed to
-coincide with column names in \code{'data'} supplied to
-\ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.}
+\item{lcoef}{a character vector of length 2 with labels of objects including
+regression coefficients. The first element is the label of coefficients
+for component distributions (default \code{"beta"}), and the second
+element is the label of coefficients on probabilities of component
+membership (default \code{"delta"}).}
 
-\item{lcpar}{a character vector of the names of objects with values of
-constant parameters of component distributions. The names of constant
-parameters depend on the chosen distribution (\code{"lnsigma"} for
-\code{dist = "normal"}). The names in \code{'lcpar'} are allowed to
-coincide with column names in \code{'data'} supplied to
-\ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.}
+\item{lcpar}{a character vector with the labels of objects including
+constant parameters of component distributions (e.g. the standard
+deviation of the normal distribution). The length of \code{'lcpar'}
+depends on the distribution supplied to \code{'dist'}.}
 
-\item{lcmp}{a character value of the names of objects with values for a
-specific component (default \code{"Comp"}). This label is also used in
+\item{lcmp}{a character value representing a stub (default \code{"Comp"})
+for labeling objects including regression coefficients in different
+components (e.g. "Comp1", "Comp2", ...). This label is also used in
 summary tables returned by
 \ifelse{html}{\code{\link[aldvmm]{summary.aldvmm}}}{
 \code{aldvmm::summary.aldvmm()}}.}

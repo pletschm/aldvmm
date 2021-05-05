@@ -164,7 +164,7 @@ aldvmm.pred <- function(par,
   }
 
   if (sum(is.na(pred[["yhat"]])) != 0) {
-    warning("fitted values include missing values",
+    warning("fitted values include missing values\n",
             call. = FALSE)
   }
   
@@ -175,8 +175,8 @@ aldvmm.pred <- function(par,
   names(pred[["prob"]]) <- paste0(lcmp, 1:ncmp)
   
   if (sum(is.na(p_c)) != 0) {
-    warning("fitted probabilities of component membership include missing ", 
-            "values",
+    warning("fitted probabilities of component membership include missing 
+            values\n",
             call. = FALSE)
   }
   

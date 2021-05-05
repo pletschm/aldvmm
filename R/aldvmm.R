@@ -25,7 +25,6 @@
 #' @import numDeriv
 #' @import stats
 #' @import checkmate
-#' @import utils
 #' @import optimr
 #'
 #' @docType package
@@ -193,9 +192,7 @@ NULL
 #'   outcomes in the original estimation data (Whitmore, 1986).  The gradients
 #'   of fitted values with respect to parameter estimates are approximated
 #'   numerically using
-#'   \ifelse{html}{\code{\link[numDeriv]{grad}}}{\code{numDeriv::grad()}}. This
-#'   numerical approach is executed in a loop over all observations and can be
-#'   very slow in large data sets.
+#'   \ifelse{html}{\code{\link[numDeriv]{jacobian}}}{\code{numDeriv::jacobian()}}.
 #'
 #' @return \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{
 #'   \code{aldvmm::aldvmm()}} returns an object of class inheriting from
@@ -326,7 +323,8 @@ aldvmm <- function(formula,
   # Labels
   #-------
   
-  # Names of objects for distributions ("beta") and multinomial logit ("delta")
+  # Labels of objects including regression coefficients for component 
+  # distributions ("beta") and multinomial logit ("delta")
   lcoef <- c("beta", "delta")
   
   # Names of constant distribution parameters (e.g. lnsigma in dist=="normal")
@@ -343,7 +341,7 @@ aldvmm <- function(formula,
   # The optimization method will be used in aldvmm.init(), the testing of 
   # initial values and the model fitting.
   
-  if (sum(init.lo != -Inf) == 0 & sum(init.hi != Inf) == 0 & 
+  if (all(init.lo == -Inf) & all(init.hi == Inf) & 
       is.null(optim.method)) {
     # Default optimization method
     optim.method <- "Nelder-Mead"
@@ -412,8 +410,8 @@ aldvmm <- function(formula,
                   ncmp = ncmp,
                   lcoef = lcoef)
   
-  # Outcome vector
-  #---------------
+  # Make outcome vector
+  #--------------------
   
   complete <- stats::complete.cases(data[, all.vars(formula)])
   y <- data[complete, all.vars(formula)[1]]
@@ -493,8 +491,8 @@ aldvmm <- function(formula,
                    lcmp = lcmp,
                    optim.method = optim.method)
   
-  # Predicted outcomes and probabilities of component membership
-  #-------------------------------------------------------------
+  # Predict outcomes and probabilities of component membership
+  #-----------------------------------------------------------
   
   pred <- aldvmm.pred(par = fit[["par"]],
                       X = mm,
@@ -506,8 +504,8 @@ aldvmm <- function(formula,
                       lcmp = lcmp,
                       lcpar = lcpar)
   
-  # Goodness of fit
-  #----------------
+  # Assess goodness of fit
+  #-----------------------
   
   # Note: Aldvmm.ll returns -log-likelihood
   
@@ -519,16 +517,16 @@ aldvmm <- function(formula,
     (nrow(mm[[1]]) - length(fit[["par"]]))
   
   if (is.na(gof[['mse']])) {
-    warning("no mse or mae were obtained",
-            call. = FALSE)
+    base::warning("no mse or mae were obtained\n", 
+                  call. = FALSE)
   }
   
   gof[["ll"]] <- fit[["value"]]
   gof[["aic"]] <- 2 * length(fit[["par"]]) + 2 * fit[["value"]]
   gof[["bic"]] <- length(fit[["par"]]) * log(nrow(mm[[1]])) + 2*fit[["value"]]
   
-  # Standard errors of the fit (delta method)
-  #------------------------------------------
+  # Obtain standard errors of the fit (delta method)
+  #-------------------------------------------------
   
   if (se.fit == TRUE) {
     pred.se <- aldvmm.sefit(par = fit[["par"]],
@@ -545,7 +543,7 @@ aldvmm <- function(formula,
                             lcmp = lcmp,
                             lcpar = lcpar,
                             level = level)
-   
+    
     pred[["se.fit"]] <- pred.se[["se.fit"]]
     pred[["lower.fit"]] <- pred.se[["lower.fit"]]
     pred[["upper.fit"]] <- pred.se[["upper.fit"]]

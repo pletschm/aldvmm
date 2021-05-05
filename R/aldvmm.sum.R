@@ -159,7 +159,7 @@ aldvmm.sum <- function(est,
                                "[95% Conf. ", "Interval]"))
   
   reptab[["head1"]] <- rbind(lines,
-                             c('E[Y|X, c]', rep("", times = nc - 1)),
+                             c('E[y|X, c]', rep("", times = nc - 1)),
                              lines)
   
   for (c in paste0(lcmp, 1:ncmp)) {

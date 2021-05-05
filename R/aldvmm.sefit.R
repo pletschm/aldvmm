@@ -4,7 +4,9 @@
 #' calculates standard errors of fitted and predicted outcomes using the delta
 #' method.
 #'
-#' @param yhat a numeric vector of predicted outcomes from \ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm::aldvmm.pred()}}.
+#' @param yhat a numeric vector of predicted outcomes from
+#'   \ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm::aldvmm.pred()}}.
+#'
 #' @param type a character value from 'fit' or 'pred' indicating whether the
 #'   standard error of the fit ('fit') or the standard error of predictions in
 #'   new data ('pred') are calculated.
@@ -12,11 +14,13 @@
 #'   returned by
 #'   \ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{\code{aldvmm::aldvmm.cv()}}.
 #'
+#'
 #' @param mse a scalar a numeric value of the mean squared error of observed
 #'   versus predicted outcomes \eqn{\sum{(y - \hat{y})^2}/(n_{obs} -
 #'   n_{par})}{\sum{(y - \hat{y})^2}/(nobs - npar)} for all observations in
 #'   \code{data} supplied to
 #'   \ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm::aldvmm.ll()}}.
+#'
 #'
 #'
 #' @inheritParams aldvmm
@@ -38,9 +42,7 @@
 #' outcomes in the original estimation data (Whitmore, 1986).  The gradients of
 #' fitted values with respect to parameter estimates are approximated
 #' numerically using
-#' \ifelse{html}{\code{\link[numDeriv]{grad}}}{\code{numDeriv::grad()}}. This
-#' numerical approach is executed in a loop over all observations and can be
-#' very slow in large data sets.
+#' \ifelse{html}{\code{\link[numDeriv]{jacobian}}}{\code{numDeriv::jacobian()}}.
 #'
 #' @references Whitmore, G. A. (1986). Prediction limits for a univariate
 #'   normal observation. The American Statistician, 40(2), 141-143.
@@ -76,14 +78,14 @@ aldvmm.sefit <- function(par,
   
   if (any(is.na(cv))) {
     warning("missing values in covariance matrix: ",
-            "No standard errors of the fit obtained",
+            "No standard errors of the fit obtained\n",
             call. = FALSE)
     return(NULL)
   }
   
   if (any(diag(cv) <= 0)) {
     warning("non-positive diagonals in covariance matrix: ",
-            "No standard errors of the fit obtained", 
+            "No standard errors of the fit obtained\n", 
             call. = FALSE)
     return(NULL)
   }
@@ -94,62 +96,49 @@ aldvmm.sefit <- function(par,
   se.fit <- rep(NA, times = nrow(X[[1]]))
   names(se.fit) <- rownames(X[[1]])
   
-  # Loop over all observations in design matrix
-  #--------------------------------------------
+  # Calculate jacobian matrix numerically
+  #--------------------------------------
   
-  pb <- utils::txtProgressBar(min = 1, max = nrow(X[[1]]), style = 3)
-  message("calculating standard errors of the fit using delta method...")
+  jacobian <- numDeriv::jacobian(func = function(z) {
+    aldvmm.pred(par   = z,
+                X     = X,
+                y     = rep(0, nrow(X[[1]])),
+                psi   = psi,
+                ncmp  = ncmp,
+                dist  = dist,
+                lcoef = lcoef,
+                lcmp  = lcmp,
+                lcpar = lcpar)[["yhat"]]
+  },
+  x = par)
   
-  for (i in 1:nrow(X[[1]])) {
-    
-    utils::setTxtProgressBar(pb, i)
-    
-    # Make model matrix for i-th observation
-    #---------------------------------------
-    
-    X_i <- lapply(X, function(x) {
-      out <- t(x[i, ])
-      rownames(out) <- rownames(x)[i]
-      return(out)
-    })
-    
-    # Approximate gradient of predictions w.r.t. parameters numerically
-    #------------------------------------------------------------------
-    
-    grad_i <- numDeriv::grad(func = function(z) {
-      aldvmm.pred(par   = z,
-                  X     = X_i,
-                  y     = 0,
-                  psi   = psi,
-                  ncmp  = ncmp,
-                  dist  = dist,
-                  lcoef = lcoef,
-                  lcmp  = lcmp,
-                  lcpar = lcpar)[["yhat"]]
-    },
-    x = par)
-    
-    # Calculate standard error
-    #-------------------------
-    
-    if (!(type %in% c("fit", "pred"))) {
-      warning("'type' ",
-              'is not "fit" or "pred": "pred" is used',
-              call. = FALSE)
+  # Calculate standard errors in loop over all observations
+  #--------------------------------------------------------
+  
+  if (!(type %in% c("fit", "pred"))) {
+    warning("'type' ",
+            'is not "fit" or "pred": "pred" is used\n',
+            call. = FALSE)
+  }
+
+  if (type == "fit") {
+    for (i in 1:nrow(X[[1]])) {
+      se.fit[i] <- sqrt(t(jacobian[i, ]) %*% cv %*% jacobian[i, ])
     }
-    
-    if (type == "fit") {
-      se.fit[i] <- sqrt(t(grad_i) %*% cv %*% grad_i)
+  } else {
+    if (!is.null(mse) & !is.na(mse)) {
+      for (i in 1:nrow(X[[1]])) {
+        se.fit[i] <- sqrt(mse + t(jacobian[i, ]) %*% cv %*% jacobian[i, ])
+      }
     } else {
-      if (!is.null(mse) & !is.na(mse)) {
-        se.fit[i] <- sqrt(mse + t(grad_i) %*% cv %*% grad_i)
-      } else {
-        se.fit[i] <- sqrt(t(grad_i) %*% cv %*% grad_i)
-        warning("'mse' is missing: Standard errors of the fit are generated.",
-                call. = FALSE)
+      warning("'mse' is missing: Standard errors of the fit are generated\n",
+              call. = FALSE)
+      for (i in 1:nrow(X[[1]])) {
+        se.fit[i] <- sqrt(t(jacobian[i, ]) %*% cv %*% jacobian[i, ])
       }
     }
   }
+  
   
   # Confidence / prediction interval
   #---------------------------------
