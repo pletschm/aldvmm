@@ -70,7 +70,8 @@ aldvmm.init <- function(X,
   zero <- list()
   
   # Betas (coefficients on distribution parameters)
-  zero[[lcoef[1]]][["est"]] <- rep(0, times = ncmp*ncol(X[[lcoef[1]]]))
+  zero[[lcoef[1]]] <- list(est = rep(0, times = ncmp * ncol(X[[lcoef[1]]])))
+  # Adding sublists with list() is necessary when val is length 1
   names(zero[[lcoef[1]]][["est"]]) <- aldvmm.getnames(X     = X,
                                                       names = c(lcoef[1]),
                                                       lcoef = lcoef,
@@ -81,8 +82,9 @@ aldvmm.init <- function(X,
   
   # Deltas (coefficients for multinomial logit for group membership)
   if (ncmp > 1) {
-    zero[[lcoef[2]]][["est"]] <- rep(0, 
-                                     times = (ncmp - 1)*ncol(X[[lcoef[2]]]))
+    # Adding sublists with list() is necessary when val is length 1
+    zero[[lcoef[2]]] <- list(est = rep(0, 
+                                       times = (ncmp - 1)*ncol(X[[lcoef[2]]])))
     names(zero[[lcoef[2]]][["est"]]) <- aldvmm.getnames(X     = X,
                                                         names = c(lcoef[2]),
                                                         lcoef = lcoef,
@@ -93,7 +95,8 @@ aldvmm.init <- function(X,
   
   # Constant distribution parameters
   for (i in lcpar) {
-    zero[[i]][["est"]] <- rep(0, times = ncmp)
+    # Adding sublists with list() is necessary when val is length 1
+    zero[[i]] <- list(est = rep(0, times = ncmp))
     names(zero[[i]][["est"]]) <- aldvmm.getnames(X     = X,
                                                  names = i,
                                                  lcoef = lcoef,
@@ -121,7 +124,7 @@ aldvmm.init <- function(X,
       init <- zero  
       
       for (i in names(zero)) {
-        init[[i]][["est"]] <- stats::rnorm(n = length(zero[[i]][["est"]]))
+        init[[i]] <- list(est = stats::rnorm(n = length(zero[[i]][["est"]])))
         names(init[[i]][["est"]]) <- names(zero[[i]][["est"]])
       }
       
@@ -147,7 +150,7 @@ aldvmm.init <- function(X,
       for (i in names(zero)) {
         index <- grepl(paste("(Intercept)", lcpar, sep = "|"), 
                        names(zero[[i]][["est"]]))
-        tmp[[i]][["est"]] <- zero[[i]][["est"]][index]
+        tmp[[i]] <- list(est = zero[[i]][["est"]][index])
       }
       tmpnames <- unlist(lapply(tmp, function(x) names(x[["est"]])), 
                          use.names = FALSE)

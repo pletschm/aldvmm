@@ -136,7 +136,7 @@ aldvmm.sum <- function(est,
   for (i in paste0(lcmp, 1:ncmp)) {
     for (j in lcpar) {
       tmp[[i]][[j]] <- cbind("",
-                             j,
+                             paste0(j),
                              parlist[["est"]][[j]][[i]],
                              parlist[["se"]][[j]][[i]],
                              parlist[["z"]][[j]][[i]],
@@ -193,8 +193,7 @@ aldvmm.sum <- function(est,
   #---------------------------
   
   reptab <- do.call("rbind", reptab)
-  reptab <- as.data.frame(reptab)
-  
+
   # Expand lines to column widths
   #------------------------------
   
@@ -202,16 +201,17 @@ aldvmm.sum <- function(est,
   
   for (i in seq_len(nrow(reptab))) {
     for (j in seq_len(ncol(reptab))) {
-      reptab[i, j] <- ifelse(reptab[i, j] == lines[1], 
-                             paste0(rep(reptab[i, j], times = width[j]), 
-                                    collapse = ""), 
-                             reptab[i, j])
+      if (reptab[i, j] == lines[1]) {
+        reptab[i, j] <- paste0(rep(reptab[i, j],times = width[j]), 
+                               collapse = "")
+      }
     }
   }
   
   # Remove row and column names
   #----------------------------
   
+  reptab <- as.data.frame(reptab, stringsAsFactors = FALSE)
   names(reptab) <- NULL
   rownames(reptab) <- NULL
   

@@ -6,9 +6,11 @@ Maintainer: 'Mark Pletscher <pletscher.mark@gmail.com>'
 New submission
 
 ## Test environments
-* local R installation Windows 10, R 4.0.3
-* ubuntu 16.04 (on travis-ci), R 4.0.3
+* win-builder (release)
 * win-builder (devel)
+* github macOS-latest (release)
+* github ubuntu-20.04 (release)
+* github ubuntu-20.04 (devel)
 
 ## R CMD check results
 0 errors | 0 warnings | 1 note

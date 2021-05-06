@@ -1,21 +1,24 @@
 test_that('Check generation of initial values.', {
   
-  mm <- list('beta' = matrix(data     = c(rep(1, 4), runif(n = 8)), 
-                             nrow     = 4, 
-                             ncol     = 3,
+  nr <- 100
+  nc <- 3
+  
+  mm <- list('beta' = matrix(data     = c(rep(1, nr), runif(n = (nc - 1)*nr)), 
+                             nrow     = nr, 
+                             ncol     = nc,
                              dimnames = list(NULL,
                                              c('(Intercept)', 
                                                'ind1', 
                                                'ind2'))),
-             'delta' = matrix(data     = c(rep(1, 4), runif(n = 8)), 
-                              nrow     = 4, 
-                              ncol     = 3,
+             'delta' = matrix(data     = c(rep(1, nr), runif(n = (nc - 1)*nr)), 
+                              nrow     = nr, 
+                              ncol     = nc,
                               dimnames = list(NULL,
                                               c('(Intercept)', 
                                                 'ind2', 
                                                 'ind3'))))
   
-  y <- runif(n = 4)
+  y <- runif(n = nr)
   
   names <- c("Grp1_beta_(Intercept)", "Grp1_beta_ind1", "Grp1_beta_ind2", 
              "Grp2_beta_(Intercept)", "Grp2_beta_ind1", "Grp2_beta_ind2", 
@@ -41,7 +44,7 @@ test_that('Check generation of initial values.', {
                       optim.control = list(trace = FALSE),
                       optim.grad = TRUE)
   
-  expect_named(init[["est"]])
+  testthat::expect_named(init[["est"]])
   testthat::expect(sum(init[["est"]]) == 0,
                    failure_message = 
                      'Non-zero initial values with init.method=="zero".'
@@ -93,7 +96,7 @@ test_that('Check generation of initial values.', {
                       optim.control = list(trace = FALSE),
                       optim.grad = TRUE)
   
-  expect_named(init[["est"]])
+  testthat::expect_named(init[["est"]])
   testthat::expect(length(unique(init[["est"]])) == length(init[["est"]]),
                    failure_message = 
                      'Random initial values include repeated values.'
@@ -147,7 +150,7 @@ test_that('Check generation of initial values.', {
                       optim.control = list(trace = FALSE),
                       optim.grad = TRUE)
   
-  expect_named(init[["est"]])
+  testthat::expect_named(init[["est"]])
   testthat::expect(sum(init[["est"]][!grepl('(Intercept)|sigma', 
                                             names(init[["est"]]))]) == 0,
                    failure_message = 
@@ -203,7 +206,7 @@ test_that('Check generation of initial values.', {
                       optim.control = list(trace = FALSE),
                       optim.grad = TRUE)
   
-  expect_named(init[["est"]])
+  testthat::expect_named(init[["est"]])
   testthat::expect(length(init[["est"]]) == length(init[["lo"]]) & 
                      length(init[["est"]]) == length(init[["hi"]]),
                    failure_message = 
@@ -254,7 +257,7 @@ test_that('Check generation of initial values.', {
                       optim.control = list(trace = FALSE),
                       optim.grad = TRUE)
   
-  expect_named(init[["est"]])
+  testthat::expect_named(init[["est"]])
   testthat::expect(sum(init[["est"]] != est) == 0,
                    failure_message = 
                      'Initial values are not equal to user input.'

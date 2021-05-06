@@ -21,11 +21,13 @@ test_that('Check generation of summary table.', {
   for (i in 1:3) {
     
     suppressWarnings({
-      fit <- aldvmm(eq5d ~ age | female,
-                                   data = utility,
-                                   psi = c(-0.594, 0.883),
-                                   ncmp = i)
+      suppressMessages({
+        fit <- aldvmm(eq5d ~ age | female,
+                      data = utility,
+                      psi = c(-0.594, 0.883),
+                      ncmp = i)
       })
+    })
     
     regtab <- aldvmm.sum(est = fit$coef,
                          se = fit$se,
