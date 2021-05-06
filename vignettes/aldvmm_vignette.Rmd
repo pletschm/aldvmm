@@ -56,16 +56,12 @@ ggplot_theme <- ggplot2::theme(panel.background = ggplot2::element_rect(fill = "
                                legend.direction = "vertical",
                                legend.key = ggplot2::element_blank())
 
-# Logical value for computations
-#-------------------------------
-
-docalc <- FALSE
 
 ```
 
 <!-- Load data -->
 
-```{r load_data, eval = docalc, echo = FALSE, results = 'hide'}
+```{r load_data, eval = FALSE, echo = FALSE, results = 'hide'}
 
 # List to collect results used in text
 #-------------------------------------
@@ -124,7 +120,7 @@ rm(textout)
 
 <!-- Computationally heavy calculations -->
 
-```{r calc_fit, eval = docalc, echo = FALSE, results = 'hide'}
+```{r calc_fit, eval = FALSE, echo = FALSE, results = 'hide'}
 
 #------------------------------------------------------------------------------
 # Fit model 1
@@ -329,7 +325,7 @@ rm(df)
 
 <!-- Make plots -->
 
-```{r calc_plot, eval = docalc, echo = FALSE, results = 'hide'}
+```{r calc_plot, eval = FALSE, echo = FALSE, results = 'hide'}
 
 # Histogram of observed outcomes
 #-------------------------------
@@ -592,7 +588,7 @@ rm(list = ls(pattern = "fit"))
 
 <!-- Make summary tables -->
 
-```{r calc_tab, eval = docalc, echo = FALSE, results = 'hide'}
+```{r calc_tab, eval = FALSE, echo = FALSE, results = 'hide'}
 
 # Model 1, comparison of optimization methods
 #--------------------------------------------
@@ -846,7 +842,7 @@ rm(sumhat)
 
 <!-- Make tables of STATA results -->
 
-```{r calc_tab_stata, eval = docalc, echo = FALSE, results = 'hide'}
+```{r calc_tab_stata, eval = FALSE, echo = FALSE, results = 'hide'}
 
 # Model 1, default options
 #-------------------------
