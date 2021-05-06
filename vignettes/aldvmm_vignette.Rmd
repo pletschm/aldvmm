@@ -5,8 +5,6 @@ date: "`r Sys.Date()`"
 package: aldvmm
 output: 
   bookdown::pdf_document2:
-    includes:
-            in_header: header.tex
     toc: false
 bibliography: aldvmm_bib.bib
 vignette: >
@@ -17,7 +15,7 @@ vignette: >
   
 <!-- Setup -->
   
-```{r setup, hide, eval = TRUE, echo = FALSE, results = 'hide'}
+```{r setup, eval = TRUE, echo = FALSE, results = 'hide'}
 
 # Load packages
 #--------------
@@ -67,7 +65,7 @@ docalc <- FALSE
 
 <!-- Load data -->
 
-```{r load_data, hide, eval = docalc, echo = FALSE, results = 'hide'}
+```{r load_data, eval = docalc, echo = FALSE, results = 'hide'}
 
 # List to collect results used in text
 #-------------------------------------
@@ -126,7 +124,7 @@ rm(textout)
 
 <!-- Computationally heavy calculations -->
 
-```{r calc_fit, hide, eval = docalc, echo = FALSE, results = 'hide'}
+```{r calc_fit, eval = docalc, echo = FALSE, results = 'hide'}
 
 #------------------------------------------------------------------------------
 # Fit model 1
@@ -331,7 +329,7 @@ rm(df)
 
 <!-- Make plots -->
 
-```{r calc_plot, hide, eval = docalc, echo = FALSE, results = 'hide'}
+```{r calc_plot, eval = docalc, echo = FALSE, results = 'hide'}
 
 # Histogram of observed outcomes
 #-------------------------------
@@ -433,11 +431,168 @@ rm(plot_comp_mhl3)
 
 rm(fit1_all)
 
+# Densities model 1, Nelder-Mead/nlminb/hjn
+#------------------------------------------
+
+load("fit1_all.RData")
+load("textout.RData")
+
+nsim <- 100
+hr <- textout[["meanhr"]] # Population average Oxford Hip Score
+
+for (i in c("Nelder-Mead", "nlminb", "hjn")) {
+  
+  # Component 1
+  n1 <- nsim*exp(fit1_all[["fit"]][["zero"]][[i]][["coef"]]["Comp1_delta_(Intercept)"]) / 
+    (1 + exp(fit1_all[["fit"]][["zero"]][[i]][["coef"]]["Comp1_delta_(Intercept)"]))
+  mean1 <- fit1_all[["fit"]][["zero"]][[i]][["coef"]]["Comp1_beta_(Intercept)"] +
+    hr*fit1_all[["fit"]][["zero"]][[i]][["coef"]]["Comp1_beta_hr"]
+  sd1 <- exp(fit1_all[["fit"]][["zero"]][[i]][["coef"]]["Comp1_lnsigma"])
+  
+  # Component 2
+  n2 <- nsim*(1 - exp(fit1_all[["fit"]][["zero"]][[i]][["coef"]]["Comp1_delta_(Intercept)"]) /
+                (1 + exp(fit1_all[["fit"]][["zero"]][[i]][["coef"]]["Comp1_delta_(Intercept)"])))
+  mean2 <- fit1_all[["fit"]][["zero"]][[i]][["coef"]]["Comp2_beta_(Intercept)"] +
+    hr*fit1_all[["fit"]][["zero"]][[i]][["coef"]]["Comp2_beta_hr"]
+  sd2 <- exp(fit1_all[["fit"]][["zero"]][[i]][["coef"]]["Comp2_lnsigma"])
+  
+  plot_dens <- ggplot(data = data.frame(x = c(-1, 1)), aes(x)) +
+    stat_function(fun = dnorm,
+                  n = n1,
+                  args = list(mean = mean1, sd = sd1)) +
+    stat_function(fun = dnorm,
+                  n = n2,
+                  args = list(mean = mean2, sd = sd2)) +
+    xlab("EQ-5D-3L utilities") +
+    ylab("Density") +
+    geom_vline(xintercept = c(-0.594, 0.883, 1),
+               linetype = "dashed",
+               colour = "gray") +
+    coord_cartesian(ylim=c(0, 5), xlim = c(-1, 1)) +
+    ggplot_theme
+  
+  save(plot_dens, 
+       file = paste0("plot_dens_", i, ".RData"),
+       compress = TRUE)
+  
+  rm(plot_dens)
+  
+}
+
+rm(i, hr, n1, mean1, sd1, n2, mean2, sd2, nsim, textout, plot_dens)
+rm(fit1_all)
+
+# Box plot of fitted values in R and STATA
+#-----------------------------------------
+
+# Load aldvmm objects
+load("fit1_nlminb.RData")
+load("fit1_cstr_stata.RData")
+load("fit1_cons.RData")
+load("fit2_stata.RData")
+stata_yhat <- read.table("stata_yhat.csv", 
+                         header = TRUE, 
+                         sep = ";", 
+                         dec = ".")
+
+stata_yhat_long <- stata_yhat
+names(stata_yhat_long) <- c("Reference case 1", "Reference case 2", "Reference case 3", "Reference case 4")
+suppressMessages(stata_yhat_long <- reshape2::melt(stata_yhat_long))
+stata_yhat_long$variable <- as.character(stata_yhat_long$variable)
+stata_yhat_long$software <- "STATA"
+
+r_yhat_long <- rbind(cbind(variable = "Reference case 1",
+                           value = fit1_nlminb[["pred"]][["yhat"]],
+                           software = "R"),
+                     cbind(variable = "Reference case 2",
+                           value = fit1_cstr_stata[["pred"]][["yhat"]],
+                           software = "R"),
+                     cbind(variable = "Reference case 3",
+                           value = fit1_cons[["pred"]][["yhat"]],
+                           software = "R"),
+                     cbind(variable = "Reference case 4",
+                           value = fit2_stata[["pred"]][["yhat"]],
+                           software = "R"))
+
+r_yhat_long <- as.data.frame(r_yhat_long)
+
+plotdf <- rbind(stata_yhat_long, r_yhat_long)
+
+suppressWarnings(
+  plot_box_yhat <- ggplot(plotdf, 
+                          aes(x = variable, 
+                              y = as.numeric(value), 
+                              fill = software)) +
+    geom_boxplot() +
+    ylab("Fitted values") +
+    ggplot_theme +
+    theme(axis.title.x = element_blank()) +
+    guides(fill = guide_legend(nrow = 1, byrow = TRUE))
+)
+
+save(plot_box_yhat, 
+     file = "plot_box_yhat.RData",
+     compress = TRUE)
+
+rm(plotdf, plot_box_yhat, r_yhat_long, stata_yhat_long)
+rm(list = ls(pattern = "fit"))
+
+# Box plot of standard errors of fitted values in R and STATA
+#------------------------------------------------------------
+
+load("fit1_nlminb.RData")
+load("fit1_cstr_stata.RData")
+load("fit1_cons.RData")
+load("fit2_stata.RData")
+stata_se <- read.table("stata_se.csv", 
+                       header = TRUE, 
+                       sep = ";", 
+                       dec = ".")
+
+stata_se_long <- stata_se
+names(stata_se_long) <- c("Reference case 1", "Reference case 2", "Reference case 3", "Reference case 4")
+suppressMessages(stata_se_long <- reshape2::melt(stata_se_long))
+stata_se_long$variable <- as.character(stata_se_long$variable)
+stata_se_long$software <- "STATA"
+
+r_se_long <- rbind(cbind(variable = "Reference case 1",
+                         value = fit1_nlminb[["pred"]][["se.fit"]],
+                         software = "R"),
+                   # cbind(variable = "Reference case 2",
+                   #       value = fit1_cstr_stata[["pred"]][["se.fit"]],
+                   #       software = "R"),
+                   cbind(variable = "Reference case 3",
+                         value = fit1_cons[["pred"]][["se.fit"]],
+                         software = "R"),
+                   cbind(variable = "Reference case 4",
+                         value = fit2_stata[["pred"]][["se.fit"]],
+                         software = "R"))
+
+r_se_long <- as.data.frame(r_se_long)
+
+plotdf <- rbind(stata_se_long, r_se_long)
+
+suppressWarnings(
+  plot_box_se <- ggplot(plotdf, aes(x = variable, y = as.numeric(value), fill = software)) +
+    geom_boxplot() +
+    ylab("Standard errors of fitted values") +
+    ggplot_theme +
+    theme(axis.title.x = element_blank()) +
+    guides(fill = guide_legend(nrow = 1, byrow = TRUE))
+)
+
+save(plot_box_se, 
+     file = "plot_box_se.RData",
+     compress = TRUE)
+
+rm(plotdf, plot_box_se, r_se_long, stata_se_long)
+rm(list = ls(pattern = "fit"))
+
 ```
 
 <!-- Make summary tables -->
 
-```{r calc_tab, hide, eval = docalc, echo = FALSE, results = 'hide'}
+```{r calc_tab, eval = docalc, echo = FALSE, results = 'hide'}
 
 # Model 1, comparison of optimization methods
 #--------------------------------------------
@@ -635,11 +790,63 @@ save(tab_sum_mod2stata,
 
 rm(fit2_stata, tab_sum_mod2stata)
 
+# Summary statistics of differences in fitted values between R and STATA
+#-----------------------------------------------------------------------
+
+load("fit1_nlminb.RData")
+load("fit1_cstr_stata.RData")
+load("fit1_cons.RData")
+load("fit2_stata.RData")
+stata_yhat <- read.table("stata_yhat.csv", 
+                       header = TRUE, 
+                       sep = ";", 
+                       dec = ".")
+stata_se <- read.table("stata_se.csv", 
+                       header = TRUE, 
+                       sep = ";", 
+                       dec = ".")
+
+
+# Fitted values
+sumhat <- list()
+
+sumhat[["yhat"]][["(1)"]] <- summary(stata_yhat[, 1] - fit1_nlminb[["pred"]][["yhat"]])
+sumhat[["yhat"]][["(2)"]] <- summary(stata_yhat[, 2] - fit1_cstr_stata[["pred"]][["yhat"]])
+sumhat[["yhat"]][["(3)"]] <- summary(stata_yhat[, 3] - fit1_cons[["pred"]][["yhat"]])
+sumhat[["yhat"]][["(4)"]] <- summary(stata_yhat[, 4] - fit2_stata[["pred"]][["yhat"]])
+
+tab_diff_yhat <- suppressWarnings( round(do.call("cbind", sumhat[["yhat"]]), 6) )
+tab_diff_yhat <- tab_diff_yhat[1:6, ]
+
+save(tab_diff_yhat, 
+     file = "tab_diff_yhat.RData",
+     compress = TRUE)
+
+# Standard errors of fitted values
+
+sumhat[["se"]][["(1)"]] <- summary(stata_se[, 1] - fit1_nlminb[["pred"]][["se.fit"]])
+sumhat[["se"]][["(2)"]] <- summary(stata_se[, 2] - fit1_cstr_stata[["pred"]][["se.fit"]])
+sumhat[["se"]][["(3)"]] <- summary(stata_se[, 3] - fit1_cons[["pred"]][["se.fit"]])
+sumhat[["se"]][["(4)"]] <- summary(stata_se[, 4] - fit2_stata[["pred"]][["se.fit"]])
+
+tab_diff_se <- suppressWarnings( round(do.call("cbind", sumhat[["se"]]), 6) )
+tab_diff_se <- tab_diff_se[1:6, ]
+
+save(tab_diff_se, 
+     file = "tab_diff_se.RData",
+     compress = TRUE)
+
+rm(list = ls(pattern = "fit1"))
+rm(list = ls(pattern = "fit2"))
+rm(list = ls(pattern = "stata_"))
+rm(list = ls(pattern = "tab_diff"))
+rm(sumhat)
+
 ```
 
 <!-- Make tables of STATA results -->
 
-```{r calc_tab_stata, hide, eval = TRUE, echo = FALSE, results = 'hide'}
+```{r calc_tab_stata, eval = docalc, echo = FALSE, results = 'hide'}
 
 # Model 1, default options
 #-------------------------
@@ -1035,115 +1242,31 @@ The densities in the solution of the "Nelder-Mead" method resemble the bi-model 
 
 ```{r fig-comp-dens1, echo = FALSE, results = "asis", fig.height = 2.9, fig.width = 6,  fig.cap = 'Densities in components based on "Nelder-Mead" parameter estimates (observation with population average Oxford Hip Score 3.8489)'}
 
-load("fit1_all.RData")
+load("plot_dens_Nelder-Mead.RData")
 
-nsim <- 100
-hr <- textout[["meanhr"]] # Population average Oxford Hip Score
+plot_dens
 
-# Component 1
-n1    <- nsim*exp(fit1_all[["fit"]][["zero"]][["Nelder-Mead"]][["coef"]]["Comp1_delta_(Intercept)"])/(1 + exp(fit1_all[["fit"]][["zero"]][["Nelder-Mead"]][["coef"]]["Comp1_delta_(Intercept)"]))
-mean1 <- fit1_all[["fit"]][["zero"]][["Nelder-Mead"]][["coef"]]["Comp1_beta_(Intercept)"] +
-  hr*fit1_all[["fit"]][["zero"]][["Nelder-Mead"]][["coef"]]["Comp1_beta_hr"]
-sd1   <- exp(fit1_all[["fit"]][["zero"]][["Nelder-Mead"]][["coef"]]["Comp1_lnsigma"])
-
-# Component 2
-n2    <- nsim*(1 - exp(fit1_all[["fit"]][["zero"]][["Nelder-Mead"]][["coef"]]["Comp1_delta_(Intercept)"]) /
-  (1 + exp(fit1_all[["fit"]][["zero"]][["Nelder-Mead"]][["coef"]]["Comp1_delta_(Intercept)"])))
-mean2 <- fit1_all[["fit"]][["zero"]][["Nelder-Mead"]][["coef"]]["Comp2_beta_(Intercept)"] +
-  hr*fit1_all[["fit"]][["zero"]][["Nelder-Mead"]][["coef"]]["Comp2_beta_hr"]
-sd2   <- exp(fit1_all[["fit"]][["zero"]][["Nelder-Mead"]][["coef"]]["Comp2_lnsigma"])
-
-ggplot2::ggplot(data = data.frame(x = c(-1, 1)), aes(x)) +
-  ggplot2::stat_function(fun = dnorm, 
-                         n = n1, 
-                         args = list(mean = mean1, sd = sd1)) +
-  ggplot2::stat_function(fun = dnorm, 
-                         n = n2, 
-                         args = list(mean = mean2, sd = sd2)) +
-  xlab("EQ-5D-3L utilities") +
-  ylab("Density") +
-  ggplot2::geom_vline(xintercept = c(-0.594, 0.883, 1), 
-                      linetype = "dashed", 
-                      colour = "gray") +
-  ggplot2::coord_cartesian(ylim=c(0, 5), xlim = c(-1, 1)) +
-  ggplot_theme
-
-rm(n1, mean1, sd1, n2, mean2, sd2, nsim)
+rm(plot_dens)
 
 ```
 
 ```{r fig-comp-dens2, echo = FALSE, results = "asis", fig.height = 2.9, fig.width = 6, fig.cap = 'Densities in components based on "nlminb" parameter estimates (observation with population average Oxford Hip Score 3.8489)'}
 
-nsim <- 100
-hr <- textout[["meanhr"]] # Population average Oxford Hip Score
+load("plot_dens_nlminb.RData")
 
-# Component 1
-n1    <- nsim*exp(fit1_all[["fit"]][["zero"]][["nlminb"]][["coef"]]["Comp1_delta_(Intercept)"])/(1 + exp(fit1_all[["fit"]][["zero"]][["nlminb"]][["coef"]]["Comp1_delta_(Intercept)"]))
-mean1 <- fit1_all[["fit"]][["zero"]][["nlminb"]][["coef"]]["Comp1_beta_(Intercept)"] +
-  hr*fit1_all[["fit"]][["zero"]][["nlminb"]][["coef"]]["Comp1_beta_hr"]
-sd1   <- exp(fit1_all[["fit"]][["zero"]][["nlminb"]][["coef"]]["Comp1_lnsigma"])
+plot_dens
 
-# Component 2
-n2    <- nsim*(1 - exp(fit1_all[["fit"]][["zero"]][["nlminb"]][["coef"]]["Comp1_delta_(Intercept)"]) /
-  (1 + exp(fit1_all[["fit"]][["zero"]][["nlminb"]][["coef"]]["Comp1_delta_(Intercept)"])))
-mean2 <- fit1_all[["fit"]][["zero"]][["nlminb"]][["coef"]]["Comp2_beta_(Intercept)"] +
-  hr*fit1_all[["fit"]][["zero"]][["nlminb"]][["coef"]]["Comp2_beta_hr"]
-sd2   <- exp(fit1_all[["fit"]][["zero"]][["nlminb"]][["coef"]]["Comp2_lnsigma"])
-
-ggplot2::ggplot(data = data.frame(x = c(-1, 1)), aes(x)) +
-  ggplot2::stat_function(fun = dnorm, 
-                         n = n1, 
-                         args = list(mean = mean1, sd = sd1)) +
-  ggplot2::stat_function(fun = dnorm, 
-                         n = n2, 
-                         args = list(mean = mean2, sd = sd2)) +
-  xlab("EQ-5D-3L utilities") +
-  ylab("Density") +
-  ggplot2::geom_vline(xintercept = c(-0.594, 0.883, 1), 
-                      linetype = "dashed", 
-                      colour = "gray") +
-  ggplot2::coord_cartesian(ylim=c(0, 5), xlim = c(-1, 1)) +
-  ggplot_theme
-
-rm(n1, mean1, sd1, n2, mean2, sd2, nsim)
+rm(plot_dens)
 
 ```
 
 ```{r fig-comp-dens3, echo = FALSE, results = "asis", fig.height = 2.9, fig.width = 6, fig.cap = 'Densities in components based on "hjn" parameter estimates (observation with population average Oxford Hip Score 3.8489)'}
 
-nsim <- 100
-hr <- textout[["meanhr"]] # Population average Oxford Hip Score
+load("plot_dens_hjn.RData")
 
-# Component 1
-n1    <- nsim*exp(fit1_all[["fit"]][["zero"]][["hjn"]][["coef"]]["Comp1_delta_(Intercept)"])/(1 + exp(fit1_all[["fit"]][["zero"]][["hjn"]][["coef"]]["Comp1_delta_(Intercept)"]))
-mean1 <- fit1_all[["fit"]][["zero"]][["hjn"]][["coef"]]["Comp1_beta_(Intercept)"] +
-  hr*fit1_all[["fit"]][["zero"]][["hjn"]][["coef"]]["Comp1_beta_hr"]
-sd1   <- exp(fit1_all[["fit"]][["zero"]][["hjn"]][["coef"]]["Comp1_lnsigma"])
+plot_dens
 
-# Component 2
-n2    <- nsim*(1 - exp(fit1_all[["fit"]][["zero"]][["hjn"]][["coef"]]["Comp1_delta_(Intercept)"]) /
-  (1 + exp(fit1_all[["fit"]][["zero"]][["hjn"]][["coef"]]["Comp1_delta_(Intercept)"])))
-mean2 <- fit1_all[["fit"]][["zero"]][["hjn"]][["coef"]]["Comp2_beta_(Intercept)"] +
-  hr*fit1_all[["fit"]][["zero"]][["hjn"]][["coef"]]["Comp2_beta_hr"]
-sd2   <- exp(fit1_all[["fit"]][["zero"]][["hjn"]][["coef"]]["Comp2_lnsigma"])
-
-ggplot2::ggplot(data = data.frame(x = c(-1, 1)), aes(x)) +
-  ggplot2::stat_function(fun = dnorm, 
-                         n = n1, 
-                         args = list(mean = mean1, sd = sd1)) +
-  ggplot2::stat_function(fun = dnorm, 
-                         n = n2, 
-                         args = list(mean = mean2, sd = sd2)) +
-  xlab("EQ-5D-3L utilities") +
-  ylab("Density") +
-  ggplot2::geom_vline(xintercept = c(-0.594, 0.883, 1), 
-                      linetype = "dashed", 
-                      colour = "gray") +
-  ggplot2::coord_cartesian(ylim=c(0, 5), xlim = c(-1, 1)) +
-  ggplot_theme
-
-rm(n1, mean1, sd1, n2, mean2, sd2, nsim)
-rm(fit1_all)
+rm(plot_dens)
 
 ```
 
@@ -1451,143 +1574,66 @@ Fitted values show very similar marginal distributions on both platforms (figure
 
 Standard errors of fitted values differ visibly between platforms (figure \@ref(fig:box-pred-se-stata) and table \@ref(tab:compse)). The difference is particularly pronounced in reference case 1, but the standard errors from STATA\textsuperscript{\textregistered} seem quite extreme compared to all other reference cases. R does not return standard errors of fitted values in reference case 2.
 
-```{r load-r-stata, echo = FALSE, results = "asis"}
-
-# Load aldvmm objects
-load("fit1_nlminb.RData")
-load("fit1_cstr_stata.RData")
-load("fit1_cons.RData")
-load("fit2_stata.RData")
-stata_yhat <- read.table("stata_yhat.csv", 
-                                    header = TRUE, 
-                                    sep = ";", 
-                                    dec = ".")
-
-stata_se <- read.table("stata_se.csv", 
-                                    header = TRUE, 
-                                    sep = ";", 
-                                    dec = ".")
-```
-
 ```{r box-pred-yhat-stata, echo = FALSE, results = "asis", warning = FALSE, fig.height = 2.9, fig.width = 6, fig.cap = 'Fitted values in R and STATA'}
 
-stata_yhat_long <- stata_yhat
-names(stata_yhat_long) <- c("Reference case 1", "Reference case 2", "Reference case 3", "Reference case 4")
-suppressMessages(stata_yhat_long <- reshape2::melt(stata_yhat_long))
-stata_yhat_long$variable <- as.character(stata_yhat_long$variable)
-stata_yhat_long$software <- "STATA"
+load("plot_box_yhat.RData")
 
-r_yhat_long <- rbind(cbind(variable = "Reference case 1",
-                           value = fit1_nlminb[["pred"]][["yhat"]],
-                           software = "R"),
-                     cbind(variable = "Reference case 2",
-                           value = fit1_cstr_stata[["pred"]][["yhat"]],
-                           software = "R"),
-                     cbind(variable = "Reference case 3",
-                           value = fit1_cons[["pred"]][["yhat"]],
-                           software = "R"),
-                     cbind(variable = "Reference case 4",
-                           value = fit2_stata[["pred"]][["yhat"]],
-                           software = "R"))
+plot_box_yhat
 
-r_yhat_long <- as.data.frame(r_yhat_long)
-
-plotdf <- rbind(stata_yhat_long, r_yhat_long)
-
-suppressWarnings(
-  ggplot(plotdf, aes(x = variable, y = as.numeric(value), fill = software)) +
-    geom_boxplot() +
-    ylab("Fitted values") +
-    ggplot_theme +
-    theme(axis.title.x = element_blank()) +
-    guides(fill = guide_legend(nrow = 1, byrow = TRUE))
-)
+rm(plot_box_yhat)
 
 ```
 
 ```{r box-pred-se-stata, echo = FALSE, results = "asis", warning = FALSE, fig.height = 2.9, fig.width = 6, fig.cap = 'Standard errors of fitted values in R and STATA'}
 
-stata_se_long <- stata_se
-names(stata_se_long) <- c("Reference case 1", "Reference case 2", "Reference case 3", "Reference case 4")
-suppressMessages(stata_se_long <- reshape2::melt(stata_se_long))
-stata_se_long$variable <- as.character(stata_se_long$variable)
-stata_se_long$software <- "STATA"
+load("plot_box_se.RData")
 
-r_se_long <- rbind(cbind(variable = "Reference case 1",
-                           value = fit1_nlminb[["pred"]][["se.fit"]],
-                           software = "R"),
-                     # cbind(variable = "Reference case 2",
-                     #       value = fit1_cstr_stata[["pred"]][["se.fit"]],
-                     #       software = "R"),
-                     cbind(variable = "Reference case 3",
-                           value = fit1_cons[["pred"]][["se.fit"]],
-                           software = "R"),
-                     cbind(variable = "Reference case 4",
-                           value = fit2_stata[["pred"]][["se.fit"]],
-                           software = "R"))
+plot_box_se
 
-r_se_long <- as.data.frame(r_se_long)
-
-plotdf <- rbind(stata_se_long, r_se_long)
-
-suppressWarnings(
-  ggplot(plotdf, aes(x = variable, y = as.numeric(value), fill = software)) +
-    geom_boxplot() +
-    ylab("Standard errors of fitted values") +
-    ggplot_theme +
-    theme(axis.title.x = element_blank()) +
-    guides(fill = guide_legend(nrow = 1, byrow = TRUE))
-)
+rm(plot_box_se)
 
 ```
 
-```{r tab-pred-stata, echo = FALSE, results = "asis"}
+```{r tab-pred-stata-yhat, echo = FALSE, results = "asis"}
 
-# Extract fitted values in estimation data
-sumhat <- list()
+load("tab_diff_yhat.RData")
 
-sumhat[["yhat"]][["(1)"]] <- summary(stata_yhat[, 1] - fit1_nlminb[["pred"]][["yhat"]])
-sumhat[["yhat"]][["(2)"]] <- summary(stata_yhat[, 2] - fit1_cstr_stata[["pred"]][["yhat"]])
-sumhat[["yhat"]][["(3)"]] <- summary(stata_yhat[, 3] - fit1_cons[["pred"]][["yhat"]])
-sumhat[["yhat"]][["(4)"]] <- summary(stata_yhat[, 4] - fit2_stata[["pred"]][["yhat"]])
-
-ymat <- suppressWarnings( round(do.call("cbind", sumhat[["yhat"]]), 6) )
-ymat <- ymat[1:6, ]
-
-print(xtable::xtable(ymat, 
+print(xtable::xtable(tab_diff_yhat, 
                      align = paste0("l", 
-                                    paste(rep("r", ncol(ymat)), 
+                                    paste(rep("r", ncol(tab_diff_yhat)), 
                                           collapse = "")),
                      label = "tab:compyhat",
                      caption = "Summary statistics of differences of fitted values in R and STATA (positive values suggest larger values in STATA)",
                      digits = 6),
       type = "latex",
       include.rownames = TRUE,
-      hline.after = c(-1, 0, nrow(ymat)),
+      hline.after = c(-1, 0, nrow(tab_diff_yhat)),
       comment = FALSE,
       caption.placement = "top")
 
+rm(tab_diff_yhat)
 
-sumhat[["se"]][["(1)"]] <- summary(stata_se[, 1] - fit1_nlminb[["pred"]][["se.fit"]])
-sumhat[["se"]][["(2)"]] <- summary(stata_se[, 2] - fit1_cstr_stata[["pred"]][["se.fit"]])
-sumhat[["se"]][["(3)"]] <- summary(stata_se[, 3] - fit1_cons[["pred"]][["se.fit"]])
-sumhat[["se"]][["(4)"]] <- summary(stata_se[, 4] - fit2_stata[["pred"]][["se.fit"]])
+```
 
-semat <- suppressWarnings( round(do.call("cbind", sumhat[["se"]]), 6) )
-semat <- semat[1:6, ]
 
-print(xtable::xtable(semat, 
+```{r tab-pred-stata-se, echo = FALSE, results = "asis"}
+
+load("tab_diff_se.RData")
+
+print(xtable::xtable(tab_diff_se, 
                      align = paste0("l", 
-                                    paste(rep("r", ncol(semat)), 
+                                    paste(rep("r", ncol(tab_diff_se)), 
                                           collapse = "")),
                      label = "tab:compse",
                      caption = "Summary statistics of differences of standard errors of fitted values in R and STATA (positive values suggest larger values in STATA)",
                      digits = 6),
       type = "latex",
       include.rownames = TRUE,
-      hline.after = c(-1, 0, nrow(semat)),
+      hline.after = c(-1, 0, nrow(tab_diff_se)),
       comment = FALSE,
       caption.placement = "top")
+
+rm(tab_diff_se)
 
 ```
 
@@ -1718,10 +1764,10 @@ rm(plot_comp_mhl3)
 ```
 
 \newpage
-## R code for the estimation of reference models
+## R code for the estimation of reference cases
 
 ```{r tab-comp-stata-show, echo = TRUE, eval = FALSE}
-# (1) Model 1 with default optimization settings
+# (1) Reference case 1 with default optimization settings
 fit1_default <- aldvmm::aldvmm(eq5d ~ hr | 1,
                                data = df,
                                psi = c(0.883, -0.594),
@@ -1729,7 +1775,7 @@ fit1_default <- aldvmm::aldvmm(eq5d ~ hr | 1,
                                init.method = "zero",
                                optim.method = "nlminb")
 
-# (2) Model 1 with user-defined initial values and constraints on parameters
+# (2) Reference case 1 with user-defined initial values and constraints on parameters
 init <- c(0,    0,   0,   0,    0,    0,    0.7283)
 lo   <- c(-Inf, -Inf, -3,  -Inf, -Inf, -3, -Inf)
 hi   <- c(Inf,  Inf,  Inf, Inf,  Inf,  Inf,  Inf)
@@ -1742,7 +1788,7 @@ fit1_cstr <- aldvmm::aldvmm(eq5d ~ hr | 1,
                             init.lo = lo,
                             init.hi = hi)
 
-# (3) Model 1 with initial values from constant-only model
+# (3) Reference case 1 with initial values from constant-only model
 fit1_const <- aldvmm::aldvmm(eq5d ~ hr | 1,
                              data = df,
                              psi = c(0.883, -0.594),
@@ -1750,7 +1796,7 @@ fit1_const <- aldvmm::aldvmm(eq5d ~ hr | 1,
                              init.method = "constant",
                              optim.method = "nlminb")
 
-# (4) Model 2 with user-defined initial values.
+# (4) Reference case 2 with user-defined initial values.
 init <- c(-.40293118, .30502755, .22614716, .14801581, -.70755741, 0, 
           -1.2632051, -2.4541401)
 
@@ -1763,29 +1809,29 @@ fit2 <- aldvmm::aldvmm(eq5d ~ hr | hr,
 ```
 
 \newpage
-## STATA\textsuperscript{\textregistered} code for the estimation of reference models
+## STATA\textsuperscript{\textregistered} code for the estimation of reference cases
 
 ```{r stata_code, echo = TRUE, eval = FALSE}
-* (1) Model 1
+* (1) Reference case 1
 aldvmm eq5d hr, ncomponents(2)
 
-* (2) Model 1 with constraints
+* (2) Reference case 1 with constraints
 matrix  input a = (0, 0, 0, 0, 0, 0, 0.7283)
 constraint 1 [Comp_2]:hr10 = 0
 constraint 2 [Comp_2]:_cons = 100
 constraint 3 [lns_2]:_cons = 1e-30
 aldvmm eq5d hr, ncomp(2) from(a) c(1 2 3)
 
-* (3) Model 1 initital values from constant-only model
+* (3) Reference case 1 initital values from constant-only model
 aldvmm eq5d hr, ncomp(2) inim(cons)
 
-* (4) Model 2 user-defined initial values
+* (4) Reference case 2 user-defined initial values
 matrix  input start = (.14801581, .22614716, .30502755, -.40293118, 0, -.70755741, -2.4541401, -1.2632051)
 aldvmm eq5d hr, ncomp(2) prob(hr) from(start)
 ```
 
-```{r end, echo = FALSE, results = "hide"}
+```{r end, echo = FALSE, results = 'hide'}
 
-rm(list = ls())
+#rm(list = ls())
 
 ```

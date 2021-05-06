@@ -17,6 +17,9 @@ covr::report(ct)
 Sys.setenv('PATH' = paste0('C:/Users/phm1/qpdf-10.1.0/bin;', Sys.getenv('PATH')))
 Sys.setenv(R_GSCMD = "C:/Program Files/gs/gs9.53.3/bin/gswin64c.exe")
 
+# Save pdf vignette in vignettes folder
+#--------------------------------------
+
 # Local check
 #------------
 
