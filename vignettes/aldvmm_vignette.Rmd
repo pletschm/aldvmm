@@ -6,6 +6,7 @@ package: aldvmm
 output: 
   bookdown::pdf_document2:
     toc: false
+    fig_crop: false
 bibliography: aldvmm_bib.bib
 vignette: >
   %\VignetteIndexEntry{Adjusted Limited Dependent Variable Mixture Models of Health State Utilities in R}
@@ -36,25 +37,25 @@ source("est_mhl.R")
 # Custom ggplot theme
 #--------------------
 
-ggplot_theme <- ggplot2::theme(panel.background = ggplot2::element_rect(fill = "white",
+ggplot_theme <- theme(panel.background = element_rect(fill = "white",
                                                                         colour = "white",
                                                                         size = 0.5, 
                                                                         linetype = "solid"),
-                               panel.grid.major = ggplot2::element_blank(), 
-                               panel.grid.minor = ggplot2::element_blank(),
-                               panel.grid.major.y = ggplot2::element_line(size = 0.25, 
+                               panel.grid.major = element_blank(), 
+                               panel.grid.minor = element_blank(),
+                               panel.grid.major.y = element_line(size = 0.25, 
                                                                           linetype = 'dashed', 
                                                                           colour = "grey"),
-                               text = ggplot2::element_text(size = 11),
-                               plot.margin = ggplot2::margin(10, 10, 0, 10),
-                               axis.line = ggplot2::element_line(size = 0.25),
-                               axis.text = ggplot2::element_text(size = 11),
-                               #legend.title = ggplot2::element_text(size = 11),
-                               legend.title = ggplot2::element_blank(),
-                               legend.text = ggplot2::element_text(size = 11),
+                               text = element_text(size = 11),
+                               plot.margin = margin(10, 10, 0, 10),
+                               axis.line = element_line(size = 0.25),
+                               axis.text = element_text(size = 11),
+                               #legend.title = element_text(size = 11),
+                               legend.title = element_blank(),
+                               legend.text = element_text(size = 11),
                                legend.position = 'bottom',
                                legend.direction = "vertical",
-                               legend.key = ggplot2::element_blank())
+                               legend.key = element_blank())
 
 
 ```
@@ -1574,7 +1575,7 @@ Standard errors of fitted values differ visibly between platforms (figure \@ref(
 
 load("plot_box_yhat.RData")
 
-plot_box_yhat
+suppressWarnings(plot_box_yhat)
 
 rm(plot_box_yhat)
 
@@ -1584,7 +1585,7 @@ rm(plot_box_yhat)
 
 load("plot_box_se.RData")
 
-plot_box_se
+suppressWarnings(plot_box_se)
 
 rm(plot_box_se)
 

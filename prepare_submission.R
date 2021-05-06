@@ -38,5 +38,5 @@ devtools::build()
 # rhub checks
 #------------
 
-rhub::check("../aldvmm_0.9.0.tar.gz", platform = "ubuntu-gcc-release")
-rhub::check("../aldvmm_0.9.0.tar.gz", platform = "debian-gcc-devel")
+rhub::check("../aldvmm_0.8.0.9000.tar.gz", platform = "ubuntu-gcc-release")
+rhub::check("../aldvmm_0.8.0.9000.tar.gz", platform = "debian-gcc-devel")
