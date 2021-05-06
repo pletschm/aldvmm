@@ -839,6 +839,12 @@ rm(list = ls(pattern = "stata_"))
 rm(list = ls(pattern = "tab_diff"))
 rm(sumhat)
 
+# Remove fit objects
+#-------------------
+
+# file.remove(dir(path = ".",  pattern="fi1_"))
+# file.remove(dir(path = ".",  pattern="fi2_"))
+
 ```
 
 <!-- Make tables of STATA results -->
