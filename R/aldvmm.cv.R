@@ -116,7 +116,7 @@ aldvmm.cv <- function(ll,
   outlist[["z"]] <- par / outlist[["se"]]
   names(outlist[["z"]]) <- names(par)
   
-  outlist[["p"]] <- stats::pnorm(outlist[["z"]], lower.tail = FALSE)
+  outlist[["p"]] <- stats::pnorm(abs(outlist[["z"]]), lower.tail = FALSE)
   names(outlist[["p"]]) <- names(par)
   
   outlist[["upper"]] <- par + stats::qnorm(0.975) * outlist[["se"]]
