@@ -1,3 +1,6 @@
+# Change version
+#---------------
+
 # Spell check
 #------------
 
@@ -28,7 +31,12 @@ devtools::check(pkg = ".", cran = TRUE)
 # Build package
 #--------------
 
-devtools::build()
+devtools::build(args = c('--compact-vignettes=both'))
+
+# Source check
+#-------------
+
+# R CMD check --as-cran ../aldvmm_0.8.2.tar.gz
 
 # Winbuilder
 #------------

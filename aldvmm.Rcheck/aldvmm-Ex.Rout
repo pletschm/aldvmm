@@ -1,0 +1,234 @@
+
+R version 4.0.3 (2020-10-10) -- "Bunny-Wunnies Freak Out"
+Copyright (C) 2020 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> pkgname <- "aldvmm"
+> source(file.path(R.home("share"), "R", "examples-header.R"))
+> options(warn = 1)
+> options(pager = "console")
+> base::assign(".ExTimings", "aldvmm-Ex.timings", pos = 'CheckExEnv')
+> base::cat("name\tuser\tsystem\telapsed\n", file=base::get(".ExTimings", pos = 'CheckExEnv'))
+> base::assign(".format_ptime",
++ function(x) {
++   if(!is.na(x[4L])) x[1L] <- x[1L] + x[4L]
++   if(!is.na(x[5L])) x[2L] <- x[2L] + x[5L]
++   options(OutDec = '.')
++   format(x[1L:3L], digits = 7L)
++ },
++ pos = 'CheckExEnv')
+> 
+> ### * </HEADER>
+> library('aldvmm')
+> 
+> base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
+> base::assign(".old_wd", base::getwd(), pos = 'CheckExEnv')
+> cleanEx()
+> nameEx("aldvmm-package")
+> ### * aldvmm-package
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: aldvmm-package
+> ### Title: aldvmm: Adjusted Limited Dependent Variable Mixture Models
+> ### Aliases: aldvmm-package
+> 
+> ### ** Examples
+> 
+> data(utility)
+> 
+>  fit <- aldvmm(data = utility,
++                formula = eq5d ~ age + female | 1,
++                psi = c(0.883, -0.594),
++                ncmp = 2)
+> 
+>  summary(fit)
+                                                                        
+ --------- ----------- ----------- ----------- ------- ----- -----------
+                          Estimate   Std. Err.       z P>|z| [95% Conf. 
+ --------- ----------- ----------- ----------- ------- ----- -----------
+ E[y|X, c]                                                              
+ --------- ----------- ----------- ----------- ------- ----- -----------
+     Comp1 (Intercept)       0.077       0.184   0.417 0.338      -0.284
+                   age       0.002       0.001   1.186 0.118      -0.001
+                female       0.456       0.180   2.537 0.006       0.104
+               lnsigma      -1.559       0.350  -4.459 1.000      -2.244
+     Comp2 (Intercept)       0.448       0.073   6.116 0.000       0.305
+                   age       0.001       0.001   0.768 0.221      -0.002
+                female      -0.603       0.051 -11.763 1.000      -0.704
+               lnsigma      -2.075       0.219  -9.491 1.000      -2.504
+ --------- ----------- ----------- ----------- ------- ----- -----------
+    P[c|X]                                                              
+ --------- ----------- ----------- ----------- ------- ----- -----------
+     Comp1 (Intercept)       0.744       0.632   1.177 0.120      -0.495
+ --------- ----------- ----------- ----------- ------- ----- -----------
+   N = 200 ll = -31.38 AIC = 80.76 BIC = 80.76                          
+          
+ ---------
+ Interval]
+ ---------
+          
+ ---------
+     0.437
+     0.004
+     0.809
+    -0.874
+     0.592
+     0.004
+    -0.503
+    -1.647
+ ---------
+          
+ ---------
+     1.984
+ ---------
+          
+> 
+>  yhat <- predict(fit,
++                  newdata = utility)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("aldvmm-package", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("aldvmm")
+> ### * aldvmm
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: aldvmm
+> ### Title: Fitting Adjusted Limited Dependent Variable Mixture Models
+> ### Aliases: aldvmm
+> 
+> ### ** Examples
+> 
+> data(utility)
+> 
+>  fit <- aldvmm(eq5d ~ age + female | 1,
++                data = utility,
++                psi = c(0.883, -0.594),
++                ncmp = 2)
+> 
+>  summary(fit)
+                                                                        
+ --------- ----------- ----------- ----------- ------- ----- -----------
+                          Estimate   Std. Err.       z P>|z| [95% Conf. 
+ --------- ----------- ----------- ----------- ------- ----- -----------
+ E[y|X, c]                                                              
+ --------- ----------- ----------- ----------- ------- ----- -----------
+     Comp1 (Intercept)       0.077       0.184   0.417 0.338      -0.284
+                   age       0.002       0.001   1.186 0.118      -0.001
+                female       0.456       0.180   2.537 0.006       0.104
+               lnsigma      -1.559       0.350  -4.459 1.000      -2.244
+     Comp2 (Intercept)       0.448       0.073   6.116 0.000       0.305
+                   age       0.001       0.001   0.768 0.221      -0.002
+                female      -0.603       0.051 -11.763 1.000      -0.704
+               lnsigma      -2.075       0.219  -9.491 1.000      -2.504
+ --------- ----------- ----------- ----------- ------- ----- -----------
+    P[c|X]                                                              
+ --------- ----------- ----------- ----------- ------- ----- -----------
+     Comp1 (Intercept)       0.744       0.632   1.177 0.120      -0.495
+ --------- ----------- ----------- ----------- ------- ----- -----------
+   N = 200 ll = -31.38 AIC = 80.76 BIC = 80.76                          
+          
+ ---------
+ Interval]
+ ---------
+          
+ ---------
+     0.437
+     0.004
+     0.809
+    -0.874
+     0.592
+     0.004
+    -0.503
+    -1.647
+ ---------
+          
+ ---------
+     1.984
+ ---------
+          
+> 
+>  yhat <- predict(fit,
++                  newdata = utility)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("aldvmm", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("utility")
+> ### * utility
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: utility
+> ### Title: Simulated Example Data of Health State Utilities.
+> ### Aliases: utility
+> ### Keywords: datasets
+> 
+> ### ** Examples
+> 
+> set.seed(101010101)
+> utility                 <- data.frame(female = rbinom(size = 1,
++                                       n      = 200,
++                                       p      = 0.6))
+> utility[, 'age']        <- stats::rnorm(n    = 200,
++                                         mean = 50 + utility$female*10,
++                                         sd   = 15)
+> utility[1:50, 'eq5d']   <- stats::rnorm(n    = 50,
++                                         mean = 0 - 0.1 *
++                                               utility[1:50, 'female'] +
++                                               0.0005 * utility[1:50, 'age'],
++                                         sd   = 0.1)
+> utility[51:200, 'eq5d'] <- stats::rnorm(n    = 150,
++                                         mean = 0.5 +
++                                            0.1 * utility[51:200, 'female'] +
++                                            0.0001*utility[51:200, 'age'],
++                                         sd   = 0.2)
+> utility[utility$eq5d<(-0.594), 'eq5d'] <- -0.594
+> utility[utility$eq5d>0.883, 'eq5d'] <- 1
+> hist(utility$eq5d, breaks = 50)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("utility", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> ### * <FOOTER>
+> ###
+> cleanEx()
+> options(digits = 7L)
+> base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
+Time elapsed:  2.83 0.03 2.92 NA NA 
+> grDevices::dev.off()
+null device 
+          1 
+> ###
+> ### Local variables: ***
+> ### mode: outline-minor ***
+> ### outline-regexp: "\\(> \\)?### [*]+" ***
+> ### End: ***
+> quit('no')

@@ -1,10 +1,12 @@
-est_mhl <- function(fit, ngroup) {
+est_mhl <- function(fit, ngroup, nsample = NULL) {
   
   # Select sample
   yhat <- fit[["pred"]][["yhat"]]
   res <- fit[["pred"]][["res"]]
   
-  nsample <- length(yhat)
+  if (is.null(nsample)) {
+    nsample <- length(yhat)
+  }
   sample <- sample(1:length(yhat), nsample, replace = FALSE)
   
   yhat <- yhat[sample]
@@ -36,7 +38,7 @@ est_mhl <- function(fit, ngroup) {
           value = predict$fit[ , 'upr'])
   ))
   
-  
+  plotdat$value <- as.numeric(as.character(plotdat$value))
   # Make plot
   lab <- paste0(seq(from = 1/ngroup, to = 1, by = 1/ngroup)*100, '%')
   
