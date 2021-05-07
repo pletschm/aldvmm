@@ -16,7 +16,7 @@ vignette: >
   
 <!-- Setup -->
   
-```{r setup, eval = FALSE, echo = FALSE, results = 'hide'}
+```{r setup, eval = TRUE, echo = FALSE, results = 'hide'}
 
 # Load packages
 #--------------
@@ -348,9 +348,9 @@ rm(plot_hist_obs)
 
 load("fit1_all.RData")
 
-yhat <- fit1_all[["fit"]][["zero"]][["nlminb"]][["pred"]][["yhat"]]
+plotdf <- data.frame(yhat = fit1_all[["fit"]][["zero"]][["nlminb"]][["pred"]][["yhat"]])
 
-plot_hist_pred <- ggplot2::ggplot(as.data.frame(yhat), aes(x = yhat)) + 
+plot_hist_pred <- ggplot2::ggplot(plotdf, aes(x = yhat)) + 
   geom_histogram(binwidth = 0.02, color="black", fill="white") +
   xlab("EQ-5D-3L utilities") +
   ylab("Frequency") +
@@ -361,7 +361,7 @@ save(plot_hist_pred,
      file = "plot_hist_pred.RData",
      compress = TRUE)
 
-rm(yhat, plot_hist_pred, fit1_all)
+rm(plotdf, plot_hist_pred, fit1_all)
 
 # Comparison of predicted values from different optimization methods
 #-------------------------------------------------------------------
@@ -376,8 +376,8 @@ tmpdf <- as.data.frame(rbind(cbind(y = c, bl = c, alg = "45° line"),
                              cbind(y = a, bl = c, alg = "Nelder-Mead"),
                              cbind(y = b, bl = c, alg = "hjn")))
 
-tmpdf$y <- as.numeric(tmpdf$y)
-tmpdf$bl <- as.numeric(tmpdf$bl)
+tmpdf$y <- as.numeric(as.character(tmpdf$y))
+tmpdf$bl <- as.numeric(as.character(tmpdf$bl))
 
 plot_comp_pred <- ggplot(tmpdf, aes(x = bl, y = y, group = alg)) +
   geom_line(aes(linetype = alg)) +
@@ -492,7 +492,10 @@ stata_yhat <- read.table("stata_yhat.csv",
                          dec = ".")
 
 stata_yhat_long <- stata_yhat
-names(stata_yhat_long) <- c("Reference case 1", "Reference case 2", "Reference case 3", "Reference case 4")
+names(stata_yhat_long) <- c("Reference case 1", 
+                            "Reference case 2", 
+                            "Reference case 3", 
+                            "Reference case 4")
 suppressMessages(stata_yhat_long <- reshape2::melt(stata_yhat_long))
 stata_yhat_long$variable <- as.character(stata_yhat_long$variable)
 stata_yhat_long$software <- "STATA"
@@ -515,7 +518,7 @@ r_yhat_long <- as.data.frame(r_yhat_long)
 plotdf <- rbind(stata_yhat_long, r_yhat_long)
 
 suppressWarnings(
-  plot_box_yhat <- ggplot(plotdf, 
+  plot_box_yhat <- ggplot2::ggplot(plotdf, 
                           aes(x = variable, 
                               y = as.numeric(value), 
                               fill = software)) +
@@ -549,7 +552,10 @@ stata_se <- read.table("stata_se.csv",
                        dec = ".")
 
 stata_se_long <- stata_se
-names(stata_se_long) <- c("Reference case 1", "Reference case 2", "Reference case 3", "Reference case 4")
+names(stata_se_long) <- c("Reference case 1", 
+                          "Reference case 2", 
+                          "Reference case 3", 
+                          "Reference case 4")
 suppressMessages(stata_se_long <- reshape2::melt(stata_se_long))
 stata_se_long$variable <- as.character(stata_se_long$variable)
 stata_se_long$software <- "STATA"
@@ -572,7 +578,10 @@ r_se_long <- as.data.frame(r_se_long)
 plotdf <- rbind(stata_se_long, r_se_long)
 
 suppressWarnings(
-  plot_box_se <- ggplot(plotdf, aes(x = variable, y = as.numeric(value), fill = software)) +
+  plot_box_se <- ggplot2::ggplot(plotdf, 
+                                 aes(x = variable, 
+                                     y = as.numeric(value), 
+                                     fill = software)) +
     geom_boxplot() +
     ylab("Standard errors of fitted values") +
     ggplot_theme +
@@ -1028,7 +1037,7 @@ The data includes `r format(textout$ncplt, big.mark="'")` observations with comp
 
 load("plot_hist_obs.RData")
 
-plot_hist_obs
+print(plot_hist_obs)
 
 rm(plot_hist_obs)
 
@@ -1116,7 +1125,7 @@ We obtain expected values of observations in the estimation data using the gener
 
 load("plot_hist_pred.RData")
 
-plot_hist_pred
+print(plot_hist_pred)
 
 rm(plot_hist_pred)
 
@@ -1254,7 +1263,7 @@ The densities in the solution of the "Nelder-Mead" method resemble the bi-model 
 
 load("plot_dens_Nelder-Mead.RData")
 
-plot_dens
+print(plot_dens)
 
 rm(plot_dens)
 
@@ -1264,7 +1273,7 @@ rm(plot_dens)
 
 load("plot_dens_nlminb.RData")
 
-plot_dens
+print(plot_dens)
 
 rm(plot_dens)
 
@@ -1274,7 +1283,7 @@ rm(plot_dens)
 
 load("plot_dens_hjn.RData")
 
-plot_dens
+print(plot_dens)
 
 rm(plot_dens)
 
@@ -1286,7 +1295,7 @@ The differences in parameter estimates from different optimization methods show 
 
 load("plot_comp_pred.RData")
 
-plot_comp_pred
+print(plot_comp_pred)
 
 rm(plot_comp_pred)
 
@@ -1588,7 +1597,7 @@ Standard errors of fitted values differ visibly between platforms (figure \@ref(
 
 load("plot_box_yhat.RData")
 
-suppressWarnings(plot_box_yhat)
+suppressWarnings(print(plot_box_yhat))
 
 rm(plot_box_yhat)
 
@@ -1598,7 +1607,7 @@ rm(plot_box_yhat)
 
 load("plot_box_se.RData")
 
-suppressWarnings(plot_box_se)
+suppressWarnings(print(plot_box_se))
 
 rm(plot_box_se)
 
@@ -1747,7 +1756,7 @@ plot <- ggplot2::ggplot(plotdat, aes(x = factor(as.numeric(group)),
 
 load("plot_comp_mhl1.RData")
 
-plot_comp_mhl1
+print(plot_comp_mhl1)
 
 rm(plot_comp_mhl1)
 
@@ -1757,7 +1766,7 @@ rm(plot_comp_mhl1)
 
 load("plot_comp_mhl2.RData")
 
-plot_comp_mhl2
+print(plot_comp_mhl2)
 
 rm(plot_comp_mhl2)
 
@@ -1767,7 +1776,7 @@ rm(plot_comp_mhl2)
 
 load("plot_comp_mhl3.RData")
 
-plot_comp_mhl3
+print(plot_comp_mhl3)
 
 rm(plot_comp_mhl3)
 
