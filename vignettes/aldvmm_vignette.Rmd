@@ -121,7 +121,7 @@ rm(textout)
 
 <!-- Computationally heavy calculations -->
 
-```{r calc_fit, eval = FALSE, echo = FALSE, results = 'hide'}
+```{r calc_fit, eval = FALSE, warning = FALSE, echo = FALSE, results = 'hide'}
 
 #------------------------------------------------------------------------------
 # Fit model 1
@@ -325,7 +325,7 @@ rm(formula)
 
 <!-- Make plots -->
 
-```{r calc_plot, eval = FALSE, echo = FALSE, results = 'hide'}
+```{r calc_plot, eval = FALSE, warning = FALSE, echo = FALSE, results = 'hide'}
 
 # Histogram of observed outcomes
 #-------------------------------
@@ -603,7 +603,7 @@ rm(list = ls(pattern = "r_"))
 
 <!-- Make summary tables -->
 
-```{r calc_tab, eval = FALSE, echo = FALSE, results = 'hide'}
+```{r calc_tab, eval = FALSE, warning = FALSE, echo = FALSE, results = 'hide'}
 
 # Model 1, comparison of optimization methods
 #--------------------------------------------
@@ -865,7 +865,7 @@ rm(df)
 
 <!-- Make tables of STATA results -->
 
-```{r calc_tab_stata, eval = FALSE, echo = FALSE, results = 'hide'}
+```{r calc_tab_stata, eval = FALSE, warning = FALSE, echo = FALSE, results = 'hide'}
 
 # Model 1, default options
 #-------------------------
