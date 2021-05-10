@@ -1,5 +1,20 @@
 test_that('Check aldvmm fitting function.', {
   
+  # Check if the model runs without error in default settings
+  #----------------------------------------------------------
+  
+  data(utility)
+  
+  suppressMessages({
+    suppressWarnings({
+      testthat::expect_error(aldvmm(eq5d ~ age | female,
+                                    data = utility,
+                                    psi = c(-0.594, 0.883)),
+                             NA)
+    })
+  })
+  
+  
   # Message for incomplete observations in data
   #--------------------------------------------
   
@@ -95,7 +110,6 @@ test_that('Check aldvmm fitting function.', {
                                     optim.grad = FALSE))
     })
   })
-  
   
 })
 
