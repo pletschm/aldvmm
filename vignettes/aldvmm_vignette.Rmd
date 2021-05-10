@@ -62,7 +62,7 @@ ggplot_theme <- theme(panel.background = element_rect(fill = "white",
 
 <!-- Load data -->
 
-```{r load_data, eval = FALSE, echo = FALSE, results = 'hide'}
+```{r load_data, eval = FALSE, warning = FALSE, echo = FALSE, results = 'hide'}
 
 # List to collect results used in text
 #-------------------------------------
@@ -492,24 +492,24 @@ stata_yhat <- read.table("stata_yhat.csv",
                          dec = ".")
 
 stata_yhat_long <- stata_yhat
-names(stata_yhat_long) <- c("Reference case 1", 
-                            "Reference case 2", 
-                            "Reference case 3", 
-                            "Reference case 4")
+names(stata_yhat_long) <- c("Ref. case 1", 
+                            "Ref. case 2", 
+                            "Ref. case 3", 
+                            "Ref. case 4")
 suppressMessages(stata_yhat_long <- reshape2::melt(stata_yhat_long))
 stata_yhat_long$variable <- as.character(stata_yhat_long$variable)
 stata_yhat_long$software <- "STATA"
 
-r_yhat_long <- rbind(cbind(variable = "Reference case 1",
+r_yhat_long <- rbind(cbind(variable = "Ref. case 1",
                            value = fit1_nlminb[["pred"]][["yhat"]],
                            software = "R"),
-                     cbind(variable = "Reference case 2",
+                     cbind(variable = "Ref. case 2",
                            value = fit1_cstr_stata[["pred"]][["yhat"]],
                            software = "R"),
-                     cbind(variable = "Reference case 3",
+                     cbind(variable = "Ref. case 3",
                            value = fit1_cons[["pred"]][["yhat"]],
                            software = "R"),
-                     cbind(variable = "Reference case 4",
+                     cbind(variable = "Ref. case 4",
                            value = fit2_stata[["pred"]][["yhat"]],
                            software = "R"))
 
@@ -552,24 +552,24 @@ stata_se <- read.table("stata_se.csv",
                        dec = ".")
 
 stata_se_long <- stata_se
-names(stata_se_long) <- c("Reference case 1", 
-                          "Reference case 2", 
-                          "Reference case 3", 
-                          "Reference case 4")
+names(stata_se_long) <- c("Ref. case 1", 
+                          "Ref. case 2", 
+                          "Ref. case 3", 
+                          "Ref. case 4")
 suppressMessages(stata_se_long <- reshape2::melt(stata_se_long))
 stata_se_long$variable <- as.character(stata_se_long$variable)
 stata_se_long$software <- "STATA"
 
-r_se_long <- rbind(cbind(variable = "Reference case 1",
+r_se_long <- rbind(cbind(variable = "Ref. case 1",
                          value = fit1_nlminb[["pred"]][["se.fit"]],
                          software = "R"),
-                   # cbind(variable = "Reference case 2",
+                   # cbind(variable = "Ref. case 2",
                    #       value = fit1_cstr_stata[["pred"]][["se.fit"]],
                    #       software = "R"),
-                   cbind(variable = "Reference case 3",
+                   cbind(variable = "Ref. case 3",
                          value = fit1_cons[["pred"]][["se.fit"]],
                          software = "R"),
-                   cbind(variable = "Reference case 4",
+                   cbind(variable = "Ref. case 4",
                          value = fit2_stata[["pred"]][["se.fit"]],
                          software = "R"))
 
@@ -821,10 +821,10 @@ stata_se <- read.table("stata_se.csv",
 # Fitted values
 sumhat <- list()
 
-sumhat[["yhat"]][["(1)"]] <- summary(stata_yhat[, 1] - fit1_nlminb[["pred"]][["yhat"]])
-sumhat[["yhat"]][["(2)"]] <- summary(stata_yhat[, 2] - fit1_cstr_stata[["pred"]][["yhat"]])
-sumhat[["yhat"]][["(3)"]] <- summary(stata_yhat[, 3] - fit1_cons[["pred"]][["yhat"]])
-sumhat[["yhat"]][["(4)"]] <- summary(stata_yhat[, 4] - fit2_stata[["pred"]][["yhat"]])
+sumhat[["yhat"]][["Ref. case 1"]] <- summary(stata_yhat[, 1] - fit1_nlminb[["pred"]][["yhat"]])
+sumhat[["yhat"]][["Ref. case 2"]] <- summary(stata_yhat[, 2] - fit1_cstr_stata[["pred"]][["yhat"]])
+sumhat[["yhat"]][["Ref. case 3"]] <- summary(stata_yhat[, 3] - fit1_cons[["pred"]][["yhat"]])
+sumhat[["yhat"]][["Ref. case 4"]] <- summary(stata_yhat[, 4] - fit2_stata[["pred"]][["yhat"]])
 
 tab_diff_yhat <- suppressWarnings( round(do.call("cbind", sumhat[["yhat"]]), 6) )
 tab_diff_yhat <- tab_diff_yhat[1:6, ]
@@ -835,10 +835,10 @@ save(tab_diff_yhat,
 
 # Standard errors of fitted values
 
-sumhat[["se"]][["(1)"]] <- summary(stata_se[, 1] - fit1_nlminb[["pred"]][["se.fit"]])
-sumhat[["se"]][["(2)"]] <- summary(stata_se[, 2] - fit1_cstr_stata[["pred"]][["se.fit"]])
-sumhat[["se"]][["(3)"]] <- summary(stata_se[, 3] - fit1_cons[["pred"]][["se.fit"]])
-sumhat[["se"]][["(4)"]] <- summary(stata_se[, 4] - fit2_stata[["pred"]][["se.fit"]])
+sumhat[["se"]][["Ref. case 1"]] <- summary(stata_se[, 1] - fit1_nlminb[["pred"]][["se.fit"]])
+sumhat[["se"]][["Ref. case 2"]] <- summary(stata_se[, 2] - fit1_cstr_stata[["pred"]][["se.fit"]])
+sumhat[["se"]][["Ref. case 3"]] <- summary(stata_se[, 3] - fit1_cons[["pred"]][["se.fit"]])
+sumhat[["se"]][["Ref. case 4"]] <- summary(stata_se[, 4] - fit2_stata[["pred"]][["se.fit"]])
 
 tab_diff_se <- suppressWarnings( round(do.call("cbind", sumhat[["se"]]), 6) )
 tab_diff_se <- tab_diff_se[1:6, ]
@@ -969,7 +969,7 @@ The 'aldvmm' package provides four options for the generation of starting values
 
 4. "sann": Parameter estimates of a simulated annealing algorithm.
 
-The 'aldvmm' package obtains fitted values using the expected value function from @HernandezAlava2015. Covariance matrices and standard errors of parameters are obtained from a numerical approximation of the hessian matrix using numDeriv::hessian(). Standard errors of fitted values in the estimation data $SE^{fit}$ and standard errors of predicted values in new data  $SE^{pred}$ are calculated using the delta method [@Dowd2014; @Whitmore1986]. $G_{i}$ denotes the gradient of a fitted value with respect to changes in parameter estimates, $\Sigma$ denotes the covariance matrix of parameters, and $MSE$ denotes the mean squared error of fitted versus observed values in the estimation data.
+The 'aldvmm' package obtains fitted values using the expected value function from @HernandezAlava2015. Covariance matrices and standard errors of parameters are obtained from a numerical approximation of the hessian matrix using numDeriv::hessian(). Standard errors of fitted values in the estimation data $SE^{fit}_{i}$ and standard errors of predicted values in new data  $SE^{pred}_{i}$ are calculated using the delta method [@Dowd2014; @Whitmore1986]. $G_{i}$ denotes the gradient of a fitted value with respect to changes in parameter estimates, $\Sigma$ denotes the covariance matrix of parameters, and $MSE$ denotes the mean squared error of fitted versus observed values in the estimation data.
 \begin{equation}
 \begin{array}{rl}
 SE^{fit}_{i} &= \sqrt{G_{i}'\Sigma G_{i}}

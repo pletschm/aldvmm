@@ -8,6 +8,8 @@ New submission
 ## Test environments
 * win-builder (release)
 * win-builder (devel)
+* win-builder (oldrelease)
+* github windows-latest (release)
 * github macOS-latest (release)
 * github ubuntu-20.04 (release)
 * github ubuntu-20.04 (devel)
