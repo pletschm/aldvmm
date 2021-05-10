@@ -90,14 +90,17 @@ test_that("Check covariance function.", {
   ncmp <- 1
   
   suppressWarnings({
-    fit <- aldvmm(data = utility,
-                  formula = formula,
-                  psi = psi,
-                  ncmp = ncmp)
+    suppressMessages({
+      
+      fit <- aldvmm(data = utility,
+                    formula = formula,
+                    psi = psi,
+                    ncmp = ncmp)
+    })
   })
   
   testthat::expect(all(c(sign(fit[["lower"]]) == sign(fit[["upper"]])) ==
-                     c(fit[["p"]] < 0.05) ),
+                         c(fit[["p"]] < 0.05) ),
                    failure_message = 
                      "P-values are not smaller 0.05 when CI are same sign.")
   
@@ -169,7 +172,6 @@ test_that("Check covariance function.", {
                   ncmp = ncmp)
   })
   
-  
   mm <- aldvmm.mm(data = utility,
                   formula = formula,
                   ncmp = ncmp,
@@ -190,3 +192,4 @@ test_that("Check covariance function.", {
   )
   
 })
+

@@ -69,9 +69,6 @@ aldvmm.cv <- function(ll,
   
   outlist[["cv"]] <- tryCatch({
     solve(outlist[["hessian"]])
-  }, warning = function(w) {
-    message(w)  
-    solve(outlist[["hessian"]])
   }, error = function(e) {
     #message(e)
     matrix(data = NA, 

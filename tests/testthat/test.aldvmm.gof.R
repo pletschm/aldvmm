@@ -58,6 +58,14 @@ test_that("Check covariance function.", {
                    failure_message = 
                      "More complex model does not show larger log-likelihood."
   )
+
+  # Warnings
+  #---------
+  
+  testthat::expect_warning(aldvmm.gof(par = fit2$coef,
+                                      ll = -fit2$gof$ll,
+                                      res = c(NA, 1))
+  )
   
   
   })

@@ -369,20 +369,10 @@ aldvmm <- function(formula,
   
   tryCatch({
     data <- as.data.frame(data)
-  }, warning = function(w) {
-    message(w)  
-    return(data)
   }, error = function(e) {
     #message(e)
     stop("'data' cannot be converted to data.frame.")
   })
-  
-  # Ensure data has row names to identify complete rows for predictions
-  #--------------------------------------------------------------------
-  
-  if (is.null(rownames(data))) {
-    rownames(data) <- as.character(1:nrow(data))
-  }
   
   # Checks
   #-------
