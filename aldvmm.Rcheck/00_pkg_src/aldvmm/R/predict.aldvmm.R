@@ -38,21 +38,11 @@ predict.aldvmm <- function(object,
   
   tryCatch({
     newdata <- as.data.frame(newdata)
-  }, warning = function(w) {
-    message(w)  
-    return(newdata)
   }, error = function(e) {
     #message(e)
     stop("'newdata' cannot be converted to data.frame.",
          "\n")
   })
-  
-  # Ensure data has row names to identify complete rows for preds correctly
-  #------------------------------------------------------------------------
-  
-  if (is.null(rownames(newdata))) {
-    rownames(newdata) <- as.character(1:nrow(newdata))
-  }
   
   # Make list of design matrices
   #-----------------------------
@@ -89,19 +79,19 @@ predict.aldvmm <- function(object,
     # Standard errors
     tmp <- list()
     tmp <- aldvmm.sefit(par     = object[["coef"]],
-                                    yhat    = object[["pred"]][["yhat"]],
-                                    X       = mm,
-                                    type    = type,
-                                    formula = object[["formula"]],
-                                    cv      = object[["cov"]],
-                                    mse     = object[["gof"]][["mse"]],
-                                    psi     = object[["psi"]],
-                                    ncmp    = object[["k"]],
-                                    dist    = object[["dist"]],
-                                    level   = object[["level"]],
-                                    lcoef   = object[["label"]][["lcoef"]],
-                                    lcpar   = object[["label"]][["lcpar"]],
-                                    lcmp    = object[["label"]][["lcmp"]])
+                        yhat    = object[["pred"]][["yhat"]],
+                        X       = mm,
+                        type    = type,
+                        formula = object[["formula"]],
+                        cv      = object[["cov"]],
+                        mse     = object[["gof"]][["mse"]],
+                        psi     = object[["psi"]],
+                        ncmp    = object[["k"]],
+                        dist    = object[["dist"]],
+                        level   = object[["level"]],
+                        lcoef   = object[["label"]][["lcoef"]],
+                        lcpar   = object[["label"]][["lcpar"]],
+                        lcmp    = object[["label"]][["lcmp"]])
     
     # Add missing standard errors and confidence bands for incomplete 
     # observations in newdata

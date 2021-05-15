@@ -61,7 +61,12 @@ test_that("Check covariance function.", {
   testthat::expect(sum(init < cov[["lower"]]) + 
                      sum(init > cov[["upper"]]) == 0,
                    failure_message = "Estimates outside confidence bands.")
-  
+  testthat::expect(all(cov[["lower"]] < cov[["upper"]]),
+                   failure_message = 
+                     "Upper limits are not always larger than lower limits.")
+  testthat::expect(all(cov[["z"]] == init / cov[["se"]]),
+                   failure_message = 
+                     "Z-values are not standardized coefficients.")
   testthat::expect(sum(cov[["se"]] != sqrt(diag(cov[["cv"]]))) == 0,
                    failure_message = 
                      "Standard errors are not square root of diagnonal CV.")
@@ -74,6 +79,30 @@ test_that("Check covariance function.", {
   testthat::expect(length(cov[["p"]]) == nrow(cov[["cv"]]),
                    failure_message = 
                      "P-values are wrong length.")
+  
+  # Valid covariance matrix with sign. and insign. coef.
+  #-----------------------------------------------------
+  
+  data(utility)
+  
+  formula <- eq5d ~ age | 1
+  psi <- c(0.883, -0.594)
+  ncmp <- 1
+  
+  suppressWarnings({
+    suppressMessages({
+      
+      fit <- aldvmm(data = utility,
+                    formula = formula,
+                    psi = psi,
+                    ncmp = ncmp)
+    })
+  })
+  
+  testthat::expect(all(c(sign(fit[["lower"]]) == sign(fit[["upper"]])) ==
+                         c(fit[["p"]] < 0.05) ),
+                   failure_message = 
+                     "P-values are not smaller 0.05 when CI are same sign.")
   
   # Covariance matrix with non-positive diagonals
   #----------------------------------------------
@@ -143,7 +172,6 @@ test_that("Check covariance function.", {
                   ncmp = ncmp)
   })
   
-  
   mm <- aldvmm.mm(data = utility,
                   formula = formula,
                   ncmp = ncmp,
@@ -164,3 +192,4 @@ test_that("Check covariance function.", {
   )
   
 })
+

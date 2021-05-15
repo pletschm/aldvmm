@@ -4,6 +4,7 @@ aldvmm.check	aldvmm.check
 aldvmm.cv	aldvmm.cv
 aldvmm.getnames	aldvmm.getnames
 aldvmm.getpar	aldvmm.getpar
+aldvmm.gof	aldvmm.gof
 aldvmm.gr	aldvmm.gr
 aldvmm.init	aldvmm.init
 aldvmm.ll	aldvmm.ll

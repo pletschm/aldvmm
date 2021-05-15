@@ -139,93 +139,91 @@ s (e.g. "Comp1", "Comp2",
 Overfull \hbox (3.448pt too wide) in paragraph at lines 765--769
 \T1/ptm/m/n/10 clud-ing re-gres-sion co-ef-fi-cients in dif-fer-ent com-po-nent
 s (e.g. "Comp1", "Comp2",
-[12]
-Overfull \hbox (3.448pt too wide) in paragraph at lines 861--865
+[12] [13]
+Overfull \hbox (3.448pt too wide) in paragraph at lines 900--904
 \T1/ptm/m/n/10 clud-ing re-gres-sion co-ef-fi-cients in dif-fer-ent com-po-nent
 s (e.g. "Comp1", "Comp2",
 
-Overfull \hbox (9.03893pt too wide) in paragraph at lines 873--881
+Overfull \hbox (9.03893pt too wide) in paragraph at lines 912--920
 \T1/ptm/m/n/10 used when lower and/or up-per con-straints are set us-ing \TS1/z
 i4/m/n/10 '\T1/zi4/m/n/10 init.lo\TS1/zi4/m/n/10 ' \T1/ptm/m/n/10 and \TS1/zi4/
 m/n/10 '\T1/zi4/m/n/10 init.hi\TS1/zi4/m/n/10 '\T1/ptm/m/n/10 .
-[13] [14]
-Overfull \hbox (9.03893pt too wide) in paragraph at lines 983--991
+[14]
+Overfull \hbox (9.03893pt too wide) in paragraph at lines 1022--1030
 \T1/ptm/m/n/10 used when lower and/or up-per con-straints are set us-ing \TS1/z
 i4/m/n/10 '\T1/zi4/m/n/10 init.lo\TS1/zi4/m/n/10 ' \T1/ptm/m/n/10 and \TS1/zi4/
 m/n/10 '\T1/zi4/m/n/10 init.hi\TS1/zi4/m/n/10 '\T1/ptm/m/n/10 .
-
-Overfull \hbox (3.448pt too wide) in paragraph at lines 1014--1018
+[15]
+Overfull \hbox (3.448pt too wide) in paragraph at lines 1053--1057
 \T1/ptm/m/n/10 clud-ing re-gres-sion co-ef-fi-cients in dif-fer-ent com-po-nent
 s (e.g. "Comp1", "Comp2",
 
-Overfull \hbox (8.21799pt too wide) in paragraph at lines 1024--1035
+Overfull \hbox (8.21799pt too wide) in paragraph at lines 1063--1074
 \T1/zi4/m/n/10 "random" \T1/ptm/m/n/10 draws ran-dom start-ing val-ues from a s
 tan-dard nor-mal dis-tri-bu-tion. The method \T1/zi4/m/n/10 "constant"
 
-Overfull \hbox (14.10739pt too wide) in paragraph at lines 1036--1044
+Overfull \hbox (14.10739pt too wide) in paragraph at lines 1075--1083
 \TS1/zi4/m/n/10 '\T1/zi4/m/n/10 init-hi\TS1/zi4/m/n/10 '\T1/ptm/m/n/10 , these 
 de-fault lim-its are re-placed with the user-specified val-ues, and the method 
 \T1/zi4/m/n/10 "L-BFGS-B"
-[15]
-Overfull \hbox (18.3789pt too wide) in paragraph at lines 1063--1067
+
+Overfull \hbox (18.3789pt too wide) in paragraph at lines 1102--1106
 []\T1/zi4/m/n/10 aldvmm::aldvmm.ll() \T1/ptm/m/n/10 cal-cu-lates the neg-a-tive
  log-likelihood of \TS1/zi4/m/n/10 '\T1/zi4/m/n/10 data\TS1/zi4/m/n/10 ' \T1/pt
 m/m/n/10 sup-plied to \T1/zi4/m/n/10 aldvmm::aldvmm()
 [16]
-Overfull \hbox (3.448pt too wide) in paragraph at lines 1125--1129
+Overfull \hbox (3.448pt too wide) in paragraph at lines 1164--1168
 \T1/ptm/m/n/10 clud-ing re-gres-sion co-ef-fi-cients in dif-fer-ent com-po-nent
 s (e.g. "Comp1", "Comp2",
 
-Overfull \hbox (9.03893pt too wide) in paragraph at lines 1132--1140
+Overfull \hbox (9.03893pt too wide) in paragraph at lines 1171--1179
 \T1/ptm/m/n/10 used when lower and/or up-per con-straints are set us-ing \TS1/z
 i4/m/n/10 '\T1/zi4/m/n/10 init.lo\TS1/zi4/m/n/10 ' \T1/ptm/m/n/10 and \TS1/zi4/
 m/n/10 '\T1/zi4/m/n/10 init.hi\TS1/zi4/m/n/10 '\T1/ptm/m/n/10 .
+[17]
+Underfull \hbox (badness 10000) in paragraph at lines 1202--1205
 
-Underfull \hbox (badness 10000) in paragraph at lines 1163--1166
 
-
-Overfull \hbox (0.36784pt too wide) in paragraph at lines 1171--1174
+Overfull \hbox (0.36784pt too wide) in paragraph at lines 1210--1213
 []\T1/zi4/m/n/10 aldvmm::aldvmm.mm() \T1/ptm/m/n/10 cre-ates de-sign ma-tri-ces
  for re-gres-sions of com-po-nent dis-tri-bu-tions (\T1/zi4/m/n/10 "beta"\T1/pt
 m/m/n/10 )
-[17] [18]
-Overfull \hbox (3.448pt too wide) in paragraph at lines 1295--1299
+[18] [19]
+Overfull \hbox (3.448pt too wide) in paragraph at lines 1334--1338
 \T1/ptm/m/n/10 clud-ing re-gres-sion co-ef-fi-cients in dif-fer-ent com-po-nent
 s (e.g. "Comp1", "Comp2",
-[19] [20]
-Overfull \hbox (3.448pt too wide) in paragraph at lines 1416--1420
+[20]
+Overfull \hbox (3.448pt too wide) in paragraph at lines 1455--1459
 \T1/ptm/m/n/10 clud-ing re-gres-sion co-ef-fi-cients in dif-fer-ent com-po-nent
 s (e.g. "Comp1", "Comp2",
-
-Underfull \hbox (badness 10000) in paragraph at lines 1455--1458
-
 [21]
-Overfull \hbox (50.20859pt too wide) in paragraph at lines 1500--1503
+Underfull \hbox (badness 10000) in paragraph at lines 1494--1497
+
+[22]
+Overfull \hbox (50.20859pt too wide) in paragraph at lines 1539--1542
 []\T1/ptm/m/n/10 a named nu-meric vec-tor of stan-dard er-rors of pa-ram-e-ters
  re-turned by \T1/zi4/m/n/10 aldvmm::aldvmm.cv()\T1/ptm/m/n/10 . 
 
-Overfull \hbox (58.54836pt too wide) in paragraph at lines 1512--1515
+Overfull \hbox (58.54836pt too wide) in paragraph at lines 1551--1554
 []\T1/ptm/m/n/10 a named nu-meric vec-tor of 95% lower lim-its of pa-ram-e-ters
  re-turned by \T1/zi4/m/n/10 aldvmm::aldvmm.cv()\T1/ptm/m/n/10 . 
 
-Overfull \hbox (58.7985pt too wide) in paragraph at lines 1516--1519
+Overfull \hbox (58.7985pt too wide) in paragraph at lines 1555--1558
 []\T1/ptm/m/n/10 a named nu-meric vec-tor of 95% up-per lim-its of pa-ram-e-ter
 s re-turned by \T1/zi4/m/n/10 aldvmm::aldvmm.cv()\T1/ptm/m/n/10 . 
 
-Overfull \hbox (41.69777pt too wide) in paragraph at lines 1528--1531
+Overfull \hbox (41.69777pt too wide) in paragraph at lines 1567--1570
 []\T1/ptm/m/n/10 a nu-meric value of the Akaike in-for-ma-tion cri-te-rion (AIC
 ) re-turned by \T1/zi4/m/n/10 aldvmm::aldvmm()\T1/ptm/m/n/10 . 
-[22]
-Overfull \hbox (49.0275pt too wide) in paragraph at lines 1532--1535
+
+Overfull \hbox (49.0275pt too wide) in paragraph at lines 1571--1574
 []\T1/ptm/m/n/10 a nu-meric value of the Bayesian in-for-ma-tion cri-te-rion (B
 IC) re-turned by \T1/zi4/m/n/10 aldvmm::aldvmm()\T1/ptm/m/n/10 . 
 
-Overfull \hbox (3.448pt too wide) in paragraph at lines 1551--1555
+Overfull \hbox (3.448pt too wide) in paragraph at lines 1590--1594
 \T1/ptm/m/n/10 clud-ing re-gres-sion co-ef-fi-cients in dif-fer-ent com-po-nent
 s (e.g. "Comp1", "Comp2",
-[23]
-Overfull \vbox (43.08556pt too high) has occurred while \output is active
-[24]
+[23] [24]
 No file Rd2.ind.
 [25] (./Rd2.aux)
 
@@ -240,20 +238,22 @@ vips/base/8r.enc}{c:/TeXLive/2021/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-
 0.enc}<c:/TeXLive/2021/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi
 4r.pfb><c:/TeXLive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c
 :/TeXLive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/TeXLive
-/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><c:/TeXLive/2021/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/TeXLive/2021/texmf-dist/fon
-ts/type1/public/amsfonts/cm/cmr7.pfb><c:/TeXLive/2021/texmf-dist/fonts/type1/pu
-blic/amsfonts/cm/cmsy10.pfb><c:/TeXLive/2021/texmf-dist/fonts/type1/urw/helveti
-c/uhvr8a.pfb><c:/TeXLive/2021/texmf-dist/fonts/type1/urw/times/utmb8a.pfb><c:/T
-eXLive/2021/texmf-dist/fonts/type1/urw/times/utmr8a.pfb><c:/TeXLive/2021/texmf-
-dist/fonts/type1/urw/times/utmr8a.pfb><c:/TeXLive/2021/texmf-dist/fonts/type1/u
-rw/times/utmri8a.pfb>
-Output written on Rd2.pdf (25 pages, 193684 bytes).
+/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb><c:/TeXLive/2021/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><c:/TeXLive/2021/texmf-dist/fon
+ts/type1/public/amsfonts/cm/cmr10.pfb><c:/TeXLive/2021/texmf-dist/fonts/type1/p
+ublic/amsfonts/cm/cmr5.pfb><c:/TeXLive/2021/texmf-dist/fonts/type1/public/amsfo
+nts/cm/cmr7.pfb><c:/TeXLive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy
+10.pfb><c:/TeXLive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb><c:
+/TeXLive/2021/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb><c:/TeXLive/2021/t
+exmf-dist/fonts/type1/urw/times/utmb8a.pfb><c:/TeXLive/2021/texmf-dist/fonts/ty
+pe1/urw/times/utmr8a.pfb><c:/TeXLive/2021/texmf-dist/fonts/type1/urw/times/utmr
+8a.pfb><c:/TeXLive/2021/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on Rd2.pdf (25 pages, 220707 bytes).
 Transcript written on Rd2.log.
 This is makeindex, version 2.15 [TeX Live 2021/W32TeX] (kpathsea + Thai support).
-Scanning input file Rd2.idx....done (17 entries accepted, 0 rejected).
-Sorting entries....done (80 comparisons).
-Generating output file Rd2.ind....done (34 lines written, 0 warnings).
+Scanning input file Rd2.idx....done (18 entries accepted, 0 rejected).
+Sorting entries....done (85 comparisons).
+Generating output file Rd2.ind....done (35 lines written, 0 warnings).
 Output written in Rd2.ind.
 Transcript written in Rd2.ilg.
 This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021/W32TeX) (preloaded format=pdflatex)
@@ -396,91 +396,91 @@ s (e.g. "Comp1", "Comp2",
 Overfull \hbox (3.448pt too wide) in paragraph at lines 765--769
 \T1/ptm/m/n/10 clud-ing re-gres-sion co-ef-fi-cients in dif-fer-ent com-po-nent
 s (e.g. "Comp1", "Comp2",
-[12]
-Overfull \hbox (3.448pt too wide) in paragraph at lines 861--865
+[12] [13]
+Overfull \hbox (3.448pt too wide) in paragraph at lines 900--904
 \T1/ptm/m/n/10 clud-ing re-gres-sion co-ef-fi-cients in dif-fer-ent com-po-nent
 s (e.g. "Comp1", "Comp2",
 
-Overfull \hbox (9.03893pt too wide) in paragraph at lines 873--881
+Overfull \hbox (9.03893pt too wide) in paragraph at lines 912--920
 \T1/ptm/m/n/10 used when lower and/or up-per con-straints are set us-ing \TS1/z
 i4/m/n/10 '\T1/zi4/m/n/10 init.lo\TS1/zi4/m/n/10 ' \T1/ptm/m/n/10 and \TS1/zi4/
 m/n/10 '\T1/zi4/m/n/10 init.hi\TS1/zi4/m/n/10 '\T1/ptm/m/n/10 .
-[13] [14]
-Overfull \hbox (9.03893pt too wide) in paragraph at lines 983--991
+[14] [15]
+Overfull \hbox (9.03893pt too wide) in paragraph at lines 1022--1030
 \T1/ptm/m/n/10 used when lower and/or up-per con-straints are set us-ing \TS1/z
 i4/m/n/10 '\T1/zi4/m/n/10 init.lo\TS1/zi4/m/n/10 ' \T1/ptm/m/n/10 and \TS1/zi4/
 m/n/10 '\T1/zi4/m/n/10 init.hi\TS1/zi4/m/n/10 '\T1/ptm/m/n/10 .
-[15]
-Overfull \hbox (3.448pt too wide) in paragraph at lines 1014--1018
+
+Overfull \hbox (3.448pt too wide) in paragraph at lines 1053--1057
 \T1/ptm/m/n/10 clud-ing re-gres-sion co-ef-fi-cients in dif-fer-ent com-po-nent
 s (e.g. "Comp1", "Comp2",
 
-Overfull \hbox (8.21799pt too wide) in paragraph at lines 1024--1035
+Overfull \hbox (8.21799pt too wide) in paragraph at lines 1063--1074
 \T1/zi4/m/n/10 "random" \T1/ptm/m/n/10 draws ran-dom start-ing val-ues from a s
 tan-dard nor-mal dis-tri-bu-tion. The method \T1/zi4/m/n/10 "constant"
 
-Overfull \hbox (14.10739pt too wide) in paragraph at lines 1036--1044
+Overfull \hbox (14.10739pt too wide) in paragraph at lines 1075--1083
 \TS1/zi4/m/n/10 '\T1/zi4/m/n/10 init-hi\TS1/zi4/m/n/10 '\T1/ptm/m/n/10 , these 
 de-fault lim-its are re-placed with the user-specified val-ues, and the method 
 \T1/zi4/m/n/10 "L-BFGS-B"
-
-Overfull \hbox (18.3789pt too wide) in paragraph at lines 1063--1067
+[16]
+Overfull \hbox (18.3789pt too wide) in paragraph at lines 1102--1106
 []\T1/zi4/m/n/10 aldvmm::aldvmm.ll() \T1/ptm/m/n/10 cal-cu-lates the neg-a-tive
  log-likelihood of \TS1/zi4/m/n/10 '\T1/zi4/m/n/10 data\TS1/zi4/m/n/10 ' \T1/pt
 m/m/n/10 sup-plied to \T1/zi4/m/n/10 aldvmm::aldvmm()
-[16]
-Overfull \hbox (3.448pt too wide) in paragraph at lines 1125--1129
+[17]
+Overfull \hbox (3.448pt too wide) in paragraph at lines 1164--1168
 \T1/ptm/m/n/10 clud-ing re-gres-sion co-ef-fi-cients in dif-fer-ent com-po-nent
 s (e.g. "Comp1", "Comp2",
 
-Overfull \hbox (9.03893pt too wide) in paragraph at lines 1132--1140
+Overfull \hbox (9.03893pt too wide) in paragraph at lines 1171--1179
 \T1/ptm/m/n/10 used when lower and/or up-per con-straints are set us-ing \TS1/z
 i4/m/n/10 '\T1/zi4/m/n/10 init.lo\TS1/zi4/m/n/10 ' \T1/ptm/m/n/10 and \TS1/zi4/
 m/n/10 '\T1/zi4/m/n/10 init.hi\TS1/zi4/m/n/10 '\T1/ptm/m/n/10 .
-[17]
-Underfull \hbox (badness 10000) in paragraph at lines 1163--1166
+
+Underfull \hbox (badness 10000) in paragraph at lines 1202--1205
 
 
-Overfull \hbox (0.36784pt too wide) in paragraph at lines 1171--1174
+Overfull \hbox (0.36784pt too wide) in paragraph at lines 1210--1213
 []\T1/zi4/m/n/10 aldvmm::aldvmm.mm() \T1/ptm/m/n/10 cre-ates de-sign ma-tri-ces
  for re-gres-sions of com-po-nent dis-tri-bu-tions (\T1/zi4/m/n/10 "beta"\T1/pt
 m/m/n/10 )
 [18] [19]
-Overfull \hbox (3.448pt too wide) in paragraph at lines 1295--1299
+Overfull \hbox (3.448pt too wide) in paragraph at lines 1334--1338
 \T1/ptm/m/n/10 clud-ing re-gres-sion co-ef-fi-cients in dif-fer-ent com-po-nent
 s (e.g. "Comp1", "Comp2",
-[20]
-Overfull \hbox (3.448pt too wide) in paragraph at lines 1416--1420
+[20] [21]
+Overfull \hbox (3.448pt too wide) in paragraph at lines 1455--1459
 \T1/ptm/m/n/10 clud-ing re-gres-sion co-ef-fi-cients in dif-fer-ent com-po-nent
 s (e.g. "Comp1", "Comp2",
-[21]
-Underfull \hbox (badness 10000) in paragraph at lines 1455--1458
-
 [22]
-Overfull \hbox (50.20859pt too wide) in paragraph at lines 1500--1503
+Underfull \hbox (badness 10000) in paragraph at lines 1494--1497
+
+[23]
+Overfull \hbox (50.20859pt too wide) in paragraph at lines 1539--1542
 []\T1/ptm/m/n/10 a named nu-meric vec-tor of stan-dard er-rors of pa-ram-e-ters
  re-turned by \T1/zi4/m/n/10 aldvmm::aldvmm.cv()\T1/ptm/m/n/10 . 
 
-Overfull \hbox (58.54836pt too wide) in paragraph at lines 1512--1515
+Overfull \hbox (58.54836pt too wide) in paragraph at lines 1551--1554
 []\T1/ptm/m/n/10 a named nu-meric vec-tor of 95% lower lim-its of pa-ram-e-ters
  re-turned by \T1/zi4/m/n/10 aldvmm::aldvmm.cv()\T1/ptm/m/n/10 . 
 
-Overfull \hbox (58.7985pt too wide) in paragraph at lines 1516--1519
+Overfull \hbox (58.7985pt too wide) in paragraph at lines 1555--1558
 []\T1/ptm/m/n/10 a named nu-meric vec-tor of 95% up-per lim-its of pa-ram-e-ter
 s re-turned by \T1/zi4/m/n/10 aldvmm::aldvmm.cv()\T1/ptm/m/n/10 . 
 
-Overfull \hbox (41.69777pt too wide) in paragraph at lines 1528--1531
+Overfull \hbox (41.69777pt too wide) in paragraph at lines 1567--1570
 []\T1/ptm/m/n/10 a nu-meric value of the Akaike in-for-ma-tion cri-te-rion (AIC
 ) re-turned by \T1/zi4/m/n/10 aldvmm::aldvmm()\T1/ptm/m/n/10 . 
 
-Overfull \hbox (49.0275pt too wide) in paragraph at lines 1532--1535
+Overfull \hbox (49.0275pt too wide) in paragraph at lines 1571--1574
 []\T1/ptm/m/n/10 a nu-meric value of the Bayesian in-for-ma-tion cri-te-rion (B
 IC) re-turned by \T1/zi4/m/n/10 aldvmm::aldvmm()\T1/ptm/m/n/10 . 
 
-Overfull \hbox (3.448pt too wide) in paragraph at lines 1551--1555
+Overfull \hbox (3.448pt too wide) in paragraph at lines 1590--1594
 \T1/ptm/m/n/10 clud-ing re-gres-sion co-ef-fi-cients in dif-fer-ent com-po-nent
 s (e.g. "Comp1", "Comp2",
-[23] [24] (./Rd2.ind [25] [26]) (./Rd2.aux)
+[24] [25] (./Rd2.ind [26] [27]) (./Rd2.aux)
 
 Package rerunfilecheck Warning: File `Rd2.out' has changed.
 (rerunfilecheck)                Rerun to get outlines right
@@ -493,20 +493,22 @@ vips/base/8r.enc}{c:/TeXLive/2021/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-
 0.enc}<c:/TeXLive/2021/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi
 4r.pfb><c:/TeXLive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c
 :/TeXLive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/TeXLive
-/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><c:/TeXLive/2021/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/TeXLive/2021/texmf-dist/fon
-ts/type1/public/amsfonts/cm/cmr7.pfb><c:/TeXLive/2021/texmf-dist/fonts/type1/pu
-blic/amsfonts/cm/cmsy10.pfb><c:/TeXLive/2021/texmf-dist/fonts/type1/urw/helveti
-c/uhvr8a.pfb><c:/TeXLive/2021/texmf-dist/fonts/type1/urw/times/utmb8a.pfb><c:/T
-eXLive/2021/texmf-dist/fonts/type1/urw/times/utmr8a.pfb><c:/TeXLive/2021/texmf-
-dist/fonts/type1/urw/times/utmr8a.pfb><c:/TeXLive/2021/texmf-dist/fonts/type1/u
-rw/times/utmri8a.pfb>
-Output written on Rd2.pdf (26 pages, 196836 bytes).
+/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb><c:/TeXLive/2021/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><c:/TeXLive/2021/texmf-dist/fon
+ts/type1/public/amsfonts/cm/cmr10.pfb><c:/TeXLive/2021/texmf-dist/fonts/type1/p
+ublic/amsfonts/cm/cmr5.pfb><c:/TeXLive/2021/texmf-dist/fonts/type1/public/amsfo
+nts/cm/cmr7.pfb><c:/TeXLive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy
+10.pfb><c:/TeXLive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb><c:
+/TeXLive/2021/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb><c:/TeXLive/2021/t
+exmf-dist/fonts/type1/urw/times/utmb8a.pfb><c:/TeXLive/2021/texmf-dist/fonts/ty
+pe1/urw/times/utmr8a.pfb><c:/TeXLive/2021/texmf-dist/fonts/type1/urw/times/utmr
+8a.pfb><c:/TeXLive/2021/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on Rd2.pdf (27 pages, 224539 bytes).
 Transcript written on Rd2.log.
 This is makeindex, version 2.15 [TeX Live 2021/W32TeX] (kpathsea + Thai support).
-Scanning input file Rd2.idx....done (17 entries accepted, 0 rejected).
-Sorting entries....done (80 comparisons).
-Generating output file Rd2.ind....done (34 lines written, 0 warnings).
+Scanning input file Rd2.idx....done (18 entries accepted, 0 rejected).
+Sorting entries....done (85 comparisons).
+Generating output file Rd2.ind....done (35 lines written, 0 warnings).
 Output written in Rd2.ind.
 Transcript written in Rd2.ilg.
 This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021/W32TeX) (preloaded format=pdflatex)
@@ -649,107 +651,109 @@ s (e.g. "Comp1", "Comp2",
 Overfull \hbox (3.448pt too wide) in paragraph at lines 765--769
 \T1/ptm/m/n/10 clud-ing re-gres-sion co-ef-fi-cients in dif-fer-ent com-po-nent
 s (e.g. "Comp1", "Comp2",
-[12]
-Overfull \hbox (3.448pt too wide) in paragraph at lines 861--865
+[12] [13]
+Overfull \hbox (3.448pt too wide) in paragraph at lines 900--904
 \T1/ptm/m/n/10 clud-ing re-gres-sion co-ef-fi-cients in dif-fer-ent com-po-nent
 s (e.g. "Comp1", "Comp2",
 
-Overfull \hbox (9.03893pt too wide) in paragraph at lines 873--881
+Overfull \hbox (9.03893pt too wide) in paragraph at lines 912--920
 \T1/ptm/m/n/10 used when lower and/or up-per con-straints are set us-ing \TS1/z
 i4/m/n/10 '\T1/zi4/m/n/10 init.lo\TS1/zi4/m/n/10 ' \T1/ptm/m/n/10 and \TS1/zi4/
 m/n/10 '\T1/zi4/m/n/10 init.hi\TS1/zi4/m/n/10 '\T1/ptm/m/n/10 .
-[13] [14]
-Overfull \hbox (9.03893pt too wide) in paragraph at lines 983--991
+[14] [15]
+Overfull \hbox (9.03893pt too wide) in paragraph at lines 1022--1030
 \T1/ptm/m/n/10 used when lower and/or up-per con-straints are set us-ing \TS1/z
 i4/m/n/10 '\T1/zi4/m/n/10 init.lo\TS1/zi4/m/n/10 ' \T1/ptm/m/n/10 and \TS1/zi4/
 m/n/10 '\T1/zi4/m/n/10 init.hi\TS1/zi4/m/n/10 '\T1/ptm/m/n/10 .
-[15]
-Overfull \hbox (3.448pt too wide) in paragraph at lines 1014--1018
+
+Overfull \hbox (3.448pt too wide) in paragraph at lines 1053--1057
 \T1/ptm/m/n/10 clud-ing re-gres-sion co-ef-fi-cients in dif-fer-ent com-po-nent
 s (e.g. "Comp1", "Comp2",
 
-Overfull \hbox (8.21799pt too wide) in paragraph at lines 1024--1035
+Overfull \hbox (8.21799pt too wide) in paragraph at lines 1063--1074
 \T1/zi4/m/n/10 "random" \T1/ptm/m/n/10 draws ran-dom start-ing val-ues from a s
 tan-dard nor-mal dis-tri-bu-tion. The method \T1/zi4/m/n/10 "constant"
 
-Overfull \hbox (14.10739pt too wide) in paragraph at lines 1036--1044
+Overfull \hbox (14.10739pt too wide) in paragraph at lines 1075--1083
 \TS1/zi4/m/n/10 '\T1/zi4/m/n/10 init-hi\TS1/zi4/m/n/10 '\T1/ptm/m/n/10 , these 
 de-fault lim-its are re-placed with the user-specified val-ues, and the method 
 \T1/zi4/m/n/10 "L-BFGS-B"
-
-Overfull \hbox (18.3789pt too wide) in paragraph at lines 1063--1067
+[16]
+Overfull \hbox (18.3789pt too wide) in paragraph at lines 1102--1106
 []\T1/zi4/m/n/10 aldvmm::aldvmm.ll() \T1/ptm/m/n/10 cal-cu-lates the neg-a-tive
  log-likelihood of \TS1/zi4/m/n/10 '\T1/zi4/m/n/10 data\TS1/zi4/m/n/10 ' \T1/pt
 m/m/n/10 sup-plied to \T1/zi4/m/n/10 aldvmm::aldvmm()
-[16]
-Overfull \hbox (3.448pt too wide) in paragraph at lines 1125--1129
+[17]
+Overfull \hbox (3.448pt too wide) in paragraph at lines 1164--1168
 \T1/ptm/m/n/10 clud-ing re-gres-sion co-ef-fi-cients in dif-fer-ent com-po-nent
 s (e.g. "Comp1", "Comp2",
 
-Overfull \hbox (9.03893pt too wide) in paragraph at lines 1132--1140
+Overfull \hbox (9.03893pt too wide) in paragraph at lines 1171--1179
 \T1/ptm/m/n/10 used when lower and/or up-per con-straints are set us-ing \TS1/z
 i4/m/n/10 '\T1/zi4/m/n/10 init.lo\TS1/zi4/m/n/10 ' \T1/ptm/m/n/10 and \TS1/zi4/
 m/n/10 '\T1/zi4/m/n/10 init.hi\TS1/zi4/m/n/10 '\T1/ptm/m/n/10 .
-[17]
-Underfull \hbox (badness 10000) in paragraph at lines 1163--1166
+
+Underfull \hbox (badness 10000) in paragraph at lines 1202--1205
 
 
-Overfull \hbox (0.36784pt too wide) in paragraph at lines 1171--1174
+Overfull \hbox (0.36784pt too wide) in paragraph at lines 1210--1213
 []\T1/zi4/m/n/10 aldvmm::aldvmm.mm() \T1/ptm/m/n/10 cre-ates de-sign ma-tri-ces
  for re-gres-sions of com-po-nent dis-tri-bu-tions (\T1/zi4/m/n/10 "beta"\T1/pt
 m/m/n/10 )
 [18] [19]
-Overfull \hbox (3.448pt too wide) in paragraph at lines 1295--1299
+Overfull \hbox (3.448pt too wide) in paragraph at lines 1334--1338
 \T1/ptm/m/n/10 clud-ing re-gres-sion co-ef-fi-cients in dif-fer-ent com-po-nent
 s (e.g. "Comp1", "Comp2",
-[20]
-Overfull \hbox (3.448pt too wide) in paragraph at lines 1416--1420
+[20] [21]
+Overfull \hbox (3.448pt too wide) in paragraph at lines 1455--1459
 \T1/ptm/m/n/10 clud-ing re-gres-sion co-ef-fi-cients in dif-fer-ent com-po-nent
 s (e.g. "Comp1", "Comp2",
-[21]
-Underfull \hbox (badness 10000) in paragraph at lines 1455--1458
-
 [22]
-Overfull \hbox (50.20859pt too wide) in paragraph at lines 1500--1503
+Underfull \hbox (badness 10000) in paragraph at lines 1494--1497
+
+[23]
+Overfull \hbox (50.20859pt too wide) in paragraph at lines 1539--1542
 []\T1/ptm/m/n/10 a named nu-meric vec-tor of stan-dard er-rors of pa-ram-e-ters
  re-turned by \T1/zi4/m/n/10 aldvmm::aldvmm.cv()\T1/ptm/m/n/10 . 
 
-Overfull \hbox (58.54836pt too wide) in paragraph at lines 1512--1515
+Overfull \hbox (58.54836pt too wide) in paragraph at lines 1551--1554
 []\T1/ptm/m/n/10 a named nu-meric vec-tor of 95% lower lim-its of pa-ram-e-ters
  re-turned by \T1/zi4/m/n/10 aldvmm::aldvmm.cv()\T1/ptm/m/n/10 . 
 
-Overfull \hbox (58.7985pt too wide) in paragraph at lines 1516--1519
+Overfull \hbox (58.7985pt too wide) in paragraph at lines 1555--1558
 []\T1/ptm/m/n/10 a named nu-meric vec-tor of 95% up-per lim-its of pa-ram-e-ter
 s re-turned by \T1/zi4/m/n/10 aldvmm::aldvmm.cv()\T1/ptm/m/n/10 . 
 
-Overfull \hbox (41.69777pt too wide) in paragraph at lines 1528--1531
+Overfull \hbox (41.69777pt too wide) in paragraph at lines 1567--1570
 []\T1/ptm/m/n/10 a nu-meric value of the Akaike in-for-ma-tion cri-te-rion (AIC
 ) re-turned by \T1/zi4/m/n/10 aldvmm::aldvmm()\T1/ptm/m/n/10 . 
 
-Overfull \hbox (49.0275pt too wide) in paragraph at lines 1532--1535
+Overfull \hbox (49.0275pt too wide) in paragraph at lines 1571--1574
 []\T1/ptm/m/n/10 a nu-meric value of the Bayesian in-for-ma-tion cri-te-rion (B
 IC) re-turned by \T1/zi4/m/n/10 aldvmm::aldvmm()\T1/ptm/m/n/10 . 
 
-Overfull \hbox (3.448pt too wide) in paragraph at lines 1551--1555
+Overfull \hbox (3.448pt too wide) in paragraph at lines 1590--1594
 \T1/ptm/m/n/10 clud-ing re-gres-sion co-ef-fi-cients in dif-fer-ent com-po-nent
 s (e.g. "Comp1", "Comp2",
-[23] [24] (./Rd2.ind [25] [26]) (./Rd2.aux) )
+[24] [25] (./Rd2.ind [26] [27]) (./Rd2.aux) )
 (see the transcript file for additional information){c:/TeXLive/2021/texmf-dist
 /fonts/enc/dvips/inconsolata/i4-ts1.enc}{c:/TeXLive/2021/texmf-dist/fonts/enc/d
 vips/base/8r.enc}{c:/TeXLive/2021/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-
 0.enc}<c:/TeXLive/2021/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi
 4r.pfb><c:/TeXLive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c
 :/TeXLive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/TeXLive
-/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><c:/TeXLive/2021/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/TeXLive/2021/texmf-dist/fon
-ts/type1/public/amsfonts/cm/cmr7.pfb><c:/TeXLive/2021/texmf-dist/fonts/type1/pu
-blic/amsfonts/cm/cmsy10.pfb><c:/TeXLive/2021/texmf-dist/fonts/type1/urw/helveti
-c/uhvr8a.pfb><c:/TeXLive/2021/texmf-dist/fonts/type1/urw/times/utmb8a.pfb><c:/T
-eXLive/2021/texmf-dist/fonts/type1/urw/times/utmr8a.pfb><c:/TeXLive/2021/texmf-
-dist/fonts/type1/urw/times/utmr8a.pfb><c:/TeXLive/2021/texmf-dist/fonts/type1/u
-rw/times/utmri8a.pfb>
-Output written on Rd2.pdf (26 pages, 197152 bytes).
+/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb><c:/TeXLive/2021/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><c:/TeXLive/2021/texmf-dist/fon
+ts/type1/public/amsfonts/cm/cmr10.pfb><c:/TeXLive/2021/texmf-dist/fonts/type1/p
+ublic/amsfonts/cm/cmr5.pfb><c:/TeXLive/2021/texmf-dist/fonts/type1/public/amsfo
+nts/cm/cmr7.pfb><c:/TeXLive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy
+10.pfb><c:/TeXLive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb><c:
+/TeXLive/2021/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb><c:/TeXLive/2021/t
+exmf-dist/fonts/type1/urw/times/utmb8a.pfb><c:/TeXLive/2021/texmf-dist/fonts/ty
+pe1/urw/times/utmr8a.pfb><c:/TeXLive/2021/texmf-dist/fonts/type1/urw/times/utmr
+8a.pfb><c:/TeXLive/2021/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on Rd2.pdf (27 pages, 224684 bytes).
 Transcript written on Rd2.log.
 Saving output to 'aldvmm-manual.pdf' ...
 Done
-You may want to clean up by 'rm -Rf C:/Users/phm1/AppData/Local/Temp/RtmpQtxJ1R/Rd2pdf213819c9462f'
+You may want to clean up by 'rm -Rf C:/Users/phm1/AppData/Local/Temp/RtmpKG1cSZ/Rd2pdfb485a61192f'

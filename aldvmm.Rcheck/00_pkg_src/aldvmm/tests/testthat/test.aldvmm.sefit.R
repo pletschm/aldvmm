@@ -26,6 +26,54 @@ test_that("Check estimation of standard errors of fitted values.", {
                   ncmp = 2,
                   lcoef = c("beta", "delta"))
   
+  # Warning when type is not "fit" or "pred"
+  testthat::expect_warning(aldvmm.sefit(par = fit[["coef"]],
+                                        yhat = yhat,
+                                        X = mm,
+                                        type = "bit",
+                                        formula = fit[["formula"]],
+                                        psi = fit[["psi"]],
+                                        cv = fit[["cov"]],
+                                        mse = fit[["gof"]][["mse"]],
+                                        ncmp = fit[["k"]],
+                                        dist = fit[["dist"]],
+                                        level = fit[["level"]],
+                                        lcoef = fit[["label"]][["lcoef"]],
+                                        lcpar = fit[["label"]][["lcpar"]],
+                                        lcmp = fit[["label"]][["lcmp"]]))
+  
+  # Warning when is missing
+  testthat::expect_warning(aldvmm.sefit(par = fit[["coef"]],
+                                        yhat = yhat,
+                                        X = mm,
+                                        type = "pred",
+                                        formula = fit[["formula"]],
+                                        psi = fit[["psi"]],
+                                        cv = fit[["cov"]],
+                                        mse = NA,
+                                        ncmp = fit[["k"]],
+                                        dist = fit[["dist"]],
+                                        level = fit[["level"]],
+                                        lcoef = fit[["label"]][["lcoef"]],
+                                        lcpar = fit[["label"]][["lcpar"]],
+                                        lcmp = fit[["label"]][["lcmp"]]))
+  
+  testthat::expect_warning(aldvmm.sefit(par = fit[["coef"]],
+                                        yhat = yhat,
+                                        X = mm,
+                                        type = "pred",
+                                        formula = fit[["formula"]],
+                                        psi = fit[["psi"]],
+                                        cv = fit[["cov"]],
+                                        #mse = NA,
+                                        ncmp = fit[["k"]],
+                                        dist = fit[["dist"]],
+                                        level = fit[["level"]],
+                                        lcoef = fit[["label"]][["lcoef"]],
+                                        lcpar = fit[["label"]][["lcpar"]],
+                                        lcmp = fit[["label"]][["lcmp"]]))
+  
+  # Test content of covariance matrix
   invisible({pred.se <- aldvmm.sefit(par = fit[["coef"]],
                                      yhat = yhat,
                                      X = mm,
@@ -45,7 +93,7 @@ test_that("Check estimation of standard errors of fitted values.", {
                    failure_message = "Non-positive standard errors.")
   
   for (i in names(pred.se)) {
-
+    
     testthat::expect(all(!is.na(pred.se[[i]])),
                      failure_message = "Missing standard errors or limits
                      despite valid covariance matrix.")
@@ -116,7 +164,7 @@ test_that("Check estimation of standard errors of fitted values.", {
     testthat::expect(all(is.na(pred.se[[1]]) == is.na(pred.se[[i]])),
                      failure_message = 
                        'Missing standard errors do not match missing limits.')
-                     
+    
   }
   
   # Negative values in diagonal
@@ -150,5 +198,10 @@ test_that("Check estimation of standard errors of fitted values.", {
     )
     
   }
+  
+  # Check if type is "fit" or "pred"
+  #---------------------------------
+  
+  
+  
 })
-    

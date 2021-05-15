@@ -40,6 +40,11 @@ test_that("Check input value checks.", {
     
   }
   
+  # Check if all variables in formula exist in data
+  #------------------------------------------------
+  
+  testthat::expect_error(aux(formula = eq5d ~ female | age + country))
+  
   # Check format of input values
   #-----------------------------
   
@@ -63,8 +68,11 @@ test_that("Check input value checks.", {
   testthat::expect_error(aux(init.method = "cons"))
   testthat::expect_error(aux(optim.method = "nlm"))
   testthat::expect_error(aux(init.est = data.frame(init.est = c(0, 0, 0))))
-  testthat::expect_error(aux(init.est = data.frame(init.lo = c(0, 0, 0))))
-  testthat::expect_error(aux(init.est = data.frame(init.hi = c(0, 0, 0))))
+  testthat::expect_error(aux(init.est = c("0", "0", "0")))
+  testthat::expect_error(aux(init.lo = data.frame(init.lo = c(0, 0, 0))))
+  testthat::expect_error(aux(init.lo = c("0", "0", "0")))
+  testthat::expect_error(aux(init.hi = data.frame(init.hi = c(0, 0, 0))))
+  testthat::expect_error(aux(init.hi = c("0", "0", "0")))
   testthat::expect_error(aux(optim.control = data.frame(trace = FALSE)))
   testthat::expect_error(aux(optim.grad = "TRUE"))
   testthat::expect_error(aux(se.fit = "TRUE"))
@@ -82,19 +90,20 @@ test_that("Check input value checks.", {
   testdf <- utility
   testdf[1, 1] <- NA
   
-  testthat::expect_message(aux(data = testdf))
+  suppressMessages(
+    testthat::expect_message(aux(data = testdf))
+  )
   rm(testdf)
   
-  # Check if all variables in formula exist in data
-  #------------------------------------------------
-  
-  testthat::expect_error(aux(formula = eq5d ~ female | age + country))
   
   # Check if user-defined initial values are the right length.
   #-----------------------------------------------------------
   
   testthat::expect_error(aux(init.est = rep(0, 1)))
+  testthat::expect_error(aux(init.lo = rep(0, 1)))
+  testthat::expect_error(aux(init.hi = rep(0, 1)))
   
+
   # Only one component but pipe separator in formula
   #-------------------------------------------------
 

@@ -12,7 +12,7 @@ aldvmm.sefit(
   formula,
   psi,
   cv,
-  mse,
+  mse = NA,
   ncmp,
   dist,
   level,

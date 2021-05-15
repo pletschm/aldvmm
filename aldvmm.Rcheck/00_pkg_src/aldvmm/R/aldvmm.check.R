@@ -46,11 +46,7 @@ aldvmm.check <- function(formula,
     stop("'data' has no column names",
          "\n")
   }
-  if (is.null(rownames(data))) {
-    stop("'data' has no row names",
-         "\n")
-  }
-  
+
   checkmate::assertFormula(formula)  
   checkmate::assertVector(psi, strict = TRUE)
   checkmate::assertNumeric(psi)
@@ -115,6 +111,19 @@ aldvmm.check <- function(formula,
   checkmate::assert(level > 0)
   checkmate::assert(level < 1)
   
+  # Check if all variables in formula exist in data
+  #------------------------------------------------
+  
+  # This check needs to occur before the use of other aldvmm functions
+  
+  if (sum(!(all.vars(formula) %in% names(data))) > 0) {
+    stop("The variables ", 
+         paste(all.vars(formula)[!(all.vars(formula) %in% names(data))], 
+               collapse = ", "), 
+         " from 'formula' do not exist in 'data'.",
+         "\n")
+  }
+  
   # Count rows with missing values
   #-------------------------------
   
@@ -123,17 +132,6 @@ aldvmm.check <- function(formula,
     message("the data includes ", 
             sum(complete == FALSE), 
             " rows with missing values\n")
-  }
-  
-  # Check if all variables in formula exist in data
-  #------------------------------------------------
-  
-  if (sum(!(all.vars(formula) %in% names(data))) > 0) {
-    stop("The variables ", 
-         paste(all.vars(formula)[!(all.vars(formula) %in% names(data))], 
-               collapse = ", "), 
-         " from 'formula' do not exist in 'data'.",
-         "\n")
   }
   
   # Check if user-defined initial values are the right length.

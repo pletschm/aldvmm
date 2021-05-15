@@ -21,12 +21,8 @@ package 'testthat' was built under R version 4.0.4
 > library(aldvmm)
 > 
 > test_check("aldvmm")
-'ncmp' is set to 1, and the second part of the formula will be ignored
-
-the data includes 2 rows with missing values
-
-[ FAIL 0 | WARN 0 | SKIP 0 | PASS 158 ]
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 317 ]
 > 
 > proc.time()
    user  system elapsed 
-  19.70    0.17   19.89 
+  45.98    0.20   46.25 

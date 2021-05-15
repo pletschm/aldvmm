@@ -83,7 +83,7 @@ NULL
 #'   \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
 #'   methods that can use this information. The default value is \code{TRUE}.
 #'   If \code{'optim.grad'} is set to \code{FALSE}, a finite difference
-#'   approximation will be used.
+#'   approximation is used.
 #' @param init.est an optional numeric vector of user-defined initial values.
 #'   User-defined initial values override the \code{'init.method'} argument.
 #'   Initial values have to follow the same order as parameter estimates in the
@@ -99,14 +99,14 @@ NULL
 #'   have to follow the same order as parameter estimates in the return value
 #'   \code{'par'}.
 #' @param se.fit an optional logical value indicating whether standard errors
-#'   of the fit are calculated (see Details). The default value is
+#'   of fitted values are calculated (see Details). The default value is
 #'   \code{FALSE}.
 #' @param level a numeric value of the significance level for confidence bands
 #'   of fitted values. The default value is 0.95.
 #'
 #' @details \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{
-#'   \code{aldvmm::aldvmm()}} fits adjusted limited dependent variable mixture
-#'   models using the likelihood and expected value functions from Hernandez
+#'   \code{aldvmm::aldvmm()}} fits an adjusted limited dependent variable mixture
+#'   model using the likelihood and expected value functions from Hernandez
 #'   Alava and Wailoo (2015).  The model accounts for multi-modality, minimum
 #'   and maximum utility values and potential gaps between 1 and the next
 #'   smaller observed utility value.  Adjusted limited dependent variable
@@ -369,20 +369,10 @@ aldvmm <- function(formula,
   
   tryCatch({
     data <- as.data.frame(data)
-  }, warning = function(w) {
-    message(w)  
-    return(data)
   }, error = function(e) {
     #message(e)
     stop("'data' cannot be converted to data.frame.")
   })
-  
-  # Ensure data has row names to identify complete rows for predictions
-  #--------------------------------------------------------------------
-  
-  if (is.null(rownames(data))) {
-    rownames(data) <- as.character(1:nrow(data))
-  }
   
   # Checks
   #-------
@@ -512,21 +502,9 @@ aldvmm <- function(formula,
   
   # Note: Aldvmm.ll returns -log-likelihood
   
-  gof <- list()
-  
-  gof[["mse"]] <- sum(pred[["res"]]^2) / 
-    (nrow(mm[[1]]) - length(fit[["par"]]))
-  gof[["mae"]] <- sum(abs(pred[["res"]])) / 
-    (nrow(mm[[1]]) - length(fit[["par"]]))
-  
-  if (is.na(gof[['mse']])) {
-    base::warning("no mse or mae were obtained\n", 
-                  call. = FALSE)
-  }
-  
-  gof[["ll"]] <- fit[["value"]]
-  gof[["aic"]] <- 2 * length(fit[["par"]]) + 2 * fit[["value"]]
-  gof[["bic"]] <- length(fit[["par"]]) * log(nrow(mm[[1]])) + 2*fit[["value"]]
+  gof <- aldvmm.gof(res = pred[["res"]],
+                    par = fit[["par"]],
+                    ll = -fit[["value"]])
   
   # Obtain standard errors of the fit (delta method)
   #-------------------------------------------------
@@ -547,9 +525,10 @@ aldvmm <- function(formula,
                             lcpar = lcpar,
                             level = level)
     
-    pred[["se.fit"]] <- pred.se[["se.fit"]]
-    pred[["lower.fit"]] <- pred.se[["lower.fit"]]
-    pred[["upper.fit"]] <- pred.se[["upper.fit"]]
+  } else {
+    pred.se <- list(se.fit = NULL,
+                    lower.fit = NULL,
+                    upper.fit = NULL)
     
   }
   
@@ -576,9 +555,9 @@ aldvmm <- function(formula,
                         y = pred[["y"]],
                         res = pred[["res"]],
                         prob = pred[["prob"]],
-                        se.fit = pred[["se.fit"]],
-                        lower.fit = pred[["lower.fit"]],
-                        upper.fit = pred[["upper.fit"]],
+                        se.fit = pred.se[["se.fit"]],
+                        lower.fit = pred.se[["lower.fit"]],
+                        upper.fit = pred.se[["upper.fit"]],
                         init = init,
                         formula = formula,
                         psi = psi,

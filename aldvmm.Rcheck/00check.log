@@ -5,12 +5,14 @@
 * using option '--as-cran'
 * checking for file 'aldvmm/DESCRIPTION' ... OK
 * checking extension type ... Package
-* this is package 'aldvmm' version '0.8.2'
+* this is package 'aldvmm' version '0.8.2.9000'
 * package encoding: UTF-8
 * checking CRAN incoming feasibility ... NOTE
 Maintainer: 'Mark Pletscher <pletscher.mark@gmail.com>'
 
 New submission
+
+Version contains large components (0.8.2.9000)
 
 License components with restrictions and base license permitting such:
   GPL-3 + file LICENSE
@@ -737,7 +739,7 @@ File 'LICENSE':
 * checking examples ... OK
 * checking for unstated dependencies in 'tests' ... OK
 * checking tests ... OK
-  Running 'testthat.R' [20s]
+  Running 'testthat.R' [46s]
 * checking for unstated dependencies in vignettes ... OK
 * checking package vignettes in 'inst/doc' ... OK
 * checking re-building of vignette outputs ... OK

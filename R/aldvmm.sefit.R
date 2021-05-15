@@ -65,7 +65,7 @@ aldvmm.sefit <- function(par,
                          formula,
                          psi,
                          cv,
-                         mse,
+                         mse = NA,
                          ncmp,
                          dist,
                          level,
@@ -120,21 +120,21 @@ aldvmm.sefit <- function(par,
             'is not "fit" or "pred": "pred" is used\n',
             call. = FALSE)
   }
-
+  
   if (type == "fit") {
     for (i in 1:nrow(X[[1]])) {
       se.fit[i] <- sqrt(t(jacobian[i, ]) %*% cv %*% jacobian[i, ])
     }
   } else {
-    if (!is.null(mse) & !is.na(mse)) {
-      for (i in 1:nrow(X[[1]])) {
-        se.fit[i] <- sqrt(mse + t(jacobian[i, ]) %*% cv %*% jacobian[i, ])
-      }
-    } else {
+    if (is.na(mse)) {
       warning("'mse' is missing: Standard errors of the fit are generated\n",
               call. = FALSE)
       for (i in 1:nrow(X[[1]])) {
         se.fit[i] <- sqrt(t(jacobian[i, ]) %*% cv %*% jacobian[i, ])
+      }
+    } else{
+      for (i in 1:nrow(X[[1]])) {
+        se.fit[i] <- sqrt(mse + t(jacobian[i, ]) %*% cv %*% jacobian[i, ])
       }
     }
   }

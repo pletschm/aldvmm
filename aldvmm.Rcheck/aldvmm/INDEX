@@ -8,6 +8,7 @@ aldvmm.cv               Numerical Approximation of Covariance Matrix
 aldvmm.getnames         Creating Names of Parameter Vectors
 aldvmm.getpar           Extracting Parameters from Parameter Vector
                         into Nested List.
+aldvmm.gof              Calculating goodness of fit measures
 aldvmm.gr               Calculating Numeric Gradients of the Negative
                         Log-Likelihood
 aldvmm.init             Creating Initial Values

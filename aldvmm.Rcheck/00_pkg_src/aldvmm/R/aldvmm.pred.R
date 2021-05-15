@@ -69,11 +69,8 @@ aldvmm.pred <- function(par,
     for (c in 1:(ncmp - 1)) {
       p_c[, c] <- exp_xd[, c] / (1 + rowSums(exp_xd))
     }
-    if (nrow(p_c) > 1) {
-      p_c[, ncmp] <- 1 - rowSums(p_c[, 1:(ncmp - 1), drop = FALSE])
-    } else {
-      p_c[, ncmp] <- 1 - sum(p_c[1:(ncmp - 1)])
-    }
+    
+    p_c[, ncmp] <- 1 - rowSums(p_c[, 1:(ncmp - 1), drop = FALSE])
     
   } else {
     p_c <- matrix(data = 1, 
@@ -151,6 +148,17 @@ aldvmm.pred <- function(par,
   
   pred <- list()
   
+  # Probabilities of group membership
+  if (any(is.na(p_c))) {
+    warning("fitted probabilities of component membership include missing 
+            values\n",
+            call. = FALSE)
+  }
+  
+  pred[["prob"]] <- colMeans(p_c)
+  names(pred[["prob"]]) <- paste0(lcmp, 1:ncmp)
+  
+  
   # Outcomes
   pred[["yhat"]] <- rowSums(p_c * ev)
   names(pred[["yhat"]]) <- rownames(X[[1]])
@@ -163,20 +171,8 @@ aldvmm.pred <- function(par,
     names(pred[["res"]]) <- rownames(X[[1]])
   }
 
-  if (sum(is.na(pred[["yhat"]])) != 0) {
+  if (any(is.na(pred[["yhat"]]))) {
     warning("fitted values include missing values\n",
-            call. = FALSE)
-  }
-  
-  # Probabilities of group membership
-  #----------------------------------
-  
-  pred[["prob"]] <- colMeans(p_c)
-  names(pred[["prob"]]) <- paste0(lcmp, 1:ncmp)
-  
-  if (sum(is.na(p_c)) != 0) {
-    warning("fitted probabilities of component membership include missing 
-            values\n",
             call. = FALSE)
   }
   

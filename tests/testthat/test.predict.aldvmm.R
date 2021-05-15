@@ -1,5 +1,19 @@
 test_that('Check prediction S3 method.', {
   
+  # Object not coercible to data.frame
+  #-----------------------------------
+  
+  data(utility)
+  suppressWarnings({
+    fit <- aldvmm(eq5d ~ age | female,
+                  data = utility,
+                  psi = c(-0.594, 0.883))
+  })
+  
+  testthat::expect_error(predict(fit,
+                                 newdata = plot(),
+                                 se.fit = TRUE))
+  
   # Prediction in data with incomplete rows and missing covariance matrix
   #----------------------------------------------------------------------
   
@@ -7,9 +21,13 @@ test_that('Check prediction S3 method.', {
   utility[1, 3] <- NA
   utility[34, 1] <- NA
   
-  suppressWarnings({fit <- aldvmm(eq5d ~ age | female,
-                                 data = utility,
-                                 psi = c(-0.594, 0.883))})
+  suppressWarnings({
+    suppressMessages({
+      fit <- aldvmm(eq5d ~ age | female,
+                    data = utility,
+                    psi = c(-0.594, 0.883))
+    })
+  })
   
   pred <- predict(fit,
                   newdata = utility,

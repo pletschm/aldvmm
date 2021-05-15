@@ -16,7 +16,7 @@ vignette: >
   
 <!-- Setup -->
   
-```{r setup, eval = FALSE, echo = FALSE, results = 'hide'}
+```{r setup, eval = TRUE, echo = FALSE, results = 'hide'}
 
 # Load packages
 #--------------
@@ -62,7 +62,7 @@ ggplot_theme <- theme(panel.background = element_rect(fill = "white",
 
 <!-- Load data -->
 
-```{r load_data, eval = FALSE, echo = FALSE, results = 'hide'}
+```{r load_data, eval = FALSE, warning = FALSE, echo = FALSE, results = 'hide'}
 
 # List to collect results used in text
 #-------------------------------------
@@ -121,7 +121,7 @@ rm(textout)
 
 <!-- Computationally heavy calculations -->
 
-```{r calc_fit, eval = FALSE, echo = FALSE, results = 'hide'}
+```{r calc_fit, eval = FALSE, warning = FALSE, echo = FALSE, results = 'hide'}
 
 #------------------------------------------------------------------------------
 # Fit model 1
@@ -325,7 +325,7 @@ rm(formula)
 
 <!-- Make plots -->
 
-```{r calc_plot, eval = FALSE, echo = FALSE, results = 'hide'}
+```{r calc_plot, eval = FALSE, warning = FALSE, echo = FALSE, results = 'hide'}
 
 # Histogram of observed outcomes
 #-------------------------------
@@ -348,9 +348,9 @@ rm(plot_hist_obs)
 
 load("fit1_all.RData")
 
-yhat <- fit1_all[["fit"]][["zero"]][["nlminb"]][["pred"]][["yhat"]]
+plotdf <- data.frame(yhat = fit1_all[["fit"]][["zero"]][["nlminb"]][["pred"]][["yhat"]])
 
-plot_hist_pred <- ggplot2::ggplot(as.data.frame(yhat), aes(x = yhat)) + 
+plot_hist_pred <- ggplot2::ggplot(plotdf, aes(x = yhat)) + 
   geom_histogram(binwidth = 0.02, color="black", fill="white") +
   xlab("EQ-5D-3L utilities") +
   ylab("Frequency") +
@@ -361,7 +361,7 @@ save(plot_hist_pred,
      file = "plot_hist_pred.RData",
      compress = TRUE)
 
-rm(yhat, plot_hist_pred, fit1_all)
+rm(plotdf, plot_hist_pred, fit1_all)
 
 # Comparison of predicted values from different optimization methods
 #-------------------------------------------------------------------
@@ -376,8 +376,8 @@ tmpdf <- as.data.frame(rbind(cbind(y = c, bl = c, alg = "45° line"),
                              cbind(y = a, bl = c, alg = "Nelder-Mead"),
                              cbind(y = b, bl = c, alg = "hjn")))
 
-tmpdf$y <- as.numeric(tmpdf$y)
-tmpdf$bl <- as.numeric(tmpdf$bl)
+tmpdf$y <- as.numeric(as.character(tmpdf$y))
+tmpdf$bl <- as.numeric(as.character(tmpdf$bl))
 
 plot_comp_pred <- ggplot(tmpdf, aes(x = bl, y = y, group = alg)) +
   geom_line(aes(linetype = alg)) +
@@ -492,21 +492,24 @@ stata_yhat <- read.table("stata_yhat.csv",
                          dec = ".")
 
 stata_yhat_long <- stata_yhat
-names(stata_yhat_long) <- c("Reference case 1", "Reference case 2", "Reference case 3", "Reference case 4")
+names(stata_yhat_long) <- c("Ref. case 1", 
+                            "Ref. case 2", 
+                            "Ref. case 3", 
+                            "Ref. case 4")
 suppressMessages(stata_yhat_long <- reshape2::melt(stata_yhat_long))
 stata_yhat_long$variable <- as.character(stata_yhat_long$variable)
 stata_yhat_long$software <- "STATA"
 
-r_yhat_long <- rbind(cbind(variable = "Reference case 1",
+r_yhat_long <- rbind(cbind(variable = "Ref. case 1",
                            value = fit1_nlminb[["pred"]][["yhat"]],
                            software = "R"),
-                     cbind(variable = "Reference case 2",
+                     cbind(variable = "Ref. case 2",
                            value = fit1_cstr_stata[["pred"]][["yhat"]],
                            software = "R"),
-                     cbind(variable = "Reference case 3",
+                     cbind(variable = "Ref. case 3",
                            value = fit1_cons[["pred"]][["yhat"]],
                            software = "R"),
-                     cbind(variable = "Reference case 4",
+                     cbind(variable = "Ref. case 4",
                            value = fit2_stata[["pred"]][["yhat"]],
                            software = "R"))
 
@@ -515,7 +518,7 @@ r_yhat_long <- as.data.frame(r_yhat_long)
 plotdf <- rbind(stata_yhat_long, r_yhat_long)
 
 suppressWarnings(
-  plot_box_yhat <- ggplot(plotdf, 
+  plot_box_yhat <- ggplot2::ggplot(plotdf, 
                           aes(x = variable, 
                               y = as.numeric(value), 
                               fill = software)) +
@@ -549,21 +552,24 @@ stata_se <- read.table("stata_se.csv",
                        dec = ".")
 
 stata_se_long <- stata_se
-names(stata_se_long) <- c("Reference case 1", "Reference case 2", "Reference case 3", "Reference case 4")
+names(stata_se_long) <- c("Ref. case 1", 
+                          "Ref. case 2", 
+                          "Ref. case 3", 
+                          "Ref. case 4")
 suppressMessages(stata_se_long <- reshape2::melt(stata_se_long))
 stata_se_long$variable <- as.character(stata_se_long$variable)
 stata_se_long$software <- "STATA"
 
-r_se_long <- rbind(cbind(variable = "Reference case 1",
+r_se_long <- rbind(cbind(variable = "Ref. case 1",
                          value = fit1_nlminb[["pred"]][["se.fit"]],
                          software = "R"),
-                   # cbind(variable = "Reference case 2",
+                   # cbind(variable = "Ref. case 2",
                    #       value = fit1_cstr_stata[["pred"]][["se.fit"]],
                    #       software = "R"),
-                   cbind(variable = "Reference case 3",
+                   cbind(variable = "Ref. case 3",
                          value = fit1_cons[["pred"]][["se.fit"]],
                          software = "R"),
-                   cbind(variable = "Reference case 4",
+                   cbind(variable = "Ref. case 4",
                          value = fit2_stata[["pred"]][["se.fit"]],
                          software = "R"))
 
@@ -572,7 +578,10 @@ r_se_long <- as.data.frame(r_se_long)
 plotdf <- rbind(stata_se_long, r_se_long)
 
 suppressWarnings(
-  plot_box_se <- ggplot(plotdf, aes(x = variable, y = as.numeric(value), fill = software)) +
+  plot_box_se <- ggplot2::ggplot(plotdf, 
+                                 aes(x = variable, 
+                                     y = as.numeric(value), 
+                                     fill = software)) +
     geom_boxplot() +
     ylab("Standard errors of fitted values") +
     ggplot_theme +
@@ -594,7 +603,7 @@ rm(list = ls(pattern = "r_"))
 
 <!-- Make summary tables -->
 
-```{r calc_tab, eval = FALSE, echo = FALSE, results = 'hide'}
+```{r calc_tab, eval = FALSE, warning = FALSE, echo = FALSE, results = 'hide'}
 
 # Model 1, comparison of optimization methods
 #--------------------------------------------
@@ -812,10 +821,10 @@ stata_se <- read.table("stata_se.csv",
 # Fitted values
 sumhat <- list()
 
-sumhat[["yhat"]][["(1)"]] <- summary(stata_yhat[, 1] - fit1_nlminb[["pred"]][["yhat"]])
-sumhat[["yhat"]][["(2)"]] <- summary(stata_yhat[, 2] - fit1_cstr_stata[["pred"]][["yhat"]])
-sumhat[["yhat"]][["(3)"]] <- summary(stata_yhat[, 3] - fit1_cons[["pred"]][["yhat"]])
-sumhat[["yhat"]][["(4)"]] <- summary(stata_yhat[, 4] - fit2_stata[["pred"]][["yhat"]])
+sumhat[["yhat"]][["Ref. case 1"]] <- summary(stata_yhat[, 1] - fit1_nlminb[["pred"]][["yhat"]])
+sumhat[["yhat"]][["Ref. case 2"]] <- summary(stata_yhat[, 2] - fit1_cstr_stata[["pred"]][["yhat"]])
+sumhat[["yhat"]][["Ref. case 3"]] <- summary(stata_yhat[, 3] - fit1_cons[["pred"]][["yhat"]])
+sumhat[["yhat"]][["Ref. case 4"]] <- summary(stata_yhat[, 4] - fit2_stata[["pred"]][["yhat"]])
 
 tab_diff_yhat <- suppressWarnings( round(do.call("cbind", sumhat[["yhat"]]), 6) )
 tab_diff_yhat <- tab_diff_yhat[1:6, ]
@@ -826,10 +835,10 @@ save(tab_diff_yhat,
 
 # Standard errors of fitted values
 
-sumhat[["se"]][["(1)"]] <- summary(stata_se[, 1] - fit1_nlminb[["pred"]][["se.fit"]])
-sumhat[["se"]][["(2)"]] <- summary(stata_se[, 2] - fit1_cstr_stata[["pred"]][["se.fit"]])
-sumhat[["se"]][["(3)"]] <- summary(stata_se[, 3] - fit1_cons[["pred"]][["se.fit"]])
-sumhat[["se"]][["(4)"]] <- summary(stata_se[, 4] - fit2_stata[["pred"]][["se.fit"]])
+sumhat[["se"]][["Ref. case 1"]] <- summary(stata_se[, 1] - fit1_nlminb[["pred"]][["se.fit"]])
+sumhat[["se"]][["Ref. case 2"]] <- summary(stata_se[, 2] - fit1_cstr_stata[["pred"]][["se.fit"]])
+sumhat[["se"]][["Ref. case 3"]] <- summary(stata_se[, 3] - fit1_cons[["pred"]][["se.fit"]])
+sumhat[["se"]][["Ref. case 4"]] <- summary(stata_se[, 4] - fit2_stata[["pred"]][["se.fit"]])
 
 tab_diff_se <- suppressWarnings( round(do.call("cbind", sumhat[["se"]]), 6) )
 tab_diff_se <- tab_diff_se[1:6, ]
@@ -856,7 +865,7 @@ rm(df)
 
 <!-- Make tables of STATA results -->
 
-```{r calc_tab_stata, eval = FALSE, echo = FALSE, results = 'hide'}
+```{r calc_tab_stata, eval = FALSE, warning = FALSE, echo = FALSE, results = 'hide'}
 
 # Model 1, default options
 #-------------------------
@@ -960,7 +969,7 @@ The 'aldvmm' package provides four options for the generation of starting values
 
 4. "sann": Parameter estimates of a simulated annealing algorithm.
 
-The 'aldvmm' package obtains fitted values using the expected value function from @HernandezAlava2015. Covariance matrices and standard errors of parameters are obtained from a numerical approximation of the hessian matrix using numDeriv::hessian(). Standard errors of fitted values in the estimation data $SE^{fit}$ and standard errors of predicted values in new data  $SE^{pred}$ are calculated using the delta method [@Dowd2014; @Whitmore1986]. $G_{i}$ denotes the gradient of a fitted value with respect to changes in parameter estimates, $\Sigma$ denotes the covariance matrix of parameters, and $MSE$ denotes the mean squared error of fitted versus observed values in the estimation data.
+The 'aldvmm' package obtains fitted values using the expected value function from @HernandezAlava2015. Covariance matrices and standard errors of parameters are obtained from a numerical approximation of the hessian matrix using numDeriv::hessian(). Standard errors of fitted values in the estimation data $SE^{fit}_{i}$ and standard errors of predicted values in new data  $SE^{pred}_{i}$ are calculated using the delta method [@Dowd2014; @Whitmore1986]. $G_{i}$ denotes the gradient of a fitted value with respect to changes in parameter estimates, $\Sigma$ denotes the covariance matrix of parameters, and $MSE$ denotes the mean squared error of fitted versus observed values in the estimation data.
 \begin{equation}
 \begin{array}{rl}
 SE^{fit}_{i} &= \sqrt{G_{i}'\Sigma G_{i}}
@@ -1028,7 +1037,7 @@ The data includes `r format(textout$ncplt, big.mark="'")` observations with comp
 
 load("plot_hist_obs.RData")
 
-plot_hist_obs
+print(plot_hist_obs)
 
 rm(plot_hist_obs)
 
@@ -1116,7 +1125,7 @@ We obtain expected values of observations in the estimation data using the gener
 
 load("plot_hist_pred.RData")
 
-plot_hist_pred
+print(plot_hist_pred)
 
 rm(plot_hist_pred)
 
@@ -1254,7 +1263,7 @@ The densities in the solution of the "Nelder-Mead" method resemble the bi-model 
 
 load("plot_dens_Nelder-Mead.RData")
 
-plot_dens
+print(plot_dens)
 
 rm(plot_dens)
 
@@ -1264,7 +1273,7 @@ rm(plot_dens)
 
 load("plot_dens_nlminb.RData")
 
-plot_dens
+print(plot_dens)
 
 rm(plot_dens)
 
@@ -1274,7 +1283,7 @@ rm(plot_dens)
 
 load("plot_dens_hjn.RData")
 
-plot_dens
+print(plot_dens)
 
 rm(plot_dens)
 
@@ -1286,7 +1295,7 @@ The differences in parameter estimates from different optimization methods show 
 
 load("plot_comp_pred.RData")
 
-plot_comp_pred
+print(plot_comp_pred)
 
 rm(plot_comp_pred)
 
@@ -1588,7 +1597,7 @@ Standard errors of fitted values differ visibly between platforms (figure \@ref(
 
 load("plot_box_yhat.RData")
 
-suppressWarnings(plot_box_yhat)
+suppressWarnings(print(plot_box_yhat))
 
 rm(plot_box_yhat)
 
@@ -1598,7 +1607,7 @@ rm(plot_box_yhat)
 
 load("plot_box_se.RData")
 
-suppressWarnings(plot_box_se)
+suppressWarnings(print(plot_box_se))
 
 rm(plot_box_se)
 
@@ -1747,7 +1756,7 @@ plot <- ggplot2::ggplot(plotdat, aes(x = factor(as.numeric(group)),
 
 load("plot_comp_mhl1.RData")
 
-plot_comp_mhl1
+print(plot_comp_mhl1)
 
 rm(plot_comp_mhl1)
 
@@ -1757,7 +1766,7 @@ rm(plot_comp_mhl1)
 
 load("plot_comp_mhl2.RData")
 
-plot_comp_mhl2
+print(plot_comp_mhl2)
 
 rm(plot_comp_mhl2)
 
@@ -1767,7 +1776,7 @@ rm(plot_comp_mhl2)
 
 load("plot_comp_mhl3.RData")
 
-plot_comp_mhl3
+print(plot_comp_mhl3)
 
 rm(plot_comp_mhl3)
 
