@@ -83,7 +83,7 @@ NULL
 #'   \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
 #'   methods that can use this information. The default value is \code{TRUE}.
 #'   If \code{'optim.grad'} is set to \code{FALSE}, a finite difference
-#'   approximation will be used.
+#'   approximation is used.
 #' @param init.est an optional numeric vector of user-defined initial values.
 #'   User-defined initial values override the \code{'init.method'} argument.
 #'   Initial values have to follow the same order as parameter estimates in the
@@ -99,14 +99,14 @@ NULL
 #'   have to follow the same order as parameter estimates in the return value
 #'   \code{'par'}.
 #' @param se.fit an optional logical value indicating whether standard errors
-#'   of the fit are calculated (see Details). The default value is
+#'   of fitted values are calculated (see Details). The default value is
 #'   \code{FALSE}.
 #' @param level a numeric value of the significance level for confidence bands
 #'   of fitted values. The default value is 0.95.
 #'
 #' @details \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{
-#'   \code{aldvmm::aldvmm()}} fits adjusted limited dependent variable mixture
-#'   models using the likelihood and expected value functions from Hernandez
+#'   \code{aldvmm::aldvmm()}} fits an adjusted limited dependent variable mixture
+#'   model using the likelihood and expected value functions from Hernandez
 #'   Alava and Wailoo (2015).  The model accounts for multi-modality, minimum
 #'   and maximum utility values and potential gaps between 1 and the next
 #'   smaller observed utility value.  Adjusted limited dependent variable

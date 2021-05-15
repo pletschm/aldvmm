@@ -16,6 +16,7 @@ spelling::spell_check_package()
 detach("package:aldvmm", unload = TRUE)
 ct <- covr::package_coverage()
 covr::report(ct)
+library("aldvmm")
 
 # Register qpdf and ghostscript
 #------------------------------
@@ -39,7 +40,7 @@ devtools::build(args = c('--compact-vignettes=both'))
 # Source check
 #-------------
 
-# R CMD check --as-cran ../aldvmm_0.8.2.tar.gz
+# R CMD check --as-cran ../aldvmm_0.8.2.9000.tar.gz
 
 # Winbuilder
 #------------
@@ -49,5 +50,5 @@ devtools::build(args = c('--compact-vignettes=both'))
 # rhub checks
 #------------
 
-rhub::check("../aldvmm_0.8.0.9000.tar.gz", platform = "ubuntu-gcc-release")
-rhub::check("../aldvmm_0.8.0.9000.tar.gz", platform = "debian-gcc-devel")
+rhub::check("../aldvmm_0.8.2.9000.tar.gz", platform = "ubuntu-gcc-release")
+rhub::check("../aldvmm_0.8.2.9000.tar.gz", platform = "debian-gcc-devel")
