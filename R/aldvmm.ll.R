@@ -1,37 +1,27 @@
 #' Calculating the Negative Adjusted Limited Dependent Variable Mixture Model
 #' Log-Likelihood
 #'
-#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm::aldvmm.ll()}}
+#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm.ll()}}
 #' calculates the negative log-likelihood of \code{'data'} supplied to
-#' \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}} for the
+#' \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm()}} for the
 #' parameter values in \code{'par'}.
 #'
 #' @param par a named numeric vector of parameter values used to calculate the
-#'   log-likelihood. The names of the parameter vector must be generated using
-#'   \ifelse{html}{\code{\link[aldvmm]{aldvmm.getnames}}}{
-#'   \code{aldvmm::aldvmm.getnames()}} because they will be inherited by return
-#'   values of functions in package \code{'aldvmm'}, and the names will be used
-#'   in the extraction of parameters into nested lists using \ifelse{html}{
-#'   \code{\link[aldvmm]{aldvmm.getpar}}}{\code{aldvmm::aldvmm.getpar()}}.
+#'   log-likelihood.
 #' @param X a list of design matrices returned by
-#'   \ifelse{html}{\code{\link[aldvmm]{aldvmm.mm}}}{\code{aldvmm::aldvmm.mm()}}.
-#'    \code{'X'} is of length 2 and includes numeric design matrices for the
-#'   models of component distributions (label \code{"beta"}) and the
-#'   probabilities of group membership (label \code{"delta"}). The numeric
-#'   matrices in \code{'X'} have rownames inherited from \code{'data'} supplied
-#'   to \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.
-#'   The rownames will be used in
-#'   \ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{
-#'   \code{aldvmm::aldvmm.pred()}} to return missing predictions for incomplete
-#'   observations in \code{'data'}.
+#'   \ifelse{html}{\code{\link[aldvmm]{aldvmm.mm}}}{\code{aldvmm.mm()}}.
+#'   \code{'X'} is of length 2 and includes numeric design matrices for the
+#'   models of component distributions and the probabilities of group
+#'   membership. The numeric matrices in \code{'X'} have rownames inherited
+#'   from \code{'data'} supplied to
+#'   \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm()}}.
 #' @param y a numeric vector of observed outcomes from complete observations in
 #'   \code{'data'} supplied to
-#'   \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.
+#'   \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm()}}.
 #' @param lcoef a character vector of length 2 with labels of objects including
-#'   regression coefficients. The first element is the label of coefficients
-#'   for component distributions (default \code{"beta"}), and the second
-#'   element is the label of coefficients on probabilities of component
-#'   membership (default \code{"delta"}).
+#'   regression coefficients of component distributions (default \code{"beta"})
+#'   and coefficients of probabilities of component membership (default
+#'   \code{"delta"}).
 #' @param lcpar a character vector with the labels of objects including
 #'   constant parameters of component distributions (e.g. the standard
 #'   deviation of the normal distribution). The length of \code{'lcpar'}
@@ -40,23 +30,35 @@
 #'   for labeling objects including regression coefficients in different
 #'   components (e.g. "Comp1", "Comp2", ...). This label is also used in
 #'   summary tables returned by
-#'   \ifelse{html}{\code{\link[aldvmm]{summary.aldvmm}}}{
-#'   \code{aldvmm::summary.aldvmm()}}.
+#'   \ifelse{html}{\code{\link[aldvmm]{summary.aldvmm}}}{\code{summary.aldvmm()}}.
+#'
+#'
 #'
 #' @inheritParams aldvmm
 #'
-#' @details
-#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm::aldvmm.ll()}}
-#' calculates the negative adjusted limited dependent variable mixture model
-#' log-likelihood using the likelihood function published in Hernandez Alava
-#' and Wailoo (2015). Constant distribution parameters that need to be
-#' non-negative (i.e. the standard deviation of normal distributions) enter the
-#' likelihood function as log-transformed values.
+#' @details \ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm.ll()}}
+#'   calculates the negative adjusted limited dependent variable mixture model
+#'   log-likelihood using the likelihood function published in Hernandez Alava
+#'   and Wailoo (2015). Constant distribution parameters that need to be
+#'   non-negative (i.e. the standard deviation of normal distributions) enter
+#'   the likelihood function as log-transformed values.
 #'
-#' As the "L-BFGS-B" and "Rcgmin" methods in
-#' \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}} fail if
-#' they encounter infinite values, the log-likelihood function takes the value
-#' -1e+20 if it is infinite during these algorithms.
+#'   As the "L-BFGS-B" and "Rcgmin" methods in
+#'   \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}} fail
+#'   if they encounter infinite values, the log-likelihood function takes the
+#'   value -1e+20 if it is infinite during these algorithms.
+#'
+#'   The names of the parameter vector supplied to \code{'par'} must be
+#'   generated using \ifelse{html}{\code{\link[aldvmm]{aldvmm.getnames}}}{
+#'   \code{aldvmm.getnames()}} because they will be inherited by return values
+#'   of other functions in the package \code{'aldvmm'}. The names will also be
+#'   used in the extraction of parameters from parameter vectors into nested
+#'   lists using
+#'   \ifelse{html}{\code{\link[aldvmm]{aldvmm.getpar}}}{\code{aldvmm.getpar()}}.
+#'
+#'
+#'
+#'
 #'
 #' @references Alava, M. H. and Wailoo, A. (2015) Fitting adjusted limited
 #'   dependent variable mixture models to EQ-5D. \emph{The Stata Journal},

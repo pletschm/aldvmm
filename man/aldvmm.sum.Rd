@@ -26,43 +26,38 @@ aldvmm.sum(
 \arguments{
 \item{est}{a named numeric vector of parameters with names returned by
 \ifelse{html}{\code{\link[aldvmm]{aldvmm.getnames}}}{
-\code{aldvmm::aldvmm.getnames()}}.}
+\code{aldvmm.getnames()}}.}
 
 \item{se}{a named numeric vector of standard errors of parameters returned
-by \ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{
-\code{aldvmm::aldvmm.cv()}}.}
+by \ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{ \code{aldvmm.cv()}}.}
 
 \item{z}{a named numeric vector of z scores (standardized coefficients) of
 parameters returned by \ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{
-\code{aldvmm::aldvmm.cv()}}.}
+\code{aldvmm.cv()}}.}
 
 \item{p}{a named numeric vector of p-values of parameters returned by
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{
-\code{aldvmm::aldvmm.cv()}}.}
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{ \code{aldvmm.cv()}}.}
 
 \item{lower}{a named numeric vector of 95\% lower limits of parameters
 returned by \ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{
-\code{aldvmm::aldvmm.cv()}}.}
+\code{aldvmm.cv()}}.}
 
 \item{upper}{a named numeric vector of 95\% upper limits of parameters
 returned by \ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{
-\code{aldvmm::aldvmm.cv()}}.}
+\code{aldvmm.cv()}}.}
 
 \item{n}{a numeric value of the number of complete observations in
 \code{'data'} supplied to
-\ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.}
+\ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm()}}.}
 
 \item{value}{a numeric value of the negative log-likelihood returned by
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{
-\code{aldvmm::aldvmm.ll()}}.}
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{ \code{aldvmm.ll()}}.}
 
 \item{aic}{a numeric value of the Akaike information criterion (AIC)
-returned by \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{
-\code{aldvmm::aldvmm()}}.}
+returned by \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{ \code{aldvmm()}}.}
 
 \item{bic}{a numeric value of the Bayesian information criterion (BIC)
-returned by \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{
-\code{aldvmm::aldvmm()}}.}
+returned by \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{ \code{aldvmm()}}.}
 
 \item{ncmp}{a numeric value of the number of components that are mixed. The
 default value is 2. A value of 1 represents a tobit model with a gap
@@ -84,11 +79,11 @@ for labeling objects including regression coefficients in different
 components (e.g. "Comp1", "Comp2", ...). This label is also used in
 summary tables returned by
 \ifelse{html}{\code{\link[aldvmm]{summary.aldvmm}}}{
-\code{aldvmm::summary.aldvmm()}}.}
+\code{summary.aldvmm()}}.}
 
 \item{lvar}{a named list of character vectors with column names of design
 matrices returned by \ifelse{html}{\code{\link[aldvmm]{aldvmm.mm}}}{
-\code{aldvmm::aldvmm.mm()}}.}
+\code{aldvmm.mm()}}.}
 
 \item{digits}{a numeric value of the number of digits in the reporting
 table.}
@@ -97,6 +92,6 @@ table.}
 a data frame with a summary table of regression results.
 }
 \description{
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.sum}}}{
-\code{aldvmm::aldvmm.sum()}} creates a summary table of regression results.
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.sum}}}{ \code{aldvmm.sum()}}
+creates a summary table of regression results.
 }

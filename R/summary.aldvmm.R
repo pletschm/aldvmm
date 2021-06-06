@@ -2,10 +2,10 @@
 #'
 #' The generic function
 #' \ifelse{html}{\code{\link[base]{summary}}}{\code{base::summary()}} calls
-#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.sum}}}{\code{aldvmm::aldvmm.sum()}}
-#' to print the summary table data frame returned by
-#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.sum}}}{\code{aldvmm::aldvmm.sum()}}
-#' of the results.
+#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.sum}}}{\code{aldvmm.sum()}} to
+#' print the summary table data frame returned by
+#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.sum}}}{\code{aldvmm.sum()}} of the
+#' results.
 #'
 #' @param object an object inheriting from class 'aldvmm'.
 #' @param ... further arguments passed to or from other methods.

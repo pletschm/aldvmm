@@ -7,34 +7,24 @@
 aldvmm.cv(ll, par, X, y, dist, psi, ncmp, lcoef, lcpar, lcmp, optim.method)
 }
 \arguments{
-\item{ll}{a function
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm::aldvmm.ll()}}
-returning the negative log-likelihood of the adjusted limited dependent
-variable mixture model as a scalar result.}
+\item{ll}{a function returning the negative log-likelihood of the adjusted
+limited dependent variable mixture model as a scalar result
+(\ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm.ll()}}).}
 
 \item{par}{a named numeric vector of parameter values used to calculate the
-log-likelihood. The names of the parameter vector must be generated using
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.getnames}}}{
-\code{aldvmm::aldvmm.getnames()}} because they will be inherited by return
-values of functions in package \code{'aldvmm'}, and the names will be used
-in the extraction of parameters into nested lists using \ifelse{html}{
-\code{\link[aldvmm]{aldvmm.getpar}}}{\code{aldvmm::aldvmm.getpar()}}.}
+log-likelihood.}
 
 \item{X}{a list of design matrices returned by
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.mm}}}{\code{aldvmm::aldvmm.mm()}}.
- \code{'X'} is of length 2 and includes numeric design matrices for the
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.mm}}}{\code{aldvmm.mm()}}.
+\code{'X'} is of length 2 and includes numeric design matrices for the
 models of component distributions (label \code{"beta"}) and the
 probabilities of group membership (label \code{"delta"}). The numeric
 matrices in \code{'X'} have rownames inherited from \code{'data'} supplied
-to \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.
-The rownames will be used in
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{
-\code{aldvmm::aldvmm.pred()}} to return missing predictions for incomplete
-observations in \code{'data'}.}
+to \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm()}}.}
 
 \item{y}{a numeric vector of observed outcomes from complete observations in
 \code{'data'} supplied to
-\ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.}
+\ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm()}}.}
 
 \item{dist}{an optional character value of the distribution used in the
 finite mixture. In this release, only the normal distribution is
@@ -66,7 +56,7 @@ for labeling objects including regression coefficients in different
 components (e.g. "Comp1", "Comp2", ...). This label is also used in
 summary tables returned by
 \ifelse{html}{\code{\link[aldvmm]{summary.aldvmm}}}{
-\code{aldvmm::summary.aldvmm()}}.}
+\code{summary.aldvmm()}}.}
 
 \item{optim.method}{an optional character value of one of the following
 \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
@@ -75,7 +65,7 @@ methods: \code{"Nelder-Mead"}, \code{"BFGS"}, \code{"CG"},
 \code{"hjn"}. The default method is \code{"Nelder-Mead"}. The method
 \code{"L-BFGS-B"} is used when lower and/or upper constraints are set
 using \code{'init.lo'} and \code{'init.hi'}. The method \code{"nlm"}
-cannot be used in the \code{'aldvmm'} package (see details).}
+cannot be used in the \code{'aldvmm'} package.}
 }
 \value{
 \code{aldvmm.cv} returns a list with the following objects.
@@ -83,23 +73,21 @@ cannot be used in the \code{'aldvmm'} package (see details).}
   derivatives of the likelihood function \code{'ll'}.} \item{\code{cv}}{a
   numeric matrix with covariances/variances of parameters in \code{'par'}.}
   \item{\code{se}}{a numeric vector of standard errors of parameters in
-  \code{'par'}.} \item{\code{z}}{a numeric vector of z-values (parameter
-  values in \code{'par'} divided by standard error \code{'se'}).}
-  \item{\code{p}}{a numeric vector of p-values of parameter estimates
-  (probabilities of \code{'z'} smaller than zero).} \item{\code{upper}}{a
-  numeric vector of upper 95\% confindence limits of paramter estimates in
-  \code{'par'}.} \item{\code{lower}}{a numeric vector of lower 95\%
-  confindence limits of paramter estimates in \code{'par'}.}
+  \code{'par'}.} \item{\code{z}}{a numeric vector of z-values of parameters
+  in \code{'par'}.} \item{\code{p}}{a numeric vector of p-values of
+  parameter estimates (probabilities of \code{'z'} smaller than zero).}
+  \item{\code{upper}}{a numeric vector of upper 95\% confindence limits of
+  paramter estimates in \code{'par'}.} \item{\code{lower}}{a numeric vector
+  of lower 95\% confindence limits of paramter estimates in \code{'par'}.}
 }
 \description{
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{\code{aldvmm::aldvmm.cv()}}
-performs a numerical approximation of the covariance matrix of parameter
-estimates.
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{\code{aldvmm.cv()}} performs
+a numerical approximation of the covariance matrix of parameter estimates.
 }
 \details{
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{\code{aldvmm::aldvmm.cv()}}
-uses
-\ifelse{html}{\code{\link[numDeriv]{hessian}}}{\code{numDeriv::hessian()}}
-to calculate the hessian matrix of the log-likelihood function in
-\code{'ll'} at parameter values in \code{'par'}.
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{\code{aldvmm.cv()}}
+  uses
+  \ifelse{html}{\code{\link[numDeriv]{hessian}}}{\code{numDeriv::hessian()}}
+  to calculate the hessian matrix of the log-likelihood function supplied to
+  \code{'ll'} at parameter values in \code{'par'}.
 }

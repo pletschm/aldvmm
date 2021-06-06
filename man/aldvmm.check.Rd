@@ -3,7 +3,7 @@
 \name{aldvmm.check}
 \alias{aldvmm.check}
 \title{Checking the Validity of Objects Supplied to
-\ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}}
+\ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm()}}}
 \usage{
 aldvmm.check(
   formula,
@@ -30,8 +30,7 @@ aldvmm.check(
 description of the model to be fitted. The model formula takes the form
 \code{y ~ x1 + x2 | x1 + x4}, where the \code{|} delimiter separates the
 model for expected values of normal distributions (left) and the
-multinomial logit model of probabilities of component membership (right)
-(see details).}
+multinomial logit model of probabilities of component membership (right).}
 
 \item{data}{a data frame, list or environment (or object coercible to a data
 frame by \cr \ifelse{html}{\code{\link[base]{as.data.frame}}}{
@@ -68,12 +67,12 @@ for labeling objects including regression coefficients in different
 components (e.g. "Comp1", "Comp2", ...). This label is also used in
 summary tables returned by
 \ifelse{html}{\code{\link[aldvmm]{summary.aldvmm}}}{
-\code{aldvmm::summary.aldvmm()}}.}
+\code{summary.aldvmm()}}.}
 
 \item{init.method}{an optional character value indicating the method for
-obtaining initial values (see details). The following values are
-available: \code{"zero"}, \code{"random"}, \code{"constant"} and
-\code{"sann"}. The default value is \code{"zero"}.}
+obtaining initial values. The following values are available:
+\code{"zero"}, \code{"random"}, \code{"constant"} and \code{"sann"}. The
+default value is \code{"zero"}.}
 
 \item{optim.method}{an optional character value of one of the following
 \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
@@ -82,14 +81,14 @@ methods: \code{"Nelder-Mead"}, \code{"BFGS"}, \code{"CG"},
 \code{"hjn"}. The default method is \code{"Nelder-Mead"}. The method
 \code{"L-BFGS-B"} is used when lower and/or upper constraints are set
 using \code{'init.lo'} and \code{'init.hi'}. The method \code{"nlm"}
-cannot be used in the \code{'aldvmm'} package (see details).}
+cannot be used in the \code{'aldvmm'} package.}
 
 \item{optim.grad}{an optional logical value indicating if a numeric gradient
 should be used in
 \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
 methods that can use this information. The default value is \code{TRUE}.
 If \code{'optim.grad'} is set to \code{FALSE}, a finite difference
-approximation will be used.}
+approximation is used.}
 
 \item{init.est}{an optional numeric vector of user-defined initial values.
 User-defined initial values override the \code{'init.method'} argument.
@@ -113,25 +112,23 @@ have to follow the same order as parameter estimates in the return value
 control parameters.}
 
 \item{se.fit}{an optional logical value indicating whether standard errors
-of the fit are calculated (see Details). The default value is
-\code{FALSE}.}
+of fitted values are calculated. The default value is \code{FALSE}.}
 
 \item{level}{a numeric value of the significance level for confidence bands
 of fitted values. The default value is 0.95.}
 }
 \value{
 \code{aldvmm.check} returns warnings or stops the execution of
-  \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}} if
-  validity checks fail.
+  \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm()}} if validity
+  checks fail.
 }
 \description{
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.check}}}{\code{aldvmm::aldvmm.check()}}
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.check}}}{\code{aldvmm.check()}}
 runs validity checks of objects supplied to
-\ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.
+\ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm()}}.
 }
 \details{
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.check}}}{\code{aldvmm::aldvmm.check()}}
-  checks the validity of input values of
-  \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}} and
-  of user settings.
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.check}}}{\code{aldvmm.check()}}
+checks the validity of arguments of
+\ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm()}}.
 }

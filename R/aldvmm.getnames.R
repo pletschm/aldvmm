@@ -1,12 +1,12 @@
 #' Creating Names of Parameter Vectors
 #'
 #' @description
-#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.getnames}}}{\code{aldvmm::aldvmm.getnames()}}
+#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.getnames}}}{\code{aldvmm.getnames()}}
 #' creates names of parameter vectors used in
-#' \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}. The
-#' order of the elements in \code{'lcoef'} and \code{'lcpar'} determines the
-#' order of parameters and the structure of summary tables returned by
-#' \ifelse{html}{\code{\link[aldvmm]{summary.aldvmm}}}{\code{aldvmm::summary.aldvmm()}}.
+#' \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm()}}. The order of
+#' the elements in \code{'lcoef'} and \code{'lcpar'} determines the order of
+#' parameters and the structure of summary tables returned by
+#' \ifelse{html}{\code{\link[aldvmm]{summary.aldvmm}}}{\code{summary.aldvmm()}}.
 #'
 #' @inheritParams aldvmm.ll
 #' @param names a character vector of names of considered elements
@@ -17,7 +17,7 @@
 #'   vectors.
 #'
 #' @return a character vector of names of parameter vectors used in
-#'   \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.
+#'   \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm()}}.
 #'
 #' @export
 

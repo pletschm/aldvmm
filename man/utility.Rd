@@ -14,9 +14,9 @@ A data frame with 200 rows and 3 variables:\tabular{ll}{
 utility
 }
 \description{
-\ifelse{html}{\code{\link[aldvmm]{utility}}}{\code{aldvmm::utility}} is a
-  simulated data frame including health state utilities and patients' age
-  and sex.
+\ifelse{html}{\code{\link[aldvmm]{utility}}}{\code{utility}} is
+a simulated data frame including health state utilities and patients' age
+and sex.
 }
 \examples{
 set.seed(101010101)

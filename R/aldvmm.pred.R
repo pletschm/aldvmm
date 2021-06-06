@@ -2,20 +2,19 @@
 #' Models
 #'
 #' @description
-#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm::aldvmm.pred()}}
-#' makes predictions of observations in design matrices in \code{'X'} using the
-#' results of
-#' \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.
+#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm.pred()}} makes
+#' predictions of observations in design matrices in \code{'X'} using the
+#' results of \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm()}}.
 #'
 #' @inheritParams aldvmm.ll
 #'
 #' @details
-#'   \ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm::aldvmm.pred()}}
-#'   calculates expected values for observations in design matrices in
-#'   \code{'X'} using the expected value function published in Hernandez Alava
-#'   and Wailoo (2015). Constant distribution parameters that need to be
-#'   non-negative (i.e. standard deviations of normal distributions) enter the
-#'   expected value function as log-transformed values.
+#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm.pred()}}
+#' calculates expected values for observations in design matrices in \code{'X'}
+#' using the expected value function published in Hernandez Alava and Wailoo
+#' (2015). Constant distribution parameters that need to be non-negative (i.e.
+#' standard deviations of normal distributions) enter the expected value
+#' function as log-transformed values.
 #'
 #' @return a named numeric vector of predicted outcomes. The names of the
 #'   elements in the vector are identical to the row names of design matrices

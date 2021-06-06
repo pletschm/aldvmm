@@ -8,16 +8,12 @@ aldvmm.getnames(X, names, lcoef, lcpar, lcmp, ncmp)
 }
 \arguments{
 \item{X}{a list of design matrices returned by
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.mm}}}{\code{aldvmm::aldvmm.mm()}}.
- \code{'X'} is of length 2 and includes numeric design matrices for the
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.mm}}}{\code{aldvmm.mm()}}.
+\code{'X'} is of length 2 and includes numeric design matrices for the
 models of component distributions (label \code{"beta"}) and the
 probabilities of group membership (label \code{"delta"}). The numeric
 matrices in \code{'X'} have rownames inherited from \code{'data'} supplied
-to \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.
-The rownames will be used in
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{
-\code{aldvmm::aldvmm.pred()}} to return missing predictions for incomplete
-observations in \code{'data'}.}
+to \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm()}}.}
 
 \item{names}{a character vector of names of considered elements
 (distributions \code{"beta"}, multinomial logit \code{"delta"} or constant
@@ -42,7 +38,7 @@ for labeling objects including regression coefficients in different
 components (e.g. "Comp1", "Comp2", ...). This label is also used in
 summary tables returned by
 \ifelse{html}{\code{\link[aldvmm]{summary.aldvmm}}}{
-\code{aldvmm::summary.aldvmm()}}.}
+\code{summary.aldvmm()}}.}
 
 \item{ncmp}{a numeric value of the number of components that are mixed. The
 default value is 2. A value of 1 represents a tobit model with a gap
@@ -50,13 +46,13 @@ between 1 and the maximum value in \code{'psi'}.}
 }
 \value{
 a character vector of names of parameter vectors used in
-  \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.
+  \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm()}}.
 }
 \description{
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.getnames}}}{\code{aldvmm::aldvmm.getnames()}}
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.getnames}}}{\code{aldvmm.getnames()}}
 creates names of parameter vectors used in
-\ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}. The
-order of the elements in \code{'lcoef'} and \code{'lcpar'} determines the
-order of parameters and the structure of summary tables returned by
-\ifelse{html}{\code{\link[aldvmm]{summary.aldvmm}}}{\code{aldvmm::summary.aldvmm()}}.
+\ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm()}}. The order of
+the elements in \code{'lcoef'} and \code{'lcpar'} determines the order of
+parameters and the structure of summary tables returned by
+\ifelse{html}{\code{\link[aldvmm]{summary.aldvmm}}}{\code{summary.aldvmm()}}.
 }

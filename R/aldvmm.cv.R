@@ -1,37 +1,33 @@
 #' Numerical Approximation of Covariance Matrix
 #'
 #' @description
-#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{\code{aldvmm::aldvmm.cv()}}
-#' performs a numerical approximation of the covariance matrix of parameter
-#' estimates.
+#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{\code{aldvmm.cv()}} performs
+#' a numerical approximation of the covariance matrix of parameter estimates.
 #'
 #' @inheritParams aldvmm.ll
 #' @inheritParams aldvmm
 #'
-#' @param ll a function
-#'   \ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm::aldvmm.ll()}}
-#'   returning the negative log-likelihood of the adjusted limited dependent
-#'   variable mixture model as a scalar result.
+#' @param ll a function returning the negative log-likelihood of the adjusted
+#'   limited dependent variable mixture model as a scalar result
+#'   (\ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm.ll()}}).
 #'
-#' @details
-#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{\code{aldvmm::aldvmm.cv()}}
-#' uses
-#' \ifelse{html}{\code{\link[numDeriv]{hessian}}}{\code{numDeriv::hessian()}}
-#' to calculate the hessian matrix of the log-likelihood function in
-#' \code{'ll'} at parameter values in \code{'par'}.
+#' @details \ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{\code{aldvmm.cv()}}
+#'   uses
+#'   \ifelse{html}{\code{\link[numDeriv]{hessian}}}{\code{numDeriv::hessian()}}
+#'   to calculate the hessian matrix of the log-likelihood function supplied to
+#'   \code{'ll'} at parameter values supplied to \code{'par'}.
 #'
 #' @return \code{aldvmm.cv} returns a list with the following objects.
 #'   \item{\code{hessian}}{a numeric matrix with second-order partial
 #'   derivatives of the likelihood function \code{'ll'}.} \item{\code{cv}}{a
 #'   numeric matrix with covariances/variances of parameters in \code{'par'}.}
 #'   \item{\code{se}}{a numeric vector of standard errors of parameters in
-#'   \code{'par'}.} \item{\code{z}}{a numeric vector of z-values (parameter
-#'   values in \code{'par'} divided by standard error \code{'se'}).}
-#'   \item{\code{p}}{a numeric vector of p-values of parameter estimates
-#'   (probabilities of \code{'z'} smaller than zero).} \item{\code{upper}}{a
-#'   numeric vector of upper 95\% confindence limits of paramter estimates in
-#'   \code{'par'}.} \item{\code{lower}}{a numeric vector of lower 95\%
+#'   \code{'par'}.} \item{\code{z}}{a numeric vector of z-values of parameters
+#'   in \code{'par'}.} \item{\code{p}}{a numeric vector of p-values of
+#'   parameter estimates.} \item{\code{upper}}{a numeric vector of upper 95\%
 #'   confindence limits of paramter estimates in \code{'par'}.}
+#'   \item{\code{lower}}{a numeric vector of lower 95\% confindence limits of
+#'   paramter estimates in \code{'par'}.}
 #'
 #' @export
 

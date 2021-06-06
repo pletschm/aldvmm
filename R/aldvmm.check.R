@@ -1,22 +1,21 @@
 #' Checking the Validity of Objects Supplied to
-#' \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}
+#' \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm()}}
 #'
-#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.check}}}{\code{aldvmm::aldvmm.check()}}
+#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.check}}}{\code{aldvmm.check()}}
 #' runs validity checks of objects supplied to
-#' \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.
+#' \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm()}}.
 #'
 #' @inheritParams aldvmm
 #' @inheritParams aldvmm.ll
 #'
 #' @details
-#'   \ifelse{html}{\code{\link[aldvmm]{aldvmm.check}}}{\code{aldvmm::aldvmm.check()}}
-#'   checks the validity of input values of
-#'   \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}} and
-#'   of user settings.
+#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.check}}}{\code{aldvmm.check()}}
+#' checks the validity of arguments of
+#' \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm()}}.
 #'
 #' @return \code{aldvmm.check} returns warnings or stops the execution of
-#'   \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}} if
-#'   validity checks fail.
+#'   \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm()}} if validity
+#'   checks fail.
 #'
 #' @export
 

@@ -1,11 +1,11 @@
 #' Creating Initial Values
 #'
 #' @description
-#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.init}}}{\code{aldvmm::aldvmm.init()}}
+#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.init}}}{\code{aldvmm.init()}}
 #' creates initial values for the minimization of the negative log-likelihood
 #' returned by
-#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm::aldvmm.ll()}}
-#' using \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}.
+#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm.ll()}} using
+#' \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}.
 #'
 #' @inheritParams aldvmm
 #' @inheritParams aldvmm.ll
@@ -22,25 +22,25 @@
 #'   When user-specified initial values are supplied in \code{'init.est'}, the
 #'   argument \code{'init.method'} is ignored.
 #'
-#'   By default, \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{
-#'   \code{aldvmm::aldvmm()}} performs unconstrained optimization with upper
-#'   and lower limits at \code{-Inf} and \code{Inf}.  When user-defined lower
-#'   and upper limits are supplied to \code{'init.lo'} and/or \code{'init-hi'},
-#'   these default limits are replaced with the user-specified values, and the
-#'   method \code{"L-BFGS-B"} is used for box-constrained optimization instead
-#'   of the user defined \code{'optim.method'}.  It is possible to only set
-#'   either maximum or minimum limits.
+#'   By default, \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{ \code{aldvmm()}}
+#'   performs unconstrained optimization with upper and lower limits at
+#'   \code{-Inf} and \code{Inf}.  When user-defined lower and upper limits are
+#'   supplied to \code{'init.lo'} and/or \code{'init-hi'}, these default limits
+#'   are replaced with the user-specified values, and the method
+#'   \code{"L-BFGS-B"} is used for box-constrained optimization instead of the
+#'   user defined \code{'optim.method'}.  It is possible to only set either
+#'   maximum or minimum limits.
 #'
 #' @return
-#'   \ifelse{html}{\code{\link[aldvmm]{aldvmm.init}}}{\code{aldvmm::aldvmm.init()}}
-#'   returns a list with the following objects. \item{\code{est}}{a numeric
-#'   vector of initial values of parameters supplied to
-#'   \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}} in
-#'   \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.}
-#'   \item{\code{lo}}{a numeric vector of lower limits of parameters in
-#'   \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}.}
-#'   \item{\code{hi}}{a numeric vector of upper limits of parameters in
-#'   \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}.}
+#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.init}}}{\code{aldvmm.init()}}
+#' returns a list with the following objects. \item{\code{est}}{a numeric
+#' vector of initial values of parameters supplied to
+#' \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}} in
+#' \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm()}}.}
+#' \item{\code{lo}}{a numeric vector of lower limits of parameters in
+#' \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}.}
+#' \item{\code{hi}}{a numeric vector of upper limits of parameters in
+#' \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}.}
 #'
 #' @export
 

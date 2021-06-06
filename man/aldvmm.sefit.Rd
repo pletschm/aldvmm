@@ -23,27 +23,18 @@ aldvmm.sefit(
 }
 \arguments{
 \item{par}{a named numeric vector of parameter values used to calculate the
-log-likelihood. The names of the parameter vector must be generated using
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.getnames}}}{
-\code{aldvmm::aldvmm.getnames()}} because they will be inherited by return
-values of functions in package \code{'aldvmm'}, and the names will be used
-in the extraction of parameters into nested lists using \ifelse{html}{
-\code{\link[aldvmm]{aldvmm.getpar}}}{\code{aldvmm::aldvmm.getpar()}}.}
+log-likelihood.}
 
 \item{yhat}{a numeric vector of predicted outcomes from
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm::aldvmm.pred()}}.}
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm.pred()}}.}
 
 \item{X}{a list of design matrices returned by
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.mm}}}{\code{aldvmm::aldvmm.mm()}}.
- \code{'X'} is of length 2 and includes numeric design matrices for the
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.mm}}}{\code{aldvmm.mm()}}.
+\code{'X'} is of length 2 and includes numeric design matrices for the
 models of component distributions (label \code{"beta"}) and the
 probabilities of group membership (label \code{"delta"}). The numeric
 matrices in \code{'X'} have rownames inherited from \code{'data'} supplied
-to \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.
-The rownames will be used in
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{
-\code{aldvmm::aldvmm.pred()}} to return missing predictions for incomplete
-observations in \code{'data'}.}
+to \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm()}}.}
 
 \item{type}{a character value from 'fit' or 'pred' indicating whether the
 standard error of the fit ('fit') or the standard error of predictions in
@@ -53,8 +44,7 @@ new data ('pred') are calculated.}
 description of the model to be fitted. The model formula takes the form
 \code{y ~ x1 + x2 | x1 + x4}, where the \code{|} delimiter separates the
 model for expected values of normal distributions (left) and the
-multinomial logit model of probabilities of component membership (right)
-(see details).}
+multinomial logit model of probabilities of component membership (right).}
 
 \item{psi}{a numeric vector of minimum and maximum possible utility values
 smaller than or equal to 1 (e.g. \code{c(-0.594, 0.883)}). The potential
@@ -64,13 +54,13 @@ minimum and maximum limits in \code{'psi'} does not matter.}
 
 \item{cv}{a numeric matrix with covariances/variances of parameter estimates
 returned by
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{\code{aldvmm::aldvmm.cv()}}.}
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{\code{aldvmm.cv()}}.}
 
 \item{mse}{a scalar a numeric value of the mean squared error of observed
 versus predicted outcomes \eqn{\sum{(y - \hat{y})^2}/(n_{obs} -
 n_{par})}{\sum{(y - \hat{y})^2}/(nobs - npar)} for all observations in
 \code{data} supplied to
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm::aldvmm.ll()}}.}
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm.ll()}}.}
 
 \item{ncmp}{a numeric value of the number of components that are mixed. The
 default value is 2. A value of 1 represents a tobit model with a gap
@@ -94,7 +84,7 @@ for labeling objects including regression coefficients in different
 components (e.g. "Comp1", "Comp2", ...). This label is also used in
 summary tables returned by
 \ifelse{html}{\code{\link[aldvmm]{summary.aldvmm}}}{
-\code{aldvmm::summary.aldvmm()}}.}
+\code{summary.aldvmm()}}.}
 
 \item{lcpar}{a character vector with the labels of objects including
 constant parameters of component distributions (e.g. the standard
@@ -107,12 +97,12 @@ a named numeric vector of standard errors of fitted or predicted
   names of design matrices in \code{'X'}
 }
 \description{
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.sefit}}}{\code{aldvmm::aldvmm.sefit()}}
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.sefit}}}{\code{aldvmm.sefit()}}
 calculates standard errors of fitted and predicted outcomes using the delta
 method.
 }
 \details{
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.sefit}}}{\code{aldvmm::aldvmm.sefit()}}
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.sefit}}}{\code{aldvmm.sefit()}}
 calculates standard errors of fitted values using the delta method.  The
 standard errors of fitted values in the estimation data set are calculated
 as \eqn{se_{fit} = \sqrt{G^{t} \Sigma G}}{se_fit =
@@ -121,12 +111,12 @@ with respect to changes of parameter estimates, and \eqn{\Sigma} is the
 estimated covariance matrix of parameters (Dowd et al., 2014).  The standard
 errors of predicted values in new data sets using the method
 \ifelse{html}{\code{\link[aldvmm]{predict.aldvmm}}}{
-\code{aldvmm::predict.aldvmm()}} are calculated as \eqn{se_{pred} =
-\sqrt{MSE + G^{t} \Sigma G}}{se_pred = (mse + t(grad)*\Sigma*grad)^0.5},
-where \eqn{MSE}{mse} is the mean squared error of fitted versus observed
-outcomes in the original estimation data (Whitmore, 1986).  The gradients of
-fitted values with respect to parameter estimates are approximated
-numerically using
+\code{predict.aldvmm()}} are calculated as \eqn{se_{pred} = \sqrt{MSE +
+G^{t} \Sigma G}}{se_pred = (mse + t(grad)*\Sigma*grad)^0.5}, where
+\eqn{MSE}{mse} is the mean squared error of fitted versus observed outcomes
+in the original estimation data (Whitmore, 1986).  The gradients of fitted
+values with respect to parameter estimates are approximated numerically
+using
 \ifelse{html}{\code{\link[numDeriv]{jacobian}}}{\code{numDeriv::jacobian()}}.
 }
 \references{

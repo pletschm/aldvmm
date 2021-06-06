@@ -1,19 +1,18 @@
 #' Calculating Numeric Gradients of the Negative Log-Likelihood
 #'
-#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.gr}}}{\code{aldvmm::aldvmm.gr()}}
+#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.gr}}}{\code{aldvmm.gr()}}
 #' calculates numeric gradients of the negative log-likelihood returned by
-#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm::aldvmm.ll()}}
-#' with respect to parameter values in \code{'par'}.
+#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm.ll()}} with
+#' respect to parameter values in \code{'par'}.
 #'
 #' @inheritParams aldvmm
 #' @inheritParams aldvmm.cv
 #'
-#' @details
-#'   \ifelse{html}{\code{\link[aldvmm]{aldvmm.gr}}}{\code{aldvmm::aldvmm.gr()}}
-#'   uses \ifelse{html}{\code{\link[numDeriv]{grad}}}{\code{numDeriv::grad()}}
-#'   to perform numerical approximation of gradients of the negative
-#'   log-likelihood returned by
-#'   \ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm::aldvmm.ll()}}.
+#' @details \ifelse{html}{\code{\link[aldvmm]{aldvmm.gr}}}{\code{aldvmm.gr()}}
+#' uses \ifelse{html}{\code{\link[numDeriv]{grad}}}{\code{numDeriv::grad()}} to
+#' perform numerical approximation of gradients of the negative log-likelihood
+#' returned by
+#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm.ll()}}.
 #'
 #'
 #' @return a named numeric vector of first derivatives of the negative

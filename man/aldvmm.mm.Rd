@@ -16,8 +16,7 @@ variables in \code{'formula'}.}
 description of the model to be fitted. The model formula takes the form
 \code{y ~ x1 + x2 | x1 + x4}, where the \code{|} delimiter separates the
 model for expected values of normal distributions (left) and the
-multinomial logit model of probabilities of component membership (right)
-(see details).}
+multinomial logit model of probabilities of component membership (right).}
 
 \item{ncmp}{a numeric value of the number of components that are mixed. The
 default value is 2. A value of 1 represents a tobit model with a gap
@@ -37,18 +36,18 @@ a named list of numeric matrices. \item{\code{beta}}{a numeric
   membership.}
 }
 \description{
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.mm}}}{\code{aldvmm::aldvmm.mm()}}
-creates design matrices for regressions of component distributions
-(\code{"beta"}) and probabilities of component membership (\code{"delta"}).
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.mm}}}{\code{aldvmm.mm()}} creates
+design matrices for regressions of component distributions (\code{"beta"})
+and probabilities of component membership (\code{"delta"}).
 }
 \details{
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.mm}}}{\code{aldvmm::aldvmm.mm()}}
-uses
-\ifelse{html}{\code{\link[stats]{model.matrix}}}{\code{stats::model.matrix()}}
-to create design matrices for regressions of component distributions
-(\code{"beta"}) and probabilities of component membership (\code{"delta"})
-based on \code{'formula'} supplied to
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm::aldvmm.ll()}}.
-The design matrix for probabilities of group membership is only created if
-more than one component are specified  in \code{'ncmp'}.
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.mm}}}{\code{aldvmm.mm()}}
+  uses
+  \ifelse{html}{\code{\link[stats]{model.matrix}}}{\code{stats::model.matrix()}}
+   to create design matrices for regressions of component distributions
+  (\code{"beta"}) and probabilities of component membership (\code{"delta"})
+  based on \code{'formula'} supplied to
+  \ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm.ll()}}. The
+  design matrix for probabilities of group membership is only created if
+  more than one component are specified  in \code{'ncmp'}.
 }
