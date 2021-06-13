@@ -3,8 +3,9 @@
 #'
 #' @description
 #' \ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm.pred()}} makes
-#' predictions of observations in design matrices in \code{'X'} using the
-#' results of \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm()}}.
+#' predictions of observations in design matrices in \code{'X'} using parameter
+#' estimates returned by
+#' \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm()}}.
 #'
 #' @inheritParams aldvmm.ll
 #'

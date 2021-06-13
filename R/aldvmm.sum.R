@@ -3,15 +3,13 @@
 #' \ifelse{html}{\code{\link[aldvmm]{aldvmm.sum}}}{ \code{aldvmm.sum()}}
 #' creates a summary table of regression results.
 #'
-#' @param est a named numeric vector of parameters with names returned by
-#'   \ifelse{html}{\code{\link[aldvmm]{aldvmm.getnames}}}{
-#'   \code{aldvmm.getnames()}}.
+#' @param est a named numeric vector of point estimates.
 #'
 #' @param se a named numeric vector of standard errors of parameters returned
 #'   by \ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{ \code{aldvmm.cv()}}.
 #'
-#' @param z a named numeric vector of z scores (standardized coefficients) of
-#'   parameters returned by \ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{
+#' @param z a named numeric vector of standardized coefficients of parameters
+#'   returned by \ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{
 #'   \code{aldvmm.cv()}}.
 #'
 #' @param p a named numeric vector of p-values of parameters returned by
@@ -29,10 +27,12 @@
 #'   \ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{ \code{aldvmm.ll()}}.
 #'
 #' @param aic a numeric value of the Akaike information criterion (AIC)
-#'   returned by \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{ \code{aldvmm()}}.
+#'   returned by \ifelse{html}{\code{\link[aldvmm]{aldvmm.gof}}}{
+#'   \code{aldvmm.gof()}}.
 #'
 #' @param bic a numeric value of the Bayesian information criterion (BIC)
-#'   returned by \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{ \code{aldvmm()}}.
+#'   returned by \ifelse{html}{\code{\link[aldvmm]{aldvmm.gof}}}{
+#'   \code{aldvmm.gof()}}.
 #'
 #' @param lvar a named list of character vectors with column names of design
 #'   matrices returned by \ifelse{html}{\code{\link[aldvmm]{aldvmm.mm}}}{
@@ -47,7 +47,7 @@
 #'
 #' @inheritParams aldvmm.ll
 #'
-#' @return a data frame with a summary table of regression results.
+#' @return a \code{data.frame} object with a summary table of regression results.
 #'
 #' @export
 

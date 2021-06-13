@@ -23,7 +23,7 @@ test_that('Check aldvmm fitting function.', {
   utility[34, 1] <- NA
   utility[77, 2] <- NA
   
-  # With numeric gradients
+  # With numerical gradients
   suppressMessages({
     suppressWarnings({testthat::expect_message(
       aldvmm(eq5d ~ age | female,
@@ -59,7 +59,7 @@ test_that('Check aldvmm fitting function.', {
     })
   })
   
-  # With numeric gradients
+  # With numerical gradients
   suppressMessages({
     suppressWarnings({
       fit <- aldvmm(eq5d ~ age | female,
@@ -89,7 +89,7 @@ test_that('Check aldvmm fitting function.', {
   # Unfeasible starting values
   #----------------------------
   
-  # With numeric gradients
+  # With numerical gradients
   suppressMessages({
     suppressWarnings({
       testthat::expect_error(aldvmm(eq5d ~ age | female,

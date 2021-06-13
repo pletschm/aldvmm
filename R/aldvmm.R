@@ -77,8 +77,8 @@ NULL
 #' @param optim.control an optional list of
 #'   \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
 #'   control parameters.
-#' @param optim.grad an optional logical value indicating if a numeric gradient
-#'   should be used in
+#' @param optim.grad an optional logical value indicating if a numerical
+#'   gradient should be used in
 #'   \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
 #'   methods that can use this information. The default value is \code{TRUE}.
 #'   If \code{'optim.grad'} is set to \code{FALSE}, a finite difference

@@ -7,16 +7,13 @@
 aldvmm.gr(par, X, y, psi, dist, ncmp, lcoef, lcmp, lcpar, optim.method)
 }
 \arguments{
-\item{par}{a named numeric vector of parameter values used to calculate the
-log-likelihood.}
+\item{par}{a named numeric vector of parameter values.}
 
 \item{X}{a list of design matrices returned by
 \ifelse{html}{\code{\link[aldvmm]{aldvmm.mm}}}{\code{aldvmm.mm()}}.
-\code{'X'} is of length 2 and includes numeric design matrices for the
-models of component distributions (label \code{"beta"}) and the
-probabilities of group membership (label \code{"delta"}). The numeric
-matrices in \code{'X'} have rownames inherited from \code{'data'} supplied
-to \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm()}}.}
+\code{'X'} is of length 2 and includes a design matrix for the model of
+component distributions and a design matrix for the model of probabilities
+of group membership.}
 
 \item{y}{a numeric vector of observed outcomes from complete observations in
 \code{'data'} supplied to
@@ -30,24 +27,22 @@ minimum and maximum limits in \code{'psi'} does not matter.}
 
 \item{dist}{an optional character value of the distribution used in the
 finite mixture. In this release, only the normal distribution is
-available, and the default value is \code{"normal"}.}
+available, and the default value is set to \code{"normal"}.}
 
 \item{ncmp}{a numeric value of the number of components that are mixed. The
 default value is 2. A value of 1 represents a tobit model with a gap
 between 1 and the maximum value in \code{'psi'}.}
 
 \item{lcoef}{a character vector of length 2 with labels of objects including
-regression coefficients. The first element is the label of coefficients
-for component distributions (default \code{"beta"}), and the second
-element is the label of coefficients on probabilities of component
-membership (default \code{"delta"}).}
+regression coefficients of component distributions (default \code{"beta"})
+and coefficients of probabilities of component membership (default
+\code{"delta"}).}
 
 \item{lcmp}{a character value representing a stub (default \code{"Comp"})
 for labeling objects including regression coefficients in different
 components (e.g. "Comp1", "Comp2", ...). This label is also used in
 summary tables returned by
-\ifelse{html}{\code{\link[aldvmm]{summary.aldvmm}}}{
-\code{summary.aldvmm()}}.}
+\ifelse{html}{\code{\link[aldvmm]{summary.aldvmm}}}{\code{summary.aldvmm()}}.}
 
 \item{lcpar}{a character vector with the labels of objects including
 constant parameters of component distributions (e.g. the standard
@@ -69,7 +64,7 @@ a named numeric vector of first derivatives of the negative
 }
 \description{
 \ifelse{html}{\code{\link[aldvmm]{aldvmm.gr}}}{\code{aldvmm.gr()}}
-calculates numeric gradients of the negative log-likelihood returned by
+calculates numerical gradients of the negative log-likelihood returned by
 \ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm.ll()}} with
 respect to parameter values in \code{'par'}.
 }

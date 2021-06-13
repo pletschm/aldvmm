@@ -22,23 +22,20 @@ aldvmm.sefit(
 )
 }
 \arguments{
-\item{par}{a named numeric vector of parameter values used to calculate the
-log-likelihood.}
+\item{par}{a named numeric vector of parameter values.}
 
-\item{yhat}{a numeric vector of predicted outcomes from
+\item{yhat}{a numeric vector of predicted outcomes returned by
 \ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm.pred()}}.}
 
 \item{X}{a list of design matrices returned by
 \ifelse{html}{\code{\link[aldvmm]{aldvmm.mm}}}{\code{aldvmm.mm()}}.
-\code{'X'} is of length 2 and includes numeric design matrices for the
-models of component distributions (label \code{"beta"}) and the
-probabilities of group membership (label \code{"delta"}). The numeric
-matrices in \code{'X'} have rownames inherited from \code{'data'} supplied
-to \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm()}}.}
+\code{'X'} is of length 2 and includes a design matrix for the model of
+component distributions and a design matrix for the model of probabilities
+of group membership.}
 
-\item{type}{a character value from 'fit' or 'pred' indicating whether the
-standard error of the fit ('fit') or the standard error of predictions in
-new data ('pred') are calculated.}
+\item{type}{a character value of either 'fit' or 'pred' indicating whether
+the standard error of the fit ('fit') or the standard error of predictions
+in new data ('pred') are calculated.}
 
 \item{formula}{an object of class \code{"formula"} with a symbolic
 description of the model to be fitted. The model formula takes the form
@@ -56,10 +53,10 @@ minimum and maximum limits in \code{'psi'} does not matter.}
 returned by
 \ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{\code{aldvmm.cv()}}.}
 
-\item{mse}{a scalar a numeric value of the mean squared error of observed
-versus predicted outcomes \eqn{\sum{(y - \hat{y})^2}/(n_{obs} -
-n_{par})}{\sum{(y - \hat{y})^2}/(nobs - npar)} for all observations in
-\code{data} supplied to
+\item{mse}{a numeric value of the mean squared error of observed versus
+predicted outcomes \eqn{\sum{(y - \hat{y})^2}/(n_{obs} - n_{par})}{\sum{(y
+- \hat{y})^2}/(nobs - npar)} for all observations in model matrices
+\code{'X'} supplied to
 \ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm.ll()}}.}
 
 \item{ncmp}{a numeric value of the number of components that are mixed. The
@@ -68,23 +65,21 @@ between 1 and the maximum value in \code{'psi'}.}
 
 \item{dist}{an optional character value of the distribution used in the
 finite mixture. In this release, only the normal distribution is
-available, and the default value is \code{"normal"}.}
+available, and the default value is set to \code{"normal"}.}
 
 \item{level}{a numeric value of the significance level for confidence bands
 of fitted values. The default value is 0.95.}
 
 \item{lcoef}{a character vector of length 2 with labels of objects including
-regression coefficients. The first element is the label of coefficients
-for component distributions (default \code{"beta"}), and the second
-element is the label of coefficients on probabilities of component
-membership (default \code{"delta"}).}
+regression coefficients of component distributions (default \code{"beta"})
+and coefficients of probabilities of component membership (default
+\code{"delta"}).}
 
 \item{lcmp}{a character value representing a stub (default \code{"Comp"})
 for labeling objects including regression coefficients in different
 components (e.g. "Comp1", "Comp2", ...). This label is also used in
 summary tables returned by
-\ifelse{html}{\code{\link[aldvmm]{summary.aldvmm}}}{
-\code{summary.aldvmm()}}.}
+\ifelse{html}{\code{\link[aldvmm]{summary.aldvmm}}}{\code{summary.aldvmm()}}.}
 
 \item{lcpar}{a character vector with the labels of objects including
 constant parameters of component distributions (e.g. the standard
@@ -103,20 +98,17 @@ method.
 }
 \details{
 \ifelse{html}{\code{\link[aldvmm]{aldvmm.sefit}}}{\code{aldvmm.sefit()}}
-calculates standard errors of fitted values using the delta method.  The
-standard errors of fitted values in the estimation data set are calculated
-as \eqn{se_{fit} = \sqrt{G^{t} \Sigma G}}{se_fit =
-(t(grad)*\Sigma*grad)^0.5}, where \eqn{G} is the gradient of a fitted value
-with respect to changes of parameter estimates, and \eqn{\Sigma} is the
-estimated covariance matrix of parameters (Dowd et al., 2014).  The standard
-errors of predicted values in new data sets using the method
-\ifelse{html}{\code{\link[aldvmm]{predict.aldvmm}}}{
-\code{predict.aldvmm()}} are calculated as \eqn{se_{pred} = \sqrt{MSE +
-G^{t} \Sigma G}}{se_pred = (mse + t(grad)*\Sigma*grad)^0.5}, where
-\eqn{MSE}{mse} is the mean squared error of fitted versus observed outcomes
-in the original estimation data (Whitmore, 1986).  The gradients of fitted
-values with respect to parameter estimates are approximated numerically
-using
+calculates standard errors of fitted values using the delta method. Standard
+errors of fitted values in the estimation data set are calculated as
+\eqn{se_{fit} = \sqrt{G^{t} \Sigma G}}{se_fit = (t(grad)*\Sigma*grad)^0.5},
+where \eqn{G} is the gradient of a fitted value with respect to changes of
+parameter estimates, and \eqn{\Sigma} is the estimated covariance matrix of
+parameters (Dowd et al., 2014).  Standard errors of predicted values in new
+data sets are calculated as \eqn{se_{pred} = \sqrt{MSE + G^{t} \Sigma
+G}}{se_pred = (mse + t(grad)*\Sigma*grad)^0.5}, where \eqn{MSE}{mse} is the
+mean squared error of fitted versus observed outcomes in the original
+estimation data (Whitmore, 1986).  The gradients of fitted values with
+respect to parameter estimates are approximated numerically using
 \ifelse{html}{\code{\link[numDeriv]{jacobian}}}{\code{numDeriv::jacobian()}}.
 }
 \references{

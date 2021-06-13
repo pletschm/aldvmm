@@ -23,31 +23,30 @@ default value is 2. A value of 1 represents a tobit model with a gap
 between 1 and the maximum value in \code{'psi'}.}
 
 \item{lcoef}{a character vector of length 2 with labels of objects including
-regression coefficients. The first element is the label of coefficients
-for component distributions (default \code{"beta"}), and the second
-element is the label of coefficients on probabilities of component
-membership (default \code{"delta"}).}
+regression coefficients of component distributions (default \code{"beta"})
+and coefficients of probabilities of component membership (default
+\code{"delta"}).}
 }
 \value{
 a named list of numeric matrices. \item{\code{beta}}{a numeric
-  matrix with the design matrix for the regression of component
-  distributions.} \item{\code{delta}}{a numeric matrix with the design
-  matrix for the multinomial logit model of probabilities of component
-  membership.}
+  design matrix for the model of component distributions.}
+  \item{\code{delta}}{a numeric design matrix of the multinomial logit model
+  of probabilities of component membership.}
 }
 \description{
 \ifelse{html}{\code{\link[aldvmm]{aldvmm.mm}}}{\code{aldvmm.mm()}} creates
-design matrices for regressions of component distributions (\code{"beta"})
-and probabilities of component membership (\code{"delta"}).
+two design matrices, one of the model of component distributions
+(\code{"beta"}) and one of the model of probabilities of component
+membership (\code{"delta"}).
 }
 \details{
 \ifelse{html}{\code{\link[aldvmm]{aldvmm.mm}}}{\code{aldvmm.mm()}}
   uses
   \ifelse{html}{\code{\link[stats]{model.matrix}}}{\code{stats::model.matrix()}}
-   to create design matrices for regressions of component distributions
+   to create design matrices for models of component distributions
   (\code{"beta"}) and probabilities of component membership (\code{"delta"})
   based on \code{'formula'} supplied to
   \ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm.ll()}}. The
   design matrix for probabilities of group membership is only created if
-  more than one component are specified  in \code{'ncmp'}.
+  more than one components are specified  in \code{'ncmp'}.
 }

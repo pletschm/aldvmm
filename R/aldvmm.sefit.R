@@ -4,21 +4,21 @@
 #' calculates standard errors of fitted and predicted outcomes using the delta
 #' method.
 #'
-#' @param yhat a numeric vector of predicted outcomes from
+#' @param yhat a numeric vector of predicted outcomes returned by
 #'   \ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm.pred()}}.
 #'
-#' @param type a character value from 'fit' or 'pred' indicating whether the
-#'   standard error of the fit ('fit') or the standard error of predictions in
-#'   new data ('pred') are calculated.
+#' @param type a character value of either 'fit' or 'pred' indicating whether
+#'   the standard error of the fit ('fit') or the standard error of predictions
+#'   in new data ('pred') are calculated.
 #' @param cv a numeric matrix with covariances/variances of parameter estimates
 #'   returned by
 #'   \ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{\code{aldvmm.cv()}}.
 #'
 #'
-#' @param mse a scalar a numeric value of the mean squared error of observed
-#'   versus predicted outcomes \eqn{\sum{(y - \hat{y})^2}/(n_{obs} -
-#'   n_{par})}{\sum{(y - \hat{y})^2}/(nobs - npar)} for all observations in
-#'   \code{data} supplied to
+#' @param mse a numeric value of the mean squared error of observed versus
+#'   predicted outcomes \eqn{\sum{(y - \hat{y})^2}/(n_{obs} - n_{par})}{\sum{(y
+#'   - \hat{y})^2}/(nobs - npar)} for all observations in model matrices
+#'   \code{'X'} supplied to
 #'   \ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm.ll()}}.
 #'
 #'
@@ -28,20 +28,17 @@
 #'
 #' @details
 #' \ifelse{html}{\code{\link[aldvmm]{aldvmm.sefit}}}{\code{aldvmm.sefit()}}
-#' calculates standard errors of fitted values using the delta method.  The
-#' standard errors of fitted values in the estimation data set are calculated
-#' as \eqn{se_{fit} = \sqrt{G^{t} \Sigma G}}{se_fit =
-#' (t(grad)*\Sigma*grad)^0.5}, where \eqn{G} is the gradient of a fitted value
-#' with respect to changes of parameter estimates, and \eqn{\Sigma} is the
-#' estimated covariance matrix of parameters (Dowd et al., 2014).  The standard
-#' errors of predicted values in new data sets using the method
-#' \ifelse{html}{\code{\link[aldvmm]{predict.aldvmm}}}{
-#' \code{predict.aldvmm()}} are calculated as \eqn{se_{pred} = \sqrt{MSE +
-#' G^{t} \Sigma G}}{se_pred = (mse + t(grad)*\Sigma*grad)^0.5}, where
-#' \eqn{MSE}{mse} is the mean squared error of fitted versus observed outcomes
-#' in the original estimation data (Whitmore, 1986).  The gradients of fitted
-#' values with respect to parameter estimates are approximated numerically
-#' using
+#' calculates standard errors of fitted values using the delta method. Standard
+#' errors of fitted values in the estimation data set are calculated as
+#' \eqn{se_{fit} = \sqrt{G^{t} \Sigma G}}{se_fit = (t(grad)*\Sigma*grad)^0.5},
+#' where \eqn{G} is the gradient of a fitted value with respect to changes of
+#' parameter estimates, and \eqn{\Sigma} is the estimated covariance matrix of
+#' parameters (Dowd et al., 2014).  Standard errors of predicted values in new
+#' data sets are calculated as \eqn{se_{pred} = \sqrt{MSE + G^{t} \Sigma
+#' G}}{se_pred = (mse + t(grad)*\Sigma*grad)^0.5}, where \eqn{MSE}{mse} is the
+#' mean squared error of fitted versus observed outcomes in the original
+#' estimation data (Whitmore, 1986).  The gradients of fitted values with
+#' respect to parameter estimates are approximated numerically using
 #' \ifelse{html}{\code{\link[numDeriv]{jacobian}}}{\code{numDeriv::jacobian()}}.
 #'
 #' @references Whitmore, G. A. (1986). Prediction limits for a univariate

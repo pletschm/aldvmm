@@ -1,7 +1,7 @@
 #' Calculating Numeric Gradients of the Negative Log-Likelihood
 #'
 #' \ifelse{html}{\code{\link[aldvmm]{aldvmm.gr}}}{\code{aldvmm.gr()}}
-#' calculates numeric gradients of the negative log-likelihood returned by
+#' calculates numerical gradients of the negative log-likelihood returned by
 #' \ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm.ll()}} with
 #' respect to parameter values in \code{'par'}.
 #'
@@ -13,7 +13,6 @@
 #' perform numerical approximation of gradients of the negative log-likelihood
 #' returned by
 #' \ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm.ll()}}.
-#'
 #'
 #' @return a named numeric vector of first derivatives of the negative
 #'   log-likelihood of the data with respect to parameters in \code{'par'}.

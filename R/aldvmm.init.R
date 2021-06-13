@@ -10,13 +10,13 @@
 #' @inheritParams aldvmm
 #' @inheritParams aldvmm.ll
 #'
-#' @details \code{'init.method'} accepts four values of methods for generating
-#'   initial values: \code{"zero"}, \code{"random"}, \code{"constant"},
-#'   \code{"sann"}. The method \code{"zero"} sets initial values of all
-#'   parameters to 0. The method \code{"random"} draws random starting values
-#'   from a standard normal distribution.  The method \code{"constant"}
-#'   estimates a constant-only model and uses estimates as initial values of
-#'   intercepts and standard errors and 0 for all other parameters.  The method
+#' @details \code{'init.method'} accepts four methods for generating initial
+#'   values: \code{"zero"}, \code{"random"}, \code{"constant"}, \code{"sann"}.
+#'   The method \code{"zero"} sets initial values of all parameters to 0. The
+#'   method \code{"random"} draws random starting values from a standard normal
+#'   distribution.  The method \code{"constant"} estimates a constant-only
+#'   model and uses estimates as initial values for intercepts and constant
+#'   distribution parameters and 0 for all other parameters.  The method
 #'   \code{"sann"} estimates the full model using the simulated annealing
 #'   optimization method and uses all parameter estimates as initial values.
 #'   When user-specified initial values are supplied in \code{'init.est'}, the
@@ -34,13 +34,9 @@
 #' @return
 #' \ifelse{html}{\code{\link[aldvmm]{aldvmm.init}}}{\code{aldvmm.init()}}
 #' returns a list with the following objects. \item{\code{est}}{a numeric
-#' vector of initial values of parameters supplied to
-#' \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}} in
-#' \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm()}}.}
-#' \item{\code{lo}}{a numeric vector of lower limits of parameters in
-#' \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}.}
-#' \item{\code{hi}}{a numeric vector of upper limits of parameters in
-#' \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}.}
+#' vector of initial values of parameters.}
+#' \item{\code{lo}}{a numeric vector of lower limits of parameters.}
+#' \item{\code{hi}}{a numeric vector of upper limits of parameters.}
 #'
 #' @export
 

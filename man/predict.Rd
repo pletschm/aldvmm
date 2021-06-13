@@ -17,9 +17,9 @@ prediction.}
 \item{se.fit}{an optional logical value indicating whether standard errors
 of fitted values are calculated. The default value is \code{FALSE}.}
 
-\item{type}{a character value from 'fit' or 'pred' indicating whether the
-standard error of the fit ('fit') or the standard error of predictions in
-new data ('pred') are calculated.}
+\item{type}{a character value of either 'fit' or 'pred' indicating whether
+the standard error of the fit ('fit') or the standard error of predictions
+in new data ('pred') are calculated.}
 
 \item{level}{a numeric value of the significance level for confidence bands
 of fitted values. The default value is 0.95.}
