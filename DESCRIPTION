@@ -6,7 +6,7 @@ Authors@R: person("Mark", "Pletscher", email = "pletscher.mark@gmail.com",
                   role = c("aut", "cre", "cph"))
 Date: 2021-06-14
 Depends: R (>= 3.5.0)
-Description: The goal of the package ‘aldvmm’ is to fit adjusted limited 
+Description: The goal of the package 'aldvmm' is to fit adjusted limited 
     dependent variable mixture models of health state utilities. Adjusted 
     limited dependent variable mixture models are finite mixtures of normal 
     distributions with an accumulation of density mass at the limits, and a gap 
