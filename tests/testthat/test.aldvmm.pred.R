@@ -33,7 +33,7 @@ test_that('Check prediction function.', {
   # Two-component model
   #--------------------
   
-  testdat <- as.data.frame(matrix(data     = runif(n = 12), 
+  testdat <- as.data.frame(matrix(data     = runif(n = 16), 
                                   nrow     = 4, 
                                   ncol     = 4,
                                   dimnames = list(NULL,
