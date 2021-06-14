@@ -1,7 +1,7 @@
 Package: aldvmm
 Type: Package
 Title: Adjusted Limited Dependent Variable Mixture Models
-Version: 0.8.2.9000
+Version: 0.8.3
 Authors@R: person("Mark", "Pletscher", email = "pletscher.mark@gmail.com",
                   role = c("aut", "cre", "cph"))
 Date: 2021-05-06
@@ -19,8 +19,7 @@ License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
-Imports: numDeriv, stats, checkmate, optimr, rmarkdown, bookdown, xtable, 
-    ggplot2, scales, reshape2
+Imports: numDeriv, stats, checkmate, optimr
 URL: https://github.com/pletschm/aldvmm/
 BugReports: https://github.com/pletschm/aldvmm/issues
 Suggests: 
@@ -28,6 +27,12 @@ Suggests:
     markdown,
     tinytex,
     testthat (>= 3.0.0),
-    covr
+    covr,
+    rmarkdown, 
+    bookdown, 
+    xtable, 
+    ggplot2, 
+    scales, 
+    reshape2
 VignetteBuilder: knitr
 Config/testthat/edition: 3
