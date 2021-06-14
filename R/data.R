@@ -2,10 +2,9 @@
 #' @name utility
 #' @title Simulated Example Data of Health State Utilities.
 #'
-#' @description
-#'   \ifelse{html}{\code{\link[aldvmm]{utility}}}{\code{aldvmm::utility}} is a
-#'   simulated data frame including health state utilities and patients' age
-#'   and sex.
+#' @description \ifelse{html}{\code{\link[aldvmm]{utility}}}{\code{utility}} is
+#' a simulated data frame including health state utilities and patients' age
+#' and sex.
 #'
 #' @format A data frame with 200 rows and 3 variables:\tabular{ll}{
 #'   \code{utility} \tab a utility value \{[-0.594, 0.883], 1\}. \cr \tab \cr

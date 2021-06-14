@@ -15,12 +15,11 @@ data frame by \cr \ifelse{html}{\code{\link[base]{as.data.frame}}}{
 prediction.}
 
 \item{se.fit}{an optional logical value indicating whether standard errors
-of the fit are calculated (see Details). The default value is
-\code{FALSE}.}
+of fitted values are calculated. The default value is \code{FALSE}.}
 
-\item{type}{a character value from 'fit' or 'pred' indicating whether the
-standard error of the fit ('fit') or the standard error of predictions in
-new data ('pred') are calculated.}
+\item{type}{a character value of either 'fit' or 'pred' indicating whether
+the standard error of the fit ('fit') or the standard error of predictions
+in new data ('pred') are calculated.}
 
 \item{level}{a numeric value of the significance level for confidence bands
 of fitted values. The default value is 0.95.}
@@ -34,9 +33,8 @@ a named list of numeric vectors of predicted outcomes, standard
 \description{
 The generic function
 \ifelse{html}{\code{\link[stats]{predict}}}{\code{stats::predict()}} calls
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm::aldvmm.pred()}}
-to predict outcomes and their standard errors in new data using
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm::aldvmm.pred()}}
-and
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.sefit}}}{\code{aldvmm::aldvmm.sefit()}}.
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm.pred()}} to
+predict outcomes and their standard errors in new data using
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm.pred()}} and
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.sefit}}}{\code{aldvmm.sefit()}}.
 }

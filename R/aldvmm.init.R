@@ -1,46 +1,42 @@
 #' Creating Initial Values
 #'
 #' @description
-#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.init}}}{\code{aldvmm::aldvmm.init()}}
+#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.init}}}{\code{aldvmm.init()}}
 #' creates initial values for the minimization of the negative log-likelihood
 #' returned by
-#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm::aldvmm.ll()}}
-#' using \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}.
+#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm.ll()}} using
+#' \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}.
 #'
 #' @inheritParams aldvmm
 #' @inheritParams aldvmm.ll
 #'
-#' @details \code{'init.method'} accepts four values of methods for generating
-#'   initial values: \code{"zero"}, \code{"random"}, \code{"constant"},
-#'   \code{"sann"}. The method \code{"zero"} sets initial values of all
-#'   parameters to 0. The method \code{"random"} draws random starting values
-#'   from a standard normal distribution.  The method \code{"constant"}
-#'   estimates a constant-only model and uses estimates as initial values of
-#'   intercepts and standard errors and 0 for all other parameters.  The method
+#' @details \code{'init.method'} accepts four methods for generating initial
+#'   values: \code{"zero"}, \code{"random"}, \code{"constant"}, \code{"sann"}.
+#'   The method \code{"zero"} sets initial values of all parameters to 0. The
+#'   method \code{"random"} draws random starting values from a standard normal
+#'   distribution.  The method \code{"constant"} estimates a constant-only
+#'   model and uses estimates as initial values for intercepts and constant
+#'   distribution parameters and 0 for all other parameters.  The method
 #'   \code{"sann"} estimates the full model using the simulated annealing
 #'   optimization method and uses all parameter estimates as initial values.
 #'   When user-specified initial values are supplied in \code{'init.est'}, the
 #'   argument \code{'init.method'} is ignored.
 #'
-#'   By default, \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{
-#'   \code{aldvmm::aldvmm()}} performs unconstrained optimization with upper
-#'   and lower limits at \code{-Inf} and \code{Inf}.  When user-defined lower
-#'   and upper limits are supplied to \code{'init.lo'} and/or \code{'init-hi'},
-#'   these default limits are replaced with the user-specified values, and the
-#'   method \code{"L-BFGS-B"} is used for box-constrained optimization instead
-#'   of the user defined \code{'optim.method'}.  It is possible to only set
-#'   either maximum or minimum limits.
+#'   By default, \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{ \code{aldvmm()}}
+#'   performs unconstrained optimization with upper and lower limits at
+#'   \code{-Inf} and \code{Inf}.  When user-defined lower and upper limits are
+#'   supplied to \code{'init.lo'} and/or \code{'init-hi'}, these default limits
+#'   are replaced with the user-specified values, and the method
+#'   \code{"L-BFGS-B"} is used for box-constrained optimization instead of the
+#'   user defined \code{'optim.method'}.  It is possible to only set either
+#'   maximum or minimum limits.
 #'
 #' @return
-#'   \ifelse{html}{\code{\link[aldvmm]{aldvmm.init}}}{\code{aldvmm::aldvmm.init()}}
-#'   returns a list with the following objects. \item{\code{est}}{a numeric
-#'   vector of initial values of parameters supplied to
-#'   \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}} in
-#'   \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.}
-#'   \item{\code{lo}}{a numeric vector of lower limits of parameters in
-#'   \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}.}
-#'   \item{\code{hi}}{a numeric vector of upper limits of parameters in
-#'   \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}.}
+#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.init}}}{\code{aldvmm.init()}}
+#' returns a list with the following objects. \item{\code{est}}{a numeric
+#' vector of initial values of parameters.}
+#' \item{\code{lo}}{a numeric vector of lower limits of parameters.}
+#' \item{\code{hi}}{a numeric vector of upper limits of parameters.}
 #'
 #' @export
 

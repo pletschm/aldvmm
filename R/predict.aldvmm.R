@@ -2,11 +2,10 @@
 #'
 #' The generic function
 #' \ifelse{html}{\code{\link[stats]{predict}}}{\code{stats::predict()}} calls
-#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm::aldvmm.pred()}}
-#' to predict outcomes and their standard errors in new data using
-#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm::aldvmm.pred()}}
-#' and
-#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.sefit}}}{\code{aldvmm::aldvmm.sefit()}}.
+#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm.pred()}} to
+#' predict outcomes and their standard errors in new data using
+#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm.pred()}} and
+#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.sefit}}}{\code{aldvmm.sefit()}}.
 #'
 #' @param object an object inheriting from class 'aldvmm'.
 #' @param newdata a data frame, list or environment (or object coercible to a

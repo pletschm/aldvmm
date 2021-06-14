@@ -18,8 +18,8 @@ probabilities of component membership.
 \examples{
 data(utility)
 
- fit <- aldvmm(data = utility,
-               formula = eq5d ~ age + female | 1,
+ fit <- aldvmm(eq5d ~ age + female | 1,
+               data = utility,
                psi = c(0.883, -0.594),
                ncmp = 2)
 

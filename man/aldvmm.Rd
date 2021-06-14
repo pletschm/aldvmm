@@ -26,8 +26,7 @@ aldvmm(
 description of the model to be fitted. The model formula takes the form
 \code{y ~ x1 + x2 | x1 + x4}, where the \code{|} delimiter separates the
 model for expected values of normal distributions (left) and the
-multinomial logit model of probabilities of component membership (right)
-(see details).}
+multinomial logit model of probabilities of component membership (right).}
 
 \item{data}{a data frame, list or environment (or object coercible to a data
 frame by \cr \ifelse{html}{\code{\link[base]{as.data.frame}}}{
@@ -46,7 +45,7 @@ between 1 and the maximum value in \code{'psi'}.}
 
 \item{dist}{an optional character value of the distribution used in the
 finite mixture. In this release, only the normal distribution is
-available, and the default value is \code{"normal"}.}
+available, and the default value is set to \code{"normal"}.}
 
 \item{optim.method}{an optional character value of one of the following
 \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
@@ -55,23 +54,23 @@ methods: \code{"Nelder-Mead"}, \code{"BFGS"}, \code{"CG"},
 \code{"hjn"}. The default method is \code{"Nelder-Mead"}. The method
 \code{"L-BFGS-B"} is used when lower and/or upper constraints are set
 using \code{'init.lo'} and \code{'init.hi'}. The method \code{"nlm"}
-cannot be used in the \code{'aldvmm'} package (see details).}
+cannot be used in the \code{'aldvmm'} package.}
 
 \item{optim.control}{an optional list of
 \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
 control parameters.}
 
-\item{optim.grad}{an optional logical value indicating if a numeric gradient
-should be used in
+\item{optim.grad}{an optional logical value indicating if a numerical
+gradient should be used in
 \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
 methods that can use this information. The default value is \code{TRUE}.
 If \code{'optim.grad'} is set to \code{FALSE}, a finite difference
-approximation will be used.}
+approximation is used.}
 
 \item{init.method}{an optional character value indicating the method for
-obtaining initial values (see details). The following values are
-available: \code{"zero"}, \code{"random"}, \code{"constant"} and
-\code{"sann"}. The default value is \code{"zero"}.}
+obtaining initial values. The following values are available:
+\code{"zero"}, \code{"random"}, \code{"constant"} and \code{"sann"}. The
+default value is \code{"zero"}.}
 
 \item{init.est}{an optional numeric vector of user-defined initial values.
 User-defined initial values override the \code{'init.method'} argument.
@@ -91,36 +90,23 @@ have to follow the same order as parameter estimates in the return value
 \code{'par'}.}
 
 \item{se.fit}{an optional logical value indicating whether standard errors
-of the fit are calculated (see Details). The default value is
-\code{FALSE}.}
+of fitted values are calculated. The default value is \code{FALSE}.}
 
 \item{level}{a numeric value of the significance level for confidence bands
 of fitted values. The default value is 0.95.}
 }
 \value{
-\ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{
-  \code{aldvmm::aldvmm()}} returns an object of class inheriting from
-  "aldvmm".\cr
-
-  The generic function
-  \ifelse{html}{\code{\link[base]{summary}}}{\code{base::summary()}} can be
-  used to obtain or print a summary of the results. \cr
-
-  The generic function
-  \ifelse{html}{\code{\link[stats]{predict}}}{\code{stats::predict()}} can
-  be used to obtain predicted values and standard errors of predictions in
-  new data. \cr
-
-  An object of class "aldvmm" is a list containing at least the following
-  objects. \item{\code{coef}}{a numeric vector of parameter estimates.}
-  \item{\code{se}}{a numeric vector of standard errors of parameter
-  estimates.} \item{\code{z}}{a numeric vector of standardized parameter
-  estimates.} \item{\code{p}}{a numeric vector of p-values of parameter
-  estimates.} \item{\code{lower}}{a numeric vector of 95\% lower confidence
-  limits of parameter estimates.} \item{\code{upper}}{a numeric vector of
-  95\% upper confidence limits of parameter estimates.}
-  \item{\code{hessian}}{a numeric matrix object with second partial
-  derivatives of the likelihood function.}
+\ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{ \code{aldvmm()}}
+  returns an object of class inheriting from "aldvmm". An object of class
+  "aldvmm" is a list containing the following objects. \item{\code{coef}}{a
+  numeric vector of parameter estimates.} \item{\code{se}}{a numeric vector
+  of standard errors of parameter estimates.} \item{\code{z}}{a numeric
+  vector of standardized parameter estimates.} \item{\code{p}}{a numeric
+  vector of p-values of parameter estimates.} \item{\code{lower}}{a numeric
+  vector of 95\% lower confidence limits of parameter estimates.}
+  \item{\code{upper}}{a numeric vector of 95\% upper confidence limits of
+  parameter estimates.} \item{\code{hessian}}{a numeric matrix object with
+  second partial derivatives of the likelihood function.}
 
   \item{\code{cov}}{a numeric matrix object with covariances of parameters.}
 
@@ -181,30 +167,37 @@ of fitted values. The default value is 0.95.}
   \item{\code{optim.method}}{a character value of the used
   \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
   method.}
+
+  The generic function
+  \ifelse{html}{\code{\link[base]{summary}}}{\code{base::summary()}} can be
+  used to obtain or print a summary of the results. The generic function
+  \ifelse{html}{\code{\link[stats]{predict}}}{\code{stats::predict()}} can
+  be used to obtain predicted values and standard errors of predictions in
+  new data.
 }
 \description{
 The function \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{
-  \code{aldvmm::aldvmm()}} fits adjusted limited dependent variable mixture
-  models of health state utilities. Adjusted limited dependent variable
-  mixture models are finite mixtures of normal distributions with an
-  accumulation of density mass at the limits, and a gap between 100\%
-  quality of life and the next smaller utility value. The package
-  \code{aldvmm} uses the likelihood and expected value functions proposed by
-  Hernandez Alava and Wailoo (2015) using normal component distributions and
-  a multinomial logit model of probabilities of component membership.
+  \code{aldvmm()}} fits adjusted limited dependent variable mixture models
+  of health state utilities. Adjusted limited dependent variable mixture
+  models are finite mixtures of normal distributions with an accumulation of
+  density mass at the limits, and a gap between 100\% quality of life and
+  the next smaller utility value. The package \code{aldvmm} uses the
+  likelihood and expected value functions proposed by Hernandez Alava and
+  Wailoo (2015) using normal component distributions and a multinomial logit
+  model of probabilities of component membership.
 }
 \details{
-\ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{
-  \code{aldvmm::aldvmm()}} fits adjusted limited dependent variable mixture
-  models using the likelihood and expected value functions from Hernandez
-  Alava and Wailoo (2015).  The model accounts for multi-modality, minimum
-  and maximum utility values and potential gaps between 1 and the next
-  smaller observed utility value.  Adjusted limited dependent variable
-  mixture models combine multiple distributions in different components with
-  a multinomial logit model of the probabilities of component membership.
-  The standard deviations of normal distributions are estimated and reported
-  as log-transformed values which enter the likelihood function as
-  exponentiated values to ensure non-negative values.
+\ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{ \code{aldvmm()}} fits
+  an adjusted limited dependent variable mixture model using the likelihood
+  and expected value functions from Hernandez Alava and Wailoo (2015).  The
+  model accounts for latent classes, multi-modality, minimum and maximum
+  utility values and potential gaps between 1 and the next smaller utility
+  value.  Adjusted limited dependent variable mixture models combine
+  multiple component distributions with a multinomial logit model of the
+  probabilities of component membership. The standard deviations of normal
+  distributions are estimated and reported as log-transformed values which
+  enter the likelihood function as exponentiated values to ensure
+  non-negative values.
 
   The minimum utility and the largest utility smaller than or equal to 1 are
   supplied in the argument \code{'psi'}.  The number of
@@ -221,16 +214,16 @@ The function \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{
   components and the multinomial logit of the probabilities of component
   membership.
 
-  \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{ \code{aldvmm::aldvmm()}} uses
+  \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{ \code{aldvmm()}} uses
   \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}} for
   maximum likelihood estimation of model parameters.  The argument
   \code{'optim.method'} accepts the following methods: \code{"Nelder-Mead"},
   \code{"BFGS"}, \code{"CG"}, \code{"L-BFGS-B"}, \code{"nlminb"},
   \code{"Rcgmin"}, \code{"Rvmmin"} and \code{"hjn"}. The default method is
   \code{"Nelder-Mead"}.  The method \code{"nlm"} cannot be used in
-  \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{ \code{aldvmm::aldvmm()}}
-  because it requires a different implementation of the likelihood function.
-  The argument \code{'optim.control'} accepts a list of
+  \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{ \code{aldvmm()}} because it
+  requires a different implementation of the likelihood function. The
+  argument \code{'optim.control'} accepts a list of
   \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
   control parameters.  If \code{'optim.grad'} is set to \code{TRUE} the
   function
@@ -258,14 +251,14 @@ The function \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{
   are supplied in \code{'init.est'}, the argument \code{'init.method'} is
   ignored.
 
-  By default, \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{
-  \code{aldvmm::aldvmm()}} performs unconstrained optimization with upper
-  and lower limits at \code{-Inf} and \code{Inf}.  When user-defined lower
-  and upper limits are supplied to \code{'init.lo'} and/or \code{'init-hi'},
-  these default limits are replaced with the user-specified values, and the
-  method \code{"L-BFGS-B"} is used for box-constrained optimization instead
-  of the user defined \code{'optim.method'}.  It is possible to only set
-  either maximum or minimum limits.
+  By default, \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{ \code{aldvmm()}}
+  performs unconstrained optimization with upper and lower limits at
+  \code{-Inf} and \code{Inf}.  When user-defined lower and upper limits are
+  supplied to \code{'init.lo'} and/or \code{'init-hi'}, these default limits
+  are replaced with the user-specified values, and the method
+  \code{"L-BFGS-B"} is used for box-constrained optimization instead of the
+  user defined \code{'optim.method'}.  It is possible to only set either
+  maximum or minimum limits.
 
   If \code{'se.fit'} is set to \code{TRUE}, standard errors of fitted values
   are calculated using the delta method.  The standard errors of fitted
@@ -274,15 +267,10 @@ The function \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{
   is the gradient of a fitted value with respect to changes of parameter
   estimates, and \eqn{\Sigma} is the estimated covariance matrix of
   parameters (Dowd et al., 2014).  The standard errors of predicted values
-  in new data sets using the method
-  \ifelse{html}{\code{\link[aldvmm]{predict.aldvmm}}}{
-  \code{aldvmm::predict.aldvmm()}} are calculated as \eqn{se_{pred} =
-  \sqrt{MSE + G^{t} \Sigma G}}{se_pred = (mse + t(grad)*\Sigma*grad)^0.5},
-  where \eqn{MSE}{mse} is the mean squared error of fitted versus observed
-  outcomes in the original estimation data (Whitmore, 1986).  The gradients
-  of fitted values with respect to parameter estimates are approximated
-  numerically using
-  \ifelse{html}{\code{\link[numDeriv]{jacobian}}}{\code{numDeriv::jacobian()}}.
+  in new data sets are calculated as \eqn{se_{pred} = \sqrt{MSE + G^{t}
+  \Sigma G}}{se_pred = (mse + t(grad)*\Sigma*grad)^0.5}, where
+  \eqn{MSE}{mse} is the mean squared error of fitted versus observed
+  outcomes in the original estimation data (Whitmore, 1986).
 }
 \examples{
 data(utility)
@@ -301,7 +289,7 @@ data(utility)
 \references{
 Alava, M. H. and Wailoo, A. (2015) Fitting adjusted limited
   dependent variable mixture models to EQ-5D. \emph{The Stata Journal},
-  \bold{15(3)}, 737--750. \doi{10.1177/1536867X1501500307} \cr
+  \bold{15(3)}, 737--750. \doi{10.1177/1536867X1501500307}
 
   Dowd, B. E., Greene, W. H., and Norton, E. C. (2014) Computation of
   standard errors. \emph{Health services research}, \bold{49(2)}, 731--750.
@@ -309,5 +297,5 @@ Alava, M. H. and Wailoo, A. (2015) Fitting adjusted limited
 
   Whitmore, G. A. (1986) Prediction limits for a univariate normal
   observation. \emph{The American Statistician}, \bold{40(2)}, 141--143.
-  \doi{10.1080/00031305.1986.10475378} \cr
+  \doi{10.1080/00031305.1986.10475378}
 }

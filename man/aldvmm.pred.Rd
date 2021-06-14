@@ -8,29 +8,17 @@ Models}
 aldvmm.pred(par, X, y = NULL, psi, ncmp, dist, lcoef, lcpar, lcmp)
 }
 \arguments{
-\item{par}{a named numeric vector of parameter values used to calculate the
-log-likelihood. The names of the parameter vector must be generated using
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.getnames}}}{
-\code{aldvmm::aldvmm.getnames()}} because they will be inherited by return
-values of functions in package \code{'aldvmm'}, and the names will be used
-in the extraction of parameters into nested lists using \ifelse{html}{
-\code{\link[aldvmm]{aldvmm.getpar}}}{\code{aldvmm::aldvmm.getpar()}}.}
+\item{par}{a named numeric vector of parameter values.}
 
 \item{X}{a list of design matrices returned by
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.mm}}}{\code{aldvmm::aldvmm.mm()}}.
- \code{'X'} is of length 2 and includes numeric design matrices for the
-models of component distributions (label \code{"beta"}) and the
-probabilities of group membership (label \code{"delta"}). The numeric
-matrices in \code{'X'} have rownames inherited from \code{'data'} supplied
-to \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.
-The rownames will be used in
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{
-\code{aldvmm::aldvmm.pred()}} to return missing predictions for incomplete
-observations in \code{'data'}.}
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.mm}}}{\code{aldvmm.mm()}}.
+\code{'X'} is of length 2 and includes a design matrix for the model of
+component distributions and a design matrix for the model of probabilities
+of group membership.}
 
 \item{y}{a numeric vector of observed outcomes from complete observations in
 \code{'data'} supplied to
-\ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.}
+\ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm()}}.}
 
 \item{psi}{a numeric vector of minimum and maximum possible utility values
 smaller than or equal to 1 (e.g. \code{c(-0.594, 0.883)}). The potential
@@ -44,13 +32,12 @@ between 1 and the maximum value in \code{'psi'}.}
 
 \item{dist}{an optional character value of the distribution used in the
 finite mixture. In this release, only the normal distribution is
-available, and the default value is \code{"normal"}.}
+available, and the default value is set to \code{"normal"}.}
 
 \item{lcoef}{a character vector of length 2 with labels of objects including
-regression coefficients. The first element is the label of coefficients
-for component distributions (default \code{"beta"}), and the second
-element is the label of coefficients on probabilities of component
-membership (default \code{"delta"}).}
+regression coefficients of component distributions (default \code{"beta"})
+and coefficients of probabilities of component membership (default
+\code{"delta"}).}
 
 \item{lcpar}{a character vector with the labels of objects including
 constant parameters of component distributions (e.g. the standard
@@ -61,8 +48,7 @@ depends on the distribution supplied to \code{'dist'}.}
 for labeling objects including regression coefficients in different
 components (e.g. "Comp1", "Comp2", ...). This label is also used in
 summary tables returned by
-\ifelse{html}{\code{\link[aldvmm]{summary.aldvmm}}}{
-\code{aldvmm::summary.aldvmm()}}.}
+\ifelse{html}{\code{\link[aldvmm]{summary.aldvmm}}}{\code{summary.aldvmm()}}.}
 }
 \value{
 a named numeric vector of predicted outcomes. The names of the
@@ -70,16 +56,16 @@ a named numeric vector of predicted outcomes. The names of the
   in \code{'X'}.
 }
 \description{
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm::aldvmm.pred()}}
-makes predictions of observations in design matrices in \code{'X'} using the
-results of
-\ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm.pred()}} makes
+predictions of observations in design matrices in \code{'X'} using parameter
+estimates returned by
+\ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm()}}.
 }
 \details{
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm::aldvmm.pred()}}
-  calculates expected values for observations in design matrices in
-  \code{'X'} using the expected value function published in Hernandez Alava
-  and Wailoo (2015). Constant distribution parameters that need to be
-  non-negative (i.e. standard deviations of normal distributions) enter the
-  expected value function as log-transformed values.
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm.pred()}}
+calculates expected values for observations in design matrices in \code{'X'}
+using the expected value function published in Hernandez Alava and Wailoo
+(2015). Constant distribution parameters that need to be non-negative (i.e.
+standard deviations of normal distributions) enter the expected value
+function as log-transformed values.
 }

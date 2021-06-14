@@ -24,55 +24,49 @@ aldvmm.sum(
 )
 }
 \arguments{
-\item{est}{a named numeric vector of parameters with names returned by
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.getnames}}}{
-\code{aldvmm::aldvmm.getnames()}}.}
+\item{est}{a named numeric vector of point estimates.}
 
 \item{se}{a named numeric vector of standard errors of parameters returned
-by \ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{
-\code{aldvmm::aldvmm.cv()}}.}
+by \ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{ \code{aldvmm.cv()}}.}
 
-\item{z}{a named numeric vector of z scores (standardized coefficients) of
-parameters returned by \ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{
-\code{aldvmm::aldvmm.cv()}}.}
+\item{z}{a named numeric vector of standardized coefficients of parameters
+returned by \ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{
+\code{aldvmm.cv()}}.}
 
 \item{p}{a named numeric vector of p-values of parameters returned by
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{
-\code{aldvmm::aldvmm.cv()}}.}
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{ \code{aldvmm.cv()}}.}
 
 \item{lower}{a named numeric vector of 95\% lower limits of parameters
 returned by \ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{
-\code{aldvmm::aldvmm.cv()}}.}
+\code{aldvmm.cv()}}.}
 
 \item{upper}{a named numeric vector of 95\% upper limits of parameters
 returned by \ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{
-\code{aldvmm::aldvmm.cv()}}.}
+\code{aldvmm.cv()}}.}
 
 \item{n}{a numeric value of the number of complete observations in
 \code{'data'} supplied to
-\ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.}
+\ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm()}}.}
 
 \item{value}{a numeric value of the negative log-likelihood returned by
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{
-\code{aldvmm::aldvmm.ll()}}.}
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{ \code{aldvmm.ll()}}.}
 
 \item{aic}{a numeric value of the Akaike information criterion (AIC)
-returned by \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{
-\code{aldvmm::aldvmm()}}.}
+returned by \ifelse{html}{\code{\link[aldvmm]{aldvmm.gof}}}{
+\code{aldvmm.gof()}}.}
 
 \item{bic}{a numeric value of the Bayesian information criterion (BIC)
-returned by \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{
-\code{aldvmm::aldvmm()}}.}
+returned by \ifelse{html}{\code{\link[aldvmm]{aldvmm.gof}}}{
+\code{aldvmm.gof()}}.}
 
 \item{ncmp}{a numeric value of the number of components that are mixed. The
 default value is 2. A value of 1 represents a tobit model with a gap
 between 1 and the maximum value in \code{'psi'}.}
 
 \item{lcoef}{a character vector of length 2 with labels of objects including
-regression coefficients. The first element is the label of coefficients
-for component distributions (default \code{"beta"}), and the second
-element is the label of coefficients on probabilities of component
-membership (default \code{"delta"}).}
+regression coefficients of component distributions (default \code{"beta"})
+and coefficients of probabilities of component membership (default
+\code{"delta"}).}
 
 \item{lcpar}{a character vector with the labels of objects including
 constant parameters of component distributions (e.g. the standard
@@ -83,20 +77,19 @@ depends on the distribution supplied to \code{'dist'}.}
 for labeling objects including regression coefficients in different
 components (e.g. "Comp1", "Comp2", ...). This label is also used in
 summary tables returned by
-\ifelse{html}{\code{\link[aldvmm]{summary.aldvmm}}}{
-\code{aldvmm::summary.aldvmm()}}.}
+\ifelse{html}{\code{\link[aldvmm]{summary.aldvmm}}}{\code{summary.aldvmm()}}.}
 
 \item{lvar}{a named list of character vectors with column names of design
 matrices returned by \ifelse{html}{\code{\link[aldvmm]{aldvmm.mm}}}{
-\code{aldvmm::aldvmm.mm()}}.}
+\code{aldvmm.mm()}}.}
 
 \item{digits}{a numeric value of the number of digits in the reporting
 table.}
 }
 \value{
-a data frame with a summary table of regression results.
+a \code{data.frame} object with a summary table of regression results.
 }
 \description{
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.sum}}}{
-\code{aldvmm::aldvmm.sum()}} creates a summary table of regression results.
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.sum}}}{ \code{aldvmm.sum()}}
+creates a summary table of regression results.
 }

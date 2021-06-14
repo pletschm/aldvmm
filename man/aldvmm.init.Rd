@@ -24,20 +24,14 @@ aldvmm.init(
 }
 \arguments{
 \item{X}{a list of design matrices returned by
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.mm}}}{\code{aldvmm::aldvmm.mm()}}.
- \code{'X'} is of length 2 and includes numeric design matrices for the
-models of component distributions (label \code{"beta"}) and the
-probabilities of group membership (label \code{"delta"}). The numeric
-matrices in \code{'X'} have rownames inherited from \code{'data'} supplied
-to \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.
-The rownames will be used in
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{
-\code{aldvmm::aldvmm.pred()}} to return missing predictions for incomplete
-observations in \code{'data'}.}
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.mm}}}{\code{aldvmm.mm()}}.
+\code{'X'} is of length 2 and includes a design matrix for the model of
+component distributions and a design matrix for the model of probabilities
+of group membership.}
 
 \item{y}{a numeric vector of observed outcomes from complete observations in
 \code{'data'} supplied to
-\ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.}
+\ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm()}}.}
 
 \item{psi}{a numeric vector of minimum and maximum possible utility values
 smaller than or equal to 1 (e.g. \code{c(-0.594, 0.883)}). The potential
@@ -51,12 +45,12 @@ between 1 and the maximum value in \code{'psi'}.}
 
 \item{dist}{an optional character value of the distribution used in the
 finite mixture. In this release, only the normal distribution is
-available, and the default value is \code{"normal"}.}
+available, and the default value is set to \code{"normal"}.}
 
 \item{init.method}{an optional character value indicating the method for
-obtaining initial values (see details). The following values are
-available: \code{"zero"}, \code{"random"}, \code{"constant"} and
-\code{"sann"}. The default value is \code{"zero"}.}
+obtaining initial values. The following values are available:
+\code{"zero"}, \code{"random"}, \code{"constant"} and \code{"sann"}. The
+default value is \code{"zero"}.}
 
 \item{init.est}{an optional numeric vector of user-defined initial values.
 User-defined initial values override the \code{'init.method'} argument.
@@ -82,24 +76,23 @@ methods: \code{"Nelder-Mead"}, \code{"BFGS"}, \code{"CG"},
 \code{"hjn"}. The default method is \code{"Nelder-Mead"}. The method
 \code{"L-BFGS-B"} is used when lower and/or upper constraints are set
 using \code{'init.lo'} and \code{'init.hi'}. The method \code{"nlm"}
-cannot be used in the \code{'aldvmm'} package (see details).}
+cannot be used in the \code{'aldvmm'} package.}
 
 \item{optim.control}{an optional list of
 \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
 control parameters.}
 
-\item{optim.grad}{an optional logical value indicating if a numeric gradient
-should be used in
+\item{optim.grad}{an optional logical value indicating if a numerical
+gradient should be used in
 \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
 methods that can use this information. The default value is \code{TRUE}.
 If \code{'optim.grad'} is set to \code{FALSE}, a finite difference
-approximation will be used.}
+approximation is used.}
 
 \item{lcoef}{a character vector of length 2 with labels of objects including
-regression coefficients. The first element is the label of coefficients
-for component distributions (default \code{"beta"}), and the second
-element is the label of coefficients on probabilities of component
-membership (default \code{"delta"}).}
+regression coefficients of component distributions (default \code{"beta"})
+and coefficients of probabilities of component membership (default
+\code{"delta"}).}
 
 \item{lcpar}{a character vector with the labels of objects including
 constant parameters of component distributions (e.g. the standard
@@ -110,46 +103,41 @@ depends on the distribution supplied to \code{'dist'}.}
 for labeling objects including regression coefficients in different
 components (e.g. "Comp1", "Comp2", ...). This label is also used in
 summary tables returned by
-\ifelse{html}{\code{\link[aldvmm]{summary.aldvmm}}}{
-\code{aldvmm::summary.aldvmm()}}.}
+\ifelse{html}{\code{\link[aldvmm]{summary.aldvmm}}}{\code{summary.aldvmm()}}.}
 }
 \value{
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.init}}}{\code{aldvmm::aldvmm.init()}}
-  returns a list with the following objects. \item{\code{est}}{a numeric
-  vector of initial values of parameters supplied to
-  \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}} in
-  \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}}.}
-  \item{\code{lo}}{a numeric vector of lower limits of parameters in
-  \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}.}
-  \item{\code{hi}}{a numeric vector of upper limits of parameters in
-  \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}.}
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.init}}}{\code{aldvmm.init()}}
+returns a list with the following objects. \item{\code{est}}{a numeric
+vector of initial values of parameters.}
+\item{\code{lo}}{a numeric vector of lower limits of parameters.}
+\item{\code{hi}}{a numeric vector of upper limits of parameters.}
 }
 \description{
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.init}}}{\code{aldvmm::aldvmm.init()}}
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.init}}}{\code{aldvmm.init()}}
 creates initial values for the minimization of the negative log-likelihood
 returned by
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm::aldvmm.ll()}}
-using \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}.
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm.ll()}} using
+\ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}.
 }
 \details{
-\code{'init.method'} accepts four values of methods for generating
-  initial values: \code{"zero"}, \code{"random"}, \code{"constant"},
-  \code{"sann"}. The method \code{"zero"} sets initial values of all
-  parameters to 0. The method \code{"random"} draws random starting values
-  from a standard normal distribution.  The method \code{"constant"}
-  estimates a constant-only model and uses estimates as initial values of
-  intercepts and standard errors and 0 for all other parameters.  The method
+\code{'init.method'} accepts four methods for generating initial
+  values: \code{"zero"}, \code{"random"}, \code{"constant"}, \code{"sann"}.
+  The method \code{"zero"} sets initial values of all parameters to 0. The
+  method \code{"random"} draws random starting values from a standard normal
+  distribution.  The method \code{"constant"} estimates a constant-only
+  model and uses estimates as initial values for intercepts and constant
+  distribution parameters and 0 for all other parameters.  The method
   \code{"sann"} estimates the full model using the simulated annealing
   optimization method and uses all parameter estimates as initial values.
   When user-specified initial values are supplied in \code{'init.est'}, the
   argument \code{'init.method'} is ignored.
 
-  By default, \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{
-  \code{aldvmm::aldvmm()}} performs unconstrained optimization with upper
-  and lower limits at \code{-Inf} and \code{Inf}.  When user-defined lower
-  and upper limits are supplied to \code{'init.lo'} and/or \code{'init-hi'},
-  these default limits are replaced with the user-specified values, and the
-  method \code{"L-BFGS-B"} is used for box-constrained optimization instead
-  of the user defined \code{'optim.method'}.  It is possible to only set
-  either maximum or minimum limits.
+  By default, \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{ \code{aldvmm()}}
+  performs unconstrained optimization with upper and lower limits at
+  \code{-Inf} and \code{Inf}.  When user-defined lower and upper limits are
+  supplied to \code{'init.lo'} and/or \code{'init-hi'}, these default limits
+  are replaced with the user-specified values, and the method
+  \code{"L-BFGS-B"} is used for box-constrained optimization instead of the
+  user defined \code{'optim.method'}.  It is possible to only set either
+  maximum or minimum limits.
 }
