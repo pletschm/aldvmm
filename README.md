@@ -50,7 +50,7 @@ yhat <- predict(fit,
 
 ## Vignette
 
-Please consult the [vignette](vignettes/aldvmm_vignette.pdf) for further
+Please consult the [vignette](https://github.com/pletschm/aldvmm/blob/main/vignettes/aldvmm_vignette.pdf) for further
 details on the methods and the usage of the package.
 
 ## References
