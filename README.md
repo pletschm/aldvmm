@@ -5,7 +5,7 @@ The goal of 'aldvmm' is to fit adjusted limited dependent variable
 mixture models of health state utilities. Adjusted limited dependent
 variable mixture models are finite mixtures of normal distributions with
 an accumulation of density mass at the limits, and a gap between 100%
-quality of life and the next smaller utility value. The package ‘aldvmm’
+quality of life and the next smaller utility value. The package 'aldvmm'
 uses the likelihood and expected value functions proposed by Hernandez
 Alava and Wailoo (2015) using normal component distributions and a
 multinomial logit model of probabilities of component membership.
