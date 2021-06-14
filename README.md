@@ -1,7 +1,7 @@
 
 # aldvmm
 
-The goal of ‘aldvmm’ is to fit adjusted limited dependent variable
+The goal of 'aldvmm' is to fit adjusted limited dependent variable
 mixture models of health state utilities. Adjusted limited dependent
 variable mixture models are finite mixtures of normal distributions with
 an accumulation of density mass at the limits, and a gap between 100%
@@ -12,22 +12,22 @@ multinomial logit model of probabilities of component membership.
 
 ## Installation
 
-<!-- You can install the released version of aldvmm from [CRAN](https://CRAN.R-project.org) with: -->
-<!-- ``` r -->
-<!-- install.packages("aldvmm") -->
-<!-- ``` -->
-
-You can install the development version from
-[GitHub](https://github.com/) with:
+You can install the released version of aldvmm from
+[CRAN](https://CRAN.R-project.org) with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("pletschm/aldvmm", ref = "main")
+install.packages("aldvmm")
 ```
+
+<!-- You can install the development version from [GitHub](https://github.com/) with: -->
+<!-- ``` r -->
+<!-- # install.packages("devtools") -->
+<!-- devtools::install_github("pletschm/aldvmm", ref = "main") -->
+<!-- ``` -->
 
 ## Example
 
-The package ‘aldvmm’ includes a simulated sample data set to run simple
+The package 'aldvmm' includes a simulated sample data set to run simple
 examples.
 
 ``` r
