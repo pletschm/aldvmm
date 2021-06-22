@@ -136,7 +136,6 @@ aldvmm.sefit <- function(par,
     }
   }
   
-  
   # Confidence / prediction interval
   #---------------------------------
   

@@ -58,14 +58,6 @@
 #'   lists using
 #'   \ifelse{html}{\code{\link[aldvmm]{aldvmm.getpar}}}{\code{aldvmm.getpar()}}.
 #'
-#'
-#'
-#'
-#'
-#'
-#'
-#'
-#'
 #' @references Alava, M. H. and Wailoo, A. (2015) Fitting adjusted limited
 #'   dependent variable mixture models to EQ-5D. \emph{The Stata Journal},
 #'   \bold{15(3)}, 737--750. \doi{10.1177/1536867X1501500307} \cr
