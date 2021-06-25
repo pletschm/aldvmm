@@ -140,11 +140,11 @@ aldvmm.sefit <- function(par,
   # Confidence / prediction interval
   #---------------------------------
   
-  ul <- yhat + stats::qnorm((1 + level)/2) * se.fit
+  ul <- yhat[!is.na(yhat)] + stats::qnorm((1 + level)/2) * se.fit
   ul[ul > max(psi)] <- 1
   names(ul) <- rownames(X[[1]])
   
-  ll <- yhat - stats::qnorm((1 + level)/2) * se.fit
+  ll <- yhat[!is.na(yhat)] - stats::qnorm((1 + level)/2) * se.fit
   ll[ll < min(psi)] <- min(psi)
   names(ll) <- rownames(X[[1]])
   
