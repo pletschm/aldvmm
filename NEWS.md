@@ -6,3 +6,4 @@
 
 * Bugfix: Corrected error in summary.aldvmm(): AIC was displayed instead of BIS in summary table.
 * Bugfix: Corrected error in predict.aldvmm(): Fitted values from aldvmm object were supplied instead of predictions from predict.aldvmm().
+* Added unit tests for predict.aldvmm().
