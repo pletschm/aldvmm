@@ -19,7 +19,8 @@ test_that("Check estimation of standard errors of fitted values.", {
   
   newdata <- utility[1:5, ]
   newdata[2, 2] <- NA
-  yhat <- fit[["pred"]][["yhat"]][1:4]
+  yhat <- predict(fit,
+                  newdata = newdata)$yhat
   
   mm <- aldvmm.mm(data = newdata,
                   formula = formula,
@@ -205,3 +206,4 @@ test_that("Check estimation of standard errors of fitted values.", {
   
   
 })
+

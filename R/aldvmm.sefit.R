@@ -69,6 +69,17 @@ aldvmm.sefit <- function(par,
                          lcoef,
                          lcmp,
                          lcpar) {
+
+  # Check if yhat has correct names
+  #--------------------------------
+  
+  if (is.null(names(yhat))) {
+    stop("'yhat' does not have names.")
+  }
+
+  if (!all(rownames(X[[1]]) %in% names(yhat))) {
+    stop("Row names of 'newdata' are not subset of names of 'yhat'")
+  }
   
   # Check validity of covariance matrix
   #------------------------------------
