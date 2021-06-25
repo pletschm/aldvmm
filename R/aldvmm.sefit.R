@@ -87,12 +87,6 @@ aldvmm.sefit <- function(par,
     return(NULL)
   }
   
-  # Initialize vector of standard errors of all observations
-  #---------------------------------------------------------
-  
-  se.fit <- rep(NA, times = nrow(X[[1]]))
-  names(se.fit) <- rownames(X[[1]])
-  
   # Calculate jacobian matrix numerically
   #--------------------------------------
   
@@ -111,6 +105,9 @@ aldvmm.sefit <- function(par,
   
   # Calculate standard errors in loop over all observations
   #--------------------------------------------------------
+  
+  se.fit <- rep(NA, times = nrow(X[[1]]))
+  names(se.fit) <- rownames(X[[1]])
   
   if (!(type %in% c("fit", "pred"))) {
     warning("'type' ",
@@ -139,11 +136,11 @@ aldvmm.sefit <- function(par,
   # Confidence / prediction interval
   #---------------------------------
   
-  ul <- yhat + stats::qnorm((1 + level)/2) * se.fit
+  ul <- yhat[rownames(X[[1]])] + stats::qnorm((1 + level)/2) * se.fit[rownames(X[[1]])]
   ul[ul > max(psi)] <- 1
   names(ul) <- rownames(X[[1]])
   
-  ll <- yhat - stats::qnorm((1 + level)/2) * se.fit
+  ll <- yhat[rownames(X[[1]])] - stats::qnorm((1 + level)/2) * se.fit[rownames(X[[1]])]
   ll[ll < min(psi)] <- min(psi)
   names(ll) <- rownames(X[[1]])
   

@@ -14,6 +14,35 @@ test_that('Check prediction S3 method.', {
                                  newdata = plot(),
                                  se.fit = TRUE))
   
+  # Predictions for different data
+  #-------------------------------
+  
+  data(utility)
+  suppressWarnings({
+    fit <- aldvmm(eq5d ~ female | 1,
+                  data = utility,
+                  psi = c(-0.594, 0.883))
+  })
+  
+  testthat::expect_warning(predict(fit,
+                                   newdata = utility[utility$female == 1, ],
+                                   se.fit = TRUE),
+                           NA)
+  
+  
+  pred <- predict(fit,
+                  newdata = utility[utility$female == 1, ],
+                  se.fit = TRUE)
+                  
+  
+  for (i in 1:length(pred)) {
+    
+    testthat::expect(all(rownames(utility[utility$female == 1, ]) == names(pred[[i]])),
+                     failure_message = 
+                       'Position of standard errors do not match position in data.')
+    
+  }
+  
   # Prediction in data with incomplete rows and missing covariance matrix
   #----------------------------------------------------------------------
   
