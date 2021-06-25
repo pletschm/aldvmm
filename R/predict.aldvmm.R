@@ -94,7 +94,7 @@ predict.aldvmm <- function(object,
     
     # Add missing standard errors and confidence bands for incomplete 
     # observations in newdata
-    pred[["se.fit"]] <- rep(NA,times = nrow(newdata))
+    pred[["se.fit"]] <- rep(NA, times = nrow(newdata))
     names(pred[["se.fit"]]) <- rownames(newdata)
     pred[["se.fit"]][names(tmp[["se.fit"]])] <- tmp[['se.fit']]
     
