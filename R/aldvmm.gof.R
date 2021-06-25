@@ -1,4 +1,4 @@
-#' Calculating goodness of fit measures
+#' Calculating Goodness of Fit Measures
 #'
 #' \ifelse{html}{\code{\link[aldvmm]{aldvmm.gof}}}{\code{aldvmm.gof()}}
 #' calculates residual- and likelihood-based goodness of fit measures.

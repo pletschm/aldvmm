@@ -2,7 +2,7 @@
 % Please edit documentation in R/aldvmm.gof.R
 \name{aldvmm.gof}
 \alias{aldvmm.gof}
-\title{Calculating goodness of fit measures}
+\title{Calculating Goodness of Fit Measures}
 \usage{
 aldvmm.gof(res, par, ll)
 }
