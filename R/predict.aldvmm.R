@@ -78,7 +78,7 @@ predict.aldvmm <- function(object,
     # Standard errors
     tmp <- list()
     tmp <- aldvmm.sefit(par     = object[["coef"]],
-                        yhat    = object[["pred"]][["yhat"]],
+                        yhat    = pred[["yhat"]],
                         X       = mm,
                         type    = type,
                         formula = object[["formula"]],
