@@ -603,7 +603,7 @@ rm(r_se_long)
 
 <!-- Make summary tables -->
 
-```{r calc_tab, eval = TRUE, warning = FALSE, echo = FALSE, results = 'hide'}
+```{r calc_tab, eval = FALSE, warning = FALSE, echo = FALSE, results = 'hide'}
 
 # Model 1, comparison of optimization methods
 #--------------------------------------------
@@ -852,8 +852,6 @@ rm(fit2_stata)
 rm(tab_diff_se, tab_diff_yhat)
 rm(stata_se, stata_yhat)
 rm(sumhat)
-
-rm(df)
 
 # Remove fit objects
 #-------------------
