@@ -66,7 +66,7 @@ predict.aldvmm <- function(object,
   
   # Add missing predictions for incomplete observations in newdata
   pred <- list()
-  pred[["yhat"]] <- rep(NA,times = nrow(newdata))
+  pred[["yhat"]] <- rep(NA, times = nrow(newdata))
   names(pred[["yhat"]]) <- rownames(newdata)
   
   pred[["yhat"]][names(tmp[["yhat"]])] <- tmp[['yhat']]

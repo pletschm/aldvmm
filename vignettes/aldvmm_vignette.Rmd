@@ -1093,6 +1093,7 @@ textout[["mod1bfgs"]][["intp1"]] <- format(
 )
 
 ```
+
 We obtain a summary table of regression results using the generic function summary(). The model converges at a log-likelihood of `r textout[["mod1bfgs"]][["ll"]]` and an Akaike information criterion value of `r textout[["mod1bfgs"]][["aic"]]` (table \@ref(tab:tab-sum-mod1bfgs)).
 
 The coefficients of the intercept and covariates for the expected values $E[y|c, X]$ of the normal distributions can be interpreted as marginal effects on component means. 'lnsigma' denotes the natural logarithm of the estimated standard deviation $\sigma^{c}$. The coefficients of covariates in the multinomial logit model of probabilities of component membership are log-transformed relative probabilities. Our model only includes two components, and the multinomial logit model collapses to a binomial logit model. The intercept of `r textout[["mod1bfgs"]][["intp1"]]` means that the average probability of an observation in the data to belong to component 1 is $\text{exp}(`r textout[["mod1bfgs"]][["intp1"]]`)$ or `r exp(as.numeric(textout[["mod1bfgs"]][["intp1"]]))` times the probability to belong to component 2.
@@ -1124,6 +1125,8 @@ print(plot_hist_pred)
 rm(plot_hist_pred)
 
 ```
+
+Expected values of observations in the estimation data can also be used to calculate average incremental effects or average treatment effects on the treated. Average treatment effects on the treated compare predictions for treated individuals to predictions for the same individuals without the effect of the treatment indicator. Standard errors of average treatment effects on the treated can be calculated using the delta meethod (see example code in the appendix).
 
 ### Comparison of optimization methods
 
@@ -1677,6 +1680,111 @@ Possible extensions of 'aldvmm' could include adjusted limited dependent variabl
 
 \newpage
 # Appendix
+
+## Example calculation of average treatment effects on the treated
+
+```{r atet-example, echo = TRUE, eval = FALSE, results = 'hide'}
+
+# Create treatment indicator
+#---------------------------
+
+df$treated <- as.numeric(df$SEX == "2")
+
+# Fit model
+#----------
+
+formula <- eq5d ~ treated + hr | 1
+
+fit <- aldvmm(formula,
+              data = df,
+              psi = c(-0.594, 0.883))
+
+# Predict treated
+#----------------
+
+# Subsample of treated observations
+tmpdf1 <- df[df$treated == 1, ]
+
+# Design matrix for treated observations
+X1 <- aldvmm.mm(data = tmpdf1,
+                formula = fit$formula,
+                ncmp = fit$k,
+                lcoef = fit$label$lcoef)
+
+# Average expected outcome of treated observations
+mean1 <- mean(predict(fit,
+                newdata = tmpdf1,
+                type = "fit",
+                se.fit = TRUE)[["yhat"]], na.rm = TRUE)
+
+# Predict counterfactual
+#-----------------------
+
+# Subsample of counterfactual observations
+tmpdf0 <- tmpdf1
+rm(tmpdf1)
+tmpdf0$treated <- 0
+
+# Design matrix for counterfactual observations
+X0 <- aldvmm.mm(data = tmpdf0,
+                formula = fit$formula,
+                ncmp = fit$k,
+                lcoef = fit$label$lcoef)
+
+# Average expected outcome of counterfactual osbervations
+mean0 <- mean(predict(fit,
+                newdata = tmpdf0,
+                type = "fit",
+                se.fit = TRUE)[["yhat"]], na.rm = TRUE)
+
+rm(tmpdf0)
+
+# Standard error of ATET
+#-----------------------
+
+atet.grad <- numDeriv::jacobian(func = function(z) {
+  
+  yhat1 <- aldvmm.pred(par   = z,
+                       X     = X1,
+                       y     = rep(0, nrow(X1[[1]])),
+                       psi   = fit$psi,
+                       ncmp  = fit$k,
+                       dist  = fit$dist,
+                       lcoef = fit$label$lcoef,
+                       lcmp  = fit$label$lcmp,
+                       lcpar = fit$label$lcpar)[["yhat"]]
+  
+  yhat0 <- aldvmm.pred(par   = z,
+              X     = X0,
+              y     = rep(0, nrow(X0[[1]])),
+              psi   = fit$psi,
+              ncmp  = fit$k,
+              dist  = fit$dist,
+              lcoef = fit$label$lcoef,
+              lcmp  = fit$label$lcmp,
+              lcpar = fit$label$lcpar)[["yhat"]]
+  
+  mean(yhat1 - yhat0, na.rm = TRUE)
+  
+},
+x = fit$coef)
+
+se.atet <- sqrt(atet.grad %*% fit$cov %*% t(atet.grad))
+
+# Summarize
+#----------
+
+out <- data.frame(atet = mean1 - mean0,
+                  se = se.atet,
+                  z = (mean1 - mean0) / se.atet)
+out$p <- stats::pnorm(abs(out$z), lower.tail = FALSE)
+out$ul <- out$atet + stats::qnorm((1 + 0.95)/2) * out$se
+out$ll <- out$atet - stats::qnorm((1 + 0.95)/2) * out$se
+
+print(out)
+
+```
+
 
 ## Covariance matrices across optimization methods
 
