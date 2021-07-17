@@ -979,11 +979,10 @@ The aldvmm() function returns an object of S3 class "aldvmm" for which methods f
 
 # Installation
 
-The 'aldvmm' package can be installed from github using the function install_github() from the 'devtools' package.
+The 'aldvmm' package can be installed from cran.
 
 ```{r install, eval = FALSE, echo = TRUE}
-# install.packages("devtools")
-devtools::install_github("pletschm/aldvmm", ref = "main")
+install.packages("aldvmm")
 ```
 
 # Data
@@ -1025,7 +1024,7 @@ load("textout.RData")
 
 ```
 
-The data includes `r format(textout$ncplt, big.mark="'")` observations with complete information on patients' post-operative utilities, Oxford Hip Scores, age and sex. Like @HernandezAlava2015, we draw a 30% sub-sample of `r format(textout$nspl, big.mark="'")` observations from the population of complete observations of these variables. Although we follow the same approach as  @HernandezAlava2015 in the preparation of the data, our random sample is not identical to the data used in their study. Post-operative EQ-5D-3L utilities from English value sets [@Dolan1997] show a bimodal distribution, limits at -0.594 and 1 and a gap between 1 and 0.883 (figure \@ref(fig:plot-hist-obs)).
+The data includes `r format(textout$ncplt, big.mark="'")` observations with complete information on patients' post-operative utilities, Oxford Hip Scores, age and sex. Like @HernandezAlava2015, we draw a 30% sub-sample of `r format(textout$nspl, big.mark="'")` observations from the population of complete observations of these variables. Although we follow a similar approach in data preparation preparation as  @HernandezAlava2015, our random sample is not identical to the data used in their study. Post-operative EQ-5D-3L utilities from English value sets [@Dolan1997] show a bimodal distribution, limits at -0.594 and 1 and a gap between 1 and 0.883 (figure \@ref(fig:plot-hist-obs)).
 
 ```{r plot-hist-obs, echo = FALSE, results = 'asis', fig.height = 2.9, fig.width = 6, fig.cap = "Frequency distribtution of observed EQ-5D-3L utilities"}
 
@@ -1670,7 +1669,7 @@ Although coefficients can be interpreted as marginal effects within each compone
 
 In situations with repeated utility measures, the 'aldvmm' package only allows fixed effects estimations with individual/group and time fixed effects which can be an important limitation in the analysis of clinical data. However, time fixed effects can be an appropriate modeling strategy in the presence of general time trends and dynamic selection in the population, e.g. because health state utilities decrease over time and treated individuals survive longer and thus are over-represented in later measurements. In light of the trade-off between the efficiency of the random effects model and the causal interpretation of treatment effects in a fixed-effects model it is recommended to assess the uncorrelatedness of random effects with the treatment using the Hausman test in a generalized linear model.
 
-Possible extensions of 'aldvmm' could include adjusted limited dependent variable beta mixture models [@Gray2018b], a mixed model implementation for repeated measures and a method for the calculation of average marginal effects and their standard errors.
+Possible extensions of the 'aldvmm' package could include adjusted limited dependent variable beta mixture models [@Gray2018b], a mixed model implementation for repeated measures and a method for the calculation of average marginal effects and their standard errors.
 
 \newpage
 

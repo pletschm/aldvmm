@@ -1,9 +1,13 @@
-## New submission
-This is a new submission.
+## Re-submission
+This is a re-submission. 
+
+It includes two bugfixes and an update of the vignette
+* Bugfix in summary.aldvmm(): AIC was displayed instead of BIC in summary table.
+* Bugfix in predict.aldvmm(): Fitted values from aldvmm object were supplied instead of predictions from predict.aldvmm().
+* New unit tests for predict.aldvmm().
+* Updated vignette: Added example code for calculation of standard errors of average treatment effects on the treated.
 
 Maintainer: 'Mark Pletscher <pletscher.mark@gmail.com>'
-
-New submission
 
 ## Test environments
 * win-builder (release)
