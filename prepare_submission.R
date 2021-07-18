@@ -37,10 +37,10 @@ devtools::check(pkg = ".", cran = TRUE)
 
 devtools::build(args = c('--compact-vignettes=both'))
 
-# Source check
-#-------------
+# Source check in shell
+#----------------------
 
-# R CMD check --as-cran ../aldvmm_0.8.3.tar.gz
+# R CMD check --as-cran ../aldvmm_0.8.4.tar.gz
 
 # Winbuilder
 #------------
@@ -50,5 +50,5 @@ devtools::build(args = c('--compact-vignettes=both'))
 # rhub checks
 #------------
 
-rhub::check("../aldvmm_0.8.3.tar.gz", platform = "ubuntu-gcc-release")
-rhub::check("../aldvmm_0.8.3.tar.gz", platform = "debian-gcc-devel")
+rhub::check("../aldvmm_0.8.4.tar.gz", platform = "ubuntu-gcc-release")
+rhub::check("../aldvmm_0.8.4.tar.gz", platform = "debian-gcc-devel")
