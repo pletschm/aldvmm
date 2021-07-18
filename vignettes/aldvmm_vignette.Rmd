@@ -1776,7 +1776,7 @@ se.atet <- sqrt(atet.grad %*% fit$cov %*% t(atet.grad))
 out <- data.frame(atet = mean1 - mean0,
                   se = se.atet,
                   z = (mean1 - mean0) / se.atet)
-out$p <- stats::pnorm(abs(out$z), lower.tail = FALSE)
+out$p <- 2*stats::pnorm(abs(out$z), lower.tail = FALSE)
 out$ul <- out$atet + stats::qnorm((1 + 0.95)/2) * out$se
 out$ll <- out$atet - stats::qnorm((1 + 0.95)/2) * out$se
 
