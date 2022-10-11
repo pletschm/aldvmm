@@ -1,11 +1,9 @@
 ## Re-submission
 This is a re-submission. 
 
-It includes two bugfixes and an update of the vignette
-* Bugfix in summary.aldvmm(): AIC was displayed instead of BIC in summary table.
-* Bugfix in predict.aldvmm(): Fitted values from aldvmm object were supplied instead of predictions from predict.aldvmm().
-* New unit tests for predict.aldvmm().
-* Updated vignette: Added example code for calculation of standard errors of average treatment effects on the treated.
+It includes two updates
+* Update in validate_aldvmm(): Checking for class type of model formula using base::inherits() instead of if(class(obj) == "formula").
+* Update in vignette: Include figures as .eps files to avoid loading ggplot objects from previous versions of ggplot2.
 
 Maintainer: 'Mark Pletscher <pletscher.mark@gmail.com>'
 

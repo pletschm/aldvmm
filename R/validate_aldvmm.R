@@ -73,7 +73,7 @@ validate_aldvmm <- function(object) {
   # Formula objects
   #----------------
   
-  if (class(object$formula) != "formula") {
+  if (inherits(object$formula, "formula")) {
     stop("'formula' ",
          'in object of class "aldvmm" is not of type "formula"',
          "\n")
