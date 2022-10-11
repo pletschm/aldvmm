@@ -13,9 +13,9 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-  
+
 <!-- Setup -->
-  
+
 ```{r setup, eval = TRUE, echo = FALSE, results = 'hide'}
 
 # Load packages
@@ -38,24 +38,24 @@ source("est_mhl.R")
 #--------------------
 
 ggplot_theme <- theme(panel.background = element_rect(fill = "white",
-                                                                        colour = "white",
-                                                                        size = 0.5, 
-                                                                        linetype = "solid"),
-                               panel.grid.major = element_blank(), 
-                               panel.grid.minor = element_blank(),
-                               panel.grid.major.y = element_line(size = 0.25, 
-                                                                          linetype = 'dashed', 
-                                                                          colour = "grey"),
-                               text = element_text(size = 11),
-                               plot.margin = margin(10, 10, 0, 10),
-                               axis.line = element_line(size = 0.25),
-                               axis.text = element_text(size = 11),
-                               #legend.title = element_text(size = 11),
-                               legend.title = element_blank(),
-                               legend.text = element_text(size = 11),
-                               legend.position = 'bottom',
-                               legend.direction = "vertical",
-                               legend.key = element_blank())
+                                                      colour = "white",
+                                                      #linewidth = 0.5, 
+                                                      linetype = "solid"),
+                      panel.grid.major = element_blank(), 
+                      panel.grid.minor = element_blank(),
+                      panel.grid.major.y = element_line(#linewidth = 0.25, 
+                        linetype = 'dashed', 
+                        colour = "grey"),
+                      text = element_text(size = 11),
+                      plot.margin = margin(10, 10, 0, 10),
+                      #axis.line = element_line(linewidth = 0.25),
+                      axis.text = element_text(size = 11),
+                      #legend.title = element_text(size = 11),
+                      legend.title = element_blank(),
+                      legend.text = element_text(size = 11),
+                      legend.position = 'bottom',
+                      legend.direction = "vertical",
+                      legend.key = element_blank())
 
 ```
 
@@ -116,11 +116,22 @@ save(textout,
 
 rm(textout)
 
+# Save data for plots
+#--------------------
+
+save(df,
+     file = "df.RData",
+     compress = FALSE)
+
+rm(df)
+
 ```
 
 <!-- Computationally heavy calculations -->
 
 ```{r calc_fit, eval = FALSE, warning = FALSE, echo = FALSE, results = 'hide'}
+
+load("df.RData")
 
 #------------------------------------------------------------------------------
 # Fit model 1
@@ -181,11 +192,11 @@ rm(fit1_all, init.method, optim.method, i, j)
 # With standard errors of fitted values for comparison to STATA
 
 fit1_nlminb <- aldvmm::aldvmm(data = df,
-                            formula = formula,
-                            psi = c(0.883, -0.594),
-                            ncmp = 2,
-                            optim.method = "nlminb",
-                            se.fit = TRUE)
+                              formula = formula,
+                              psi = c(0.883, -0.594),
+                              ncmp = 2,
+                              optim.method = "nlminb",
+                              se.fit = TRUE)
 
 save(fit1_nlminb, 
      file = "fit1_nlminb.RData",
@@ -326,6 +337,11 @@ rm(formula)
 
 ```{r calc_plot, eval = FALSE, warning = FALSE, echo = FALSE, results = 'hide'}
 
+# Load data
+#----------
+
+load("df.RData")
+
 # Histogram of observed outcomes
 #-------------------------------
 
@@ -336,9 +352,9 @@ plot_hist_obs <- ggplot2::ggplot(df, aes(x = eq5d)) +
   scale_y_continuous(labels = scales::comma) +
   ggplot_theme
 
-save(plot_hist_obs, 
-     file = "plot_hist_obs.RData",
-     compress = TRUE)
+ggsave("plot_hist_obs.eps",
+       width = 6,
+       height = 2.9)
 
 rm(plot_hist_obs)
 
@@ -356,9 +372,9 @@ plot_hist_pred <- ggplot2::ggplot(plotdf, aes(x = yhat)) +
   scale_y_continuous(labels = scales::comma) +
   ggplot_theme
 
-save(plot_hist_pred, 
-     file = "plot_hist_pred.RData",
-     compress = TRUE)
+ggsave("plot_hist_pred.eps",
+       width = 6,
+       height = 2.9)
 
 rm(plotdf, plot_hist_pred, fit1_all)
 
@@ -371,16 +387,20 @@ a <- fit1_all[["fit"]][["zero"]][["Nelder-Mead"]][["pred"]][["yhat"]]
 b <- fit1_all[["fit"]][["zero"]][["hjn"]][["pred"]][["yhat"]]
 c <- fit1_all[["fit"]][["zero"]][["nlminb"]][["pred"]][["yhat"]]
 
-tmpdf <- as.data.frame(rbind(cbind(y = c, bl = c, alg = "45° line"),
-                             cbind(y = a, bl = c, alg = "Nelder-Mead"),
-                             cbind(y = b, bl = c, alg = "hjn")))
+tmpdf <- as.data.frame(rbind(cbind(out = c, bl = c, alg = "45 line"),
+                             cbind(out = a, bl = c, alg = "Nelder-Mead"),
+                             cbind(out = b, bl = c, alg = "hjn")))
 
-tmpdf$y <- as.numeric(as.character(tmpdf$y))
-tmpdf$bl <- as.numeric(as.character(tmpdf$bl))
+tmpdf <- unique(tmpdf)
+tmpdf <- tmpdf[order(tmpdf$bl), ]
 
-plot_comp_pred <- ggplot(tmpdf, aes(x = bl, y = y, group = alg)) +
+tmpdf[, "out"] <- as.numeric(as.character(tmpdf[, "out"]))
+tmpdf[, "bl"] <- as.numeric(as.character(tmpdf[, "bl"]))
+tmpdf[, "alg"] <- as.factor(tmpdf[, "alg"])
+
+plot_comp_pred <- ggplot2::ggplot(tmpdf, aes(x = bl, y = out, group = alg)) +
   geom_line(aes(linetype = alg)) +
-  scale_linetype_manual(values=c("solid", "dashed", "dotted")) +
+  scale_linetype_manual(values = c("solid", "dashed", "dotted")) +
   scale_x_continuous(breaks = seq(-0.2, 1, by = 0.1)) +
   xlab("E[y|X] nlminb") +
   ylab("E[y|X]") +
@@ -389,9 +409,9 @@ plot_comp_pred <- ggplot(tmpdf, aes(x = bl, y = y, group = alg)) +
   theme(panel.grid.major.x = element_blank(),
         panel.grid.major.y = element_blank())
 
-save(plot_comp_pred, 
-     file = "plot_comp_pred.RData",
-     compress = TRUE)
+ggsave("plot_comp_pred.eps",
+       width = 6,
+       height = 2.9)
 
 rm(fit1_all, a, b, c, tmpdf, plot_comp_pred)
 
@@ -403,25 +423,31 @@ load("fit1_all.RData")
 set.seed(101010101)
 plot_comp_mhl1 <- est_mhl(fit1_all[["fit"]][["zero"]][["Nelder-Mead"]],
                           ngroup = 10)
-save(plot_comp_mhl1, 
-     file = "plot_comp_mhl1.RData",
-     compress = TRUE)
+
+ggsave("plot_comp_mhl1.eps",
+       width = 6,
+       height = 2.9)
+
 rm(plot_comp_mhl1)
 
 set.seed(101010101)
 plot_comp_mhl2 <- est_mhl(fit1_all[["fit"]][["zero"]][["nlminb"]],
                           ngroup = 10)
-save(plot_comp_mhl2, 
-     file = "plot_comp_mhl2.RData",
-     compress = TRUE)
+
+ggsave("plot_comp_mhl2.eps",
+       width = 6,
+       height = 2.9)
+
 rm(plot_comp_mhl2)
 
 set.seed(101010101)
 plot_comp_mhl3 <- est_mhl(fit1_all[["fit"]][["zero"]][["hjn"]],
                           ngroup = 10)
-save(plot_comp_mhl3,
-     file = "plot_comp_mhl3.RData",
-     compress = TRUE)
+
+ggsave("plot_comp_mhl3.eps",
+       width = 6,
+       height = 2.9)
+
 rm(plot_comp_mhl3)
 
 rm(fit1_all)
@@ -466,9 +492,9 @@ for (i in c("Nelder-Mead", "nlminb", "hjn")) {
     coord_cartesian(ylim=c(0, 5), xlim = c(-1, 1)) +
     ggplot_theme
   
-  save(plot_dens, 
-       file = paste0("plot_dens_", i, ".RData"),
-       compress = TRUE)
+  ggsave(paste0("plot_dens_", i,".eps"),
+         width = 6,
+         height = 2.9)
   
   rm(plot_dens)
   
@@ -518,9 +544,9 @@ plotdf <- rbind(stata_yhat_long, r_yhat_long)
 
 suppressWarnings(
   plot_box_yhat <- ggplot2::ggplot(plotdf, 
-                          aes(x = variable, 
-                              y = as.numeric(value), 
-                              fill = software)) +
+                                   aes(x = variable, 
+                                       y = as.numeric(value), 
+                                       fill = software)) +
     geom_boxplot() +
     ylab("Fitted values") +
     ggplot_theme +
@@ -528,9 +554,9 @@ suppressWarnings(
     guides(fill = guide_legend(nrow = 1, byrow = TRUE))
 )
 
-save(plot_box_yhat, 
-     file = "plot_box_yhat.RData",
-     compress = TRUE)
+ggsave("plot_box_yhat.eps",
+       width = 6,
+       height = 2.9)
 
 rm(plotdf, plot_box_yhat)
 rm(fit1_cons, fit1_cstr_stata, fit1_nlminb)
@@ -588,22 +614,27 @@ suppressWarnings(
     guides(fill = guide_legend(nrow = 1, byrow = TRUE))
 )
 
-save(plot_box_se, 
-     file = "plot_box_se.RData",
-     compress = TRUE)
+ggsave("plot_box_se.eps",
+       width = 6,
+       height = 2.9)
 
 rm(plotdf, plot_box_se)
 rm(fit1_cons, fit1_cstr_stata, fit1_nlminb)
 rm(fit2_stata)
 rm(stata_se, stata_se_long)
 rm(r_se_long)
-
+rm(df)
 
 ```
 
 <!-- Make summary tables -->
 
 ```{r calc_tab, eval = FALSE, warning = FALSE, echo = FALSE, results = 'hide'}
+
+# Load data
+#----------
+
+load("df.RData")
 
 # Model 1, comparison of optimization methods
 #--------------------------------------------
@@ -809,9 +840,9 @@ load("fit1_cstr_stata.RData")
 load("fit1_cons.RData")
 load("fit2_stata.RData")
 stata_yhat <- read.table("stata_yhat.csv", 
-                       header = TRUE, 
-                       sep = ";", 
-                       dec = ".")
+                         header = TRUE, 
+                         sep = ";", 
+                         dec = ".")
 stata_se <- read.table("stata_se.csv", 
                        header = TRUE, 
                        sep = ";", 
@@ -858,6 +889,7 @@ rm(sumhat)
 
 # file.remove(dir(path = ".",  pattern="fi1_"))
 # file.remove(dir(path = ".",  pattern="fi2_"))
+rm(df)
 
 ```
 
@@ -1026,15 +1058,7 @@ load("textout.RData")
 
 The data includes `r format(textout$ncplt, big.mark="'")` observations with complete information on patients' post-operative utilities, Oxford Hip Scores, age and sex. Like @HernandezAlava2015, we draw a 30% sub-sample of `r format(textout$nspl, big.mark="'")` observations from the population of complete observations of these variables. Although we follow a similar approach in data preparation preparation as  @HernandezAlava2015, our random sample is not identical to the data used in their study. Post-operative EQ-5D-3L utilities from English value sets [@Dolan1997] show a bimodal distribution, limits at -0.594 and 1 and a gap between 1 and 0.883 (figure \@ref(fig:plot-hist-obs)).
 
-```{r plot-hist-obs, echo = FALSE, results = 'asis', fig.height = 2.9, fig.width = 6, fig.cap = "Frequency distribtution of observed EQ-5D-3L utilities"}
-
-load("plot_hist_obs.RData")
-
-print(plot_hist_obs)
-
-rm(plot_hist_obs)
-
-```
+![(#fig:plot-hist-obs) Frequency distribtution of observed EQ-5D-3L utilities](./plot_hist_obs.eps)
 
 # Results
 
@@ -1115,15 +1139,7 @@ rm(tab_sum_mod1bfgs)
 
 We obtain expected values of observations in the estimation data using the generic function predict(). Standard errors of fitted (estimation data) or predicted (new data) values are calculated using the delta method. Expected values exhibit a smoother distribution than observed values and do not show a gap between 1 and 0.883, because they are weighted averages of component distributions and 1.
 
-```{r plot-hist-pred, echo = FALSE, results = "asis", fig.height = 2.9, fig.width = 6,  fig.cap = "Expected values from base case model"}
-
-load("plot_hist_pred.RData")
-
-print(plot_hist_pred)
-
-rm(plot_hist_pred)
-
-```
+![Expected values from base case model](./plot_hist_pred.eps)
 
 Expected values of observations in the estimation data can also be used to calculate average incremental effects or average treatment effects on the treated. Average treatment effects on the treated compare predictions for treated individuals to predictions for the same individuals without the effect of the treatment indicator. Standard errors of average treatment effects on the treated can be calculated using the delta meethod (see example code in the appendix).
 
@@ -1255,47 +1271,15 @@ ggplot2::ggplot(data = data.frame(x = c(-1, 1)), aes(x)) +
 
 The densities in the solution of the "Nelder-Mead" method resemble the bi-model distribution observed in the data (figure \@ref(fig:fig-comp-dens1)). The densities in the solution of the "nlminb" method include two distributions with similar means but different standard deviations (figure \@ref(fig:fig-comp-dens2)). The densities in the solution of the "hjn" method include two distributions with similar means, but component 1 shows an extremely small standard deviation and a low probability of group membership (figure \@ref(fig:fig-comp-dens3)). The density plots also suggest that the model fit benefits more from improving the modeling of the more frequently observed higher utilities rather than replicating the bi-modal distribution observed in the data. Overall, the differences between optimization methods show that it is very difficult to fit a two-component model to the data. We suspect that a simple one-component model would be more likely to converge towards a global optimum and would fit the data similarly well as the two-component model. 
 
-```{r fig-comp-dens1, echo = FALSE, results = "asis", fig.height = 2.9, fig.width = 6,  fig.cap = 'Densities in components based on "Nelder-Mead" parameter estimates (observation with population average Oxford Hip Score 3.8489)'}
+![(#fig:fig-comp-dens1) Densities in components based on "Nelder-Mead" parameter estimates (observation with population average Oxford Hip Score 3.8489)](./plot_dens_Nelder-Mead.eps)
 
-load("plot_dens_Nelder-Mead.RData")
+![(#fig:fig-comp-dens2) Densities in components based on "nlminb" parameter estimates (observation with population average Oxford Hip Score 3.8489)](./plot_dens_nlminb.eps)
 
-print(plot_dens)
-
-rm(plot_dens)
-
-```
-
-```{r fig-comp-dens2, echo = FALSE, results = "asis", fig.height = 2.9, fig.width = 6, fig.cap = 'Densities in components based on "nlminb" parameter estimates (observation with population average Oxford Hip Score 3.8489)'}
-
-load("plot_dens_nlminb.RData")
-
-print(plot_dens)
-
-rm(plot_dens)
-
-```
-
-```{r fig-comp-dens3, echo = FALSE, results = "asis", fig.height = 2.9, fig.width = 6, fig.cap = 'Densities in components based on "hjn" parameter estimates (observation with population average Oxford Hip Score 3.8489)'}
-
-load("plot_dens_hjn.RData")
-
-print(plot_dens)
-
-rm(plot_dens)
-
-```
+![(#fig:fig-comp-dens3) Densities in components based on "hjn" parameter estimates (observation with population average Oxford Hip Score 3.8489)](./plot_dens_hjn.eps)
 
 The differences in parameter estimates from different optimization methods show that the choice of the optimization algorithm and initial values is very important for parameter identification. As adjusted limited dependent variable mixture models are frequently used for tasks that rely on predictions, we also compare expected values from the "Nelder-Mead" and "hjn" methods to expected values from the "nlminb"  method. Expected values from the "Nelder-Mead" and "hjn" methods differed from expected values from the "nlminb" method among observations with lower expected values (figure \@ref(fig:plot-comp-pred)).
 
-```{r plot-comp-pred, echo = FALSE, results = "asis", fig.height = 2.9, fig.width = 6, fig.cap = 'Expected values from model 1, "Nelder-Mead" and "hjn" versus "nlminb" with zero starting values'}
-
-load("plot_comp_pred.RData")
-
-print(plot_comp_pred)
-
-rm(plot_comp_pred)
-
-```
+![(#fig:plot-comp-pred) Expected values from model 1, "Nelder-Mead" and "hjn" versus "nlminb" with zero starting values](./plot_comp_pred.eps)
 
 An visual inspection of mean residuals over deciles of expected values shows that model 1 fits the data poorly regardless of the optimization method, and that the patterns of over- and under-predictions of observed values are similar across optimization methods despite different log-likelihoods (figure \@ref(fig:plot-comp-mhl1), figure \@ref(fig:plot-comp-mhl2) and figure \@ref(fig:plot-comp-mhl3) in the appendix).
 
@@ -1528,7 +1512,7 @@ for (i in tabvec) {
       as.numeric(gsub("[^0-9.-]", "", as.matrix(get(i)$table)[nr, 2])), 
       big.mark = "'"
     )
-
+    
     ctab[j, 2 + match(i, tabvec)] <- as.matrix(get(i)$table)[j, 3]
     ctab[nrow(ctab), 2 + match(i, tabvec)] <- lltmp
     ctab[nrow(ctab), 2] <- "ll"
@@ -1536,7 +1520,7 @@ for (i in tabvec) {
     stab[j, 2 + match(i, tabvec)] <- as.matrix(get(i)$table)[j, 4]
     stab[nrow(stab), 2 + match(i, tabvec)] <- lltmp
     stab[nrow(stab), 2] <- "ll"
-
+    
   }
   rm(nr)
 }
@@ -1555,8 +1539,8 @@ lindex[1] <- -1
 
 print(xtable::xtable(ctab,
                      align = paste0("lll", 
-                                   paste(rep("r", length(tabvec)), 
-                                         collapse = "")),
+                                    paste(rep("r", length(tabvec)), 
+                                          collapse = "")),
                      label = "tab:tab-comp-stata",
                      caption = "Comparison of point estimates to the results of the STATA package"),
       type = "latex",
@@ -1568,8 +1552,8 @@ print(xtable::xtable(ctab,
 
 print(xtable::xtable(stab,
                      align = paste0("lll", 
-                                   paste(rep("r", length(tabvec)), 
-                                         collapse = "")),
+                                    paste(rep("r", length(tabvec)), 
+                                          collapse = "")),
                      label = "tab:tab-compse-stata",
                      caption = "Comparison of standard errors to the results of the STATA package."),
       type = "latex",
@@ -1590,25 +1574,9 @@ Fitted values show very similar marginal distributions on both platforms (figure
 
 Standard errors of fitted values differ visibly between platforms (figure \@ref(fig:box-pred-se-stata) and table \@ref(tab:compse)). The difference is particularly pronounced in reference case 1, but the standard errors from STATA\textsuperscript{\textregistered} seem quite extreme compared to all other reference cases. R does not return standard errors of fitted values in reference case 2.
 
-```{r box-pred-yhat-stata, echo = FALSE, results = "asis", warning = FALSE, fig.height = 2.9, fig.width = 6, fig.cap = 'Fitted values in R and STATA'}
+![(#fig:box-pred-yhat-stata) Fitted values in R and STATA](./plot_box_yhat.eps)
 
-load("plot_box_yhat.RData")
-
-suppressWarnings(print(plot_box_yhat))
-
-rm(plot_box_yhat)
-
-```
-
-```{r box-pred-se-stata, echo = FALSE, results = "asis", warning = FALSE, fig.height = 2.9, fig.width = 6, fig.cap = 'Standard errors of fitted values in R and STATA'}
-
-load("plot_box_se.RData")
-
-suppressWarnings(print(plot_box_se))
-
-rm(plot_box_se)
-
-```
+![(#fig:box-pred-se-stata) Standard errors of fitted values in R and STATA](./plot_box_se.eps)
 
 ```{r tab-pred-stata-yhat, echo = FALSE, results = "asis"}
 
@@ -1665,7 +1633,7 @@ The 'aldvmm' package offers a variety of optimization algorithms and methods for
 
 The analysis of the EQ-5D-3L utility data also suggests that simpler models with fewer components should be considered when multi-component models are difficult to fit. Even single-component adjusted limited dependent variable mixture models can improve fit compared to traditional regression techniques because they account for limits and gaps.
 
-Although coefficients can be interpreted as marginal effects within each component, they cannot interpreted in terms of overall expected values. Thus, average marginal effects and average treatment effects need to be calculated from predictions using the generic function predict(). Standard errors of marginal effects or average treatment effects can be calculated using the standard errors of fitted values for observed and counterfactual covariate values. 
+Although coefficients can be interpreted as marginal effects within each component, they cannot interpreted in terms of overall expected values. Thus, average marginal effects and average treatment effects need to be calculated from predictions using the generic function predict(). Standard errors of marginal effects or average treatment effects can be calculated using the delta method. 
 
 In situations with repeated utility measures, the 'aldvmm' package only allows fixed effects estimations with individual/group and time fixed effects which can be an important limitation in the analysis of clinical data. However, time fixed effects can be an appropriate modeling strategy in the presence of general time trends and dynamic selection in the population, e.g. because health state utilities decrease over time and treated individuals survive longer and thus are over-represented in later measurements. In light of the trade-off between the efficiency of the random effects model and the causal interpretation of treatment effects in a fixed-effects model it is recommended to assess the uncorrelatedness of random effects with the treatment using the Hausman test in a generalized linear model.
 
@@ -1712,9 +1680,9 @@ X1 <- aldvmm.mm(data = tmpdf1,
 
 # Average expected outcome of treated observations
 mean1 <- mean(predict(fit,
-                newdata = tmpdf1,
-                type = "fit",
-                se.fit = TRUE)[["yhat"]], na.rm = TRUE)
+                      newdata = tmpdf1,
+                      type = "fit",
+                      se.fit = TRUE)[["yhat"]], na.rm = TRUE)
 
 # Predict counterfactual
 #-----------------------
@@ -1732,9 +1700,9 @@ X0 <- aldvmm.mm(data = tmpdf0,
 
 # Average expected outcome of counterfactual osbervations
 mean0 <- mean(predict(fit,
-                newdata = tmpdf0,
-                type = "fit",
-                se.fit = TRUE)[["yhat"]], na.rm = TRUE)
+                      newdata = tmpdf0,
+                      type = "fit",
+                      se.fit = TRUE)[["yhat"]], na.rm = TRUE)
 
 rm(tmpdf0)
 
@@ -1754,14 +1722,14 @@ atet.grad <- numDeriv::jacobian(func = function(z) {
                        lcpar = fit$label$lcpar)[["yhat"]]
   
   yhat0 <- aldvmm.pred(par   = z,
-              X     = X0,
-              y     = rep(0, nrow(X0[[1]])),
-              psi   = fit$psi,
-              ncmp  = fit$k,
-              dist  = fit$dist,
-              lcoef = fit$label$lcoef,
-              lcmp  = fit$label$lcmp,
-              lcpar = fit$label$lcpar)[["yhat"]]
+                       X     = X0,
+                       y     = rep(0, nrow(X0[[1]])),
+                       psi   = fit$psi,
+                       ncmp  = fit$k,
+                       dist  = fit$dist,
+                       lcoef = fit$label$lcoef,
+                       lcmp  = fit$label$lcmp,
+                       lcpar = fit$label$lcpar)[["yhat"]]
   
   mean(yhat1 - yhat0, na.rm = TRUE)
   
@@ -1854,35 +1822,11 @@ plot <- ggplot2::ggplot(plotdat, aes(x = factor(as.numeric(group)),
   geom_line(aes(linetype = factor(outcome)))
 ```  
 
-```{r plot-comp-mhl1, echo = FALSE, results = "asis", fig.height = 2.5, fig.width = 6, fig.cap = 'Mean residuals over deciles of expected values, "Nelder-Mead" with "zero" starting values'}
+![(#fig:plot-comp-mhl1) Mean residuals over deciles of expected values, "Nelder-Mead" with "zero" starting values](./plot_comp_mhl1.eps)
 
-load("plot_comp_mhl1.RData")
+![(#fig:plot-comp-mhl2) Mean residuals over deciles of expected values, "BFGS" with "zero" starting values](./plot_comp_mhl2.eps)
 
-print(plot_comp_mhl1)
-
-rm(plot_comp_mhl1)
-
-```
-
-```{r plot-comp-mhl2, echo = FALSE, results = "asis", fig.height = 2.5, fig.width = 6, fig.cap = 'Mean residuals over deciles of expected values, "BFGS" with "zero" starting values'}
-
-load("plot_comp_mhl2.RData")
-
-print(plot_comp_mhl2)
-
-rm(plot_comp_mhl2)
-
-```
-
-```{r plot-comp-mhl3, echo = FALSE, results = "asis", fig.height = 2.5, fig.width = 6, fig.cap = 'Mean residuals over deciles of expected values, "hjn" with "zero" starting values'}
-
-load("plot_comp_mhl3.RData")
-
-print(plot_comp_mhl3)
-
-rm(plot_comp_mhl3)
-
-```
+![(#fig:plot-comp-mhl3) Mean residuals over deciles of expected values, "hjn" with "zero" starting values](./plot_comp_mhl3.eps)
 
 \newpage
 ## R code for the estimation of reference cases

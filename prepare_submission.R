@@ -21,8 +21,8 @@ library("aldvmm")
 # Register qpdf and ghostscript
 #------------------------------
 
-Sys.setenv('PATH' = paste0('C:/Users/phm1/qpdf-10.1.0/bin;', Sys.getenv('PATH')))
-Sys.setenv(R_GSCMD = "C:/Program Files/gs/gs9.53.3/bin/gswin64c.exe")
+Sys.setenv('PATH' = paste0('C:/Users/phm1/qpdf-11.1.1/bin;', Sys.getenv('PATH')))
+Sys.setenv(R_GSCMD = "C:/Users/phm1/gs10.00.0/bin/gswin64c.exe")
 
 # Save pdf vignette in vignettes folder
 #--------------------------------------
@@ -40,7 +40,7 @@ devtools::build(args = c('--compact-vignettes=both'))
 # Source check in shell
 #----------------------
 
-# R CMD check --as-cran ../aldvmm_0.8.4.tar.gz
+# R CMD check --as-cran ../aldvmm_0.8.5.tar.gz
 
 # Winbuilder
 #------------
@@ -50,5 +50,5 @@ devtools::build(args = c('--compact-vignettes=both'))
 # rhub checks
 #------------
 
-rhub::check("../aldvmm_0.8.4.tar.gz", platform = "ubuntu-gcc-release")
-rhub::check("../aldvmm_0.8.4.tar.gz", platform = "debian-gcc-devel")
+rhub::check("../aldvmm_0.8.5.tar.gz", platform = "ubuntu-gcc-release")
+rhub::check("../aldvmm_0.8.5.tar.gz", platform = "debian-gcc-devel")

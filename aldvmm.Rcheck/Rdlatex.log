@@ -1,4 +1,6 @@
 Hmm ... looks like a package
+Converting parsed Rd's to LaTeX .
+Creating pdf output from LaTeX ...
 Saving output to 'aldvmm-manual.pdf' ...
 Done
-You may want to clean up by 'rm -Rf C:/Users/phm1/AppData/Local/Temp/RtmpkVcEK4/Rd2pdf1d047405cc6'
+You may want to clean up by 'rm -Rf C:/Users/phm1/AppData/Local/Temp/RtmpAzIZtf/Rd2pdf45283f7a587f'
