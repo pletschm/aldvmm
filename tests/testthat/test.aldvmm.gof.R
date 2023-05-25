@@ -9,11 +9,13 @@ test_that("Check covariance function.", {
   suppressWarnings({
     fit1 <- aldvmm(formula = eq5d ~ age | 1,
                    data = utility,
-                   psi = c(-0.594, 0.883))
+                   psi = c(-0.594, 0.883),
+                   optim.method = "Nelder-Mead")
     
     fit2 <- aldvmm(eq5d ~ age | female,
                    data = utility,
-                   psi = c(-0.594, 0.884))
+                   psi = c(-0.594, 0.884),
+                   optim.method = "Nelder-Mead")
   })
   
   gof1 <- aldvmm.gof(par = fit1$coef,

@@ -99,6 +99,9 @@ NULL
 #'   \code{'par'}.
 #' @param se.fit an optional logical value indicating whether standard errors
 #'   of fitted values are calculated. The default value is \code{FALSE}.
+#' @param model an optional logical value indicating whether the model frame, 
+#' model matrices and the response are returned. The default value is 
+#' \code{TRUE}.
 #' @param level a numeric value of the significance level for confidence bands
 #'   of fitted values. The default value is 0.95.
 #'
@@ -203,13 +206,13 @@ NULL
 #'
 #'   \item{\code{n}}{a scalar representing the number of complete observations
 #'   with no missing values that were used in the estimation.}
-#'
 #'   \item{\code{k}}{a scalar representing the number of components that were
 #'   mixed.}
-#'
+#'   
 #'   \item{\code{gof}}{a list including the following elements. \describe{
 #'   \item{\code{ll}}{a numeric value of the negative log-likelihood
-#'   \eqn{-ll}.} \item{\code{aic}}{a numeric value of the Akaike information
+#'   \eqn{-ll}.} 
+#'   \item{\code{aic}}{a numeric value of the Akaike information
 #'   criterion \eqn{AIC = 2n_{par} - 2ll}{AIC = 2*npar - 2*ll}.}
 #'   \item{\code{bic}}{a numeric value of the Bayesian information criterion
 #'   \eqn{BIC = n_{par}*log(n_{obs}) - 2ll}{BIC = npar*log(nobs) - 2*ll}.}
@@ -237,6 +240,11 @@ NULL
 #'   \item{\code{formula}}{an object of class
 #'   \ifelse{html}{\code{\link[stats]{formula}}}{\code{stats::formula}}
 #'   supplied to argument \code{'formula'}.}
+#'   \item{\code{terms}}{a list of objects of class
+#'   \ifelse{html}{\code{\link[stats]{terms}}}{\code{stats::terms}}.}
+#'   \item{\code{model}}{a data.frame including the variables specified 
+#'   in \code{'formula'} plus additional attributes returned by 
+#'   \ifelse{html}{\code{\link[stats]{model.frame}}}{\code{stats::model.frame}}.}
 #'
 #'   \item{\code{psi}}{a numeric vector with the minimum and maximum utility
 #'   below 1 in \code{'data'}.}
@@ -305,6 +313,7 @@ aldvmm <- function(formula,
                    init.lo = NULL,
                    init.hi = NULL,
                    se.fit = FALSE,
+                   model = TRUE,
                    level = 0.95) {
   
   # Labels
@@ -331,7 +340,7 @@ aldvmm <- function(formula,
   if (all(init.lo == -Inf) & all(init.hi == Inf) & 
       is.null(optim.method)) {
     # Default optimization method
-    optim.method <- "Nelder-Mead"
+    optim.method <- "BFGS"
   } else if ((!is.null(init.lo) | !is.null(init.hi))) {
     # Constrained optimization with "L-BFGS-B"
     optim.method <- "L-BFGS-B"
@@ -382,16 +391,29 @@ aldvmm <- function(formula,
   # Make list of design matrices
   #-----------------------------
   
-  mm <- aldvmm.mm(data = data,
-                  formula = formula,
+  formula <- Formula::Formula(formula) # Convert formula to 'Formula' object
+  data <- stats::model.frame(formula, data = data) # Convert data to model frame
+  
+  mm <- aldvmm.mm(mf = data,
+                  Formula = formula,
                   ncmp = ncmp,
                   lcoef = lcoef)
   
   # Make outcome vector
   #--------------------
   
-  complete <- stats::complete.cases(data[, all.vars(formula)])
-  y <- data[complete, all.vars(formula)[1]]
+  y <- stats::model.response(
+    stats::model.frame(formula, 
+                       data = data)
+  )
+  
+  # Make list of model terms
+  #-------------------------
+  
+  terms <- aldvmm.tm(mf = data,
+                     Formula = formula,
+                     ncmp = ncmp,
+                     lcoef = lcoef)
   
   # Generate initial values
   #------------------------
@@ -498,7 +520,6 @@ aldvmm <- function(formula,
                             yhat = pred[["yhat"]],
                             X = mm,
                             type = "fit",
-                            formula = formula,
                             cv = cov[["cv"]],
                             mse = gof[["mse"]],
                             psi = psi,
@@ -519,10 +540,7 @@ aldvmm <- function(formula,
   # Collect output
   #---------------
   
-  outlist <- new_aldvmm(n = nrow(mm[[1]]),
-                        k = ncmp,
-                        dist = dist,
-                        coef = fit[["par"]],
+  outlist <- new_aldvmm(coef = fit[["par"]],
                         se = cov[["se"]],
                         z = cov[["z"]],
                         p = cov[["p"]],
@@ -530,11 +548,13 @@ aldvmm <- function(formula,
                         upper = cov[["upper"]],
                         hessian = cov[["hessian"]],
                         cov = cov[["cv"]],
-                        mse = gof[["mse"]],
-                        mae = gof[["mae"]],
+                        n = length(y),
+                        k = ncmp,
                         ll = gof[["ll"]],
                         aic = gof[["aic"]],
                         bic = gof[["bic"]],
+                        mse = gof[["mse"]],
+                        mae = gof[["mae"]],
                         yhat = pred[["yhat"]],
                         y = pred[["y"]],
                         res = pred[["res"]],
@@ -543,8 +563,11 @@ aldvmm <- function(formula,
                         lower.fit = pred.se[["lower.fit"]],
                         upper.fit = pred.se[["upper.fit"]],
                         init = init,
-                        formula = formula,
+                        formula = stats::formula(formula),
+                        terms = terms,
+                        model = ifelse(model == TRUE, data, NULL),
                         psi = psi,
+                        dist = dist,
                         lcoef = lcoef,
                         lcpar = lcpar,
                         lcmp = lcmp,

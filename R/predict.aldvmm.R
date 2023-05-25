@@ -43,13 +43,33 @@ predict.aldvmm <- function(object,
          "\n")
   })
   
+  # Make list of empty outcome vectors including incomplete rows of newdata
+  #------------------------------------------------------------------------
+  
+  pred <- list()
+  
+  pred[["se.fit"]] <- rep(NA, times = nrow(newdata))
+  names(pred[["se.fit"]]) <- rownames(newdata)
+  
+  pred[["ll"]] <- rep(NA, times = nrow(newdata))
+  names(pred[["ll"]]) <- rownames(newdata)
+  
+  pred[["ul"]] <- rep(NA, times = nrow(newdata))
+  names(pred[["ul"]]) <- rownames(newdata)
+  
+  pred[["yhat"]] <- rep(NA, times = nrow(newdata))
+  names(pred[["yhat"]]) <- rownames(newdata)
+  
   # Make list of design matrices
   #-----------------------------
   
-  mm <- aldvmm.mm(data    = newdata,
-                  formula = object[["formula"]],
-                  ncmp    = object[["k"]],
-                  lcoef   = object[["label"]][["lcoef"]])
+  formula <- Formula::Formula(object[["formula"]])
+  newdata <- stats::model.frame(formula, data = newdata)
+  
+  mm <- aldvmm.mm(mf = newdata,
+                  Formula = formula,
+                  ncmp = object[["k"]],
+                  lcoef = object[["label"]][["lcoef"]])
   
   # Predict outcomes
   #-----------------
@@ -64,11 +84,6 @@ predict.aldvmm <- function(object,
                      lcpar = object[["label"]][["lcpar"]],
                      lcmp  = object[["label"]][["lcmp"]])
   
-  # Add missing predictions for incomplete observations in newdata
-  pred <- list()
-  pred[["yhat"]] <- rep(NA, times = nrow(newdata))
-  names(pred[["yhat"]]) <- rownames(newdata)
-  
   pred[["yhat"]][names(tmp[["yhat"]])] <- tmp[['yhat']]
   
   # Estimate standard errors of predictions and prediction intervals
@@ -81,7 +96,6 @@ predict.aldvmm <- function(object,
                         yhat    = pred[["yhat"]],
                         X       = mm,
                         type    = type,
-                        formula = object[["formula"]],
                         cv      = object[["cov"]],
                         mse     = object[["gof"]][["mse"]],
                         psi     = object[["psi"]],
@@ -92,18 +106,9 @@ predict.aldvmm <- function(object,
                         lcpar   = object[["label"]][["lcpar"]],
                         lcmp    = object[["label"]][["lcmp"]])
     
-    # Add missing standard errors and confidence bands for incomplete 
-    # observations in newdata
-    pred[["se.fit"]] <- rep(NA, times = nrow(newdata))
-    names(pred[["se.fit"]]) <- rownames(newdata)
+    # Add output to complete observations of newdata
     pred[["se.fit"]][names(tmp[["se.fit"]])] <- tmp[['se.fit']]
-    
-    pred[["ll"]] <- rep(NA,times = nrow(newdata))
-    names(pred[["ll"]]) <- rownames(newdata)
     pred[["ll"]][names(tmp[["lower.fit"]])] <- tmp[['lower.fit']]
-    
-    pred[["ul"]] <- rep(NA,times = nrow(newdata))
-    names(pred[["ul"]]) <- rownames(newdata)
     pred[["ul"]][names(tmp[["upper.fit"]])] <- tmp[['upper.fit']]
     
   }

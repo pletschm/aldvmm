@@ -95,7 +95,8 @@ test_that("Check covariance function.", {
       fit <- aldvmm(data = utility,
                     formula = formula,
                     psi = psi,
-                    ncmp = ncmp)
+                    ncmp = ncmp,
+                    optim.method = "Nelder-Mead")
     })
   })
   
@@ -118,11 +119,12 @@ test_that("Check covariance function.", {
     fit <- aldvmm(data = utility[1:100, ],
                   formula = formula,
                   psi = psi,
-                  ncmp = ncmp)
+                  ncmp = ncmp,
+                  optim.method = "Nelder-Mead")
   })
   
-  mm <- aldvmm.mm(data = utility,
-                  formula = formula,
+  mm <- aldvmm.mm(mf = stats::model.frame(Formula::Formula(formula), data = utility),
+                  Formula = Formula::Formula(formula),
                   ncmp = ncmp,
                   lcoef = fit$label$lcoef)
   
@@ -169,11 +171,12 @@ test_that("Check covariance function.", {
     fit <- aldvmm(formula = formula,
                   data = utility[1:20, ],
                   psi = psi,
-                  ncmp = ncmp)
+                  ncmp = ncmp,
+                  optim.method = "Nelder-Mead")
   })
   
-  mm <- aldvmm.mm(data = utility,
-                  formula = formula,
+  mm <- aldvmm.mm(mf = stats::model.frame(Formula::Formula(formula), data = utility),
+                  Formula = Formula::Formula(formula),
                   ncmp = ncmp,
                   lcoef = fit$label$lcoef)
   

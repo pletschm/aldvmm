@@ -60,6 +60,9 @@ aldvmm.cv <- function(ll,
                                             lcpar = lcpar,
                                             optim.method = optim.method)
   
+  rownames(outlist[["hessian"]]) <- names(par)
+  colnames(outlist[["hessian"]]) <- names(par)
+  
   # Covariance matrix
   #------------------
   
@@ -72,13 +75,16 @@ aldvmm.cv <- function(ll,
            ncol = ncol(outlist[["hessian"]]))
   })
   
+  rownames(outlist[["cv"]]) <- names(par)
+  colnames(outlist[["cv"]]) <- names(par)
+  
   # Standard errors, significance and confidence intervals of parameters
   #---------------------------------------------------------------------
   
   if (all(is.na(outlist[["cv"]]))) {
     
     base::warning("no covariance matrix is obtained\n",
-            call. = FALSE)
+                  call. = FALSE)
     outlist[["se"]] <- rep(NA, times = length(par))
     
   } else {
@@ -89,17 +95,17 @@ aldvmm.cv <- function(ll,
     
     if (all(is.na(diag(outlist[["cv"]])))) {
       base::warning("covariance matrix includes only missing diagonals\n",
-              call. = FALSE)
+                    call. = FALSE)
     } 
     
     if (any(diag(outlist[["cv"]]) <= 0)) {
       base::warning("covariance matrix includes non-positive diagnoals\n",
-              call. = FALSE)
+                    call. = FALSE)
     }
     
     if (any(is.na(outlist[["se"]]))) {
       base::warning("missing standard errors are obtained\n",
-              call. = FALSE)
+                    call. = FALSE)
     }
     
   }

@@ -22,8 +22,8 @@ test_that("Check estimation of standard errors of fitted values.", {
   yhat <- predict(fit,
                   newdata = newdata)$yhat
   
-  mm <- aldvmm.mm(data = newdata,
-                  formula = formula,
+  mm <- aldvmm.mm(mf = stats::model.frame(Formula::Formula(formula), data = newdata),
+                  Formula = Formula::Formula(formula),
                   ncmp = 2,
                   lcoef = c("beta", "delta"))
   
@@ -32,7 +32,6 @@ test_that("Check estimation of standard errors of fitted values.", {
                                         yhat = yhat,
                                         X = mm,
                                         type = "bit",
-                                        formula = fit[["formula"]],
                                         psi = fit[["psi"]],
                                         cv = fit[["cov"]],
                                         mse = fit[["gof"]][["mse"]],
@@ -48,7 +47,6 @@ test_that("Check estimation of standard errors of fitted values.", {
                                         yhat = yhat,
                                         X = mm,
                                         type = "pred",
-                                        formula = fit[["formula"]],
                                         psi = fit[["psi"]],
                                         cv = fit[["cov"]],
                                         mse = NA,
@@ -63,7 +61,6 @@ test_that("Check estimation of standard errors of fitted values.", {
                                         yhat = yhat,
                                         X = mm,
                                         type = "pred",
-                                        formula = fit[["formula"]],
                                         psi = fit[["psi"]],
                                         cv = fit[["cov"]],
                                         #mse = NA,
@@ -79,7 +76,6 @@ test_that("Check estimation of standard errors of fitted values.", {
                                      yhat = yhat,
                                      X = mm,
                                      type = "fit",
-                                     formula = fit[["formula"]],
                                      psi = fit[["psi"]],
                                      cv = fit[["cov"]],
                                      mse = fit[["gof"]][["mse"]],
@@ -139,7 +135,6 @@ test_that("Check estimation of standard errors of fitted values.", {
                  yhat = yhat,
                  X = mm,
                  type = "fit",
-                 formula = fit[["formula"]],
                  psi = fit[["psi"]],
                  cv = cvtmp,
                  mse = fit[["gof"]][["mse"]],
@@ -179,7 +174,6 @@ test_that("Check estimation of standard errors of fitted values.", {
                  yhat = yhat,
                  X = mm,
                  type = "fit",
-                 formula = fit[["formula"]],
                  psi = fit[["psi"]],
                  cv = cvtmp,
                  mse = fit[["gof"]][["mse"]],

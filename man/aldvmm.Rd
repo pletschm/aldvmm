@@ -18,6 +18,7 @@ aldvmm(
   init.lo = NULL,
   init.hi = NULL,
   se.fit = FALSE,
+  model = TRUE,
   level = 0.95
 )
 }
@@ -92,6 +93,10 @@ have to follow the same order as parameter estimates in the return value
 \item{se.fit}{an optional logical value indicating whether standard errors
 of fitted values are calculated. The default value is \code{FALSE}.}
 
+\item{model}{an optional logical value indicating whether the model frame, 
+model matrices and the response are returned. The default value is 
+\code{TRUE}.}
+
 \item{level}{a numeric value of the significance level for confidence bands
 of fitted values. The default value is 0.95.}
 }
@@ -112,13 +117,13 @@ of fitted values. The default value is 0.95.}
 
   \item{\code{n}}{a scalar representing the number of complete observations
   with no missing values that were used in the estimation.}
-
   \item{\code{k}}{a scalar representing the number of components that were
   mixed.}
-
+  
   \item{\code{gof}}{a list including the following elements. \describe{
   \item{\code{ll}}{a numeric value of the negative log-likelihood
-  \eqn{-ll}.} \item{\code{aic}}{a numeric value of the Akaike information
+  \eqn{-ll}.} 
+  \item{\code{aic}}{a numeric value of the Akaike information
   criterion \eqn{AIC = 2n_{par} - 2ll}{AIC = 2*npar - 2*ll}.}
   \item{\code{bic}}{a numeric value of the Bayesian information criterion
   \eqn{BIC = n_{par}*log(n_{obs}) - 2ll}{BIC = npar*log(nobs) - 2*ll}.}
@@ -146,6 +151,11 @@ of fitted values. The default value is 0.95.}
   \item{\code{formula}}{an object of class
   \ifelse{html}{\code{\link[stats]{formula}}}{\code{stats::formula}}
   supplied to argument \code{'formula'}.}
+  \item{\code{terms}}{a list of objects of class
+  \ifelse{html}{\code{\link[stats]{terms}}}{\code{stats::terms}}.}
+  \item{\code{model}}{a data.frame including the variables specified 
+  in \code{'formula'} plus additional attributes returned by 
+  \ifelse{html}{\code{\link[stats]{model.frame}}}{\code{stats::model.frame}}.}
 
   \item{\code{psi}}{a numeric vector with the minimum and maximum utility
   below 1 in \code{'data'}.}
