@@ -221,6 +221,7 @@ NULL
 #'   \item{\code{gof}}{a list including the following elements. \describe{
 #'   \item{\code{ll}}{a numeric value of the negative log-likelihood
 #'   \eqn{-ll}.} 
+#'   \item{\code{deviance}}{a numeric value of the deviance \eqn{-2ll}{- 2*ll}.} 
 #'   \item{\code{aic}}{a numeric value of the Akaike information
 #'   criterion \eqn{AIC = 2n_{par} - 2ll}{AIC = 2*npar - 2*ll}.}
 #'   \item{\code{bic}}{a numeric value of the Bayesian information criterion

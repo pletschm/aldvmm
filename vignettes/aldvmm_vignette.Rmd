@@ -654,14 +654,14 @@ tab_comp_mae <- tab_comp_ll
 for (i in names(fit1_all[["fit"]])) { # Initial value methods
   for (j in names(fit1_all[["fit"]][[1]])) { # Optimization methods
     if (length(fit1_all[["fit"]][[i]][[j]]) != 0) {
-      tab_comp_ll[i, j] <- -fit1_all[["fit"]][[i]][[j]][["ll"]]
+      tab_comp_ll[i, j] <- -fit1_all[["fit"]][[i]][[j]][["gof"]][["ll"]]
       tab_comp_time[i, j] <- fit1_all[["time"]][[i]][[j]]
       cov <- fit1_all[["fit"]][[i]][[j]][["cov"]]
       tab_comp_cov[i, j] <- sum(diag(cov) < 0) == 0 & 
         sum(is.na(diag(cov))) == 0
       rm(cov)
-      tab_comp_mse[i, j] <- fit1_all[["fit"]][[i]][[j]][["mse"]]
-      tab_comp_mae[i, j] <- fit1_all[["fit"]][[i]][[j]][["mae"]]
+      tab_comp_mse[i, j] <- fit1_all[["fit"]][[i]][[j]][["gof"]][["mse"]]
+      tab_comp_mae[i, j] <- fit1_all[["fit"]][[i]][[j]][["gof"]][["mae"]]
     }
   }
 }

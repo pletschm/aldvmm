@@ -17,11 +17,11 @@ test_that("Check covariance function.", {
   })
   
   gof1 <- aldvmm.gof(par = fit1$coef,
-                     ll = -fit1$ll,
+                     ll = -fit1$gof$ll,
                      res = fit1$pred$res)
   
   gof2 <- aldvmm.gof(par = fit2$coef,
-                     ll = -fit2$ll,
+                     ll = -fit2$gof$ll,
                      res = fit2$pred$res)
   
   # Correct format
@@ -40,13 +40,13 @@ test_that("Check covariance function.", {
   # Correct statistics
   #-------------------
   
-  testthat::expect(gof1$aic == 2 * length(fit1$coef) + 2 * gof1$ll,
+  testthat::expect(gof1$gof$aic == 2 * length(fit1$coef) + 2 * gof1$gof$ll,
                    failure_message = 
                      "AIC not correctly calculated."
   )
   
-  testthat::expect(gof1$bic == length(fit1$coef) * log(nrow(utility)) + 
-                     2 * gof1$ll,
+  testthat::expect(gof1$gof$bic == length(fit1$coef) * log(nrow(utility)) + 
+                     2 * gof1$gof$ll,
                    failure_message = 
                      "BIC not correctly calculated."
   )
@@ -54,7 +54,7 @@ test_that("Check covariance function.", {
   # Compare models
   #---------------
   
-  testthat::expect(gof1$ll > gof2$ll,
+  testthat::expect(gof1$gof$ll > gof$gof2$ll,
                    failure_message = 
                      "More complex model does not show larger log-likelihood."
   )
@@ -63,7 +63,7 @@ test_that("Check covariance function.", {
   #---------
   
   testthat::expect_warning(aldvmm.gof(par = fit2$coef,
-                                      ll = -fit2$ll,
+                                      ll = -fit2$gof$ll,
                                       res = c(NA, 1))
   )
   

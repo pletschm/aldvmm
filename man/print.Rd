@@ -9,8 +9,10 @@
 \arguments{
 \item{...}{further arguments passed to or from other methods.}
 
-\item{object}{an object inheriting from class 'aldvmm'.}
+\item{object}{an object inheriting from class "aldvmm".}
 }
 \description{
-
+The generic function
+\ifelse{html}{\code{\link[stats]{coef}}}{\code{stats::print()}} prints key 
+attributes of an object of class "aldvmm".
 }

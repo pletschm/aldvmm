@@ -2,12 +2,13 @@
 % Please edit documentation in R/coef.aldvmm.R
 \name{coef.aldvmm}
 \alias{coef.aldvmm}
-\title{Extract Model Coefficients of Adjusted Limited Dependent Variable Mixture Model Fits}
+\title{Extract Coefficients of Adjusted Limited Dependent Variable Mixture 
+Model Fits}
 \usage{
 \method{coef}{aldvmm}(object, ...)
 }
 \arguments{
-\item{object}{an object inheriting from class 'aldvmm'.}
+\item{object}{an object inheriting from class "aldvmm".}
 
 \item{...}{further arguments passed to or from other methods.}
 }
@@ -15,5 +16,7 @@
 a named vector of numeric parameter estimates.
 }
 \description{
-
+The generic function
+\ifelse{html}{\code{\link[stats]{coef}}}{\code{stats::coef()}} extracts the 
+vector of coefficients from an object of class "aldvmm".
 }
