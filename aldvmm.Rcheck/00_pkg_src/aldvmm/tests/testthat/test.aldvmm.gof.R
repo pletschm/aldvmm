@@ -17,11 +17,11 @@ test_that("Check covariance function.", {
   })
   
   gof1 <- aldvmm.gof(par = fit1$coef,
-                     ll = -fit1$gof$ll,
+                     ll = -fit1$ll,
                      res = fit1$pred$res)
   
   gof2 <- aldvmm.gof(par = fit2$coef,
-                     ll = -fit2$gof$ll,
+                     ll = -fit2$ll,
                      res = fit2$pred$res)
   
   # Correct format
@@ -63,7 +63,7 @@ test_that("Check covariance function.", {
   #---------
   
   testthat::expect_warning(aldvmm.gof(par = fit2$coef,
-                                      ll = -fit2$gof$ll,
+                                      ll = -fit2$ll,
                                       res = c(NA, 1))
   )
   

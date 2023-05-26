@@ -36,14 +36,14 @@ test_that('Check generation of summary table.', {
                          lower = fit$lower,
                          upper = fit$upper,
                          n = fit$n,
-                         value = fit$gof$ll,
-                         aic = fit$gof$aic,
-                         bic = fit$gof$bic,
+                         value = fit$ll,
+                         aic = fit$aic,
+                         bic = fit$bic,
                          lcoef = fit$label$lcoef,
                          lcmp = fit$label$lcmp,
                          lcpar = fit$label$lcpar,
                          lvar = fit$label$lvar,
-                         ncmp = fit$k)
+                         ncmp = fit$ncmp)
     
     test <- getval(regtab)
     

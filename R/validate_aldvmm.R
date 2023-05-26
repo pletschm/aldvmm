@@ -43,7 +43,7 @@ validate_aldvmm <- function(object) {
   #----------------
   
   numnames <- c("coef", "se", "z", "p", "lower", "upper", "hessian", "cov",
-                "n", "k", "psi")
+                "n", "k", "ncmp", "psi")
   nonum <- unlist(lapply(numnames, function(x) !is.numeric(object[[x]])))
   nonum <- c(nonum, 
              unlist((lapply(object[["pred"]][c("yhat", "y", "res")], 

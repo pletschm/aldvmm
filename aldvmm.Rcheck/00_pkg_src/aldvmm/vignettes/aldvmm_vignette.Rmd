@@ -654,14 +654,14 @@ tab_comp_mae <- tab_comp_ll
 for (i in names(fit1_all[["fit"]])) { # Initial value methods
   for (j in names(fit1_all[["fit"]][[1]])) { # Optimization methods
     if (length(fit1_all[["fit"]][[i]][[j]]) != 0) {
-      tab_comp_ll[i, j] <- -fit1_all[["fit"]][[i]][[j]][["gof"]][["ll"]]
+      tab_comp_ll[i, j] <- -fit1_all[["fit"]][[i]][[j]][["ll"]]
       tab_comp_time[i, j] <- fit1_all[["time"]][[i]][[j]]
       cov <- fit1_all[["fit"]][[i]][[j]][["cov"]]
       tab_comp_cov[i, j] <- sum(diag(cov) < 0) == 0 & 
         sum(is.na(diag(cov))) == 0
       rm(cov)
-      tab_comp_mse[i, j] <- fit1_all[["fit"]][[i]][[j]][["gof"]][["mse"]]
-      tab_comp_mae[i, j] <- fit1_all[["fit"]][[i]][[j]][["gof"]][["mae"]]
+      tab_comp_mse[i, j] <- fit1_all[["fit"]][[i]][[j]][["mse"]]
+      tab_comp_mae[i, j] <- fit1_all[["fit"]][[i]][[j]][["mae"]]
     }
   }
 }
@@ -1675,7 +1675,7 @@ tmpdf1 <- df[df$treated == 1, ]
 # Design matrix for treated observations
 X1 <- aldvmm.mm(data = tmpdf1,
                 formula = fit$formula,
-                ncmp = fit$k,
+                ncmp = fit$ncmp,
                 lcoef = fit$label$lcoef)
 
 # Average expected outcome of treated observations
@@ -1695,7 +1695,7 @@ tmpdf0$treated <- 0
 # Design matrix for counterfactual observations
 X0 <- aldvmm.mm(data = tmpdf0,
                 formula = fit$formula,
-                ncmp = fit$k,
+                ncmp = fit$ncmp,
                 lcoef = fit$label$lcoef)
 
 # Average expected outcome of counterfactual osbervations
@@ -1715,7 +1715,7 @@ atet.grad <- numDeriv::jacobian(func = function(z) {
                        X     = X1,
                        y     = rep(0, nrow(X1[[1]])),
                        psi   = fit$psi,
-                       ncmp  = fit$k,
+                       ncmp  = fit$ncmp,
                        dist  = fit$dist,
                        lcoef = fit$label$lcoef,
                        lcmp  = fit$label$lcmp,
@@ -1725,7 +1725,7 @@ atet.grad <- numDeriv::jacobian(func = function(z) {
                        X     = X0,
                        y     = rep(0, nrow(X0[[1]])),
                        psi   = fit$psi,
-                       ncmp  = fit$k,
+                       ncmp  = fit$ncmp,
                        dist  = fit$dist,
                        lcoef = fit$label$lcoef,
                        lcmp  = fit$label$lcmp,

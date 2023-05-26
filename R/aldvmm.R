@@ -70,7 +70,7 @@ NULL
 #'   \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
 #'   methods: \code{"Nelder-Mead"}, \code{"BFGS"}, \code{"CG"},
 #'   \code{"L-BFGS-B"}, \code{"nlminb"}, \code{"Rcgmin"}, \code{"Rvmmin"} and
-#'   \code{"hjn"}. The default method is \code{"Nelder-Mead"}. The method
+#'   \code{"hjn"}. The default method is \code{"BFGS"}. The method
 #'   \code{"L-BFGS-B"} is used when lower and/or upper constraints are set
 #'   using \code{'init.lo'} and \code{'init.hi'}. The method \code{"nlm"}
 #'   cannot be used in the \code{'aldvmm'} package.
@@ -99,11 +99,15 @@ NULL
 #'   \code{'par'}.
 #' @param se.fit an optional logical value indicating whether standard errors
 #'   of fitted values are calculated. The default value is \code{FALSE}.
-#' @param model an optional logical value indicating whether the model frame, 
-#' model matrices and the response are returned. The default value is 
-#' \code{TRUE}.
+#' @param model an optional logical value indicating whether the estimation 
+#' data frame is returned. The default value is \code{TRUE}.
 #' @param level a numeric value of the significance level for confidence bands
 #'   of fitted values. The default value is 0.95.
+#' @param na.action a character value indicating the argument passed to 
+#' argument \code{'na.action'} of the function 
+#' \ifelse{html}{\code{\link[stats]{model.frame}}}{\code{stats::model.frame()}} 
+#' in the preparation of the model matrix. The default value is 
+#' \code{"na.omit"}.
 #'
 #' @details \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{ \code{aldvmm()}} fits
 #'   an adjusted limited dependent variable mixture model using the likelihood
@@ -138,7 +142,7 @@ NULL
 #'   \code{'optim.method'} accepts the following methods: \code{"Nelder-Mead"},
 #'   \code{"BFGS"}, \code{"CG"}, \code{"L-BFGS-B"}, \code{"nlminb"},
 #'   \code{"Rcgmin"}, \code{"Rvmmin"} and \code{"hjn"}. The default method is
-#'   \code{"Nelder-Mead"}.  The method \code{"nlm"} cannot be used in
+#'   \code{"BFGS"}.  The method \code{"nlm"} cannot be used in
 #'   \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{ \code{aldvmm()}} because it
 #'   requires a different implementation of the likelihood function. The
 #'   argument \code{'optim.control'} accepts a list of
@@ -206,8 +210,13 @@ NULL
 #'
 #'   \item{\code{n}}{a scalar representing the number of complete observations
 #'   with no missing values that were used in the estimation.}
-#'   \item{\code{k}}{a scalar representing the number of components that were
+#'   \item{\code{k}}{a named list of scalars representing the number of 
+#'   parameters estimated in the model of component means ("beta") and 
+#'   probabilities of component membership ("delta").}
+#'   \item{\code{ncmp}}{a scalar representing the number of components that were
 #'   mixed.}
+#'   \item{\code{df.null}}{}
+#'   \item{\code{df.residual}}{}
 #'   
 #'   \item{\code{gof}}{a list including the following elements. \describe{
 #'   \item{\code{ll}}{a numeric value of the negative log-likelihood
@@ -237,6 +246,8 @@ NULL
 #'   \item{\code{hi}}{a numeric vector of upper limits of parameter
 #'   estimates.}} }
 #'
+#'   \item{\code{call}}{a character value including the model call captured by
+#'   \ifelse{html}{\code{\link[base]{match.call}}}{\code{base::match.call}}.}
 #'   \item{\code{formula}}{an object of class
 #'   \ifelse{html}{\code{\link[stats]{formula}}}{\code{stats::formula}}
 #'   supplied to argument \code{'formula'}.}
@@ -245,7 +256,13 @@ NULL
 #'   \item{\code{model}}{a data.frame including the variables specified 
 #'   in \code{'formula'} plus additional attributes returned by 
 #'   \ifelse{html}{\code{\link[stats]{model.frame}}}{\code{stats::model.frame}}.}
+#'   \item{\code{contrasts}}{a nested list of character values showing 
+#'   contrasts of factors used in models of component means ("beta") and 
+#'   probabilities of component membership ("delta").}
 #'
+#'   \item{\code{data}}{a data frame created by 
+#'   \ifelse{html}{\code{\link[stats]{model.frame}}}{\code{stats::model.frame}} 
+#'   including estimation data with additional attributes.}
 #'   \item{\code{psi}}{a numeric vector with the minimum and maximum utility
 #'   below 1 in \code{'data'}.}
 #'
@@ -266,6 +283,12 @@ NULL
 #'   \item{\code{optim.method}}{a character value of the used
 #'   \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
 #'   method.}
+#'   \item{\code{level}}{a numeric value of the confidence level used for 
+#'   reporting.}
+#'   \item{\code{na.action}}{an object of class "omit" extracted from the 
+#'   "na.action" attribute of the data frame created by 
+#'   \ifelse{html}{\code{\link[stats]{model.frame}}}{\code{stats::model.frame}} 
+#'   in the preparation of model matrices.}
 #'
 #'   The generic function
 #'   \ifelse{html}{\code{\link[base]{summary}}}{\code{base::summary()}} can be
@@ -314,7 +337,13 @@ aldvmm <- function(formula,
                    init.hi = NULL,
                    se.fit = FALSE,
                    model = TRUE,
-                   level = 0.95) {
+                   level = 0.95,
+                   na.action = "na.omit") {
+
+  # Store function call
+  #--------------------
+  
+  call <- match.call()
   
   # Labels
   #-------
@@ -388,24 +417,28 @@ aldvmm <- function(formula,
                se.fit = se.fit,
                level = level)
   
+  # Make outcome vector
+  #--------------------
+  
+  formula <- Formula::Formula(formula) # Convert formula to 'Formula' object
+  
+  y <- stats::model.response(
+    stats::model.frame(formula, 
+                       data = data,
+                       na.action = na.action)
+  )
+  
   # Make list of design matrices
   #-----------------------------
   
-  formula <- Formula::Formula(formula) # Convert formula to 'Formula' object
-  data <- stats::model.frame(formula, data = data) # Convert data to model frame
-  
+  data <- stats::model.frame(formula, 
+                             data = data,
+                             na.action = na.action) # Convert data to model frame
+
   mm <- aldvmm.mm(mf = data,
                   Formula = formula,
                   ncmp = ncmp,
                   lcoef = lcoef)
-  
-  # Make outcome vector
-  #--------------------
-  
-  y <- stats::model.response(
-    stats::model.frame(formula, 
-                       data = data)
-  )
   
   # Make list of model terms
   #-------------------------
@@ -414,7 +447,7 @@ aldvmm <- function(formula,
                      Formula = formula,
                      ncmp = ncmp,
                      lcoef = lcoef)
-  
+
   # Generate initial values
   #------------------------
   
@@ -540,41 +573,28 @@ aldvmm <- function(formula,
   # Collect output
   #---------------
   
-  outlist <- new_aldvmm(coef = fit[["par"]],
-                        se = cov[["se"]],
-                        z = cov[["z"]],
-                        p = cov[["p"]],
-                        lower = cov[["lower"]],
-                        upper = cov[["upper"]],
-                        hessian = cov[["hessian"]],
-                        cov = cov[["cv"]],
-                        n = length(y),
-                        k = ncmp,
-                        ll = gof[["ll"]],
-                        aic = gof[["aic"]],
-                        bic = gof[["bic"]],
-                        mse = gof[["mse"]],
-                        mae = gof[["mae"]],
-                        yhat = pred[["yhat"]],
-                        y = pred[["y"]],
-                        res = pred[["res"]],
-                        prob = pred[["prob"]],
-                        se.fit = pred.se[["se.fit"]],
-                        lower.fit = pred.se[["lower.fit"]],
-                        upper.fit = pred.se[["upper.fit"]],
+  outlist <- new_aldvmm(fit = fit,
+                        cov = cov,
+                        y,
+                        mm,
+                        ncmp = ncmp,
+                        gof = gof,
+                        pred = pred,
+                        pred.se = pred.se,
                         init = init,
+                        call = call,
                         formula = stats::formula(formula),
                         terms = terms,
-                        model = ifelse(model == TRUE, data, NULL),
+                        data = if(model == TRUE) {data} else {NULL},
                         psi = psi,
                         dist = dist,
                         lcoef = lcoef,
                         lcpar = lcpar,
                         lcmp = lcmp,
-                        lvar = lapply(mm, function(x) colnames(x)),
                         optim.method = optim.method,
                         init.method = init.method,
-                        level = level)
+                        level = level,
+                        na.action = attr(data, "na.action"))
   
   return(outlist)
   

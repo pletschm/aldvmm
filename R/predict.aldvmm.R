@@ -48,6 +48,9 @@ predict.aldvmm <- function(object,
   
   pred <- list()
   
+  pred[["yhat"]] <- rep(NA, times = nrow(newdata))
+  names(pred[["yhat"]]) <- rownames(newdata)
+  
   pred[["se.fit"]] <- rep(NA, times = nrow(newdata))
   names(pred[["se.fit"]]) <- rownames(newdata)
   
@@ -57,9 +60,6 @@ predict.aldvmm <- function(object,
   pred[["ul"]] <- rep(NA, times = nrow(newdata))
   names(pred[["ul"]]) <- rownames(newdata)
   
-  pred[["yhat"]] <- rep(NA, times = nrow(newdata))
-  names(pred[["yhat"]]) <- rownames(newdata)
-  
   # Make list of design matrices
   #-----------------------------
   
@@ -68,7 +68,7 @@ predict.aldvmm <- function(object,
   
   mm <- aldvmm.mm(mf = newdata,
                   Formula = formula,
-                  ncmp = object[["k"]],
+                  ncmp = object[["ncmp"]],
                   lcoef = object[["label"]][["lcoef"]])
   
   # Predict outcomes
@@ -78,7 +78,7 @@ predict.aldvmm <- function(object,
   tmp <- aldvmm.pred(par   = object[["coef"]],
                      X     = mm,
                      psi   = object[["psi"]],
-                     ncmp  = object[["k"]],
+                     ncmp  = object[["ncmp"]],
                      dist  = object[["dist"]],
                      lcoef = object[["label"]][["lcoef"]],
                      lcpar = object[["label"]][["lcpar"]],
@@ -97,9 +97,9 @@ predict.aldvmm <- function(object,
                         X       = mm,
                         type    = type,
                         cv      = object[["cov"]],
-                        mse     = object[["gof"]][["mse"]],
+                        mse     = object[["mse"]],
                         psi     = object[["psi"]],
-                        ncmp    = object[["k"]],
+                        ncmp    = object[["ncmp"]],
                         dist    = object[["dist"]],
                         level   = object[["level"]],
                         lcoef   = object[["label"]][["lcoef"]],
