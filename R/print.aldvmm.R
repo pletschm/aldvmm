@@ -29,13 +29,15 @@ print.aldvmm <- function(x,
     print.default(format(x$coef, digits = digits),
                   print.gap = 2, quote = FALSE)
   } else cat("No coefficients\n\n")
-  cat("\nDegrees of Freedom:", c(rbind(unlist(x$df.null), c(" (beta), ", " (delta), ", " (full)"))), "Total (i.e. Null);",
-      "\n                   ", c(rbind(unlist(x$df.residual), c(" (beta), ", " (delta)"))), "Residual\n")
-  if(nzchar(mess <- naprint(x$na.action))) cat("  (",mess, ")\n", sep = "")
-  cat("Log-likelihood:	   ",	format(signif(x$gof$ll, digits)),
-      "\nResidual Deviance:", format(signif(x$gof$deviance, digits)),
+ 
+  cat("Log-likelihood:",	format(signif(x$gof$ll, digits)),
       "\tAIC:", format(signif(x$gof$aic, digits)),
       "\tBIC:", format(signif(x$gof$bic, digits)))
+  
+  cat("\n Degrees of Freedom (null):    ", c(rbind(unlist(x$df.null), c("(beta),", "(delta),", "(full)"))),
+      "\n Degrees of Freedom (residual):", c(rbind(unlist(x$df.residual), c("(beta),", "(delta),", "(full)"))), "\n")
+  if(nzchar(mess <- naprint(x$na.action))) cat("  (",mess, ")\n", sep = "")
+  
   cat("\n")
   invisible(x)
 }

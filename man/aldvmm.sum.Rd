@@ -12,9 +12,6 @@ aldvmm.sum(
   lower,
   upper,
   n,
-  value,
-  aic,
-  bic,
   ncmp,
   lcoef,
   lcpar,
@@ -48,17 +45,6 @@ returned by \ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{
 \code{'data'} supplied to
 \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm()}}.}
 
-\item{value}{a numeric value of the negative log-likelihood returned by
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{ \code{aldvmm.ll()}}.}
-
-\item{aic}{a numeric value of the Akaike information criterion (AIC)
-returned by \ifelse{html}{\code{\link[aldvmm]{aldvmm.gof}}}{
-\code{aldvmm.gof()}}.}
-
-\item{bic}{a numeric value of the Bayesian information criterion (BIC)
-returned by \ifelse{html}{\code{\link[aldvmm]{aldvmm.gof}}}{
-\code{aldvmm.gof()}}.}
-
 \item{ncmp}{a numeric value of the number of components that are mixed. The
 default value is 2. A value of 1 represents a tobit model with a gap
 between 1 and the maximum value in \code{'psi'}.}
@@ -85,6 +71,17 @@ matrices returned by \ifelse{html}{\code{\link[aldvmm]{aldvmm.mm}}}{
 
 \item{digits}{a numeric value of the number of digits in the reporting
 table.}
+
+\item{value}{a numeric value of the negative log-likelihood returned by
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{ \code{aldvmm.ll()}}.}
+
+\item{aic}{a numeric value of the Akaike information criterion (AIC)
+returned by \ifelse{html}{\code{\link[aldvmm]{aldvmm.gof}}}{
+\code{aldvmm.gof()}}.}
+
+\item{bic}{a numeric value of the Bayesian information criterion (BIC)
+returned by \ifelse{html}{\code{\link[aldvmm]{aldvmm.gof}}}{
+\code{aldvmm.gof()}}.}
 }
 \value{
 a \code{data.frame} object with a summary table of regression results.

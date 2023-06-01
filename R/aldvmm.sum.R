@@ -58,9 +58,6 @@ aldvmm.sum <- function(est,
                        lower,
                        upper,
                        n,
-                       value,
-                       aic,
-                       bic,
                        ncmp,
                        lcoef,
                        lcpar,
@@ -168,25 +165,16 @@ aldvmm.sum <- function(est,
                                lines)
     
     reptab[[lcoef[2]]] <- do.call("rbind", 
-                                  lapply(tmp, function(x) x[[lcoef[2]]]))
+                                         lapply(tmp, function(k) k[[lcoef[2]]]))
   }
   
   reptab[["end"]] <- lines
-  
-  reptab[["gof"]] <- c(paste0("N = ", n), 
-                       paste0("ll = ", format(round(-value, digits = 2), 
-                                              nsmall = 2)),
-                       paste0("AIC = ", format(round(aic, digits = 2), 
-                                               nsmall = 2)),
-                       paste0("BIC = ", format(round(bic, digits = 2), 
-                                               nsmall = 2)),
-                       rep("", times = nc - 4))
   
   # Convert list to data.frame
   #---------------------------
   
   reptab <- do.call("rbind", reptab)
-
+  
   # Expand lines to column widths
   #------------------------------
   

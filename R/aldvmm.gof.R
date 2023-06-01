@@ -47,7 +47,6 @@ aldvmm.gof <- function(res,
   }
   
   gof[["ll"]] <- -ll
-  gof[["deviance"]] <- 2*ll
   gof[["aic"]] <- 2 * length(par) - 2 * ll
   gof[["bic"]] <- length(par) * log(length(res)) - 2 * ll
   

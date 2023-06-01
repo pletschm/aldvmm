@@ -21,6 +21,26 @@ new_aldvmm <- function(fit,
                        level,
                        na.action) {
   
+  # Calculate degrees of freedom
+  #-----------------------------
+  
+  df.null <- list()
+  df.null[[lcoef[1]]] <- length(y) - ncmp * as.integer(attr(terms[[lcoef[1]]], "intercept") > 0L)
+  if (ncmp > 1) {
+    df.null[[lcoef[2]]] <- length(y) - as.integer(attr(terms[[lcoef[2]]], "intercept") > 0L)
+  }
+  df.null[["full"]] <- length(y) - sum(length(y) - unlist(df.null))
+  
+  df.residual <- list()
+  df.residual[[lcoef[1]]] <- length(y) - ncmp * length(attr(terms[[lcoef[1]]], "term.labels")) - as.integer(attr(terms[[lcoef[1]]], "intercept") > 0L)
+  if (ncmp > 1) {
+    df.residual[[lcoef[2]]] <- length(y) - length(attr(terms[[lcoef[2]]], "term.labels")) - as.integer(attr(terms[[lcoef[2]]], "intercept") > 0L)
+  }
+  df.residual[["full"]] <- length(y) - sum(length(y) - unlist(df.residual)) 
+  
+  # Make output list
+  #-----------------
+  
   outlist <- list(coef    = fit[["par"]],
                   se      = cov[["se"]],
                   z       = cov[["z"]],
@@ -32,14 +52,11 @@ new_aldvmm <- function(fit,
                   n       = length(y),
                   k       = lapply(mm, function (x) ncol(x)),
                   ncmp    = ncmp,
-                  df.null = lapply(terms, function (x) {
-                    length(y) - as.integer(attr(x, "intercept") > 0L)
-                  }),
-                  df.residual = lapply(lapply(mm, function (x) ncol(x)), {
-                    function (x) length(y) - x - 1
-                  }),
+                  df.null = df.null,
+                  df.residual = df.residual,
+                  iter    = fit[["counts"]][["function"]],
+                  convergence = fit[["convergence"]],
                   gof     = list(ll      = gof[["ll"]],
-                                 deviance = gof[["deviance"]],
                                  aic     = gof[["aic"]],
                                  bic     = gof[["bic"]],
                                  mse     = gof[["mse"]],

@@ -26,6 +26,8 @@
 #' @import stats
 #' @import checkmate
 #' @import optimr
+#' @import Formula
+#' @import sandwich
 #'
 #' @docType package
 #' @name aldvmm-package
@@ -211,17 +213,28 @@ NULL
 #'   \item{\code{n}}{a scalar representing the number of complete observations
 #'   with no missing values that were used in the estimation.}
 #'   \item{\code{k}}{a named list of scalars representing the number of 
-#'   parameters estimated in the model of component means ("beta") and 
-#'   probabilities of component membership ("delta").}
+#'   columns of the design matrices of component means ("beta") and 
+#'   probabilities of component membership ("delta"). The number of columns of 
+#'   columns is not necessarily identical to the number of parameters because 
+#'   the model can include multiple components.}
 #'   \item{\code{ncmp}}{a scalar representing the number of components that were
 #'   mixed.}
-#'   \item{\code{df.null}}{}
-#'   \item{\code{df.residual}}{}
+#'   \item{\code{df.null}}{a list including integer value of the residual 
+#'   degrees of freedom of a null model of component means ("beta"), 
+#'   probabilities of component membership ("delta") and the full model 
+#'   ("full").}
+#'   \item{\code{df.residual}}{a list including integer value of the residual 
+#'   degrees of freedom for the model of component means ("beta"), 
+#'   probabilities of component membership ("delta") and the full model 
+#'   ("full").}
+#'   \item{\code{iter}}{an integer value of the number of iterations used in 
+#'   optimization.}
+#'   \item{\code{convergence}}{an integer value indicating convergence. "0" 
+#'   indicates successful completion.}
 #'   
 #'   \item{\code{gof}}{a list including the following elements. \describe{
 #'   \item{\code{ll}}{a numeric value of the negative log-likelihood
 #'   \eqn{-ll}.} 
-#'   \item{\code{deviance}}{a numeric value of the deviance \eqn{-2ll}{- 2*ll}.} 
 #'   \item{\code{aic}}{a numeric value of the Akaike information
 #'   criterion \eqn{AIC = 2n_{par} - 2ll}{AIC = 2*npar - 2*ll}.}
 #'   \item{\code{bic}}{a numeric value of the Bayesian information criterion
@@ -576,8 +589,8 @@ aldvmm <- function(formula,
   
   outlist <- new_aldvmm(fit = fit,
                         cov = cov,
-                        y,
-                        mm,
+                        y = y,
+                        mm = mm,
                         ncmp = ncmp,
                         gof = gof,
                         pred = pred,
