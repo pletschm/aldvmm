@@ -24,19 +24,13 @@ new_aldvmm <- function(fit,
   # Calculate degrees of freedom
   #-----------------------------
   
-  df.null <- list()
-  df.null[[lcoef[1]]] <- length(y) - ncmp * as.integer(attr(terms[[lcoef[1]]], "intercept") > 0L)
-  if (ncmp > 1) {
-    df.null[[lcoef[2]]] <- length(y) - as.integer(attr(terms[[lcoef[2]]], "intercept") > 0L)
-  }
-  df.null[["full"]] <- length(y) - sum(length(y) - unlist(df.null))
+  df.null <- length(y) - 
+    ncmp * as.integer(attr(terms[[lcoef[1]]], "intercept") > 0L) - 
+    (ncmp > 1) * as.integer(attr(terms[[lcoef[2]]], "intercept") > 0L) -
+    ncmp # standard errors lnsigma
   
-  df.residual <- list()
-  df.residual[[lcoef[1]]] <- length(y) - ncmp * length(attr(terms[[lcoef[1]]], "term.labels")) - as.integer(attr(terms[[lcoef[1]]], "intercept") > 0L)
-  if (ncmp > 1) {
-    df.residual[[lcoef[2]]] <- length(y) - length(attr(terms[[lcoef[2]]], "term.labels")) - as.integer(attr(terms[[lcoef[2]]], "intercept") > 0L)
-  }
-  df.residual[["full"]] <- length(y) - sum(length(y) - unlist(df.residual)) 
+  
+  df.residual <- length(y) - length(fit$par)
   
   # Make output list
   #-----------------
@@ -54,7 +48,7 @@ new_aldvmm <- function(fit,
                   ncmp    = ncmp,
                   df.null = df.null,
                   df.residual = df.residual,
-                  iter    = fit[["counts"]][["function"]],
+                  iter    = fit[["counts"]][1],
                   convergence = fit[["convergence"]],
                   gof     = list(ll      = gof[["ll"]],
                                  aic     = gof[["aic"]],

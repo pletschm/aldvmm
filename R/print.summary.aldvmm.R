@@ -34,8 +34,8 @@ print.summary.aldvmm <- function(x,
       "\tAIC:", format(signif(x$aic, digits)),
       "\tBIC:", format(signif(x$bic, digits)))
   
-  cat("\nDegrees of Freedom (null):    ", c(rbind(unlist(x$df.null), c("(beta),", "(delta),", "(full)"))),
-      "\nDegrees of Freedom (residual):", c(rbind(unlist(x$df.residual), c("(beta),", "(delta),", "(full)"))), "\n")
+  cat("\nDegrees of Freedom (null):    ", x$df.null,
+      "\nDegrees of Freedom (residual):", x$df.residual, "\n")
 
   invisible(x)
 }

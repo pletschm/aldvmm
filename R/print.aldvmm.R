@@ -30,12 +30,12 @@ print.aldvmm <- function(x,
                   print.gap = 2, quote = FALSE)
   } else cat("No coefficients\n\n")
  
-  cat("Log-likelihood:",	format(signif(x$gof$ll, digits)),
+  cat("\nLog-likelihood:",	format(signif(x$gof$ll, digits)),
       "\tAIC:", format(signif(x$gof$aic, digits)),
       "\tBIC:", format(signif(x$gof$bic, digits)))
   
-  cat("\n Degrees of Freedom (null):    ", c(rbind(unlist(x$df.null), c("(beta),", "(delta),", "(full)"))),
-      "\n Degrees of Freedom (residual):", c(rbind(unlist(x$df.residual), c("(beta),", "(delta),", "(full)"))), "\n")
+  cat("\nDegrees of Freedom (null):    ", x$df.null,
+      "\nDegrees of Freedom (residual):", x$df.residual, "\n")
   if(nzchar(mess <- naprint(x$na.action))) cat("  (",mess, ")\n", sep = "")
   
   cat("\n")

@@ -86,8 +86,8 @@ test_that('Check aldvmm fitting function.', {
   testthat::expect(fit$optim.method == "L-BFGS-B",
                    failure_message = 'optim.method should be "L-BFGS-B"')  
   
-  # Unfeasible starting values
-  #----------------------------
+  # Infeasible starting values
+  #---------------------------
   
   # With numerical gradients
   suppressMessages({

@@ -219,14 +219,10 @@ NULL
 #'   the model can include multiple components.}
 #'   \item{\code{ncmp}}{a scalar representing the number of components that were
 #'   mixed.}
-#'   \item{\code{df.null}}{a list including integer value of the residual 
-#'   degrees of freedom of a null model of component means ("beta"), 
-#'   probabilities of component membership ("delta") and the full model 
-#'   ("full").}
-#'   \item{\code{df.residual}}{a list including integer value of the residual 
-#'   degrees of freedom for the model of component means ("beta"), 
-#'   probabilities of component membership ("delta") and the full model 
-#'   ("full").}
+#'   \item{\code{df.null}}{an integer value of the residual 
+#'   degrees of freedom of a null model including intercepts and standard errors.}
+#'   \item{\code{df.residual}}{an integer value of the residual 
+#'   degrees of freedom..}
 #'   \item{\code{iter}}{an integer value of the number of iterations used in 
 #'   optimization.}
 #'   \item{\code{convergence}}{an integer value indicating convergence. "0" 
@@ -266,7 +262,7 @@ NULL
 #'   \ifelse{html}{\code{\link[stats]{formula}}}{\code{stats::formula}}
 #'   supplied to argument \code{'formula'}.}
 #'   \item{\code{terms}}{a list of objects of class
-#'   \ifelse{html}{\code{\link[stats]{terms}}}{\code{stats::terms}}.}
+#'   \ifelse{html}{\code{\link[stats]{terms}}}{\code{stats::terms}} for the model of component means ("beta"), probabilities of component membership ("delta") and the full model ("full").}
 #'   \item{\code{model}}{a data.frame including the variables specified 
 #'   in \code{'formula'} plus additional attributes returned by 
 #'   \ifelse{html}{\code{\link[stats]{model.frame}}}{\code{stats::model.frame}}.}
@@ -353,7 +349,7 @@ aldvmm <- function(formula,
                    model = TRUE,
                    level = 0.95,
                    na.action = "na.omit") {
-
+  
   # Store function call
   #--------------------
   
@@ -448,7 +444,7 @@ aldvmm <- function(formula,
   data <- stats::model.frame(formula, 
                              data = data,
                              na.action = na.action) # Convert data to model frame
-
+  
   mm <- aldvmm.mm(mf = data,
                   Formula = formula,
                   ncmp = ncmp,
@@ -461,7 +457,7 @@ aldvmm <- function(formula,
                      Formula = formula,
                      ncmp = ncmp,
                      lcoef = lcoef)
-
+  
   # Generate initial values
   #------------------------
   

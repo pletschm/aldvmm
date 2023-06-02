@@ -30,12 +30,6 @@
 #'   summary tables returned by
 #'   \ifelse{html}{\code{\link[aldvmm]{summary.aldvmm}}}{\code{summary.aldvmm()}}.
 #'
-#'
-#'
-#'
-#'
-#'
-#'
 #' @inheritParams aldvmm
 #'
 #' @details \ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm.ll()}}

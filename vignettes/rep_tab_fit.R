@@ -1,6 +1,11 @@
 rep_tab_fit <- function(fit) {
   
   tmp <- summary(fit)
+  tmp <- rbind(tmp$summary, c(paste0("N = ", tmp$n),
+                              paste0("ll = ", round(tmp$ll, 0)),
+                              paste0("AIC = ", round(tmp$aic, 0)),
+                              paste0("BIC = ", round(tmp$bic, 0)),
+                              rep("", ncol(tmp$summary) - 4)))
   
   valindex <- apply(tmp, 1, function(x)
     sum("-" != strsplit(paste(x, collapse = ""), "")[[1]]) != 0

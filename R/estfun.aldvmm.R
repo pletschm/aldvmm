@@ -1,6 +1,7 @@
 #' Create Matrix of Adjusted Limited Dependent Variable Mixture Model Gradients per Observation
 #'
-#' The method \code{estfun.aldvmm} calculates the gradient of the aldvmm 
+#' The generic function 
+#' \ifelse{html}{\code{\link[sandwich]{estfun}}}{\code{sandwich::estfun()}} calculates the gradient of the aldvmm 
 #' log-likelihood 
 #' \ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm::aldvmm.ll()}} 
 #' with respect to parameter values for each observation using 
