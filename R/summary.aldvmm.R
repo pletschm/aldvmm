@@ -67,24 +67,15 @@
 
 summary.aldvmm <- function(object, 
                            digits = max(3L, getOption("digits") - 3L),
+                           level = 0.95,
                            ...) {
   
   # Create summary table
   #---------------------
   
-  regtab <- aldvmm.sum(est    = object$coef,
-                       se     = object$se,
-                       z      = object$z,
-                       p      = object$p,
-                       lower  = object$lower,
-                       upper  = object$upper,
-                       n      = object$n,
-                       ncmp   = object$ncmp,
-                       lcoef  = object$label$lcoef,
-                       lcmp   = object$label$lcmp,
-                       lcpar  = object$label$lcpar,
-                       lvar   = object$label$lvar,
-                       digits = digits)
+  regtab <- aldvmm.sum(object = object,
+                       digits = digits,
+                       level = level)
   
   # Create output list
   #-------------------

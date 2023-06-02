@@ -3,93 +3,46 @@
 #' \ifelse{html}{\code{\link[aldvmm]{aldvmm.sum}}}{ \code{aldvmm.sum()}}
 #' creates a summary table of regression results.
 #'
-#' @param est a named numeric vector of point estimates.
-#'
-#' @param se a named numeric vector of standard errors of parameters returned
-#'   by \ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{ \code{aldvmm.cv()}}.
-#'
-#' @param z a named numeric vector of standardized coefficients of parameters
-#'   returned by \ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{
-#'   \code{aldvmm.cv()}}.
-#'
-#' @param p a named numeric vector of p-values of parameters returned by
-#'   \ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{ \code{aldvmm.cv()}}.
-#'
-#' @param lower a named numeric vector of 95\% lower limits of parameters
-#'   returned by \ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{
-#'   \code{aldvmm.cv()}}.
-#'
-#' @param upper a named numeric vector of 95\% upper limits of parameters
-#'   returned by \ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{
-#'   \code{aldvmm.cv()}}.
-#'
-#' @param value a numeric value of the negative log-likelihood returned by
-#'   \ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{ \code{aldvmm.ll()}}.
-#'
-#' @param aic a numeric value of the Akaike information criterion (AIC)
-#'   returned by \ifelse{html}{\code{\link[aldvmm]{aldvmm.gof}}}{
-#'   \code{aldvmm.gof()}}.
-#'
-#' @param bic a numeric value of the Bayesian information criterion (BIC)
-#'   returned by \ifelse{html}{\code{\link[aldvmm]{aldvmm.gof}}}{
-#'   \code{aldvmm.gof()}}.
-#'
-#' @param lvar a named list of character vectors with column names of design
-#'   matrices returned by \ifelse{html}{\code{\link[aldvmm]{aldvmm.mm}}}{
-#'   \code{aldvmm.mm()}}.
-#'
-#' @param n a numeric value of the number of complete observations in
-#'   \code{'data'} supplied to
-#'   \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm()}}.
-#'
+#' @param object an \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{
+#'   \code{aldvmm()}} model fit object of class "aldvmm".
 #' @param digits a numeric value of the number of digits in the reporting
 #'   table.
-#'
-#' @inheritParams aldvmm.ll
+#' @param level a numeric value of the confidence level.
 #'
 #' @return a \code{data.frame} object with a summary table of regression results.
 #'
 #' @export
 
-aldvmm.sum <- function(est,
-                       se,
-                       z,
-                       p,
-                       lower,
-                       upper,
-                       n,
-                       ncmp,
-                       lcoef,
-                       lcpar,
-                       lcmp,
-                       lvar,
-                       digits = 3) {
+aldvmm.sum <- function(object,
+                       digits = max(3L, getOption("digits") - 3L),
+                       level = 0.95) {
+  
+  ncmp   <- object$ncmp
+  lcoef  <- object$label$lcoef
+  lcmp   <- object$label$lcmp
+  lcpar  <- object$label$lcpar
+  lvar   <- object$label$lvar
+  
+  # Calculate test statistics
+  #---------------------------
+  
+  mat <- cbind(lmtest::coeftest(object), 
+               lmtest::coefci(object, level = level))
+  mat <- round(mat, digits)
   
   # Extract parameters to list
   #---------------------------
   
-  lstat <- c("est", "se", "z", "p", "lower", "upper")
-  parlist <- lapply(lstat,
-                    function(x) aldvmm.getpar(par   = eval(parse(text = x)),
-                                              lcoef = lcoef,
-                                              lcmp  = lcmp,
-                                              lcpar = lcpar,
-                                              ncmp  = ncmp))
-  names(parlist) <- lstat
+  parlist <- lapply(colnames(mat),
+                    function(x) {
+                      aldvmm.getpar(par   = mat[, x],
+                                    lcoef = lcoef,
+                                    lcmp  = lcmp,
+                                    lcpar = lcpar,
+                                    ncmp  = ncmp)
+                    })
   
-  # Round results
-  #--------------
-  
-  for (i in 1:length(parlist)) {
-    for (j in 1:length(parlist[[i]])) {
-      for (k in 1:length(parlist[[i]][[j]])) {
-        val <- parlist[[i]][[j]][[k]]
-        parlist[[i]][[j]][[k]] <- format(round(as.numeric(val),
-                                               digits = digits), 
-                                         nsmall = digits)
-      }
-    }
-  }
+  names(parlist) <- colnames(mat)
   
   # Make matrices of statistics by component and type of parameters
   #----------------------------------------------------------------
@@ -100,12 +53,12 @@ aldvmm.sum <- function(est,
   for (i in paste0(lcmp, 1:ncmp)) {
     tmp[[i]][[lcoef[1]]] <- cbind(c(i, rep("", length(lvar[[lcoef[1]]]) - 1)),
                                   lvar[[lcoef[1]]],
-                                  parlist[["est"]][[lcoef[1]]][[i]],
-                                  parlist[["se"]][[lcoef[1]]][[i]],
-                                  parlist[["z"]][[lcoef[1]]][[i]],
-                                  parlist[["p"]][[lcoef[1]]][[i]],
-                                  parlist[["lower"]][[lcoef[1]]][[i]],
-                                  parlist[["upper"]][[lcoef[1]]][[i]])
+                                  parlist[[1]][[lcoef[1]]][[i]],
+                                  parlist[[2]][[lcoef[1]]][[i]],
+                                  parlist[[3]][[lcoef[1]]][[i]],
+                                  parlist[[4]][[lcoef[1]]][[i]],
+                                  parlist[[5]][[lcoef[1]]][[i]],
+                                  parlist[[6]][[lcoef[1]]][[i]])
   }
   
   # Deltas (coefficients for multinomial logit for group membership)
@@ -113,12 +66,12 @@ aldvmm.sum <- function(est,
     for (i in paste0(lcmp, 1:(ncmp - 1))) {
       tmp[[i]][[lcoef[2]]] <- cbind(c(i,rep("", length(lvar[[lcoef[2]]]) - 1)),
                                     lvar[[lcoef[2]]],
-                                    parlist[["est"]][[lcoef[2]]][[i]],
-                                    parlist[["se"]][[lcoef[2]]][[i]],
-                                    parlist[["z"]][[lcoef[2]]][[i]],
-                                    parlist[["p"]][[lcoef[2]]][[i]],
-                                    parlist[["lower"]][[lcoef[2]]][[i]],
-                                    parlist[["upper"]][[lcoef[2]]][[i]])
+                                    parlist[[1]][[lcoef[2]]][[i]],
+                                    parlist[[2]][[lcoef[2]]][[i]],
+                                    parlist[[3]][[lcoef[2]]][[i]],
+                                    parlist[[4]][[lcoef[2]]][[i]],
+                                    parlist[[5]][[lcoef[2]]][[i]],
+                                    parlist[[6]][[lcoef[2]]][[i]])
     }
   }
   
@@ -127,12 +80,12 @@ aldvmm.sum <- function(est,
     for (j in lcpar) {
       tmp[[i]][[j]] <- cbind("",
                              paste0(j),
-                             parlist[["est"]][[j]][[i]],
-                             parlist[["se"]][[j]][[i]],
-                             parlist[["z"]][[j]][[i]],
-                             parlist[["p"]][[j]][[i]],
-                             parlist[["lower"]][[j]][[i]],
-                             parlist[["upper"]][[j]][[i]])
+                             parlist[[1]][[j]][[i]],
+                             parlist[[2]][[j]][[i]],
+                             parlist[[3]][[j]][[i]],
+                             parlist[[4]][[j]][[i]],
+                             parlist[[5]][[j]][[i]],
+                             parlist[[6]][[j]][[i]])
     }
   }
   
@@ -145,8 +98,7 @@ aldvmm.sum <- function(est,
   reptab <- list()
   
   reptab[["head0"]] <- rbind(lines,
-                             c("", "", "Estimate", "Std. Err.", "z", "P>|z|", 
-                               "[95% Conf. ", "Interval]"))
+                             c("", "", colnames(mat)))
   
   reptab[["head1"]] <- rbind(lines,
                              c('E[y|X, c]', rep("", times = nc - 1)),
@@ -165,7 +117,7 @@ aldvmm.sum <- function(est,
                                lines)
     
     reptab[[lcoef[2]]] <- do.call("rbind", 
-                                         lapply(tmp, function(k) k[[lcoef[2]]]))
+                                  lapply(tmp, function(k) k[[lcoef[2]]]))
   }
   
   reptab[["end"]] <- lines

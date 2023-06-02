@@ -36,11 +36,6 @@ new_aldvmm <- function(fit,
   #-----------------
   
   outlist <- list(coef    = fit[["par"]],
-                  se      = cov[["se"]],
-                  z       = cov[["z"]],
-                  p       = cov[["p"]],
-                  lower   = cov[["lower"]],
-                  upper   = cov[["upper"]],
                   hessian = cov[["hessian"]],
                   cov     = cov[["cv"]],
                   n       = length(y),

@@ -28,6 +28,7 @@
 #' @import optimr
 #' @import Formula
 #' @import sandwich
+#' @importFrom lmtest coeftest coefci
 #'
 #' @docType package
 #' @name aldvmm-package
@@ -199,13 +200,7 @@ NULL
 #' @return \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{ \code{aldvmm()}}
 #'   returns an object of class inheriting from "aldvmm". An object of class
 #'   "aldvmm" is a list containing the following objects. \item{\code{coef}}{a
-#'   numeric vector of parameter estimates.} \item{\code{se}}{a numeric vector
-#'   of standard errors of parameter estimates.} \item{\code{z}}{a numeric
-#'   vector of standardized parameter estimates.} \item{\code{p}}{a numeric
-#'   vector of p-values of parameter estimates.} \item{\code{lower}}{a numeric
-#'   vector of 95\% lower confidence limits of parameter estimates.}
-#'   \item{\code{upper}}{a numeric vector of 95\% upper confidence limits of
-#'   parameter estimates.} \item{\code{hessian}}{a numeric matrix object with
+#'   numeric vector of parameter estimates.} \item{\code{hessian}}{a numeric matrix object with
 #'   second partial derivatives of the likelihood function.}
 #'
 #'   \item{\code{cov}}{a numeric matrix object with covariances of parameters.}
