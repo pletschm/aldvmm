@@ -11,6 +11,8 @@
 
 \item{digits}{an integer value of the number of digits in the output table.}
 
+\item{level}{a numeric value of the confidence interval between 0 and 1.}
+
 \item{...}{further arguments passed to or from other methods.}
 }
 \value{

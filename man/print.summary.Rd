@@ -9,6 +9,8 @@
 \arguments{
 \item{x}{an object inheriting from class 'summary.aldvmm'.}
 
+\item{digits}{an integer value of the number of digits in the output table.}
+
 \item{...}{further arguments passed to or from other methods.}
 }
 \description{

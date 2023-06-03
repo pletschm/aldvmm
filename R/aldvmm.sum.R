@@ -126,6 +126,7 @@ aldvmm.sum <- function(object,
   #---------------------------
   
   reptab <- do.call("rbind", reptab)
+  reptab[is.na(reptab)] <- "NA"
   
   # Expand lines to column widths
   #------------------------------

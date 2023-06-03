@@ -6,6 +6,7 @@
 #' fit.
 #'
 #' @param x an object inheriting from class 'summary.aldvmm'.
+#' @param digits an integer value of the number of digits in the output table.
 #' @param ... further arguments passed to or from other methods.
 #'
 #' @method print summary.aldvmm

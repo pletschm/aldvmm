@@ -7,12 +7,12 @@
 \method{print}{aldvmm}(x, digits = max(3L, getOption("digits") - 3L), ...)
 }
 \arguments{
+\item{x}{an object inheriting from class "aldvmm".}
+
 \item{digits}{an integer value of the number of digits in the printed 
 output.}
 
 \item{...}{further arguments passed to or from other methods.}
-
-\item{object}{an object inheriting from class "aldvmm".}
 }
 \description{
 The generic function

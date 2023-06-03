@@ -56,6 +56,7 @@
 #'   
 #' @param object an object inheriting from class 'aldvmm'.
 #' @param digits an integer value of the number of digits in the output table.
+#' @param level a numeric value of the confidence interval between 0 and 1.
 #' @param ... further arguments passed to or from other methods.
 #'
 #' @method summary aldvmm
@@ -88,11 +89,6 @@ summary.aldvmm <- function(object,
   ans[["contrasts"]] <- object[["contrasts"]]
   ans[["coef"]] <- object[["coef"]]
   ans[["cov"]] <- object[["cov"]]
-  ans[["se"]] <- object[["se"]]
-  ans[["z"]] <- object[["z"]]
-  ans[["p"]] <- object[["p"]]
-  ans[["lower"]] <- object[["lower"]]
-  ans[["upper"]] <- object[["upper"]]
   ans[["n"]] <- object[["n"]]
   ans[["df.residual"]] <- object[["df.residual"]]
   ans[["df.null"]] <- object[["df.null"]]

@@ -4,7 +4,7 @@
 #' \ifelse{html}{\code{\link[stats]{coef}}}{\code{stats::print()}} prints key 
 #' attributes of an object of class "aldvmm".
 #'
-#' @param object an object inheriting from class "aldvmm".
+#' @param x an object inheriting from class "aldvmm".
 #' @param digits an integer value of the number of digits in the printed 
 #' output.
 #' @param ... further arguments passed to or from other methods.

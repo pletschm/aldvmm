@@ -31,7 +31,7 @@ summary.aldvmm <- function(object, ...) {
                        value  = object$gof$ll,
                        aic    = object$gof$aic,
                        bic    = object$gof$bic,
-                       ncmp   = object$ncmp,
+                       ncmp   = object$k,
                        lcoef  = object$label$lcoef,
                        lcmp   = object$label$lcmp,
                        lcpar  = object$label$lcpar,

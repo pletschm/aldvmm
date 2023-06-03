@@ -1681,7 +1681,7 @@ tmpdf1 <- df[df$treated == 1, ]
 # Design matrix for treated observations
 X1 <- aldvmm.mm(data = tmpdf1,
                 formula = fit$formula,
-                ncmp = fit$ncmp,
+                ncmp = fit$k,
                 lcoef = fit$label$lcoef)
 
 # Average expected outcome of treated observations
@@ -1701,7 +1701,7 @@ tmpdf0$treated <- 0
 # Design matrix for counterfactual observations
 X0 <- aldvmm.mm(data = tmpdf0,
                 formula = fit$formula,
-                ncmp = fit$ncmp,
+                ncmp = fit$k,
                 lcoef = fit$label$lcoef)
 
 # Average expected outcome of counterfactual osbervations
@@ -1721,7 +1721,7 @@ atet.grad <- numDeriv::jacobian(func = function(z) {
                        X     = X1,
                        y     = rep(0, nrow(X1[[1]])),
                        psi   = fit$psi,
-                       ncmp  = fit$ncmp,
+                       ncmp  = fit$k,
                        dist  = fit$dist,
                        lcoef = fit$label$lcoef,
                        lcmp  = fit$label$lcmp,
@@ -1731,7 +1731,7 @@ atet.grad <- numDeriv::jacobian(func = function(z) {
                        X     = X0,
                        y     = rep(0, nrow(X0[[1]])),
                        psi   = fit$psi,
-                       ncmp  = fit$ncmp,
+                       ncmp  = fit$k,
                        dist  = fit$dist,
                        lcoef = fit$label$lcoef,
                        lcmp  = fit$label$lcmp,
