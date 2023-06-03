@@ -24,29 +24,30 @@ aldvmm.check <- function(formula,
                          psi, 
                          ncmp, 
                          dist,
-                         lcoef,
-                         lcpar,
-                         lcmp,
-                         init.method, 
                          optim.method,
+                         optim.control,
                          optim.grad,
+                         init.method, 
                          init.est,
                          init.lo,
                          init.hi,
-                         optim.control,
                          se.fit,
-                         level) {
+                         model,
+                         level,
+                         na.action,
+                         lcoef,
+                         lcpar,
+                         lcmp) {
   
   # Check format of input values
   #-----------------------------
   
+  checkmate::assertFormula(formula)  
   checkmate::assertDataFrame(data)
   if (is.null(names(data))) {
     stop("'data' has no column names",
          "\n")
   }
-
-  checkmate::assertFormula(formula)  
   checkmate::assertVector(psi, strict = TRUE)
   checkmate::assertNumeric(psi)
   checkmate::assert(psi[1] != psi[2])
@@ -54,13 +55,19 @@ aldvmm.check <- function(formula,
   checkmate::assert(max(psi) <= 1)
   checkmate::assertCount(ncmp, positive = TRUE)
   checkmate::assertChoice(dist, c("normal"))
-  checkmate::assertChoice(init.method, c("zero", "random", "constant", "sann"))
-  
   if (!is.null(optim.method)) {
     checkmate::assert(optim.method %in% c("Nelder-Mead", "BFGS", "CG", 
                                           "L-BFGS-B", "nlminb", 
                                           "Rcgmin", "Rvmmin", "hjn"))
   }
+  checkmate::assertList(optim.control)
+  
+  if (!is.null(optim.grad)) {
+    checkmate::assertLogical(optim.grad)
+  }
+  
+  checkmate::assertChoice(init.method, c("zero", "random", "constant", "sann"))
+  
   if (!is.null(init.est)) {
     checkmate::assertVector(init.est, strict = TRUE)
     checkmate::assertNumeric(init.est)
@@ -76,13 +83,16 @@ aldvmm.check <- function(formula,
     checkmate::assertNumeric(init.hi)
   }
   
-  checkmate::assertList(optim.control)
-  
-  if (!is.null(optim.grad)) {
-    checkmate::assertLogical(optim.grad)
-  }
   
   checkmate::assertLogical(se.fit)
+  checkmate::assertLogical(model)
+  
+  checkmate::assert(length(level) == 1)
+  checkmate::assertNumeric(level)
+  checkmate::assert(level > 0)
+  checkmate::assert(level < 1)
+  
+  checkmate::assertChoice(na.action, c("na.pass", "na.omit", "na.fail", "na.exclude"))
   
   if (dist == "normal" & length(lcpar) != 1) {
     stop("'lcpar' is wrong length for ",
@@ -104,11 +114,6 @@ aldvmm.check <- function(formula,
          " instead of 1.",
          "\n")
   }
-  
-  checkmate::assert(length(level) == 1)
-  checkmate::assertNumeric(level)
-  checkmate::assert(level > 0)
-  checkmate::assert(level < 1)
   
   # Check if all variables in formula exist in data
   #------------------------------------------------

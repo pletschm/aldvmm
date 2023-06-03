@@ -15,6 +15,12 @@ test_that('Check creation of model terms objects', {
                      failure_message = 
                        'aldvmm.tm output is not list.'
     )
+    
+    testthat::expect(if (ncmp > 1) {length(tm) == 3} else {length(tm) == 2}, 
+                     failure_message = 
+                       'aldvmm.tm output is of wrong length.'
+    )
+    
     testthat::expect(all(unlist(lapply(tm, 
                                 function(x) 
                                   any(class(x) == "terms")))),
@@ -67,6 +73,19 @@ test_that('Check creation of model terms objects', {
   
   test_tm(tm = tm,
           ncmp = ncmp)
+  
+  # Single-component model with one part on the right-hand side
+  #------------------------------------------------------------
+  
+  f <- dep ~ ind1 + ind2
+  
+  tm <- aldvmm.tm(mf = stats::model.frame(Formula::Formula(f), data = testdat),
+                  Formula = Formula::Formula(f),
+                  ncmp = 1,
+                  lcoef = c('beta', 'delta'))
+  
+  test_tm(tm = tm,
+          ncmp = 1)
   
   rm(testdat, ncmp, tm, f)
   

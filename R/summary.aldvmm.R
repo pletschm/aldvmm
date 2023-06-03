@@ -100,7 +100,7 @@ summary.aldvmm <- function(object,
   ans[["ll"]] <- object[["gof"]][["ll"]]
   ans[["aic"]] <- object[["gof"]][["aic"]]
   ans[["bic"]] <- object[["gof"]][["bic"]]
-  ans[["ncmp"]] <- object[["ncmp"]]
+  ans[["k"]] <- object[["k"]]
   ans[["lcoef"]] <- object[["label"]][["lcoef"]]
   ans[["lcpar"]] <- object[["label"]][["lcpar"]]
   ans[["lcmp"]] <- object[["label"]][["lcmp"]]

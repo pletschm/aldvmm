@@ -31,8 +31,7 @@ model for expected values of normal distributions (left) and the
 multinomial logit model of probabilities of component membership (right).}
 
 \item{data}{a data frame, list or environment (or object coercible to a data
-frame by \cr \ifelse{html}{\code{\link[base]{as.data.frame}}}{
-\code{base::as.data.frame()}}) including data on outcomes and explanatory
+frame by \ifelse{html}{\code{\link[base]{as.data.frame}}}{\code{base::as.data.frame()}}) including data on outcomes and explanatory
 variables in \code{'formula'}.}
 
 \item{psi}{a numeric vector of minimum and maximum possible utility values
@@ -95,7 +94,7 @@ have to follow the same order as parameter estimates in the return value
 of fitted values are calculated. The default value is \code{FALSE}.}
 
 \item{model}{an optional logical value indicating whether the estimation 
-data frame is returned. The default value is \code{TRUE}.}
+data frame is returned in the output object. The default value is \code{TRUE}.}
 
 \item{level}{a numeric value of the significance level for confidence bands
 of fitted values. The default value is 0.95.}
@@ -110,13 +109,7 @@ in the preparation of the model matrix. The default value is
 \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{ \code{aldvmm()}}
   returns an object of class inheriting from "aldvmm". An object of class
   "aldvmm" is a list containing the following objects. \item{\code{coef}}{a
-  numeric vector of parameter estimates.} \item{\code{se}}{a numeric vector
-  of standard errors of parameter estimates.} \item{\code{z}}{a numeric
-  vector of standardized parameter estimates.} \item{\code{p}}{a numeric
-  vector of p-values of parameter estimates.} \item{\code{lower}}{a numeric
-  vector of 95\% lower confidence limits of parameter estimates.}
-  \item{\code{upper}}{a numeric vector of 95\% upper confidence limits of
-  parameter estimates.} \item{\code{hessian}}{a numeric matrix object with
+  numeric vector of parameter estimates.} \item{\code{hessian}}{a numeric matrix object with
   second partial derivatives of the likelihood function.}
 
   \item{\code{cov}}{a numeric matrix object with covariances of parameters.}
@@ -130,14 +123,10 @@ in the preparation of the model matrix. The default value is
   the model can include multiple components.}
   \item{\code{ncmp}}{a scalar representing the number of components that were
   mixed.}
-  \item{\code{df.null}}{a list including integer value of the residual 
-  degrees of freedom of a null model of component means ("beta"), 
-  probabilities of component membership ("delta") and the full model 
-  ("full").}
-  \item{\code{df.residual}}{a list including integer value of the residual 
-  degrees of freedom for the model of component means ("beta"), 
-  probabilities of component membership ("delta") and the full model 
-  ("full").}
+  \item{\code{df.null}}{an integer value of the residual 
+  degrees of freedom of a null model including intercepts and standard errors.}
+  \item{\code{df.residual}}{an integer value of the residual 
+  degrees of freedom..}
   \item{\code{iter}}{an integer value of the number of iterations used in 
   optimization.}
   \item{\code{convergence}}{an integer value indicating convergence. "0" 
@@ -177,7 +166,7 @@ in the preparation of the model matrix. The default value is
   \ifelse{html}{\code{\link[stats]{formula}}}{\code{stats::formula}}
   supplied to argument \code{'formula'}.}
   \item{\code{terms}}{a list of objects of class
-  \ifelse{html}{\code{\link[stats]{terms}}}{\code{stats::terms}}.}
+  \ifelse{html}{\code{\link[stats]{terms}}}{\code{stats::terms}} for the model of component means ("beta"), probabilities of component membership ("delta") and the full model ("full").}
   \item{\code{model}}{a data.frame including the variables specified 
   in \code{'formula'} plus additional attributes returned by 
   \ifelse{html}{\code{\link[stats]{model.frame}}}{\code{stats::model.frame}}.}

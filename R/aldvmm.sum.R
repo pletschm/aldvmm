@@ -17,7 +17,7 @@ aldvmm.sum <- function(object,
                        digits = max(3L, getOption("digits") - 3L),
                        level = 0.95) {
   
-  ncmp   <- object$ncmp
+  ncmp   <- object$k
   lcoef  <- object$label$lcoef
   lcmp   <- object$label$lcmp
   lcpar  <- object$label$lcpar

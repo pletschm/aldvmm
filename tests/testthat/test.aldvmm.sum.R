@@ -29,35 +29,9 @@ test_that('Check generation of summary table.', {
       })
     })
     
-    regtab <- aldvmm.sum(est = fit$coef,
-                         se = fit$se,
-                         z = fit$z,
-                         p = fit$p,
-                         lower = fit$lower,
-                         upper = fit$upper,
-                         n = fit$n,
-                         lcoef = fit$label$lcoef,
-                         lcmp = fit$label$lcmp,
-                         lcpar = fit$label$lcpar,
-                         lvar = fit$label$lvar,
-                         ncmp = fit$ncmp)
-    
-    test <- getval(regtab)
-    
-    ref <- as.character(format(round(c(fit$coef, 
-                                       fit$se, 
-                                       fit$z, 
-                                       fit$p, 
-                                       fit$lower, 
-                                       fit$upper), 3), 
-                               nsmall = 3,
-                               trim = TRUE))
-    ref <- ref[order(ref)]
-    
-    testthat::expect(all(test == ref),
-                     failure_message = 
-                       'Summary table does not include input data.'
-    )
+    regtab <- aldvmm.sum(fit,
+                         digits = max(3L, getOption("digits") - 3L),
+                         level = 0.95)
     
     testthat::expect(is.data.frame(regtab),
                      failure_message = 

@@ -19,6 +19,6 @@ model.matrix.aldvmm <- function(object,
   
   aldvmm.mm(mf      = object$data, 
             Formula = Formula::Formula(object$formula), 
-            ncmp    = object$ncmp, 
+            ncmp    = object$k, 
             lcoef   = object$label$lcoef)
 }

@@ -15,7 +15,8 @@
 \code{estfun.aldvmm} returns a matrix with one row per observation and one column per parameter.
 }
 \description{
-The method \code{estfun.aldvmm} calculates the gradient of the aldvmm 
+The generic function 
+\ifelse{html}{\code{\link[sandwich]{estfun}}}{\code{sandwich::estfun()}} calculates the gradient of the aldvmm 
 log-likelihood 
 \ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm::aldvmm.ll()}} 
 with respect to parameter values for each observation using 

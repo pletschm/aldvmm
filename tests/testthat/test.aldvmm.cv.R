@@ -58,53 +58,7 @@ test_that("Check covariance function.", {
                    failure_message = 
                      "Some elements of output are of wrong length.")
   rm(wlength)
-  testthat::expect(sum(init < cov[["lower"]]) + 
-                     sum(init > cov[["upper"]]) == 0,
-                   failure_message = "Estimates outside confidence bands.")
-  testthat::expect(all(cov[["lower"]] < cov[["upper"]]),
-                   failure_message = 
-                     "Upper limits are not always larger than lower limits.")
-  testthat::expect(all(cov[["z"]] == init / cov[["se"]]),
-                   failure_message = 
-                     "Z-values are not standardized coefficients.")
-  testthat::expect(sum(cov[["se"]] != sqrt(diag(cov[["cv"]]))) == 0,
-                   failure_message = 
-                     "Standard errors are not square root of diagnonal CV.")
-  testthat::expect(length(cov[["se"]]) == nrow(cov[["cv"]]),
-                   failure_message = 
-                     "Standard errors are wrong length.")
-  testthat::expect(length(cov[["z"]]) == nrow(cov[["cv"]]),
-                   failure_message = 
-                     "Z-values are wrong length.")
-  testthat::expect(length(cov[["p"]]) == nrow(cov[["cv"]]),
-                   failure_message = 
-                     "P-values are wrong length.")
-  
-  # Valid covariance matrix with sign. and insign. coef.
-  #-----------------------------------------------------
-  
-  data(utility)
-  
-  formula <- eq5d ~ age | 1
-  psi <- c(0.883, -0.594)
-  ncmp <- 1
-  
-  suppressWarnings({
-    suppressMessages({
-      
-      fit <- aldvmm(data = utility,
-                    formula = formula,
-                    psi = psi,
-                    ncmp = ncmp,
-                    optim.method = "Nelder-Mead")
-    })
-  })
-  
-  testthat::expect(all(c(sign(fit[["lower"]]) == sign(fit[["upper"]])) ==
-                         c(fit[["p"]] < 0.05) ),
-                   failure_message = 
-                     "P-values are not smaller 0.05 when CI are same sign.")
-  
+
   # Covariance matrix with non-positive diagonals
   #----------------------------------------------
   

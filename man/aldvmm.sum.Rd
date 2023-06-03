@@ -4,84 +4,16 @@
 \alias{aldvmm.sum}
 \title{Creating Summary Table}
 \usage{
-aldvmm.sum(
-  est,
-  se,
-  z,
-  p,
-  lower,
-  upper,
-  n,
-  ncmp,
-  lcoef,
-  lcpar,
-  lcmp,
-  lvar,
-  digits = 3
-)
+aldvmm.sum(object, digits = max(3L, getOption("digits") - 3L), level = 0.95)
 }
 \arguments{
-\item{est}{a named numeric vector of point estimates.}
-
-\item{se}{a named numeric vector of standard errors of parameters returned
-by \ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{ \code{aldvmm.cv()}}.}
-
-\item{z}{a named numeric vector of standardized coefficients of parameters
-returned by \ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{
-\code{aldvmm.cv()}}.}
-
-\item{p}{a named numeric vector of p-values of parameters returned by
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{ \code{aldvmm.cv()}}.}
-
-\item{lower}{a named numeric vector of 95\% lower limits of parameters
-returned by \ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{
-\code{aldvmm.cv()}}.}
-
-\item{upper}{a named numeric vector of 95\% upper limits of parameters
-returned by \ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{
-\code{aldvmm.cv()}}.}
-
-\item{n}{a numeric value of the number of complete observations in
-\code{'data'} supplied to
-\ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm()}}.}
-
-\item{ncmp}{a numeric value of the number of components that are mixed. The
-default value is 2. A value of 1 represents a tobit model with a gap
-between 1 and the maximum value in \code{'psi'}.}
-
-\item{lcoef}{a character vector of length 2 with labels of objects including
-regression coefficients of component distributions (default \code{"beta"})
-and coefficients of probabilities of component membership (default
-\code{"delta"}).}
-
-\item{lcpar}{a character vector with the labels of objects including
-constant parameters of component distributions (e.g. the standard
-deviation of the normal distribution). The length of \code{'lcpar'}
-depends on the distribution supplied to \code{'dist'}.}
-
-\item{lcmp}{a character value representing a stub (default \code{"Comp"})
-for labeling objects including regression coefficients in different
-components (e.g. "Comp1", "Comp2", ...). This label is also used in
-summary tables returned by
-\ifelse{html}{\code{\link[aldvmm]{summary.aldvmm}}}{\code{summary.aldvmm()}}.}
-
-\item{lvar}{a named list of character vectors with column names of design
-matrices returned by \ifelse{html}{\code{\link[aldvmm]{aldvmm.mm}}}{
-\code{aldvmm.mm()}}.}
+\item{object}{an \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{
+\code{aldvmm()}} model fit object of class "aldvmm".}
 
 \item{digits}{a numeric value of the number of digits in the reporting
 table.}
 
-\item{value}{a numeric value of the negative log-likelihood returned by
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{ \code{aldvmm.ll()}}.}
-
-\item{aic}{a numeric value of the Akaike information criterion (AIC)
-returned by \ifelse{html}{\code{\link[aldvmm]{aldvmm.gof}}}{
-\code{aldvmm.gof()}}.}
-
-\item{bic}{a numeric value of the Bayesian information criterion (BIC)
-returned by \ifelse{html}{\code{\link[aldvmm]{aldvmm.gof}}}{
-\code{aldvmm.gof()}}.}
+\item{level}{a numeric value of the confidence level.}
 }
 \value{
 a \code{data.frame} object with a summary table of regression results.

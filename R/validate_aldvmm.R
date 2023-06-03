@@ -3,8 +3,7 @@ validate_aldvmm <- function(object) {
   # Vectors
   #--------
   
-  names(object)
-  vecnames <- c("coef", "se", "z", "p", "lower", "upper", "psi")
+  vecnames <- c("coef", "psi")
   novec <- unlist(lapply(vecnames, function(x) !is.vector(object[[x]])))
   novec <- c(novec, !is.vector(unlist(object[["label"]])))
   if (sum(novec) != 0) {
@@ -13,6 +12,35 @@ validate_aldvmm <- function(object) {
          "\n")
   }
 
+  vecnames <- c("y", "yhat", "res")
+  novec <- unlist(lapply(vecnames, function(x) !is.vector(object[["pred"]][[x]])))
+  novec <- c(novec, !is.vector(unlist(object[["label"]])))
+  if (sum(novec) != 0) {
+    stop('Some elements in object of class "aldvmm" are not of type "vector": ',
+         paste(vecnames[novec], collapse = ", "),
+         "\n")
+  }
+  
+  if (!is.null(object[["pred"]][["se.fit"]])) {
+    vecnames <- c("se.fit", "lower.fit", "upper.fit")
+    novec <- unlist(lapply(vecnames, function(x) !is.vector(object[["pred"]][[x]])))
+    novec <- c(novec, !is.vector(unlist(object[["label"]])))
+    if (sum(novec) != 0) {
+      stop('Some elements in object of class "aldvmm" are not of type "vector": ',
+           paste(vecnames[novec], collapse = ", "),
+           "\n")
+    }
+    
+  }
+  
+  vecnames <- c("est", "lo", "hi")
+  novec <- unlist(lapply(vecnames, function(x) !is.vector(object[["init"]][[x]])))
+  novec <- c(novec, !is.vector(unlist(object[["label"]])))
+  if (sum(novec) != 0) {
+    stop('Some elements in object of class "aldvmm" are not of type "vector": ',
+         paste(vecnames[novec], collapse = ", "),
+         "\n")
+  }
   # Lists
   #------
   
@@ -42,8 +70,7 @@ validate_aldvmm <- function(object) {
   # Numeric objects
   #----------------
   
-  numnames <- c("coef", "se", "z", "p", "lower", "upper", "hessian", "cov",
-                "n", "k", "ncmp", "psi")
+  numnames <- c("coef", "hessian", "cov", "n", "k", "psi")
   nonum <- unlist(lapply(numnames, function(x) !is.numeric(object[[x]])))
   nonum <- c(nonum, 
              unlist((lapply(object[["pred"]][c("yhat", "y", "res")], 
@@ -82,7 +109,7 @@ validate_aldvmm <- function(object) {
   # Length of vectors
   #------------------
   
-  veclen <- unlist(lapply(object[c("coef", "se", "z", "p", "lower", "upper")],
+  veclen <- unlist(lapply(object[c("coef")],
                 function(x) length(x)))
   veclen <- c(veclen, unlist(lapply(object[c("hessian", "cov")],
                    function(x) dim(x)[1])))

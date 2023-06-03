@@ -4,7 +4,7 @@
 \alias{summary.aldvmm}
 \title{Summarizing Adjusted Limited Dependent Variable Mixture Model Fits}
 \usage{
-\method{summary}{aldvmm}(object, digits = max(3L, getOption("digits") - 3L), ...)
+\method{summary}{aldvmm}(object, digits = max(3L, getOption("digits") - 3L), level = 0.95, ...)
 }
 \arguments{
 \item{object}{an object inheriting from class 'aldvmm'.}
@@ -37,12 +37,10 @@ including the following elements.
   parameter estimates.}
   \item{\code{n}}{a scalar representing the number of complete observations
   with no missing values that were used in the estimation.}
-  \item{\code{df.residual}}{a list including integer value of the residual 
-  degrees of freedom for the model of component means ("beta") and 
-  probability of component membership ("delta").}
-  \item{\code{df.null}}{a list including integer value of the residual 
-  degrees of freedom of a null model of component means ("beta") and 
-  probability of component membership ("delta").}
+  \item{\code{df.residual}}{an integer value of the residual 
+  degrees of freedom.}
+  \item{\code{df.null}}{an integer value of the residual 
+  degrees of freedom of a null model including intercepts and standard errors.}
   \item{\code{iter}}{an integer value of the number of iterations used in 
   optimization.}
   \item{\code{ll}}{a numeric value of the negative log-likelihood

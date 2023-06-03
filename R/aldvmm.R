@@ -51,8 +51,7 @@ NULL
 #'   model for expected values of normal distributions (left) and the
 #'   multinomial logit model of probabilities of component membership (right).
 #' @param data a data frame, list or environment (or object coercible to a data
-#'   frame by \cr \ifelse{html}{\code{\link[base]{as.data.frame}}}{
-#'   \code{base::as.data.frame()}}) including data on outcomes and explanatory
+#'   frame by \ifelse{html}{\code{\link[base]{as.data.frame}}}{\code{base::as.data.frame()}}) including data on outcomes and explanatory
 #'   variables in \code{'formula'}.
 #' @param psi a numeric vector of minimum and maximum possible utility values
 #'   smaller than or equal to 1 (e.g. \code{c(-0.594, 0.883)}). The potential
@@ -103,7 +102,7 @@ NULL
 #' @param se.fit an optional logical value indicating whether standard errors
 #'   of fitted values are calculated. The default value is \code{FALSE}.
 #' @param model an optional logical value indicating whether the estimation 
-#' data frame is returned. The default value is \code{TRUE}.
+#' data frame is returned in the output object. The default value is \code{TRUE}.
 #' @param level a numeric value of the significance level for confidence bands
 #'   of fitted values. The default value is 0.95.
 #' @param na.action a character value indicating the argument passed to 
@@ -404,29 +403,33 @@ aldvmm <- function(formula,
   # Checks
   #-------
   
-  aldvmm.check(data = data, 
-               formula = formula, 
+  aldvmm.check(formula = formula, 
+               data = data, 
                psi = psi, 
                ncmp = ncmp, 
                dist = dist,
-               lcoef = lcoef,
-               lcpar = lcpar,
-               lcmp = lcmp,
-               init.method = init.method, 
                optim.method = optim.method, 
                optim.grad = optim.grad,
                optim.control = optim.control,
+               init.method = init.method, 
                init.est = init.est,
                init.lo = init.lo,
                init.hi = init.hi,
                se.fit = se.fit,
-               level = level)
+               model = model,
+               level = level,
+               na.action = na.action,
+               lcoef = lcoef,
+               lcpar = lcpar,
+               lcmp = lcmp)
   
   # Make outcome vector
   #--------------------
   
-  formula <- Formula::Formula(formula) # Convert formula to 'Formula' object
+  # Convert formula to 'Formula' object
+  formula <- Formula::Formula(formula)
   
+  # Create outcome vector
   y <- stats::model.response(
     stats::model.frame(formula, 
                        data = data,
@@ -436,10 +439,12 @@ aldvmm <- function(formula,
   # Make list of design matrices
   #-----------------------------
   
+  # Convert data to model frame
   data <- stats::model.frame(formula, 
                              data = data,
-                             na.action = na.action) # Convert data to model frame
+                             na.action = na.action)
   
+  # Make list of design matrices
   mm <- aldvmm.mm(mf = data,
                   Formula = formula,
                   ncmp = ncmp,
@@ -541,15 +546,6 @@ aldvmm <- function(formula,
                       lcmp = lcmp,
                       lcpar = lcpar)
   
-  # Assess goodness of fit
-  #-----------------------
-  
-  # Note: Aldvmm.ll returns -log-likelihood
-  
-  gof <- aldvmm.gof(res = pred[["res"]],
-                    par = fit[["par"]],
-                    ll = -fit[["value"]])
-  
   # Obtain standard errors of the fit (delta method)
   #-------------------------------------------------
   
@@ -575,6 +571,25 @@ aldvmm <- function(formula,
     
   }
   
+  # Calculate degrees of freedom
+  #-----------------------------
+  
+  df.null <- length(y) - 
+    ncmp * as.integer(attr(terms[[lcoef[1]]], "intercept") > 0L) - 
+    (ncmp > 1) * as.integer(attr(terms[[lcoef[2]]], "intercept") > 0L) -
+    ncmp # standard errors lnsigma
+  
+  df.residual <- length(y) - length(fit$par)
+  
+  # Assess goodness of fit
+  #-----------------------
+  
+  # Note: Aldvmm.ll returns -log-likelihood
+  
+  gof <- aldvmm.gof(res = pred[["res"]],
+                    par = fit[["par"]],
+                    ll = -fit[["value"]])
+  
   # Collect output
   #---------------
   
@@ -583,6 +598,8 @@ aldvmm <- function(formula,
                         y = y,
                         mm = mm,
                         ncmp = ncmp,
+                        df.null = df.null,
+                        df.residual = df.residual,
                         gof = gof,
                         pred = pred,
                         pred.se = pred.se,
