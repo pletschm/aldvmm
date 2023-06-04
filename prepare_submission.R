@@ -7,6 +7,11 @@
 # run usethis::use_github_action("check-standard") in the main branch.
 
 # Add line "- uses: r-lib/actions/setup-tinytex@v2" to the .yaml file.
+# Add line "error-on: '"error"'" below to prevent fail on warnings.
+# "- uses: r-lib/actions/check-r-package@v2".
+#    with:
+#      upload-snapshots: true
+#      error-on: '"error"'
 
 # Commit and push to the main branch.
 
