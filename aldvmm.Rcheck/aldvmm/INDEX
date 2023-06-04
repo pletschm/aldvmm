@@ -21,9 +21,25 @@ aldvmm.pred             Predicting Expected Values from Adjusted
 aldvmm.sefit            Calculating Standard Errors of Fitted and
                         Predicted Outcomes
 aldvmm.sum              Creating Summary Table
+aldvmm.tm               Creating Terms Objects
+coef.aldvmm             Extract Coefficients of Adjusted Limited
+                        Dependent Variable Mixture Model Fits
+estfun.aldvmm           Create Matrix of Adjusted Limited Dependent
+                        Variable Mixture Model Gradients per
+                        Observation
+model.matrix.aldvmm     Extract Adjusted Limited Dependent Variable
+                        Mixture Model Model Matrices
+nobs.aldvmm             Extract Adjusted Limited Dependent Variable
+                        Mixture Model Number of Observations
 predict.aldvmm          Predict Method for Adjusted Limited Dependent
                         Variable Mixture Model Fits
+print.aldvmm            Print Adjusted Limited Dependent Variable
+                        Mixture Model Fits
+print.summary.aldvmm    Printing Adjusted Limited Dependent Variable
+                        Mixture Model Summaries
 summary.aldvmm          Summarizing Adjusted Limited Dependent Variable
                         Mixture Model Fits
 utility                 Simulated Example Data of Health State
                         Utilities.
+vcov.aldvmm             Extract Adjusted Limited Dependent Variable
+                        Mixture Model Covariance Matrix

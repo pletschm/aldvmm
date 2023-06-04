@@ -31,10 +31,8 @@ a named list of numeric vectors of predicted outcomes, standard
   errors and confidence or prediction intervals.
 }
 \description{
-The generic function
+The method \code{predict.aldvmm} for the generic function
 \ifelse{html}{\code{\link[stats]{predict}}}{\code{stats::predict()}} calls
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm.pred()}} to
-predict outcomes and their standard errors in new data using
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm.pred()}} and
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.sefit}}}{\code{aldvmm.sefit()}}.
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm.pred()}} and \ifelse{html}{\code{\link[aldvmm]{aldvmm.sefit}}}{\code{aldvmm.sefit()}} to
+predict outcomes and their standard errors in new data.
 }

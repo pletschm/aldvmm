@@ -1,9 +1,11 @@
 ## Re-submission
 This is a re-submission. 
 
-It includes two updates
-* Update in validate_aldvmm(): Checking for class type of model formula using base::inherits() instead of if(class(obj) == "formula").
-* Update in vignette: Include figures as .eps files to avoid loading ggplot objects from previous versions of ggplot2.
+It includes the following updates.
+* New methods for generic functions print(), summary(), stats::predict(), stats::coef(), stats::nobs(), stats::vcov(), stats::model.matrix() and sandwich::estfun() are available.
+* New workflow using the function Formula::formula() to handle models with two right-hand sides.
+* Default optimzation method was changed to "BFGS".
+* Objects of class "aldvmm" include new elements.
 
 Maintainer: 'Mark Pletscher <pletscher.mark@gmail.com>'
 

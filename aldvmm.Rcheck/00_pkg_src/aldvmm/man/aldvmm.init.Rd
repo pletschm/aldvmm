@@ -73,7 +73,7 @@ have to follow the same order as parameter estimates in the return value
 \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
 methods: \code{"Nelder-Mead"}, \code{"BFGS"}, \code{"CG"},
 \code{"L-BFGS-B"}, \code{"nlminb"}, \code{"Rcgmin"}, \code{"Rvmmin"} and
-\code{"hjn"}. The default method is \code{"Nelder-Mead"}. The method
+\code{"hjn"}. The default method is \code{"BFGS"}. The method
 \code{"L-BFGS-B"} is used when lower and/or upper constraints are set
 using \code{'init.lo'} and \code{'init.hi'}. The method \code{"nlm"}
 cannot be used in the \code{'aldvmm'} package.}

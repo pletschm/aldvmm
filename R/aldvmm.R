@@ -27,7 +27,7 @@
 #' @import checkmate
 #' @import optimr
 #' @import Formula
-#' @import sandwich
+#' @importFrom sandwich estfun
 #' @importFrom lmtest coeftest coefci
 #'
 #' @docType package
@@ -168,7 +168,7 @@ NULL
 #'   method \code{"random"} draws random starting values from a standard normal
 #'   distribution.  The method \code{"constant"} estimates a constant-only
 #'   model and uses estimates as initial values of intercepts and standard
-#'   errors and 0 for all other prameters.  The method \code{"sann"} estimates
+#'   errors and 0 for all other parameters.  The method \code{"sann"} estimates
 #'   the full model using the simulated annealing optimization method in
 #'   \ifelse{html}{\code{\link[stats]{optim}}}{ \code{stats::optim()}} and uses
 #'   parameter estimates as initial values.  When user-specified initial values
@@ -206,12 +206,7 @@ NULL
 #'
 #'   \item{\code{n}}{a scalar representing the number of complete observations
 #'   with no missing values that were used in the estimation.}
-#'   \item{\code{k}}{a named list of scalars representing the number of 
-#'   columns of the design matrices of component means ("beta") and 
-#'   probabilities of component membership ("delta"). The number of columns of 
-#'   columns is not necessarily identical to the number of parameters because 
-#'   the model can include multiple components.}
-#'   \item{\code{ncmp}}{a scalar representing the number of components that were
+#'   \item{\code{k}}{a scalar representing the number of components that were
 #'   mixed.}
 #'   \item{\code{df.null}}{an integer value of the residual 
 #'   degrees of freedom of a null model including intercepts and standard errors.}
@@ -257,9 +252,6 @@ NULL
 #'   supplied to argument \code{'formula'}.}
 #'   \item{\code{terms}}{a list of objects of class
 #'   \ifelse{html}{\code{\link[stats]{terms}}}{\code{stats::terms}} for the model of component means ("beta"), probabilities of component membership ("delta") and the full model ("full").}
-#'   \item{\code{model}}{a data.frame including the variables specified 
-#'   in \code{'formula'} plus additional attributes returned by 
-#'   \ifelse{html}{\code{\link[stats]{model.frame}}}{\code{stats::model.frame}}.}
 #'   \item{\code{contrasts}}{a nested list of character values showing 
 #'   contrasts of factors used in models of component means ("beta") and 
 #'   probabilities of component membership ("delta").}

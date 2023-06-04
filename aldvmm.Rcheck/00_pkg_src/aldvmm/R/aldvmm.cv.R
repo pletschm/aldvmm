@@ -25,9 +25,9 @@
 #'   \code{'par'}.} \item{\code{z}}{a numeric vector of z-values of parameters
 #'   in \code{'par'}.} \item{\code{p}}{a numeric vector of p-values of
 #'   parameter estimates.} \item{\code{upper}}{a numeric vector of upper 95\%
-#'   confindence limits of paramter estimates in \code{'par'}.}
+#'   confidence limits of parameter estimates in \code{'par'}.}
 #'   \item{\code{lower}}{a numeric vector of lower 95\% confindence limits of
-#'   paramter estimates in \code{'par'}.}
+#'   parameter estimates in \code{'par'}.}
 #'
 #' @export
 
@@ -60,6 +60,9 @@ aldvmm.cv <- function(ll,
                                             lcpar = lcpar,
                                             optim.method = optim.method)
   
+  rownames(outlist[["hessian"]]) <- names(par)
+  colnames(outlist[["hessian"]]) <- names(par)
+  
   # Covariance matrix
   #------------------
   
@@ -72,51 +75,40 @@ aldvmm.cv <- function(ll,
            ncol = ncol(outlist[["hessian"]]))
   })
   
-  # Standard errors, significance and confidence intervals of parameters
-  #---------------------------------------------------------------------
+  rownames(outlist[["cv"]]) <- names(par)
+  colnames(outlist[["cv"]]) <- names(par)
   
+  # Warnings
+  #---------
+
   if (all(is.na(outlist[["cv"]]))) {
-    
+
     base::warning("no covariance matrix is obtained\n",
-            call. = FALSE)
+                  call. = FALSE)
     outlist[["se"]] <- rep(NA, times = length(par))
-    
+
   } else {
-    
+
     suppressWarnings(
       outlist[["se"]] <- sqrt(diag(outlist[["cv"]]))
     )
-    
+
     if (all(is.na(diag(outlist[["cv"]])))) {
       base::warning("covariance matrix includes only missing diagonals\n",
-              call. = FALSE)
-    } 
-    
+                    call. = FALSE)
+    }
+
     if (any(diag(outlist[["cv"]]) <= 0)) {
       base::warning("covariance matrix includes non-positive diagnoals\n",
-              call. = FALSE)
+                    call. = FALSE)
     }
-    
-    if (any(is.na(outlist[["se"]]))) {
+
+    if (any(is.na(diag(outlist[["cv"]])))) {
       base::warning("missing standard errors are obtained\n",
-              call. = FALSE)
+                    call. = FALSE)
     }
-    
+
   }
-  
-  names(outlist[["se"]]) <- names(par)
-  
-  outlist[["z"]] <- par / outlist[["se"]]
-  names(outlist[["z"]]) <- names(par)
-  
-  outlist[["p"]] <- 2 * stats::pnorm(abs(outlist[["z"]]), lower.tail = FALSE)
-  names(outlist[["p"]]) <- names(par)
-  
-  outlist[["upper"]] <- par + stats::qnorm(0.975) * outlist[["se"]]
-  names(outlist[["upper"]]) <- names(par)
-  
-  outlist[["lower"]] <- par - stats::qnorm(0.975) * outlist[["se"]]
-  names(outlist[["lower"]]) <- names(par)
-  
+
   return(outlist)
 }

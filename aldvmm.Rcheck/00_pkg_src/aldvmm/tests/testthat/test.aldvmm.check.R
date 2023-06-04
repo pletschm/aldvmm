@@ -7,36 +7,40 @@ test_that("Check input value checks.", {
                   psi = c(-0.594, 0.883),
                   ncmp = 2,
                   dist = "normal",
-                  lcoef = c("beta", "delta"),
-                  lcpar = c("lnsigma"),
-                  lcmp = c("Comp1"),
-                  init.method = "zero", 
                   optim.method = NULL,
+                  optim.control = list(trace = FALSE),
                   optim.grad = TRUE,
+                  init.method = "zero", 
                   init.est = NULL,
                   init.lo = NULL,
                   init.hi = NULL,
-                  optim.control = list(trace = FALSE),
                   se.fit = FALSE,
-                  level = 0.95) {
+                  model = TRUE,
+                  level = 0.95,
+                  na.action = "na.omit",
+                  lcoef = c("beta", "delta"),
+                  lcpar = c("lnsigma"),
+                  lcmp = c("Comp1")) {
     
     aldvmm.check(formula = formula, 
                  data = data, 
                  psi = psi,
                  ncmp = ncmp,
                  dist = dist,
-                 lcoef = lcoef,
-                 lcpar = lcpar,
-                 lcmp = lcmp,
-                 init.method = init.method, 
                  optim.method = optim.method,
+                 optim.control = optim.control,
                  optim.grad = optim.grad,
+                 init.method = init.method, 
                  init.est = init.est,
                  init.lo = init.lo,
                  init.hi = init.hi,
-                 optim.control = optim.control,
                  se.fit = se.fit,
-                 level = level)
+                 model = model,
+                 level = level,
+                 na.action = na.action,
+                 lcoef = lcoef,
+                 lcpar = lcpar,
+                 lcmp = lcmp)
     
   }
   
@@ -48,6 +52,7 @@ test_that("Check input value checks.", {
   # Check format of input values
   #-----------------------------
   
+  testthat::expect_error(aux(formula = "dfg"))
   testthat::expect_error(aux(data = list(NA)))
   
   testdf <- utility
@@ -55,7 +60,6 @@ test_that("Check input value checks.", {
   testthat::expect_error(aux(data = testdf))
   rm(testdf)
   
-  testthat::expect_error(aux(formula = "dfg"))
   testthat::expect_error(aux(psi = list(-0.594, 0.883)))
   testthat::expect_error(aux(psi = c("-0.594", "0.883")))
   testthat::expect_error(aux(psi = c(0.5, 0.5)))
@@ -65,24 +69,26 @@ test_that("Check input value checks.", {
   testthat::expect_error(aux(ncmp = 0))
   testthat::expect_error(aux(ncmp = -1))
   testthat::expect_error(aux(dist = "t"))
-  testthat::expect_error(aux(init.method = "cons"))
   testthat::expect_error(aux(optim.method = "nlm"))
+  testthat::expect_error(aux(optim.control = data.frame(trace = FALSE)))
+  testthat::expect_error(aux(optim.grad = "TRUE"))
+  testthat::expect_error(aux(init.method = "cons"))
   testthat::expect_error(aux(init.est = data.frame(init.est = c(0, 0, 0))))
   testthat::expect_error(aux(init.est = c("0", "0", "0")))
   testthat::expect_error(aux(init.lo = data.frame(init.lo = c(0, 0, 0))))
   testthat::expect_error(aux(init.lo = c("0", "0", "0")))
   testthat::expect_error(aux(init.hi = data.frame(init.hi = c(0, 0, 0))))
   testthat::expect_error(aux(init.hi = c("0", "0", "0")))
-  testthat::expect_error(aux(optim.control = data.frame(trace = FALSE)))
-  testthat::expect_error(aux(optim.grad = "TRUE"))
   testthat::expect_error(aux(se.fit = "TRUE"))
   testthat::expect_error(aux(lcpar = c("lnsigma", "lambda")))
   testthat::expect_error(aux(lcoef = c("beta", "delta", "epsilon")))
   testthat::expect_error(aux(lcmp = c("Comp1", "Comp2")))
+  testthat::expect_error(aux(model = "TRUE"))
   testthat::expect_error(aux(level = c(0.025, 0.975)))
   testthat::expect_error(aux(level = "0.95"))
   testthat::expect_error(aux(level = 0))
   testthat::expect_error(aux(level = 1))
+  testthat::expect_error(aux(na.action = na.loop))
   
   # Count rows with missing values
   #-------------------------------
@@ -103,7 +109,6 @@ test_that("Check input value checks.", {
   testthat::expect_error(aux(init.lo = rep(0, 1)))
   testthat::expect_error(aux(init.hi = rep(0, 1)))
   
-
   # Only one component but pipe separator in formula
   #-------------------------------------------------
 

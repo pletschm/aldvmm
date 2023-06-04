@@ -25,9 +25,9 @@
 #'   \code{'par'}.} \item{\code{z}}{a numeric vector of z-values of parameters
 #'   in \code{'par'}.} \item{\code{p}}{a numeric vector of p-values of
 #'   parameter estimates.} \item{\code{upper}}{a numeric vector of upper 95\%
-#'   confindence limits of paramter estimates in \code{'par'}.}
+#'   confidence limits of parameter estimates in \code{'par'}.}
 #'   \item{\code{lower}}{a numeric vector of lower 95\% confindence limits of
-#'   paramter estimates in \code{'par'}.}
+#'   parameter estimates in \code{'par'}.}
 #'
 #' @export
 

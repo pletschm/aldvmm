@@ -9,11 +9,13 @@ test_that("Check covariance function.", {
   suppressWarnings({
     fit1 <- aldvmm(formula = eq5d ~ age | 1,
                    data = utility,
-                   psi = c(-0.594, 0.883))
+                   psi = c(-0.594, 0.883),
+                   optim.method = "Nelder-Mead")
     
     fit2 <- aldvmm(eq5d ~ age | female,
                    data = utility,
-                   psi = c(-0.594, 0.884))
+                   psi = c(-0.594, 0.884),
+                   optim.method = "Nelder-Mead")
   })
   
   gof1 <- aldvmm.gof(par = fit1$coef,
@@ -40,13 +42,13 @@ test_that("Check covariance function.", {
   # Correct statistics
   #-------------------
   
-  testthat::expect(gof1$gof$aic == 2 * length(fit1$coef) + 2 * gof1$gof$ll,
+  testthat::expect(gof1$aic == 2 * length(fit1$coef) + 2 * gof1$ll,
                    failure_message = 
                      "AIC not correctly calculated."
   )
   
-  testthat::expect(gof1$gof$bic == length(fit1$coef) * log(nrow(utility)) + 
-                     2 * gof1$gof$ll,
+  testthat::expect(gof1$bic == length(fit1$coef) * log(nrow(utility)) + 
+                     2 * gof1$ll,
                    failure_message = 
                      "BIC not correctly calculated."
   )
@@ -54,7 +56,7 @@ test_that("Check covariance function.", {
   # Compare models
   #---------------
   
-  testthat::expect(gof1$gof$ll > gof2$gof$ll,
+  testthat::expect(gof1$ll > gof2$ll,
                    failure_message = 
                      "More complex model does not show larger log-likelihood."
   )

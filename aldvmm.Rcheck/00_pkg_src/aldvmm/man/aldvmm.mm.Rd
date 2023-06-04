@@ -4,19 +4,13 @@
 \alias{aldvmm.mm}
 \title{Creating Design Matrices}
 \usage{
-aldvmm.mm(data, formula, ncmp, lcoef)
+aldvmm.mm(mf, Formula, ncmp, lcoef)
 }
 \arguments{
-\item{data}{a data frame, list or environment (or object coercible to a data
-frame by \cr \ifelse{html}{\code{\link[base]{as.data.frame}}}{
-\code{base::as.data.frame()}}) including data on outcomes and explanatory
-variables in \code{'formula'}.}
+\item{mf}{a data frame created by \ifelse{html}{\code{\link[stats]{model.frame}}}{\code{stats::model.frame}} including the variables used in formula supplied to \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm()}} plus additional attributes, including "terms" for an object of class "terms" derived from formula.}
 
-\item{formula}{an object of class \code{"formula"} with a symbolic
-description of the model to be fitted. The model formula takes the form
-\code{y ~ x1 + x2 | x1 + x4}, where the \code{|} delimiter separates the
-model for expected values of normal distributions (left) and the
-multinomial logit model of probabilities of component membership (right).}
+\item{Formula}{an object of class \code{"Formula"} created by \ifelse{html}{\code{\link[Formula]{Formula}}}{\code{Formula::Formula}} based on the \code{formula} supplied to \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{
+\code{aldvmm()}}.}
 
 \item{ncmp}{a numeric value of the number of components that are mixed. The
 default value is 2. A value of 1 represents a tobit model with a gap
@@ -35,7 +29,7 @@ a named list of numeric matrices. \item{\code{beta}}{a numeric
 }
 \description{
 \ifelse{html}{\code{\link[aldvmm]{aldvmm.mm}}}{\code{aldvmm.mm()}} creates
-two design matrices, one of the model of component distributions
+a list of two design matrices, one of the model of component distributions
 (\code{"beta"}) and one of the model of probabilities of component
 membership (\code{"delta"}).
 }
@@ -45,8 +39,7 @@ membership (\code{"delta"}).
   \ifelse{html}{\code{\link[stats]{model.matrix}}}{\code{stats::model.matrix()}}
    to create design matrices for models of component distributions
   (\code{"beta"}) and probabilities of component membership (\code{"delta"})
-  based on \code{'formula'} supplied to
-  \ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm.ll()}}. The
+  based on a \code{'Formula'} object created by \ifelse{html}{\code{\link[Formula]{Formula}}}{\code{Formula::Formula}} and a model frame created by \ifelse{html}{\code{\link[stats]{model.frame}}}{\code{stats::model.frame}}. The
   design matrix for probabilities of group membership is only created if
-  more than one components are specified  in \code{'ncmp'}.
+  more than one components are specified in \code{'ncmp'}.
 }

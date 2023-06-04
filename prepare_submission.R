@@ -4,6 +4,8 @@
 # check pdf manual
 #-----------------
 
+devtools::build_manual(pkg = ".", path = NULL)
+
 # Spell check
 #------------
 
@@ -40,15 +42,17 @@ devtools::build(args = c('--compact-vignettes=both'))
 # Source check in shell
 #----------------------
 
-# R CMD check --as-cran ../aldvmm_0.8.5.tar.gz
+# R CMD check --as-cran ../aldvmm_0.8.6.tar.gz
 
 # Winbuilder
 #------------
 
 # upload via webpage https://win-builder.r-project.org/upload.aspx
 
+# Note about possibly invalid DOI in DESCRIPTION is fine.
+
 # rhub checks
 #------------
 
-rhub::check("../aldvmm_0.8.5.tar.gz", platform = "ubuntu-gcc-release")
-rhub::check("../aldvmm_0.8.5.tar.gz", platform = "debian-gcc-devel")
+rhub::check("../aldvmm_0.8.6.tar.gz", platform = "ubuntu-gcc-release")
+rhub::check("../aldvmm_0.8.6.tar.gz", platform = "debian-gcc-devel")

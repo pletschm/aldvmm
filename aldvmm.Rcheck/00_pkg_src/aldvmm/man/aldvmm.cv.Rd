@@ -57,7 +57,7 @@ summary tables returned by
 \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
 methods: \code{"Nelder-Mead"}, \code{"BFGS"}, \code{"CG"},
 \code{"L-BFGS-B"}, \code{"nlminb"}, \code{"Rcgmin"}, \code{"Rvmmin"} and
-\code{"hjn"}. The default method is \code{"Nelder-Mead"}. The method
+\code{"hjn"}. The default method is \code{"BFGS"}. The method
 \code{"L-BFGS-B"} is used when lower and/or upper constraints are set
 using \code{'init.lo'} and \code{'init.hi'}. The method \code{"nlm"}
 cannot be used in the \code{'aldvmm'} package.}
@@ -71,9 +71,9 @@ cannot be used in the \code{'aldvmm'} package.}
   \code{'par'}.} \item{\code{z}}{a numeric vector of z-values of parameters
   in \code{'par'}.} \item{\code{p}}{a numeric vector of p-values of
   parameter estimates.} \item{\code{upper}}{a numeric vector of upper 95\%
-  confindence limits of paramter estimates in \code{'par'}.}
+  confidence limits of parameter estimates in \code{'par'}.}
   \item{\code{lower}}{a numeric vector of lower 95\% confindence limits of
-  paramter estimates in \code{'par'}.}
+  parameter estimates in \code{'par'}.}
 }
 \description{
 \ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{\code{aldvmm.cv()}} performs

@@ -1,11 +1,15 @@
 #' Summarizing Adjusted Limited Dependent Variable Mixture Model Fits
 #'
-#' The generic function
+#' The method \code{summary.aldvmm} for the generic function
 #' \ifelse{html}{\code{\link[base]{summary}}}{\code{base::summary()}} creates 
-#' an object of class "summary.aldvmm" including key results from an 
-#' \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm::aldvmm()}} model
-#' fit.
+#' an object of class "summary.aldvmm" including key results from an object of 
+#' class "aldvmm".
 #' 
+#' @param object an object inheriting from class 'aldvmm'.
+#' @param digits an integer value of the number of digits in the output table.
+#' @param level a numeric value of the confidence interval between 0 and 1.
+#' @param ... further arguments passed to or from other methods.
+#'
 #' @return \code{summary.aldvmm} returns an object of class "summary.aldvmm" 
 #' including the following elements. 
 #'   \item{\code{call}}{a character value including the model call captured by
@@ -21,12 +25,6 @@
 #'   \item{\code{coef}}{a
 #'   numeric vector of parameter estimates.}
 #'   \item{\code{cov}}{a numeric matrix object with covariances of parameters.}
-#'   \item{\code{se}}{a numeric vector of standard errors of parameter estimates.}
-#'   \item{\code{z}}{a numeric vector of standardized parameter estimates.}
-#'   \item{\code{lower}}{a numeric
-#'   vector of 95\% lower confidence limits of parameter estimates.}
-#'   \item{\code{upper}}{a numeric vector of 95\% upper confidence limits of
-#'   parameter estimates.}
 #'   \item{\code{n}}{a scalar representing the number of complete observations
 #'   with no missing values that were used in the estimation.}
 #'   \item{\code{df.residual}}{an integer value of the residual 
@@ -41,6 +39,7 @@
 #'   criterion \eqn{AIC = 2n_{par} - 2ll}{AIC = 2*npar - 2*ll}.}
 #'   \item{\code{bic}}{a numeric value of the Bayesian information criterion
 #'   \eqn{BIC = n_{par}*log(n_{obs}) - 2ll}{BIC = npar*log(nobs) - 2*ll}.}
+#'   \item{\code{k}}{a numeric value of the number of components.}
 #'   \item{\code{lcoef}}{a character vector of labels for objects including
 #'   results on distributions (default \code{"beta"}) and the probabilities of
 #'   component membership (default \code{"delta"}).} 
@@ -54,11 +53,6 @@
 #'   of distributions (\code{"beta"}) and the multinomial logit
 #'   (\code{"delta"}).}
 #'   
-#' @param object an object inheriting from class 'aldvmm'.
-#' @param digits an integer value of the number of digits in the output table.
-#' @param level a numeric value of the confidence interval between 0 and 1.
-#' @param ... further arguments passed to or from other methods.
-#'
 #' @method summary aldvmm
 #' @rdname summary
 #'

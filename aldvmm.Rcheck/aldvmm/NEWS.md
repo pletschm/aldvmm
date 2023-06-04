@@ -11,5 +11,20 @@
 # aldvmm 0.8.5
 
 * Update of validate_aldvmm(): Checking for class type of model formula using base::inherits() instead of if(class(obj) == "formula").
-* Update of vignette: Use element_line(linewidth = 0.25) instead of element_line(size = 0.25) as size is deprecated as of ggplot2 3.4.0.
 * Update of vignette: Include figures as .eps files to avoid loading ggplot objects from previous versions of ggplot2
+
+# aldvmm 0.8.6
+* Default optimzation method was changed to "BFGS".
+* New methods for generic functions print(), summary(), stats::predict(), stats::coef(), stats::nobs(), stats::vcov(), stats::model.matrix() and sandwich::estfun() are available. Objects of class "aldvmm" can now be supplied to sandwich::sandwich(), sandwich::vcovCL(), lmtest::coeftest(), lmtest::coefci() and other functions.
+* New workflow using the function Formula::formula() to handle models with two right-hand sides.
+* Objects of class "aldvmm" include new elements:
+  * n: The number of complete observations.
+  * df.null: Degrees of freedom of null model.
+  * df.residual: Degrees of freedom of fitted model.
+  * iter: The number of iterations during optimization.
+  * convergence: An indicator of successful completion of optimization.
+  * call: A character value of the model call.
+  * terms: A list of terms objects for the models.
+  * data: A data frame of the estimation data.
+  * contrasts: A nested list of character values of contrasts.
+  * na.action: An object indicating the na.action used in stats::model.frame()
