@@ -1,3 +1,15 @@
+# Set up github actions
+#----------------------
+
+# See https://github.com/r-lib/actions/blob/v2/examples/README.md to pick the 
+# latest .yaml file.
+
+# run usethis::use_github_action("check-standard") in the main branch.
+
+# Add line "- uses: r-lib/actions/setup-tinytex@v2" to the .yaml file.
+
+# Commit and push to the main branch.
+
 # Change version
 #---------------
 
