@@ -50,4 +50,4 @@ jobs:
         with:
           upload-snapshots: true
           error-on: '"error"'
-          r_build_args: '--compact-vignettes="gs+qpdf"'
+          build_args: '--compact-vignettes="gs+qpdf"'
