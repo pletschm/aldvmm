@@ -15,6 +15,7 @@ test_that('Check creation of model matrices', {
                      failure_message = 
                        'aldvmm.mm output is not list.'
     )
+    
     testthat::expect(sum(unlist(lapply(mm, 
                                        function(x) 
                                          is.matrix(x)))) == min(2, ncmp),
@@ -71,8 +72,10 @@ test_that('Check creation of model matrices', {
   # Model with two parts on the right-hand side
   #--------------------------------------------
   
-  mm <- aldvmm.mm(data = testdat,
-                  formula = dep ~ ind1 + ind2 | ind2 + ind3 + ind2:ind3,
+  f <- dep ~ ind1 + ind2 | ind2 + ind3 + ind2:ind3
+  
+  mm <- aldvmm.mm(mf = stats::model.frame(Formula::Formula(f), data = testdat),
+                  Formula = Formula::Formula(f),
                   ncmp = ncmp,
                   lcoef = c('beta', 'delta'))
   
@@ -82,14 +85,29 @@ test_that('Check creation of model matrices', {
   # Model with one part on the right-hand side
   #-------------------------------------------
   
-  mm <- aldvmm.mm(data = testdat,
-                  formula = dep ~ ind1 + ind2,
+  f <- dep ~ ind1 + ind2
+  
+  mm <- aldvmm.mm(mf = stats::model.frame(Formula::Formula(f), data = testdat),
+                  Formula = Formula::Formula(f),
                   ncmp = ncmp,
                   lcoef = c('beta', 'delta'))
   
   test_mm(mm = mm,
           ncmp = ncmp)
   
-  rm(testdat, ncmp, mm)
+  # Single-component model with one part on the right-hand side
+  #------------------------------------------------------------
+  
+  f <- dep ~ ind1 + ind2
+  
+  mm <- aldvmm.mm(mf = stats::model.frame(Formula::Formula(f), data = testdat),
+                  Formula = Formula::Formula(f),
+                  ncmp = 1,
+                  lcoef = c('beta', 'delta'))
+  
+  test_mm(mm = mm,
+          ncmp = 1)
+  
+  rm(testdat, ncmp, mm, f)
   
 })

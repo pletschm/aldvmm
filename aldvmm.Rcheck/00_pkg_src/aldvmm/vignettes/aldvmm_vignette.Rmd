@@ -165,7 +165,8 @@ for (i in init.method) {
                      psi = c(0.883, -0.594),
                      ncmp = 2,
                      init.method = i,
-                     optim.method = j)
+                     optim.method = j,
+                     model = FALSE)
       
     }, error = function(e) {
       return(list())
@@ -330,6 +331,7 @@ save(fit2_stata,
 rm(fit2_stata, init)
 
 rm(formula)
+rm(df)
 
 ```
 
@@ -341,6 +343,7 @@ rm(formula)
 #----------
 
 load("df.RData")
+load("textout.RData")
 
 # Histogram of observed outcomes
 #-------------------------------
@@ -890,6 +893,7 @@ rm(sumhat)
 # file.remove(dir(path = ".",  pattern="fi1_"))
 # file.remove(dir(path = ".",  pattern="fi2_"))
 rm(df)
+rm(rep_tab_fit)
 
 ```
 
@@ -949,7 +953,7 @@ Health-related quality of life is a key outcome in health technology assessments
 
 Adjusted limited dependent variable mixture models are finite mixtures of normal distributions that account for limits, gaps between 1 and the next smaller utility value and multi-modality [@HernandezAlava2012; @HernandezAlava2013; @HernandezAlava2014; @HernandezAlava2015; @Mukuria2019]. These features can improve empirical fit, parameter identification and predictive accuracy compared to standard regression models. Thus, adjusted limited dependent variable mixture models are particularly useful for mapping studies [@Gray2018a; @Gray2018; @Dixon2020; @Yang2019; @Xu2020; @Fuller2017; @Pennington2020].
 
-The R 'aldvmm' package is an implementation of the adjusted limited dependent variable model mixture model proposed by @HernandezAlava2015 using normal component distributions and a multinomial logit model of probabilities of component membership.
+The R 'aldvmm' package is an implementation of the adjusted limited dependent variable mixture model proposed by @HernandezAlava2015 using normal component distributions and a multinomial logit model of probabilities of component membership.
 
 The objectives of this vignette are to demonstrate the usage of the 'aldvmm' package, show important challenges of fitting adjusted limited dependent variable mixture models and validate the R implementation against the STATA\textsuperscript{\textregistered} package [@HernandezAlava2015] using publicly available data.
 
@@ -981,7 +985,7 @@ In this vignette, we estimate the same models of post-operative EQ-5D-3L utiliti
 \end{array}
 \end{equation}
 
-The aldvmm() function fits an adjusted limited dependent variable mixture model using the likelihood function from @HernandezAlava2015. The function calls optimr::optimr to minimize the negative log-likelihood using numerical gradients from numDeriv::grad(). The aldvmm() function accepts all optimization methods available in optimr::optimr() except for "nlm", which requires a different implementation of the likelihood function.
+The aldvmm() function fits an adjusted limited dependent variable mixture model using the likelihood function from @HernandezAlava2015. The function calls optimr::optimr to minimize the negative log-likelihood using numerical gradients from numDeriv::grad(). The aldvmm() function accepts all optimization methods available in optimr::optimr() except for "nlm", which requires a different implementation of the likelihood function. The default optimization method is "BFGS".
 
 The model formula in aldvmm() is an object of class "formula" with two parts on the right-hand side of $\sim$. The first part on the left of the | delimiter represents the model of expected values of $K$ normal distributions. The second part on the right of the | delimiter represents the model of probabilities of component membership from a multinomial logit model.
 
@@ -1007,7 +1011,7 @@ SE^{pred}_{i} &= \sqrt{MSE + G_{i}'\Sigma G_{i}}
 \end{array}
 \end{equation}
 
-The aldvmm() function returns an object of S3 class "aldvmm" for which methods for generic functions summary() and predict() are available.
+The aldvmm() function returns an object of S3 class "aldvmm" for which methods for generic functions print(), summary(), stats::predict(), stats::coef(), stats::nobs(), stats::vcov(), stats::model.matrix() and sandwich::estfun() are available.
 
 # Installation
 
@@ -1058,7 +1062,7 @@ load("textout.RData")
 
 The data includes `r format(textout$ncplt, big.mark="'")` observations with complete information on patients' post-operative utilities, Oxford Hip Scores, age and sex. Like @HernandezAlava2015, we draw a 30% sub-sample of `r format(textout$nspl, big.mark="'")` observations from the population of complete observations of these variables. Although we follow a similar approach in data preparation preparation as  @HernandezAlava2015, our random sample is not identical to the data used in their study. Post-operative EQ-5D-3L utilities from English value sets [@Dolan1997] show a bimodal distribution, limits at -0.594 and 1 and a gap between 1 and 0.883 (figure \@ref(fig:plot-hist-obs)).
 
-![(#fig:plot-hist-obs) Frequency distribtution of observed EQ-5D-3L utilities](./plot_hist_obs.eps)
+![(#fig:plot-hist-obs) Frequency distribution of observed EQ-5D-3L utilities](./plot_hist_obs.eps)
 
 # Results
 
@@ -1066,7 +1070,7 @@ The data includes `r format(textout$ncplt, big.mark="'")` observations with comp
 
 ### BFGS optimization method with zero-only starting values {#sec:base}
 
-We first fit model 1 with the "BFGS" optimization method and "zero" initial values. The values 0.883 and -0.594 in the argument 'psi' represent the maximum and minimum values smaller than 1 in the English value set [@Dolan1997]. As the data showed a bi-modal distribution (figure \@ref(fig:plot-hist-obs)), we estimate a mixture of 2 normal distributions ('ncmp' = 2). aldvmm() returns an object of class "aldvmm".
+We first fit model 1 with the default "BFGS" optimization method and "zero" initial values. The values 0.883 and -0.594 in the argument 'psi' represent the maximum and minimum values smaller than 1 in the English value set [@Dolan1997]. As the data showed a bi-modal distribution (figure \@ref(fig:plot-hist-obs)), we estimate a mixture of 2 normal distributions ('ncmp' = 2). aldvmm() returns an object of class "aldvmm".
 
 ```{r model1-fit, echo = TRUE, eval = FALSE}
 library("aldvmm")
@@ -1119,14 +1123,14 @@ textout[["mod1bfgs"]][["intp1"]] <- format(
 
 We obtain a summary table of regression results using the generic function summary(). The model converges at a log-likelihood of `r textout[["mod1bfgs"]][["ll"]]` and an Akaike information criterion value of `r textout[["mod1bfgs"]][["aic"]]` (table \@ref(tab:tab-sum-mod1bfgs)).
 
-The coefficients of the intercept and covariates for the expected values $E[y|c, X]$ of the normal distributions can be interpreted as marginal effects on component means. 'lnsigma' denotes the natural logarithm of the estimated standard deviation $\sigma^{c}$. The coefficients of covariates in the multinomial logit model of probabilities of component membership are log-transformed relative probabilities. Our model only includes two components, and the multinomial logit model collapses to a binomial logit model. The intercept of `r textout[["mod1bfgs"]][["intp1"]]` means that the average probability of an observation in the data to belong to component 1 is $\text{exp}(`r textout[["mod1bfgs"]][["intp1"]]`)$ or `r exp(as.numeric(textout[["mod1bfgs"]][["intp1"]]))` times the probability to belong to component 2.
+The coefficients of the intercepts and covariates for the expected values $E[y|c, X]$ of the normal distributions can be interpreted as marginal effects on component means. 'lnsigma' denotes the natural logarithm of the estimated standard deviation $\sigma^{c}$. The coefficients of covariates in the multinomial logit model of probabilities of component membership are log-transformed relative probabilities. Our model only includes two components, and the multinomial logit model collapses to a binomial logit model. The intercept of `r textout[["mod1bfgs"]][["intp1"]]` means that the average probability of an observation in the data to belong to component 1 is $\text{exp}(`r textout[["mod1bfgs"]][["intp1"]]`)$ or `r exp(as.numeric(textout[["mod1bfgs"]][["intp1"]]))` times the probability to belong to component 2.
 
 ```{r tab-sum-mod1, echo = FALSE, results = "asis"}
 
 print(xtable::xtable(tab_sum_mod1bfgs$table, 
                      align = "lllrrrrrr",
                      label = "tab:tab-sum-mod1bfgs",
-                     caption = 'Regression results from model1 with "BFGS" optimization method and "zero" starting values'),
+                     caption = 'Regression results from model 1 with "BFGS" optimization method and "zero" starting values'),
       type = "latex",
       include.rownames = FALSE,
       hline.after = tab_sum_mod1bfgs$lindex,
@@ -1141,7 +1145,9 @@ We obtain expected values of observations in the estimation data using the gener
 
 ![Expected values from base case model](./plot_hist_pred.eps)
 
-Expected values of observations in the estimation data can also be used to calculate average incremental effects or average treatment effects on the treated. Average treatment effects on the treated compare predictions for treated individuals to predictions for the same individuals without the effect of the treatment indicator. Standard errors of average treatment effects on the treated can be calculated using the delta meethod (see example code in the appendix).
+Expected values of observations in the estimation data can also be used to calculate average incremental effects or average treatment effects on the treated. Average treatment effects on the treated compare predictions for treated individuals to predictions for the same individuals without the effect of the treatment indicator. Standard errors of average treatment effects on the treated can be calculated using the delta method (see example code in the appendix).
+
+We can use the 'sandwich' package [@Zeileis2006] to calculate robust or clustered standard errors from objects of class "aldvmm" (see example code in the appendix). However, the computation of robust standard errors is very slow, because the gradients of the log-likelihood with respect to parameter values are approximated numerically for each observation in the data using the function numDeriv::grad().
 
 ### Comparison of optimization methods
 
@@ -1174,7 +1180,7 @@ for (i in init.method) {
 
 The maximum likelihood varies considerably across optimization methods and initial values which confirms the sensitivity of the model to changes in these settings (table \@ref(tab:ll)). The most frequent log-likelihood is `r format( names( which.max(table(round(tab_comp_ll, 2)) ) ), big.mark = "'")`, but the Hooke and Jeeves Pattern Search Optimization ("hjn") with "zero" initial values converges at a log-likelihood `r format(max(round(tab_comp_ll, 2)), big.mark = "'")`.
 
-The optimization methods "Nelder-Mead", "CG", "L-BFGS-B", and "Rvmmin" are particularly sensitive to starting values. The method "BFGS" coverges at a log-likelihood of `r format( names( which.max(table(round(tab_comp_ll[, "BFGS"], 2)) ) ), big.mark = "'")` with three of four sets of initial values, and the method "hjn" with two of four sets of initial values. The methods "nlminb" and "Rcgmin" converge at a log-likelihood of `r format( names( which.max(table(round(tab_comp_ll[, "nlminb"], 2)) ) ), big.mark = "'")` regardless of initial values.
+The optimization methods "Nelder-Mead", "CG", "L-BFGS-B", and "Rvmmin" are particularly sensitive to changes of starting values. The method "BFGS" converges at a log-likelihood of `r format( names( which.max(table(round(tab_comp_ll[, "BFGS"], 2)) ) ), big.mark = "'")` with three of four sets of initial values, and the method "hjn" with two of four sets of initial values. The methods "nlminb" and "Rcgmin" converge at a log-likelihood of `r format( names( which.max(table(round(tab_comp_ll[, "nlminb"], 2)) ) ), big.mark = "'")` regardless of initial values.
 
 ```{r tab-comp-ll, echo = FALSE, results = 'asis'}
 
@@ -1231,7 +1237,7 @@ load("tab_sum_mod1.RData")
 print(xtable::xtable(tab_comp_coef, 
                      align = "lllrrr",
                      label = "tab:tab-comp-coef",
-                     caption = 'Regression results of model1 with zero starting 
+                     caption = 'Regression results of model 1 with zero starting 
                      values in "Nelder-Mead", "nlminb" and "hjn" algorithms'),
       type = "latex",
       include.rownames = FALSE,
@@ -1300,7 +1306,7 @@ textout[["cstr"]][["ll"]] <- format(
 
 ```
 
-We can also fit model 1 with user-defined starting values and box constraints. When constraints are imposed, the aldvmm() function uses the optimization method "L-BFGS-B", which shows very sensitive to starting values. We use zero initial values for all parameters except for the intercept in the multinomial logit which we set to the estimate from the "nlminb" optimization method with "zero" sarting values (0.7283) (table \@ref(tab:tab-comp-coef)). We impose a lower limit of -3 to the log-standard deviations in both components. The aldvmm() function returns a warning that the covariance matrix included negative values on the diagonal. We see that these values are the variances of the intercept and the log-standard deviation in component 2 (table \@ref(tab:tab-sum-cstr)). The log-likelihood amounts to `r textout[["cstr"]][["ll"]]`, which is even lower than the log-likelihood in the solution of the "Nelder-Mead" optimization method with "zero" starting values. The parameter estimates do not resemble any of the solutions of the unconstrained "Nelder-Mead", "nlminb" or "hjn" optimization methods with "zero" values (table \@ref(tab:tab-comp-coef)), which further emphasizes the difficulties in finding a global optimum of the likelihood with English EQ-5D-3L utilities after hip replacement.
+We can also fit model 1 with user-defined starting values and box constraints. When constraints are imposed, the aldvmm() function uses the optimization method "L-BFGS-B", which shows very sensitive to starting values. We use zero initial values for all parameters except for the intercept in the multinomial logit which we set to the estimate from the "nlminb" optimization method with "zero" starting values (0.7283) (table \@ref(tab:tab-comp-coef)). We impose a lower limit of -3 to the log-standard deviations in both components. The aldvmm() function returns a warning that the covariance matrix included negative values on the diagonal. We see that these values are the variances of the intercept and the log-standard deviation in component 2 (table \@ref(tab:tab-sum-cstr)). The log-likelihood amounts to `r textout[["cstr"]][["ll"]]`, which is even lower than the log-likelihood in the solution of the "Nelder-Mead" optimization method with "zero" starting values. The parameter estimates do not resemble any of the solutions of the unconstrained "Nelder-Mead", "nlminb" or "hjn" optimization methods with "zero" values (table \@ref(tab:tab-comp-coef)), which further emphasizes the difficulties in finding a global optimum of the likelihood with English EQ-5D-3L utilities after hip replacement.
 
 ```{r tab-cstr-show, echo = TRUE, eval = FALSE}
 init <- c(0,    0,   0,   0,    0,    0,    0.7283)
@@ -1325,7 +1331,7 @@ load("tab_sum_cstr.RData")
 print(xtable::xtable(tab_sum_cstr$table, 
                      align = "lllrrrrrr",
                      label = "tab:tab-sum-cstr",
-                     caption = 'Regression results of model1 with the "L-BFGS-B" method, parameter constraints and user-defined starting values'),
+                     caption = 'Regression results of model 1 with the "L-BFGS-B" method, parameter constraints and user-defined starting values'),
       type = "latex",
       include.rownames = FALSE,
       hline.after = tab_sum_cstr$lindex,
@@ -1394,7 +1400,7 @@ The coefficients of the single-component model are relatively similar to the par
 print(xtable::xtable(tab_sum_tobit$table, 
                      align = "lllrrrrrr",
                      label = "tab:tab-sum-tobit",
-                     caption = 'Regression results of model1 with 1 component, 
+                     caption = 'Regression results of model 1 with 1 component, 
                      zero starting values in "nlminb" algorithm'),
       type = "latex",
       include.rownames = FALSE,
@@ -1752,6 +1758,36 @@ print(out)
 
 ```
 
+\newpage
+## Example calculation of clustered standard errors
+
+```{r sandwich-example, echo = TRUE, eval = FALSE, results = 'hide'}
+
+# Create cluster indicator
+#-------------------------
+
+df$grp <- as.factor(round(0.5 + runif(nrow(df)) * 5, 0))
+
+# Fit model
+#----------
+
+formula <- eq5d ~ hr | 1
+
+fit <- aldvmm(formula,
+              data = df,
+              psi = c(-0.594, 0.883))
+
+# Calculate clustered standard errors
+#------------------------------------
+
+vc <- sandwich::vcovCL(fit, cluster = df$grp)
+
+# Calculate test statistics
+#--------------------------
+
+lmtest::coeftest(fit, vcov = vc)
+
+```
 
 ## Covariance matrices across optimization methods
 
@@ -1790,7 +1826,7 @@ yhat <- fit1_all[["zero"]][["Nelder-Mead"]][["pred"]][["yhat"]]
 res <- fit1_all[["zero"]][["Nelder-Mead"]][["pred"]][["res"]]
 
 # Make groups
-group <- as.numeric(cut(yhat, breaks = ngroup), na.rm=TRUE)
+group <- as.numeric(cut(yhat, breaks = ngroup), na.rm = TRUE)
 
 # Auxiliary regression
 aux <- stats::lm(res ~ factor(group))

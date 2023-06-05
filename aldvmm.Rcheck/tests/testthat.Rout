@@ -1,6 +1,6 @@
 
-R version 4.2.1 (2022-06-23 ucrt) -- "Funny-Looking Kid"
-Copyright (C) 2022 The R Foundation for Statistical Computing
+R version 4.3.0 (2023-04-21 ucrt) -- "Already Tomorrow"
+Copyright (C) 2023 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -19,8 +19,8 @@ Type 'q()' to quit R.
 > library(aldvmm)
 > 
 > test_check("aldvmm")
-[ FAIL 0 | WARN 0 | SKIP 0 | PASS 322 ]
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 337 ]
 > 
 > proc.time()
    user  system elapsed 
-  46.28    0.95   49.71 
+  76.78    1.56   79.68 

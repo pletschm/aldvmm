@@ -18,7 +18,9 @@ aldvmm(
   init.lo = NULL,
   init.hi = NULL,
   se.fit = FALSE,
-  level = 0.95
+  model = TRUE,
+  level = 0.95,
+  na.action = "na.omit"
 )
 }
 \arguments{
@@ -29,8 +31,7 @@ model for expected values of normal distributions (left) and the
 multinomial logit model of probabilities of component membership (right).}
 
 \item{data}{a data frame, list or environment (or object coercible to a data
-frame by \cr \ifelse{html}{\code{\link[base]{as.data.frame}}}{
-\code{base::as.data.frame()}}) including data on outcomes and explanatory
+frame by \ifelse{html}{\code{\link[base]{as.data.frame}}}{\code{base::as.data.frame()}}) including data on outcomes and explanatory
 variables in \code{'formula'}.}
 
 \item{psi}{a numeric vector of minimum and maximum possible utility values
@@ -51,7 +52,7 @@ available, and the default value is set to \code{"normal"}.}
 \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
 methods: \code{"Nelder-Mead"}, \code{"BFGS"}, \code{"CG"},
 \code{"L-BFGS-B"}, \code{"nlminb"}, \code{"Rcgmin"}, \code{"Rvmmin"} and
-\code{"hjn"}. The default method is \code{"Nelder-Mead"}. The method
+\code{"hjn"}. The default method is \code{"BFGS"}. The method
 \code{"L-BFGS-B"} is used when lower and/or upper constraints are set
 using \code{'init.lo'} and \code{'init.hi'}. The method \code{"nlm"}
 cannot be used in the \code{'aldvmm'} package.}
@@ -92,33 +93,44 @@ have to follow the same order as parameter estimates in the return value
 \item{se.fit}{an optional logical value indicating whether standard errors
 of fitted values are calculated. The default value is \code{FALSE}.}
 
+\item{model}{an optional logical value indicating whether the estimation 
+data frame is returned in the output object. The default value is \code{TRUE}.}
+
 \item{level}{a numeric value of the significance level for confidence bands
 of fitted values. The default value is 0.95.}
+
+\item{na.action}{a character value indicating the argument passed to 
+argument \code{'na.action'} of the function 
+\ifelse{html}{\code{\link[stats]{model.frame}}}{\code{stats::model.frame()}} 
+in the preparation of the model matrix. The default value is 
+\code{"na.omit"}.}
 }
 \value{
 \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{ \code{aldvmm()}}
   returns an object of class inheriting from "aldvmm". An object of class
   "aldvmm" is a list containing the following objects. \item{\code{coef}}{a
-  numeric vector of parameter estimates.} \item{\code{se}}{a numeric vector
-  of standard errors of parameter estimates.} \item{\code{z}}{a numeric
-  vector of standardized parameter estimates.} \item{\code{p}}{a numeric
-  vector of p-values of parameter estimates.} \item{\code{lower}}{a numeric
-  vector of 95\% lower confidence limits of parameter estimates.}
-  \item{\code{upper}}{a numeric vector of 95\% upper confidence limits of
-  parameter estimates.} \item{\code{hessian}}{a numeric matrix object with
+  numeric vector of parameter estimates.} \item{\code{hessian}}{a numeric matrix object with
   second partial derivatives of the likelihood function.}
 
   \item{\code{cov}}{a numeric matrix object with covariances of parameters.}
 
   \item{\code{n}}{a scalar representing the number of complete observations
   with no missing values that were used in the estimation.}
-
   \item{\code{k}}{a scalar representing the number of components that were
   mixed.}
-
+  \item{\code{df.null}}{an integer value of the residual 
+  degrees of freedom of a null model including intercepts and standard errors.}
+  \item{\code{df.residual}}{an integer value of the residual 
+  degrees of freedom..}
+  \item{\code{iter}}{an integer value of the number of iterations used in 
+  optimization.}
+  \item{\code{convergence}}{an integer value indicating convergence. "0" 
+  indicates successful completion.}
+  
   \item{\code{gof}}{a list including the following elements. \describe{
   \item{\code{ll}}{a numeric value of the negative log-likelihood
-  \eqn{-ll}.} \item{\code{aic}}{a numeric value of the Akaike information
+  \eqn{-ll}.} 
+  \item{\code{aic}}{a numeric value of the Akaike information
   criterion \eqn{AIC = 2n_{par} - 2ll}{AIC = 2*npar - 2*ll}.}
   \item{\code{bic}}{a numeric value of the Bayesian information criterion
   \eqn{BIC = n_{par}*log(n_{obs}) - 2ll}{BIC = npar*log(nobs) - 2*ll}.}
@@ -143,10 +155,20 @@ of fitted values. The default value is 0.95.}
   \item{\code{hi}}{a numeric vector of upper limits of parameter
   estimates.}} }
 
+  \item{\code{call}}{a character value including the model call captured by
+  \ifelse{html}{\code{\link[base]{match.call}}}{\code{base::match.call}}.}
   \item{\code{formula}}{an object of class
   \ifelse{html}{\code{\link[stats]{formula}}}{\code{stats::formula}}
   supplied to argument \code{'formula'}.}
+  \item{\code{terms}}{a list of objects of class
+  \ifelse{html}{\code{\link[stats]{terms}}}{\code{stats::terms}} for the model of component means ("beta"), probabilities of component membership ("delta") and the full model ("full").}
+  \item{\code{contrasts}}{a nested list of character values showing 
+  contrasts of factors used in models of component means ("beta") and 
+  probabilities of component membership ("delta").}
 
+  \item{\code{data}}{a data frame created by 
+  \ifelse{html}{\code{\link[stats]{model.frame}}}{\code{stats::model.frame}} 
+  including estimation data with additional attributes.}
   \item{\code{psi}}{a numeric vector with the minimum and maximum utility
   below 1 in \code{'data'}.}
 
@@ -167,6 +189,12 @@ of fitted values. The default value is 0.95.}
   \item{\code{optim.method}}{a character value of the used
   \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
   method.}
+  \item{\code{level}}{a numeric value of the confidence level used for 
+  reporting.}
+  \item{\code{na.action}}{an object of class "omit" extracted from the 
+  "na.action" attribute of the data frame created by 
+  \ifelse{html}{\code{\link[stats]{model.frame}}}{\code{stats::model.frame}} 
+  in the preparation of model matrices.}
 
   The generic function
   \ifelse{html}{\code{\link[base]{summary}}}{\code{base::summary()}} can be
@@ -220,7 +248,7 @@ The function \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{
   \code{'optim.method'} accepts the following methods: \code{"Nelder-Mead"},
   \code{"BFGS"}, \code{"CG"}, \code{"L-BFGS-B"}, \code{"nlminb"},
   \code{"Rcgmin"}, \code{"Rvmmin"} and \code{"hjn"}. The default method is
-  \code{"Nelder-Mead"}.  The method \code{"nlm"} cannot be used in
+  \code{"BFGS"}.  The method \code{"nlm"} cannot be used in
   \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{ \code{aldvmm()}} because it
   requires a different implementation of the likelihood function. The
   argument \code{'optim.control'} accepts a list of
@@ -244,7 +272,7 @@ The function \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{
   method \code{"random"} draws random starting values from a standard normal
   distribution.  The method \code{"constant"} estimates a constant-only
   model and uses estimates as initial values of intercepts and standard
-  errors and 0 for all other prameters.  The method \code{"sann"} estimates
+  errors and 0 for all other parameters.  The method \code{"sann"} estimates
   the full model using the simulated annealing optimization method in
   \ifelse{html}{\code{\link[stats]{optim}}}{ \code{stats::optim()}} and uses
   parameter estimates as initial values.  When user-specified initial values

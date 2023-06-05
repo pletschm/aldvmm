@@ -9,7 +9,6 @@ aldvmm.sefit(
   yhat,
   X,
   type,
-  formula,
   psi,
   cv,
   mse = NA,
@@ -36,12 +35,6 @@ of group membership.}
 \item{type}{a character value of either 'fit' or 'pred' indicating whether
 the standard error of the fit ('fit') or the standard error of predictions
 in new data ('pred') are calculated.}
-
-\item{formula}{an object of class \code{"formula"} with a symbolic
-description of the model to be fitted. The model formula takes the form
-\code{y ~ x1 + x2 | x1 + x4}, where the \code{|} delimiter separates the
-model for expected values of normal distributions (left) and the
-multinomial logit model of probabilities of component membership (right).}
 
 \item{psi}{a numeric vector of minimum and maximum possible utility values
 smaller than or equal to 1 (e.g. \code{c(-0.594, 0.883)}). The potential

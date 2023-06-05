@@ -11,18 +11,20 @@ aldvmm.check(
   psi,
   ncmp,
   dist,
-  lcoef,
-  lcpar,
-  lcmp,
-  init.method,
   optim.method,
+  optim.control,
   optim.grad,
+  init.method,
   init.est,
   init.lo,
   init.hi,
-  optim.control,
   se.fit,
-  level
+  model,
+  level,
+  na.action,
+  lcoef,
+  lcpar,
+  lcmp
 )
 }
 \arguments{
@@ -33,8 +35,7 @@ model for expected values of normal distributions (left) and the
 multinomial logit model of probabilities of component membership (right).}
 
 \item{data}{a data frame, list or environment (or object coercible to a data
-frame by \cr \ifelse{html}{\code{\link[base]{as.data.frame}}}{
-\code{base::as.data.frame()}}) including data on outcomes and explanatory
+frame by \ifelse{html}{\code{\link[base]{as.data.frame}}}{\code{base::as.data.frame()}}) including data on outcomes and explanatory
 variables in \code{'formula'}.}
 
 \item{psi}{a numeric vector of minimum and maximum possible utility values
@@ -51,35 +52,18 @@ between 1 and the maximum value in \code{'psi'}.}
 finite mixture. In this release, only the normal distribution is
 available, and the default value is set to \code{"normal"}.}
 
-\item{lcoef}{a character vector of length 2 with labels of objects including
-regression coefficients of component distributions (default \code{"beta"})
-and coefficients of probabilities of component membership (default
-\code{"delta"}).}
-
-\item{lcpar}{a character vector with the labels of objects including
-constant parameters of component distributions (e.g. the standard
-deviation of the normal distribution). The length of \code{'lcpar'}
-depends on the distribution supplied to \code{'dist'}.}
-
-\item{lcmp}{a character value representing a stub (default \code{"Comp"})
-for labeling objects including regression coefficients in different
-components (e.g. "Comp1", "Comp2", ...). This label is also used in
-summary tables returned by
-\ifelse{html}{\code{\link[aldvmm]{summary.aldvmm}}}{\code{summary.aldvmm()}}.}
-
-\item{init.method}{an optional character value indicating the method for
-obtaining initial values. The following values are available:
-\code{"zero"}, \code{"random"}, \code{"constant"} and \code{"sann"}. The
-default value is \code{"zero"}.}
-
 \item{optim.method}{an optional character value of one of the following
 \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
 methods: \code{"Nelder-Mead"}, \code{"BFGS"}, \code{"CG"},
 \code{"L-BFGS-B"}, \code{"nlminb"}, \code{"Rcgmin"}, \code{"Rvmmin"} and
-\code{"hjn"}. The default method is \code{"Nelder-Mead"}. The method
+\code{"hjn"}. The default method is \code{"BFGS"}. The method
 \code{"L-BFGS-B"} is used when lower and/or upper constraints are set
 using \code{'init.lo'} and \code{'init.hi'}. The method \code{"nlm"}
 cannot be used in the \code{'aldvmm'} package.}
+
+\item{optim.control}{an optional list of
+\ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
+control parameters.}
 
 \item{optim.grad}{an optional logical value indicating if a numerical
 gradient should be used in
@@ -87,6 +71,11 @@ gradient should be used in
 methods that can use this information. The default value is \code{TRUE}.
 If \code{'optim.grad'} is set to \code{FALSE}, a finite difference
 approximation is used.}
+
+\item{init.method}{an optional character value indicating the method for
+obtaining initial values. The following values are available:
+\code{"zero"}, \code{"random"}, \code{"constant"} and \code{"sann"}. The
+default value is \code{"zero"}.}
 
 \item{init.est}{an optional numeric vector of user-defined initial values.
 User-defined initial values override the \code{'init.method'} argument.
@@ -105,15 +94,36 @@ optimization method \code{"L-BFGS-B"} is used. Upper limits of parameters
 have to follow the same order as parameter estimates in the return value
 \code{'par'}.}
 
-\item{optim.control}{an optional list of
-\ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
-control parameters.}
-
 \item{se.fit}{an optional logical value indicating whether standard errors
 of fitted values are calculated. The default value is \code{FALSE}.}
 
+\item{model}{an optional logical value indicating whether the estimation 
+data frame is returned in the output object. The default value is \code{TRUE}.}
+
 \item{level}{a numeric value of the significance level for confidence bands
 of fitted values. The default value is 0.95.}
+
+\item{na.action}{a character value indicating the argument passed to 
+argument \code{'na.action'} of the function 
+\ifelse{html}{\code{\link[stats]{model.frame}}}{\code{stats::model.frame()}} 
+in the preparation of the model matrix. The default value is 
+\code{"na.omit"}.}
+
+\item{lcoef}{a character vector of length 2 with labels of objects including
+regression coefficients of component distributions (default \code{"beta"})
+and coefficients of probabilities of component membership (default
+\code{"delta"}).}
+
+\item{lcpar}{a character vector with the labels of objects including
+constant parameters of component distributions (e.g. the standard
+deviation of the normal distribution). The length of \code{'lcpar'}
+depends on the distribution supplied to \code{'dist'}.}
+
+\item{lcmp}{a character value representing a stub (default \code{"Comp"})
+for labeling objects including regression coefficients in different
+components (e.g. "Comp1", "Comp2", ...). This label is also used in
+summary tables returned by
+\ifelse{html}{\code{\link[aldvmm]{summary.aldvmm}}}{\code{summary.aldvmm()}}.}
 }
 \value{
 \code{aldvmm.check} returns warnings or stops the execution of
