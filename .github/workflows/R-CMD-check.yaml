@@ -22,11 +22,11 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          #- {os: windows-latest, r: 'release'}
-          #- {os: macOS-latest, r: 'release'}
-          #- {os: ubuntu-22.04, r: 'release', rspm: "https://packagemanager.rstudio.com/cran/__linux__/jammy/latest"}
-          #- {os: ubuntu-20.04, r: 'devel', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
-          - {os: ubuntu-22.04, r: 'devel', rspm: "https://packagemanager.rstudio.com/cran/__linux__/jammy/latest"}
+          - {os: windows-latest, r: 'release'}
+          - {os: macOS-latest, r: 'release'}
+          - {os: ubuntu-22.04, r: 'release', rspm: "https://packagemanager.rstudio.com/cran/__linux__/jammy/latest"}
+          - {os: ubuntu-20.04, r: 'devel', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
+          #- {os: ubuntu-22.04, r: 'devel', rspm: "https://packagemanager.rstudio.com/cran/__linux__/jammy/latest"}
          
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
@@ -59,6 +59,13 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
           restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
 
+      - name: Install dependencies
+        run: |
+          remotes::install_deps(dependencies = TRUE)
+          remotes::install_cran("curl")
+          remotes::install_cran("rcmdcheck")
+        shell: Rscript {0}
+
       - name: Install system dependencies
         if: runner.os == 'Linux'
         run: |
@@ -66,13 +73,6 @@ jobs:
           do
             eval sudo $cmd
           done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "22.04"))')
-
-      - name: Install dependencies
-        run: |
-          remotes::install_deps(dependencies = TRUE)
-          remotes::install_cran("curl")
-          remotes::install_cran("rcmdcheck")
-        shell: Rscript {0}
 
       - name: Check
         env:
