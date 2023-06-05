@@ -46,8 +46,15 @@ jobs:
       
       - uses: r-lib/actions/setup-tinytex@v2
 
-      - uses: r-lib/actions/check-r-package@v2
-        with:
-          upload-snapshots: true
-          error-on: '"error"'
-          build_args: '--compact-vignettes=gs+qpdf'
+      #- uses: r-lib/actions/check-r-package@v2
+      #  with:
+      #    upload-snapshots: true
+      #    error-on: '"warning"'
+      
+      - name: Check
+        run: |
+          options(crayon.enabled = TRUE)
+          rcmdcheck::rcmdcheck(args = c("--as-cran", "--run-donttest"),
+                               build_args = c("--compact-vignettes=gs+qpdf"),
+                               error_on = "warning", check_dir = "check")
+        shell: Rscript {0}
