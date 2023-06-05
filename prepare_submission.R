@@ -1,3 +1,30 @@
+# Setup github actions in main branch
+#------------------------------------
+
+# Replace the check action from usethis::use_github_action("check-standard")
+
+#- uses: r-lib/actions/check-r-package@v2
+#  with:
+#    upload-snapshots: true
+#    error-on: '"error"'
+
+# with
+
+# - name: Check
+# env:
+#   _R_CHECK_CRAN_INCOMING_REMOTE_: false
+# run: |
+#   options(crayon.enabled = TRUE)
+# rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), build_args = c("--compact-vignettes=both"), error_on = "warning", check_dir = "check")
+# shell: Rscript {0}
+# 
+# - name: Upload check results
+# if: failure()
+# uses: actions/upload-artifact@main
+# with:
+#   name: ${{ runner.os }}-r${{ matrix.config.r }}-results
+# path: check
+
 # Change version
 #---------------
 

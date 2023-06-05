@@ -17,8 +17,9 @@ Maintainer: 'Mark Pletscher <pletscher.mark@gmail.com>'
 * rhub (debian-gcc-devel)
 * github windows-latest (release)
 * github macOS-latest (release)
-* github ubuntu-22.04 (release)
-* github ubuntu-22.04 (devel)
+* github ubuntu-latest (release)
+* github ubuntu-latest (devel)
+* github ubuntu-latest (oldrel-1)
 
 ## R CMD check results
 Status: OK
