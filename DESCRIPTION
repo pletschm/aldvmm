@@ -33,6 +33,7 @@ Suggests:
     xtable, 
     ggplot2, 
     scales, 
-    reshape2
+    reshape2,
+    rcmdcheck
 VignetteBuilder: knitr
 Config/testthat/edition: 3
