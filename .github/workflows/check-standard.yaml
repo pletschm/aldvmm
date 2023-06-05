@@ -50,4 +50,4 @@ jobs:
         with:
           upload-snapshots: true
           error-on: '"error"'
-          build_args: '--compact-vignettes="both"'
+          build_args: '--compact-vignettes=both'
