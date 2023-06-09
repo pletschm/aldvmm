@@ -23,19 +23,26 @@ aldvmm.sc <- function(par,
   # Elements of likelihood function
   #--------------------------------
   
+  # Multinomial logit
   if (ncmp > 1) {
-    A <- lapply(1:length(parlist[[lcoef[2]]]), function (x) {
-      exp(rowSums(sweep(X[[lcoef[2]]], 
-                        MARGIN = 2, 
-                        parlist[[lcoef[2]]][[x]], 
-                        `*`))) /
-        (1 + Reduce("+",
-               lapply(1:length(parlist[[lcoef[2]]]), function (z) {
-                 exp(rowSums(sweep(X[[lcoef[2]]], 
-                                   MARGIN = 2, 
-                                   parlist[[lcoef[2]]][[z]], 
-                                   `*`)))
-               })))
+    wd <- lapply(names(parlist[[lcoef[2]]]), function (x) {
+      rowSums(sweep(X[[lcoef[2]]], 
+                    MARGIN = 2, 
+                    parlist[[lcoef[2]]][[x]], 
+                    `*`))
+    })
+    names(wd) <- names(parlist[[lcoef[2]]])
+    
+    sumexp <- 1 + Reduce("+",
+                         lapply(names(parlist[[lcoef[2]]]), function (z) {
+                           exp(rowSums(sweep(X[[lcoef[2]]], 
+                                             MARGIN = 2, 
+                                             parlist[[lcoef[2]]][[z]], 
+                                             `*`)))
+                         }))
+    
+    A <- lapply(names(parlist[[lcoef[2]]]), function (x) {
+      exp(wd[[x]]) / sumexp
     })
     A[[ncmp]] <- 1 - Reduce("+", A)
   } else {
@@ -45,48 +52,48 @@ aldvmm.sc <- function(par,
                 dimnames = list(rownames(X[[lcoef[2]]]),
                                 paste0(lcmp, 1)))
   }
-  names(A)
+  names(A) <- names(parlist[[lcoef[1]]])
   
-  C <- lapply(1:length(parlist[[lcoef[1]]]), function (x) {
-    1 - stats::pnorm((psi1 - rowSums(sweep(X[[lcoef[1]]], 
-                                           MARGIN = 2, 
-                                           parlist[[lcoef[1]]][[x]], 
-                                           `*`))) / exp(parlist[[lcpar]][[x]]), 
+  # Component distributions
+  
+  xb <- lapply(parlist[[lcoef[1]]], function (x) {
+    rowSums(sweep(X[[lcoef[1]]], 
+                  MARGIN = 2, 
+                  x, 
+                  `*`))
+  })
+  names(xb) <- names(parlist[[lcoef[1]]])
+  
+  C <- lapply(names(parlist[[lcoef[1]]]), function (x) {
+    1 - stats::pnorm((psi1 - xb[[x]]) / exp(parlist[[lcpar]][[x]]), 
                      mean = 0, 
                      sd = 1)
   })
   names(C) <- names(parlist[[lcoef[1]]])
   
-  D <- lapply(1:length(parlist[[lcoef[1]]]), function (x) {
-    stats::pnorm((psi2 - rowSums(sweep(X[[lcoef[1]]], 
-                                       MARGIN = 2, 
-                                       parlist[[lcoef[1]]][[x]], 
-                                       `*`))) / exp(parlist[[lcpar]][[x]]), 
+  D <- lapply(names(parlist[[lcoef[1]]]), function (x) {
+    stats::pnorm((psi2 - xb[[x]]) / exp(parlist[[lcpar]][[x]]), 
                  mean = 0, 
                  sd = 1)
   })
   names(D) <- names(parlist[[lcoef[1]]])
   
-  E <- lapply(1:length(parlist[[lcoef[1]]]), function (x) {
-    stats::pnorm((y - rowSums(sweep(X[[lcoef[1]]], 
-                                    MARGIN = 2, 
-                                    parlist[[lcoef[1]]][[x]], 
-                                    `*`))) / exp(parlist[[lcpar]][[x]]), 
+  E <- lapply(names(parlist[[lcoef[1]]]), function (x) {
+    stats::dnorm((y - xb[[x]]) / exp(parlist[[lcpar]][[x]]), 
                  mean = 0, 
                  sd = 1) / exp(parlist[[lcpar]][[x]])
   })
   names(E) <- names(parlist[[lcoef[1]]])
   
-  B <- lapply(1:length(parlist[[lcoef[1]]]), function (x) {
+  B <- lapply(names(parlist[[lcoef[1]]]), function (x) {
     as.numeric(y >  psi1) * C[[x]] + 
       as.numeric(y <= psi2) * D[[x]] + 
       as.numeric(y <= psi1 & y > psi2) * E[[x]]
   })
-  
   names(B) <- names(parlist[[lcoef[1]]])
   
   L <- Reduce("+",
-              lapply(1:ncmp, function (x) {
+              lapply(names(A), function (x) {
                 A[[x]] * B[[x]]
               })
   )
@@ -94,57 +101,37 @@ aldvmm.sc <- function(par,
   # Derivative w.r.t. beta
   #-----------------------
   
-  dCdb <- lapply(1:length(parlist[[lcoef[1]]]), function (x) {
-    stats::pnorm((psi1 - sweep(X[[lcoef[1]]], 
-                               MARGIN = 2, 
-                               parlist[[lcoef[1]]][[x]], 
-                               `*`)) / exp(parlist[[lcpar]][[x]]), 
+  dCdb <- lapply(names(parlist[[lcoef[1]]]), function (x) {
+    stats::dnorm((psi1 - xb[[x]]) / exp(parlist[[lcpar]][[x]]), 
                  mean = 0, 
-                 sd   = 1) * 
-      (-X[[1]] * (psi1 - sweep(X[[lcoef[1]]], 
-                               MARGIN = 2, 
-                               parlist[[lcoef[1]]][[x]], 
-                               `*`))) / exp(parlist[[lcpar]][[x]])^2
+                 sd   = 1) * X[[lcoef[1]]] / exp(parlist[[lcpar]][[x]])
   })
   names(dCdb) <- names(parlist[[lcoef[1]]])
   
-  dDdb <- lapply(1:length(parlist[[lcoef[1]]]), function (x) {
-    stats::pnorm((psi2 - sweep(X[[lcoef[1]]], 
-                               MARGIN = 2, 
-                               parlist[[lcoef[1]]][[x]], 
-                               `*`)) / exp(parlist[[lcpar]][[x]])^2, 
+  dDdb <- lapply(names(parlist[[lcoef[1]]]), function (x) {
+    stats::dnorm((psi2 - xb[[x]]) / exp(parlist[[lcpar]][[x]]), 
                  mean = 0, 
-                 sd   = 1) * 
-      (X[[1]] * (psi2 - sweep(X[[lcoef[1]]], 
-                              MARGIN = 2, 
-                              parlist[[lcoef[1]]][[x]], 
-                              `*`))) / exp(parlist[[lcpar]][[x]])^2
+                 sd   = 1) * -X[[lcoef[1]]] / exp(parlist[[lcpar]][[x]])
   })
   names(dDdb) <- names(parlist[[lcoef[1]]])
   
-  dEdb <- lapply(1:length(parlist[[lcoef[1]]]), function (x) {
-    stats::pnorm((y - sweep(X[[lcoef[1]]], 
-                            MARGIN = 2, 
-                            parlist[[lcoef[1]]][[x]], 
-                            `*`)) / exp(parlist[[lcpar]][[x]]), 
+  dEdb <- lapply(names(parlist[[lcoef[1]]]), function (x) {
+    stats::dnorm((y - xb[[x]]) / exp(parlist[[lcpar]][[x]]), 
                  mean = 0, 
                  sd   = 1) * 
-      (X[[1]] * (y - sweep(X[[lcoef[1]]], 
-                           MARGIN = 2, 
-                           parlist[[lcoef[1]]][[x]], 
-                           `*`))) / exp(parlist[[lcpar]][[x]])^3
+      X[[1]] * (y - xb[[x]]) / exp(parlist[[lcpar]][[x]])^3
   })
   names(dEdb) <- names(parlist[[lcoef[1]]])
   
-  dBdb <- lapply(1:length(parlist[[lcoef[1]]]), function (x) {
+  dBdb <- lapply(names(parlist[[lcoef[1]]]), function (x) {
     as.numeric(y >  psi1) * dCdb[[x]] + 
       as.numeric(y <= psi2) * dDdb[[x]] + 
       as.numeric(y <= psi1 & y > psi2) * dEdb[[x]]
   })
   names(dBdb) <- names(parlist[[lcoef[1]]])
   
-  dLdb <- lapply(1:length(parlist[[lcoef[1]]]), function (x) {
-    sweep(dBdb[[x]], 
+  dLdb <- lapply(names(parlist[[lcoef[1]]]), function (x) {
+    sweep(matrix(dBdb[[x]], ncol = length(parlist[[lcoef[1]]][[x]])), 
           MARGIN = 1,
           A[[x]], 
           `*`)
@@ -157,6 +144,86 @@ aldvmm.sc <- function(par,
           L, 
           `/`)
   })
+  names(dlldb) <- names(parlist[[lcoef[1]]])
   
-  do.call("cbind", dlldb)
+  # Derivative w.r.t. delta
+  #------------------------
+  
+  dAdd <- lapply(names(parlist[[lcoef[2]]]), function (x) {
+    (exp(wd[[x]]) * X[[lcoef[2]]] * sumexp
+     - exp(wd[[x]])^2 * X[[lcoef[2]]]) /
+      sumexp^2
+  })
+  names(dAdd) <- names(parlist[[lcoef[2]]])
+  
+  dLdd <- lapply(names(parlist[[lcoef[2]]]), function (x) {
+    sweep(matrix(dAdd[[x]], ncol = length(parlist[[lcoef[2]]][[x]])),
+          MARGIN = 1,
+          B[[x]],
+          `*`)
+  })
+  names(dLdd) <- names(parlist[[lcoef[2]]])
+  
+  dlldd <- lapply(names(parlist[[lcoef[2]]]), function (x) {
+    sweep(dLdd[[x]],
+          MARGIN = 1,
+          L,
+          `/`)
+  })
+  names(dlldd) <- names(parlist[[lcoef[2]]])
+  
+  # Derivative w.r.t. sigma
+  #------------------------
+  
+  dCds <- lapply(names(parlist[[lcoef[1]]]), function (x) {
+    stats::dnorm((psi1 - xb[[x]]) / exp(parlist[[lcpar]][[x]]), 
+                 mean = 0, 
+                 sd   = 1) * 
+      (psi1 - xb[[x]]) / exp(parlist[[lcpar]][[x]])^2
+  })
+  names(dCds) <- names(parlist[[lcoef[1]]])
+  
+  dDds <- lapply(names(parlist[[lcoef[1]]]), function (x) {
+    stats::dnorm((psi2 - xb[[x]]) / exp(parlist[[lcpar]][[x]]), 
+                 mean = 0, 
+                 sd   = 1) * -(psi2 - xb[[x]]) / exp(parlist[[lcpar]][[x]])^2
+  })
+  names(dDds) <- names(parlist[[lcoef[1]]])
+  
+  dEds <- lapply(names(parlist[[lcoef[1]]]), function (x) {
+    stats::dnorm((y - xb[[x]]) / exp(parlist[[lcpar]][[x]]), 
+                 mean = 0, 
+                 sd   = 1) * (y - xb[[x]])^2 / exp(parlist[[lcpar]][[x]])^4  - 
+      stats::dnorm((y - xb[[x]]) / exp(parlist[[lcpar]][[x]]), 
+                   mean = 0, 
+                   sd   = 1) / exp(parlist[[lcpar]][[x]])^2
+  })
+  names(dEds) <- names(parlist[[lcoef[1]]])
+  
+  dBds <- lapply(names(parlist[[lcoef[1]]]), function (x) {
+    as.numeric(y >  psi1) * dCds[[x]] + 
+      as.numeric(y <= psi2) * dDds[[x]] + 
+      as.numeric(y <= psi1 & y > psi2) * dEds[[x]]
+  })
+  names(dBds) <- names(parlist[[lcoef[1]]])
+  
+  dLds <- lapply(names(parlist[[lcoef[1]]]), function (x) {
+    sweep(matrix(dBds[[x]], ncol = 1), 
+          MARGIN = 1,
+          A[[x]], 
+          `*`)
+  })
+  names(dLds) <- names(parlist[[lcoef[1]]])
+  
+  dllds <- lapply(1:length(parlist[[lcoef[1]]]), function (x) {
+    sweep(dLds[[x]], 
+          MARGIN = 1,
+          L, 
+          `/`)
+  })
+  names(dllds) <- names(parlist[[lcoef[1]]])
+  
+  -cbind(do.call("cbind", dlldb), 
+        do.call("cbind", dlldd), 
+        do.call("cbind", dllds))
 }
