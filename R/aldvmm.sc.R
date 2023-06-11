@@ -149,18 +149,52 @@ aldvmm.sc <- function(par,
   # Derivative w.r.t. delta
   #------------------------
   
+  # START EXPERIMENTAL ---------------
+  
   dAdd <- lapply(names(parlist[[lcoef[2]]]), function (x) {
-    (exp(wd[[x]]) * X[[lcoef[2]]] * sumexp
-     - exp(wd[[x]])^2 * X[[lcoef[2]]]) /
+    (exp(wd[[x]]) * X[[lcoef[2]]] * sumexp - 
+       exp(wd[[x]]) * exp(wd[[x]]) * X[[lcoef[2]]]) /
       sumexp^2
+    
   })
   names(dAdd) <- names(parlist[[lcoef[2]]])
   
-  dLdd <- lapply(names(parlist[[lcoef[2]]]), function (x) {
+  dAdd.inv <- lapply(names(parlist[[lcoef[2]]]), function (x) {
+    tmplist <- lapply(names(parlist[[lcoef[2]]]), function (z) {
+      (-exp(wd[[z]]) / sumexp^2) * exp(wd[[x]]) * X[[lcoef[2]]]
+    })
+    tmplist[[ncmp]] <- (-1 / sumexp^2) * exp(wd[[x]]) * X[[lcoef[2]]]
+    return(tmplist)
+  })
+  
+  names(dAdd.inv) <- names(parlist[[lcoef[2]]])
+  
+  dAdd.inv <- lapply(dAdd.inv, function (x) {
+    names(x) <- names(parlist[[lcoef[1]]])
+    return(x)
+  })
+  
+  mat <- matrix(1, 
+                ncol = length(parlist[[lcoef[1]]]),
+                nrow = length(parlist[[lcoef[1]]]),
+                dimnames = list(names(parlist[[lcoef[1]]]),
+                                names(parlist[[lcoef[1]]])))
+  mat <- lower.tri(mat) * mat
+  
+  dLdd <- lapply(names(dAdd), function (x) {
     sweep(matrix(dAdd[[x]], ncol = length(parlist[[lcoef[2]]][[x]])),
           MARGIN = 1,
           B[[x]],
-          `*`)
+          `*`) +
+      Reduce("+", 
+             lapply(names(dAdd.inv[[x]]), function (z) {
+               mat[z, x] * sweep(matrix(dAdd.inv[[x]][[z]], 
+                                        ncol = length(parlist[[lcoef[2]]][[x]])),
+                                 MARGIN = 1,
+                                 B[[z]],
+                                 `*`)
+             })
+      )
   })
   names(dLdd) <- names(parlist[[lcoef[2]]])
   
@@ -172,6 +206,32 @@ aldvmm.sc <- function(par,
   })
   names(dlldd) <- names(parlist[[lcoef[2]]])
   
+  # END EXPERIMENTAL ---------------
+  
+  # dAdd <- lapply(names(parlist[[lcoef[2]]]), function (x) {
+  #   (exp(wd[[x]]) * X[[lcoef[2]]] * sumexp - 
+  #      exp(wd[[x]]) * exp(wd[[x]]) * X[[lcoef[2]]]) /
+  #     sumexp^2
+  #   
+  # })
+  # names(dAdd) <- names(parlist[[lcoef[2]]])
+  # 
+  # dLdd <- lapply(names(parlist[[lcoef[2]]]), function (x) {
+  #   sweep(matrix(dAdd[[x]], ncol = length(parlist[[lcoef[2]]][[x]])),
+  #         MARGIN = 1,
+  #         B[[x]],
+  #         `*`)
+  # })
+  # names(dLdd) <- names(parlist[[lcoef[2]]])
+  # 
+  # dlldd <- lapply(names(parlist[[lcoef[2]]]), function (x) {
+  #   sweep(dLdd[[x]],
+  #         MARGIN = 1,
+  #         L,
+  #         `/`)
+  # })
+  # names(dlldd) <- names(parlist[[lcoef[2]]])
+  
   # Derivative w.r.t. sigma
   #------------------------
   
@@ -179,24 +239,28 @@ aldvmm.sc <- function(par,
     stats::dnorm((psi1 - xb[[x]]) / exp(parlist[[lcpar]][[x]]), 
                  mean = 0, 
                  sd   = 1) * 
-      (psi1 - xb[[x]]) / exp(parlist[[lcpar]][[x]])^2
+      ((psi1 - xb[[x]]) / exp(parlist[[lcpar]][[x]])^2) *
+      exp(parlist[[lcpar]][[x]])
   })
   names(dCds) <- names(parlist[[lcoef[1]]])
   
   dDds <- lapply(names(parlist[[lcoef[1]]]), function (x) {
     stats::dnorm((psi2 - xb[[x]]) / exp(parlist[[lcpar]][[x]]), 
                  mean = 0, 
-                 sd   = 1) * -(psi2 - xb[[x]]) / exp(parlist[[lcpar]][[x]])^2
+                 sd   = 1) * 
+      (-(psi2 - xb[[x]]) / exp(parlist[[lcpar]][[x]])^2) *
+      exp(parlist[[lcpar]][[x]])
   })
   names(dDds) <- names(parlist[[lcoef[1]]])
   
   dEds <- lapply(names(parlist[[lcoef[1]]]), function (x) {
-    stats::dnorm((y - xb[[x]]) / exp(parlist[[lcpar]][[x]]), 
-                 mean = 0, 
-                 sd   = 1) * (y - xb[[x]])^2 / exp(parlist[[lcpar]][[x]])^4  - 
-      stats::dnorm((y - xb[[x]]) / exp(parlist[[lcpar]][[x]]), 
-                   mean = 0, 
-                   sd   = 1) / exp(parlist[[lcpar]][[x]])^2
+    (stats::dnorm((y - xb[[x]]) / exp(parlist[[lcpar]][[x]]), 
+                  mean = 0, 
+                  sd   = 1) * (y - xb[[x]])^2 / exp(parlist[[lcpar]][[x]])^4  - 
+       stats::dnorm((y - xb[[x]]) / exp(parlist[[lcpar]][[x]]), 
+                    mean = 0, 
+                    sd   = 1) / exp(parlist[[lcpar]][[x]])^2) *
+      exp(parlist[[lcpar]][[x]])
   })
   names(dEds) <- names(parlist[[lcoef[1]]])
   
@@ -224,6 +288,6 @@ aldvmm.sc <- function(par,
   names(dllds) <- names(parlist[[lcoef[1]]])
   
   -cbind(do.call("cbind", dlldb), 
-        do.call("cbind", dlldd), 
-        do.call("cbind", dllds))
+         do.call("cbind", dlldd), 
+         do.call("cbind", dllds))
 }
