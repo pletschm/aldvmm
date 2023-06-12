@@ -4,8 +4,7 @@
 #' \ifelse{html}{\code{\link[sandwich]{estfun}}}{\code{sandwich::estfun()}} calculates the gradient of the aldvmm 
 #' log-likelihood 
 #' \ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm::aldvmm.ll()}} 
-#' with respect to parameter values for each observation using 
-#' \ifelse{html}{\code{\link[numDeriv]{jacobian}}}{\code{numDeriv::jacobian()}}. 
+#' with respect to parameter values for each observation. 
 #'
 #' @param x an object inheriting from class "aldvmm".
 #' @param ... further arguments passed to or from other methods.
@@ -24,27 +23,14 @@ estfun.aldvmm <- function(x,
   
   X <- model.matrix(x)
   
-  ef <- lapply(1:nobs(x), function(i) {
-    numDeriv::jacobian(
-      func = function(z) aldvmm::aldvmm.ll(par = z,
-                                           X = lapply(X, function (m) 
-                                             t(as.matrix(m[i, ]))),
-                                           y = x$pred$y[i], 
-                                           psi = x$psi,
-                                           ncmp = x$k,
-                                           dist = x$dist,
-                                           lcoef = x$label$lcoef,
-                                           lcpar = x$label$lcpar,
-                                           lcmp = x$label$lcmp,
-                                           optim.method = x$optim.method),
-      x = x$coef
-    )
-  })
-  
-  ef <- do.call("rbind", ef)
-  
-  colnames(ef) <- names(x$coef)
-  
-  return(ef)
+  aldvmm.gr(par = x$coef,
+            X = X,
+            y = x$pred$y,
+            psi = x$psi,
+            ncmp = x$k,
+            dist = x$dist,
+            lcoef = x$label$lcoef,
+            lcmp  = x$label$lcmp,
+            lcpar = x$label$lcpar)
   
 }

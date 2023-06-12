@@ -33,14 +33,14 @@ test_that('Check aldvmm fitting function.', {
     })
   })
   
-  # With numerical gradients
+  # With finite difference
   suppressMessages({
     suppressWarnings({
       testthat::expect_message(
         aldvmm(eq5d ~ age | female,
                data = utility,
                psi = c(-0.594, 0.883),
-               num.grad = TRUE)
+               optim.grad = FALSE)
       )
     })
   })
@@ -72,14 +72,14 @@ test_that('Check aldvmm fitting function.', {
   testthat::expect(fit$optim.method == "L-BFGS-B",
                    failure_message = 'optim.method should be "L-BFGS-B"')  
   
-  # With numerical gradients
+  # With finite difference
   suppressMessages({
     suppressWarnings({
       fit <- aldvmm(eq5d ~ age | female,
                     data = utility,
                     psi = c(-0.594, 0.883),
                     init.lo = rep(-99, length(fit$coef)),
-                    num.grad = TRUE)
+                    optim.grad = FALSE)
     })
   })
   
@@ -100,14 +100,14 @@ test_that('Check aldvmm fitting function.', {
   })
   
   
-  # With numerical gradients
+  # With finite difference
   suppressMessages({
     suppressWarnings({
       testthat::expect_error(aldvmm(eq5d ~ age | female,
                                     data = utility,
                                     psi = c(-0.594, 0.883),
                                     init.est = rep(-99, length(fit$coef)),
-                                    num.grad = TRUE))
+                                    optim.grad = FALSE))
     })
   })
   

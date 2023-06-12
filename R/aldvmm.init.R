@@ -51,7 +51,7 @@ aldvmm.init <- function(X,
                         init.hi,
                         optim.method,
                         optim.control = list(),
-                        num.grad,
+                        optim.grad,
                         lcoef,
                         lcpar,
                         lcmp) {

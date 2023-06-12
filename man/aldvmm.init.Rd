@@ -16,7 +16,7 @@ aldvmm.init(
   init.hi,
   optim.method,
   optim.control = list(),
-  num.grad,
+  optim.grad,
   lcoef,
   lcpar,
   lcmp
@@ -82,10 +82,12 @@ cannot be used in the \code{'aldvmm'} package.}
 \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
 control parameters.}
 
-\item{num.grad}{a logical value indicating if a numerical
-gradient should be used instead of analytical gradient for those
+\item{optim.grad}{an optional logical value indicating if an analytical
+gradient should be used in
 \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
-methods that can use this information. The default value is \code{FALSE}.}
+methods that can use this information. The default value is \code{TRUE}.
+If \code{'optim.grad'} is set to \code{FALSE}, a finite difference
+approximation is used.}
 
 \item{lcoef}{a character vector of length 2 with labels of objects including
 regression coefficients of component distributions (default \code{"beta"})

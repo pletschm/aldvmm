@@ -17,48 +17,6 @@ aldvmm.sc(
 )
 }
 \arguments{
-\item{par}{a named numeric vector of parameter values.}
-
-\item{X}{a list of design matrices returned by
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.mm}}}{\code{aldvmm.mm()}}.
-\code{'X'} is of length 2 and includes a design matrix for the model of
-component distributions and a design matrix for the model of probabilities
-of group membership.}
-
-\item{y}{a numeric vector of observed outcomes from complete observations in
-\code{'data'} supplied to
-\ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm()}}.}
-
-\item{psi}{a numeric vector of minimum and maximum possible utility values
-smaller than or equal to 1 (e.g. \code{c(-0.594, 0.883)}). The potential
-gap between the maximum value and 1 represents an area with zero density
-in the value set from which utilities were obtained. The order of the
-minimum and maximum limits in \code{'psi'} does not matter.}
-
-\item{dist}{an optional character value of the distribution used in the
-finite mixture. In this release, only the normal distribution is
-available, and the default value is set to \code{"normal"}.}
-
-\item{ncmp}{a numeric value of the number of components that are mixed. The
-default value is 2. A value of 1 represents a tobit model with a gap
-between 1 and the maximum value in \code{'psi'}.}
-
-\item{lcoef}{a character vector of length 2 with labels of objects including
-regression coefficients of component distributions (default \code{"beta"})
-and coefficients of probabilities of component membership (default
-\code{"delta"}).}
-
-\item{lcmp}{a character value representing a stub (default \code{"Comp"})
-for labeling objects including regression coefficients in different
-components (e.g. "Comp1", "Comp2", ...). This label is also used in
-summary tables returned by
-\ifelse{html}{\code{\link[aldvmm]{summary.aldvmm}}}{\code{summary.aldvmm()}}.}
-
-\item{lcpar}{a character vector with the labels of objects including
-constant parameters of component distributions (e.g. the standard
-deviation of the normal distribution). The length of \code{'lcpar'}
-depends on the distribution supplied to \code{'dist'}.}
-
 \item{sum.grad}{a logical value indicating whether the sum of gradients of
 all observations for the likelihood of the full data is returned 
 (\code{TRUE}) or a matrix of gradients per observation (\code{FALSE})}

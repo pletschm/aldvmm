@@ -9,7 +9,7 @@ test_that("Check input value checks.", {
                   dist = "normal",
                   optim.method = NULL,
                   optim.control = list(trace = FALSE),
-                  num.grad = FALSE,
+                  optim.grad = TRUE,
                   init.method = "zero", 
                   init.est = NULL,
                   init.lo = NULL,
@@ -29,7 +29,7 @@ test_that("Check input value checks.", {
                  dist = dist,
                  optim.method = optim.method,
                  optim.control = optim.control,
-                 num.grad = num.grad,
+                 optim.grad = optim.grad,
                  init.method = init.method, 
                  init.est = init.est,
                  init.lo = init.lo,
@@ -71,7 +71,7 @@ test_that("Check input value checks.", {
   testthat::expect_error(aux(dist = "t"))
   testthat::expect_error(aux(optim.method = "nlm"))
   testthat::expect_error(aux(optim.control = data.frame(trace = FALSE)))
-  testthat::expect_error(aux(num.grad = "TRUE"))
+  testthat::expect_error(aux(optim.grad = "TRUE"))
   testthat::expect_error(aux(init.method = "cons"))
   testthat::expect_error(aux(init.est = data.frame(init.est = c(0, 0, 0))))
   testthat::expect_error(aux(init.est = c("0", "0", "0")))

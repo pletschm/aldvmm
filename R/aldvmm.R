@@ -79,10 +79,12 @@ NULL
 #' @param optim.control an optional list of
 #'   \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
 #'   control parameters.
-#' @param num.grad a logical value indicating if a numerical
-#'   gradient should be used instead of analytical gradient for those
+#' @param optim.grad an optional logical value indicating if an analytical
+#'   gradient should be used in
 #'   \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
-#'   methods that can use this information. The default value is \code{FALSE}.
+#'   methods that can use this information. The default value is \code{TRUE}.
+#'   If \code{'optim.grad'} is set to \code{FALSE}, a finite difference
+#'   approximation is used.
 #' @param init.est an optional numeric vector of user-defined initial values.
 #'   User-defined initial values override the \code{'init.method'} argument.
 #'   Initial values have to follow the same order as parameter estimates in the
@@ -147,17 +149,13 @@ NULL
 #'   requires a different implementation of the likelihood function. The
 #'   argument \code{'optim.control'} accepts a list of
 #'   \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
-#'   control parameters.  If \code{'num.grad'} is set to \code{FALSE} (default) 
-#'   the function
+#'   control parameters.  If \code{'optim.grad'} is set to \code{TRUE} the
+#'   function
 #'   \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}} uses
 #'   analytical gradients during the optimization procedure for all methods that
-#'   can use gradients in the optimization routine. If \code{'num.grad'} is 
-#'   set to \code{TRUE} numerical gradients are supplied to the optimization function. or
+#'   allow for this approach. If \code{'optim.grad'} is set to \code{FALSE} or
 #'   a method cannot use gradients, a finite difference approximation is used.
-#'   The numerical gradients of the likelihood function are approximated
-#'   numerically using the function
-#'   \ifelse{html}{\code{\link[numDeriv]{grad}}}{\code{numDeriv::grad()}}.  The
-#'   hessian matrix at maximum likelihood parameters is approximated
+#'   The hessian matrix at maximum likelihood parameters is approximated
 #'   numerically using \ifelse{html}{\code{\link[numDeriv]{hessian}}}{
 #'   \code{numDeriv::hessian()}}.
 #'
@@ -325,7 +323,7 @@ aldvmm <- function(formula,
                    dist = "normal", 
                    optim.method = NULL, 
                    optim.control = list(trace = FALSE),
-                   num.grad = FALSE,
+                   optim.grad = TRUE,
                    init.method = "zero", 
                    init.est = NULL,
                    init.lo = NULL,
@@ -391,7 +389,7 @@ aldvmm <- function(formula,
                ncmp = ncmp, 
                dist = dist,
                optim.method = optim.method, 
-               num.grad = num.grad,
+               optim.grad = optim.grad,
                optim.control = optim.control,
                init.method = init.method, 
                init.est = init.est,
@@ -457,7 +455,7 @@ aldvmm <- function(formula,
                       init.hi = init.hi,
                       optim.method = optim.method,
                       optim.control = optim.control,
-                      num.grad = num.grad)
+                      optim.grad = optim.grad)
   
   # Check feasibility of initial values
   #------------------------------------
@@ -482,7 +480,30 @@ aldvmm <- function(formula,
   # Fit model
   #----------
   
-  str(aldvmm.gr)
+  if (optim.grad == TRUE) {
+    grd <- function (par,
+                      X,
+                      y,
+                      psi,
+                      ncmp,
+                      dist,
+                      lcoef,
+                      lcmp,
+                      lcpar,
+                      optim.method) {
+      colSums(aldvmm.gr(par = par,
+                        X = X,
+                        y = y,
+                        psi = psi,
+                        ncmp = ncmp,
+                        dist = dist,
+                        lcoef = lcoef,
+                        lcmp  = lcmp,
+                        lcpar = lcpar))
+    }
+  } else {
+    grd <- NULL
+  }
   
   fit <- optimr::optimr(fn = aldvmm.ll,
                         par = init[["est"]],
@@ -498,7 +519,7 @@ aldvmm <- function(formula,
                         lcpar = lcpar,
                         optim.method = optim.method,
                         method = optim.method,
-                        gr = aldvmm.gr,
+                        gr = grd,
                         hessian = FALSE,
                         control = optim.control)
   

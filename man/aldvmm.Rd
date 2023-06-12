@@ -12,7 +12,7 @@ aldvmm(
   dist = "normal",
   optim.method = NULL,
   optim.control = list(trace = FALSE),
-  num.grad = FALSE,
+  optim.grad = TRUE,
   init.method = "zero",
   init.est = NULL,
   init.lo = NULL,
@@ -61,10 +61,12 @@ cannot be used in the \code{'aldvmm'} package.}
 \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
 control parameters.}
 
-\item{num.grad}{a logical value indicating if a numerical
-gradient should be used instead of analytical gradient for those
+\item{optim.grad}{an optional logical value indicating if an analytical
+gradient should be used in
 \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
-methods that can use this information. The default value is \code{FALSE}.}
+methods that can use this information. The default value is \code{TRUE}.
+If \code{'optim.grad'} is set to \code{FALSE}, a finite difference
+approximation is used.}
 
 \item{init.method}{an optional character value indicating the method for
 obtaining initial values. The following values are available:
@@ -251,17 +253,13 @@ The function \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{
   requires a different implementation of the likelihood function. The
   argument \code{'optim.control'} accepts a list of
   \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
-  control parameters.  If \code{'num.grad'} is set to \code{FALSE} (default) 
-  the function
+  control parameters.  If \code{'optim.grad'} is set to \code{TRUE} the
+  function
   \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}} uses
   analytical gradients during the optimization procedure for all methods that
-  can use gradients in the optimization routine. If \code{'num.grad'} is 
-  set to \code{TRUE} numerical gradients are supplied to the optimization function. or
+  allow for this approach. If \code{'optim.grad'} is set to \code{FALSE} or
   a method cannot use gradients, a finite difference approximation is used.
-  The numerical gradients of the likelihood function are approximated
-  numerically using the function
-  \ifelse{html}{\code{\link[numDeriv]{grad}}}{\code{numDeriv::grad()}}.  The
-  hessian matrix at maximum likelihood parameters is approximated
+  The hessian matrix at maximum likelihood parameters is approximated
   numerically using \ifelse{html}{\code{\link[numDeriv]{hessian}}}{
   \code{numDeriv::hessian()}}.
 
