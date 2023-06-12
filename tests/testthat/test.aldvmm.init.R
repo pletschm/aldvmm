@@ -91,7 +91,7 @@ test_that('Check generation of initial values.', {
                           init.hi = NULL,
                           optim.method = 'Nelder-Mead',
                           optim.control = list(trace = FALSE),
-                          optim.grad = j)
+                          num.grad = j)
       
       testthat::expect(sum(init[["est"]]) == 0,
                        failure_message = 
@@ -122,7 +122,7 @@ test_that('Check generation of initial values.', {
                           init.hi = NULL,
                           optim.method = 'Nelder-Mead',
                           optim.control = list(trace = FALSE),
-                          optim.grad = j)
+                          numm.grad = j)
       
       testthat::expect(length(unique(init[["est"]])) == length(init[["est"]]),
                        failure_message = 
@@ -153,7 +153,7 @@ test_that('Check generation of initial values.', {
                           init.hi = NULL,
                           optim.method = 'Nelder-Mead',
                           optim.control = list(trace = FALSE),
-                          optim.grad = j)
+                          num.grad = j)
       
       testthat::expect(sum(init[["est"]][!grepl('(Intercept)|sigma', 
                                                 names(init[["est"]]))]) == 0,
@@ -185,7 +185,7 @@ test_that('Check generation of initial values.', {
                           init.hi = NULL,
                           optim.method = 'Nelder-Mead',
                           optim.control = list(trace = FALSE),
-                          optim.grad = j)
+                          num.grad = j)
       
       test_init(init = init,
                 names = names[[i]])
@@ -213,7 +213,7 @@ test_that('Check generation of initial values.', {
                           init.hi = est*10,
                           optim.method = 'Nelder-Mead',
                           optim.control = list(trace = FALSE),
-                          optim.grad = TRUE)
+                          num.grad = FALSE)
       
       testthat::expect(sum(init[["est"]] != est) == 0,
                        failure_message = 

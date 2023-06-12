@@ -13,7 +13,7 @@ aldvmm.check(
   dist,
   optim.method,
   optim.control,
-  optim.grad,
+  num.grad,
   init.method,
   init.est,
   init.lo,
@@ -65,12 +65,10 @@ cannot be used in the \code{'aldvmm'} package.}
 \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
 control parameters.}
 
-\item{optim.grad}{an optional logical value indicating if a numerical
-gradient should be used in
+\item{num.grad}{a logical value indicating if a numerical
+gradient should be used instead of analytical gradient for those
 \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
-methods that can use this information. The default value is \code{TRUE}.
-If \code{'optim.grad'} is set to \code{FALSE}, a finite difference
-approximation is used.}
+methods that can use this information. The default value is \code{FALSE}.}
 
 \item{init.method}{an optional character value indicating the method for
 obtaining initial values. The following values are available:

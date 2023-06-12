@@ -79,12 +79,10 @@ NULL
 #' @param optim.control an optional list of
 #'   \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
 #'   control parameters.
-#' @param optim.grad an optional logical value indicating if a numerical
-#'   gradient should be used in
+#' @param num.grad a logical value indicating if a numerical
+#'   gradient should be used instead of analytical gradient for those
 #'   \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
-#'   methods that can use this information. The default value is \code{TRUE}.
-#'   If \code{'optim.grad'} is set to \code{FALSE}, a finite difference
-#'   approximation is used.
+#'   methods that can use this information. The default value is \code{FALSE}.
 #' @param init.est an optional numeric vector of user-defined initial values.
 #'   User-defined initial values override the \code{'init.method'} argument.
 #'   Initial values have to follow the same order as parameter estimates in the
@@ -149,11 +147,12 @@ NULL
 #'   requires a different implementation of the likelihood function. The
 #'   argument \code{'optim.control'} accepts a list of
 #'   \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
-#'   control parameters.  If \code{'optim.grad'} is set to \code{TRUE} the
-#'   function
+#'   control parameters.  If \code{'num.grad'} is set to \code{FALSE} (default) 
+#'   the function
 #'   \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}} uses
-#'   numerical gradients during the optimization procedure for all methods that
-#'   allow for this approach. If \code{'optim.grad'} is set to \code{FALSE} or
+#'   analytical gradients during the optimization procedure for all methods that
+#'   can use gradients in the optimization routine. If \code{'num.grad'} is 
+#'   set to \code{TRUE} numerical gradients are supplied to the optimization function. or
 #'   a method cannot use gradients, a finite difference approximation is used.
 #'   The numerical gradients of the likelihood function are approximated
 #'   numerically using the function
@@ -326,7 +325,7 @@ aldvmm <- function(formula,
                    dist = "normal", 
                    optim.method = NULL, 
                    optim.control = list(trace = FALSE),
-                   optim.grad = TRUE,
+                   num.grad = FALSE,
                    init.method = "zero", 
                    init.est = NULL,
                    init.lo = NULL,
@@ -373,15 +372,6 @@ aldvmm <- function(formula,
     # User-defined optimization method
   }
   
-  # Attach gradient function for optimization if selected by the user
-  #------------------------------------------------------------------
-  
-  if (optim.grad == TRUE) {
-    grd <- aldvmm.gr
-  } else {
-    grd <- NULL
-  }
-  
   # Convert data to data.frame object
   #----------------------------------
   
@@ -401,7 +391,7 @@ aldvmm <- function(formula,
                ncmp = ncmp, 
                dist = dist,
                optim.method = optim.method, 
-               optim.grad = optim.grad,
+               num.grad = num.grad,
                optim.control = optim.control,
                init.method = init.method, 
                init.est = init.est,
@@ -467,7 +457,7 @@ aldvmm <- function(formula,
                       init.hi = init.hi,
                       optim.method = optim.method,
                       optim.control = optim.control,
-                      optim.grad = optim.grad)
+                      num.grad = num.grad)
   
   # Check feasibility of initial values
   #------------------------------------
@@ -492,6 +482,8 @@ aldvmm <- function(formula,
   # Fit model
   #----------
   
+  str(aldvmm.gr)
+  
   fit <- optimr::optimr(fn = aldvmm.ll,
                         par = init[["est"]],
                         X = mm,
@@ -506,7 +498,7 @@ aldvmm <- function(formula,
                         lcpar = lcpar,
                         optim.method = optim.method,
                         method = optim.method,
-                        gr = grd,
+                        gr = aldvmm.gr,
                         hessian = FALSE,
                         control = optim.control)
   

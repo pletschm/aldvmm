@@ -23,7 +23,7 @@ test_that('Check aldvmm fitting function.', {
   utility[34, 1] <- NA
   utility[77, 2] <- NA
   
-  # With numerical gradients
+  # With Analytical gradients
   suppressMessages({
     suppressWarnings({testthat::expect_message(
       aldvmm(eq5d ~ age | female,
@@ -33,14 +33,14 @@ test_that('Check aldvmm fitting function.', {
     })
   })
   
-  # With gradient descent
+  # With numerical gradients
   suppressMessages({
     suppressWarnings({
       testthat::expect_message(
         aldvmm(eq5d ~ age | female,
                data = utility,
                psi = c(-0.594, 0.883),
-               optim.grad = FALSE)
+               num.grad = TRUE)
       )
     })
   })
@@ -59,7 +59,7 @@ test_that('Check aldvmm fitting function.', {
     })
   })
   
-  # With numerical gradients
+  # With analytical gradients
   suppressMessages({
     suppressWarnings({
       fit <- aldvmm(eq5d ~ age | female,
@@ -72,14 +72,14 @@ test_that('Check aldvmm fitting function.', {
   testthat::expect(fit$optim.method == "L-BFGS-B",
                    failure_message = 'optim.method should be "L-BFGS-B"')  
   
-  # With gradient descent
+  # With numerical gradients
   suppressMessages({
     suppressWarnings({
       fit <- aldvmm(eq5d ~ age | female,
                     data = utility,
                     psi = c(-0.594, 0.883),
                     init.lo = rep(-99, length(fit$coef)),
-                    optim.grad = FALSE)
+                    num.grad = TRUE)
     })
   })
   
@@ -89,7 +89,7 @@ test_that('Check aldvmm fitting function.', {
   # Infeasible starting values
   #---------------------------
   
-  # With numerical gradients
+  # With analytical gradients
   suppressMessages({
     suppressWarnings({
       testthat::expect_error(aldvmm(eq5d ~ age | female,
@@ -100,14 +100,14 @@ test_that('Check aldvmm fitting function.', {
   })
   
   
-  # With gradient descent
+  # With numerical gradients
   suppressMessages({
     suppressWarnings({
       testthat::expect_error(aldvmm(eq5d ~ age | female,
                                     data = utility,
                                     psi = c(-0.594, 0.883),
                                     init.est = rep(-99, length(fit$coef)),
-                                    optim.grad = FALSE))
+                                    num.grad = TRUE))
     })
   })
   

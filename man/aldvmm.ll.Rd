@@ -5,7 +5,19 @@
 \title{Calculating the Negative Log-Likelihood of the Adjusted Limited Dependent
 Variable Mixture Model}
 \usage{
-aldvmm.ll(par, X, y, psi, ncmp, dist, lcoef, lcpar, lcmp, optim.method)
+aldvmm.ll(
+  par,
+  X,
+  y,
+  psi,
+  ncmp,
+  dist,
+  lcoef,
+  lcpar,
+  lcmp,
+  optim.method,
+  num.grad
+)
 }
 \arguments{
 \item{par}{a named numeric vector of parameter values.}
@@ -58,6 +70,11 @@ methods: \code{"Nelder-Mead"}, \code{"BFGS"}, \code{"CG"},
 \code{"L-BFGS-B"} is used when lower and/or upper constraints are set
 using \code{'init.lo'} and \code{'init.hi'}. The method \code{"nlm"}
 cannot be used in the \code{'aldvmm'} package.}
+
+\item{num.grad}{a logical value indicating if a numerical
+gradient should be used instead of analytical gradient for those
+\ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
+methods that can use this information. The default value is \code{FALSE}.}
 }
 \value{
 a scalar of the negative log-likelihood of the data at parameter

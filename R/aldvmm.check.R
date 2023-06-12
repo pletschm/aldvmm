@@ -26,7 +26,7 @@ aldvmm.check <- function(formula,
                          dist,
                          optim.method,
                          optim.control,
-                         optim.grad,
+                         num.grad,
                          init.method, 
                          init.est,
                          init.lo,
@@ -62,10 +62,8 @@ aldvmm.check <- function(formula,
   }
   checkmate::assertList(optim.control)
   
-  if (!is.null(optim.grad)) {
-    checkmate::assertLogical(optim.grad)
-  }
-  
+  checkmate::assertLogical(num.grad)
+
   checkmate::assertChoice(init.method, c("zero", "random", "constant", "sann"))
   
   if (!is.null(init.est)) {
