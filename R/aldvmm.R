@@ -384,7 +384,7 @@ aldvmm <- function(formula,
                      lcmp,
                      lcpar,
                      optim.method) {
-      exp(colSums(aldvmm.gr(par = par,
+      colSums(aldvmm.gr(par = par,
                         X = X,
                         y = y,
                         psi = psi,
@@ -392,7 +392,7 @@ aldvmm <- function(formula,
                         dist = dist,
                         lcoef = lcoef,
                         lcmp  = lcmp,
-                        lcpar = lcpar)))
+                        lcpar = lcpar))
     }
   } else {
     grd <- NULL

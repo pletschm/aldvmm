@@ -65,7 +65,7 @@ test_that('Check aldvmm fitting function.', {
       fit <- aldvmm(eq5d ~ age | female,
                     data = utility,
                     psi = c(-0.594, 0.883),
-                    init.lo = rep(-99, length(fit$coef)))
+                    init.lo = rep(0.1, length(fit$coef)))
     })
   })
   
