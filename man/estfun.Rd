@@ -20,6 +20,5 @@ The method \code{estfun.aldvmm} for the generic function
 \ifelse{html}{\code{\link[sandwich]{estfun}}}{\code{sandwich::estfun()}} calculates the gradient of the aldvmm 
 log-likelihood 
 \ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm::aldvmm.ll()}} 
-with respect to parameter values for each observation using 
-\ifelse{html}{\code{\link[numDeriv]{jacobian}}}{\code{numDeriv::jacobian()}}.
+with respect to parameter values for each observation.
 }

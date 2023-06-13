@@ -21,10 +21,8 @@
 estfun.aldvmm <- function(x,
                           ...) {
   
-  X <- model.matrix(x)
-  
   aldvmm.gr(par = x$coef,
-            X = X,
+            X = model.matrix(x),
             y = x$pred$y,
             psi = x$psi,
             ncmp = x$k,

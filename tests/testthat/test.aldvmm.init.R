@@ -122,7 +122,7 @@ test_that('Check generation of initial values.', {
                           init.hi = NULL,
                           optim.method = 'Nelder-Mead',
                           optim.control = list(trace = FALSE),
-                          numm.grad = j)
+                          optim.grad = j)
       
       testthat::expect(length(unique(init[["est"]])) == length(init[["est"]]),
                        failure_message = 

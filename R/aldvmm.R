@@ -370,6 +370,34 @@ aldvmm <- function(formula,
     # User-defined optimization method
   }
   
+  # Attach gradient function based on user selection
+  #-------------------------------------------------
+  
+  if (optim.grad == TRUE) {
+    grd <- function (par,
+                     X,
+                     y,
+                     psi,
+                     ncmp,
+                     dist,
+                     lcoef,
+                     lcmp,
+                     lcpar,
+                     optim.method) {
+      exp(colSums(aldvmm.gr(par = par,
+                        X = X,
+                        y = y,
+                        psi = psi,
+                        ncmp = ncmp,
+                        dist = dist,
+                        lcoef = lcoef,
+                        lcmp  = lcmp,
+                        lcpar = lcpar)))
+    }
+  } else {
+    grd <- NULL
+  }
+  
   # Convert data to data.frame object
   #----------------------------------
   
@@ -479,31 +507,6 @@ aldvmm <- function(formula,
   
   # Fit model
   #----------
-  
-  if (optim.grad == TRUE) {
-    grd <- function (par,
-                      X,
-                      y,
-                      psi,
-                      ncmp,
-                      dist,
-                      lcoef,
-                      lcmp,
-                      lcpar,
-                      optim.method) {
-      colSums(aldvmm.gr(par = par,
-                        X = X,
-                        y = y,
-                        psi = psi,
-                        ncmp = ncmp,
-                        dist = dist,
-                        lcoef = lcoef,
-                        lcmp  = lcmp,
-                        lcpar = lcpar))
-    }
-  } else {
-    grd <- NULL
-  }
   
   fit <- optimr::optimr(fn = aldvmm.ll,
                         par = init[["est"]],
