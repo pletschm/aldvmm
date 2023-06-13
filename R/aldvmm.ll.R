@@ -170,7 +170,7 @@ aldvmm.ll <- function(par,
   ll <- sum(log(rowSums(cont)))
   
   if (optim.method %in% c("L-BFGS-B", "Rcgmin") & !is.finite(ll)) {
-      ll <- -1e+20 
+      ll <- -1e+20
   }
   
   return(-ll)

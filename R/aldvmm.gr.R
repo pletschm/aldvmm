@@ -5,11 +5,7 @@
 #' to parameter values in \code{'par'} for each observation in the estimation 
 #' data.
 #'
-#' @param sum.grad a logical value indicating whether the sum of gradients of
-#' all observations for the likelihood of the full data is returned 
-#' (\code{TRUE}) or a matrix of gradients per observation (\code{FALSE})
-#'
-#' @inheritParams aldvmm.gr
+#' @inheritParams aldvmm.ll
 #'
 #' @details \ifelse{html}{\code{\link[aldvmm]{aldvmm.gr}}}{\code{aldvmm.gr()}}
 #' calculates gradients of the negative log-likelihood.
@@ -27,7 +23,8 @@ aldvmm.gr <- function(par,
                       ncmp,
                       lcoef = lcoef,
                       lcmp  = lcmp,
-                      lcpar = lcpar) {
+                      lcpar = lcpar,
+                      optim.method) {
   
   psi1 <- max(psi)
   psi2 <- min(psi)
@@ -352,6 +349,10 @@ aldvmm.gr <- function(par,
                                       lcmp  = lcmp,
                                       lcpar = lcpar,
                                       ncmp = ncmp)
+  
+  # if (optim.method %in% c("L-BFGS-B", "Rcgmin")) {
+  #   outmat[!is.finite(outmat)] <- 0
+  # }
   
   return(outmat)
 }

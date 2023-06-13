@@ -392,8 +392,34 @@ aldvmm <- function(formula,
                         dist = dist,
                         lcoef = lcoef,
                         lcmp  = lcmp,
-                        lcpar = lcpar))
+                        lcpar = lcpar,
+                        optim.method))
+      
     }
+    
+    # grd <- function (par,
+    #                  X,
+    #                  y,
+    #                  psi,
+    #                  ncmp,
+    #                  dist,
+    #                  lcoef,
+    #                  lcmp,
+    #                  lcpar,
+    #                  optim.method) {
+    #   numDeriv::grad(func = function(z) aldvmm.ll(par = z,
+    #                                             X = X,
+    #                                             y = y,
+    #                                             psi = psi,
+    #                                             dist = dist,
+    #                                             ncmp = ncmp,
+    #                                             lcoef = lcoef,
+    #                                             lcmp = lcmp,
+    #                                             lcpar = lcpar,
+    #                                             optim.method = optim.method), 
+    #                x = par)
+    # }
+    
   } else {
     grd <- NULL
   }

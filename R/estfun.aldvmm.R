@@ -29,6 +29,7 @@ estfun.aldvmm <- function(x,
             dist = x$dist,
             lcoef = x$label$lcoef,
             lcmp  = x$label$lcmp,
-            lcpar = x$label$lcpar)
+            lcpar = x$label$lcpar,
+            optim.method = x$optim.method)
   
 }
