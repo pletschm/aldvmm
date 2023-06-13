@@ -350,9 +350,5 @@ aldvmm.gr <- function(par,
                                       lcpar = lcpar,
                                       ncmp = ncmp)
   
-  # if (optim.method %in% c("L-BFGS-B", "Rcgmin")) {
-  #   outmat[!is.finite(outmat)] <- 0
-  # }
-  
   return(outmat)
 }

@@ -384,7 +384,8 @@ aldvmm <- function(formula,
                      lcmp,
                      lcpar,
                      optim.method) {
-      colSums(aldvmm.gr(par = par,
+      
+      out <- colSums(aldvmm.gr(par = par,
                         X = X,
                         y = y,
                         psi = psi,
@@ -395,6 +396,11 @@ aldvmm <- function(formula,
                         lcpar = lcpar,
                         optim.method))
       
+      if (optim.method %in% c("L-BFGS-B", "Rcgmin")) {
+        out[!is.finite(out)] <- 0
+      }
+      
+      return(out)
     }
     
     # grd <- function (par,
