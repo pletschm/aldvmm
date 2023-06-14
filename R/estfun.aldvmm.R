@@ -2,9 +2,8 @@
 #'
 #' The method \code{estfun.aldvmm} for the generic function 
 #' \ifelse{html}{\code{\link[sandwich]{estfun}}}{\code{sandwich::estfun()}} calculates the gradient of the aldvmm 
-#' log-likelihood 
-#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm::aldvmm.ll()}} 
-#' with respect to parameter values for each observation. 
+#' log-likelihood using with respect to parameter values for each observation
+#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.sc}}}{\code{aldvmm::aldvmm.sc()}}. 
 #'
 #' @param x an object inheriting from class "aldvmm".
 #' @param ... further arguments passed to or from other methods.
@@ -21,7 +20,7 @@
 estfun.aldvmm <- function(x,
                           ...) {
   
-  aldvmm.gr(par = x$coef,
+  aldvmm.sc(par = x$coef,
             X = model.matrix(x),
             y = x$pred$y,
             psi = x$psi,

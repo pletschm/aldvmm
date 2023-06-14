@@ -374,58 +374,7 @@ aldvmm <- function(formula,
   #-------------------------------------------------
   
   if (optim.grad == TRUE) {
-    grd <- function (par,
-                     X,
-                     y,
-                     psi,
-                     ncmp,
-                     dist,
-                     lcoef,
-                     lcmp,
-                     lcpar,
-                     optim.method) {
-      
-      out <- colSums(aldvmm.gr(par = par,
-                        X = X,
-                        y = y,
-                        psi = psi,
-                        ncmp = ncmp,
-                        dist = dist,
-                        lcoef = lcoef,
-                        lcmp  = lcmp,
-                        lcpar = lcpar,
-                        optim.method))
-      
-      if (optim.method %in% c("L-BFGS-B", "Rcgmin")) {
-        out[!is.finite(out)] <- 0
-      }
-      
-      return(out)
-    }
-    
-    # grd <- function (par,
-    #                  X,
-    #                  y,
-    #                  psi,
-    #                  ncmp,
-    #                  dist,
-    #                  lcoef,
-    #                  lcmp,
-    #                  lcpar,
-    #                  optim.method) {
-    #   numDeriv::grad(func = function(z) aldvmm.ll(par = z,
-    #                                             X = X,
-    #                                             y = y,
-    #                                             psi = psi,
-    #                                             dist = dist,
-    #                                             ncmp = ncmp,
-    #                                             lcoef = lcoef,
-    #                                             lcmp = lcmp,
-    #                                             lcpar = lcpar,
-    #                                             optim.method = optim.method), 
-    #                x = par)
-    # }
-    
+    grd <- aldvmm.gr
   } else {
     grd <- NULL
   }

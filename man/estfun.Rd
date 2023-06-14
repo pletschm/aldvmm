@@ -18,7 +18,6 @@ observation and one column per parameter.
 \description{
 The method \code{estfun.aldvmm} for the generic function 
 \ifelse{html}{\code{\link[sandwich]{estfun}}}{\code{sandwich::estfun()}} calculates the gradient of the aldvmm 
-log-likelihood 
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm::aldvmm.ll()}} 
-with respect to parameter values for each observation.
+log-likelihood using with respect to parameter values for each observation
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.sc}}}{\code{aldvmm::aldvmm.sc()}}.
 }

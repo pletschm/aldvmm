@@ -153,6 +153,14 @@ aldvmm.init <- function(X,
       tmp <- unlist(tmp)
       names(tmp) <- tmpnames
       
+      # Attach gradient function
+      if (optim.grad == TRUE) {
+        grd <- aldvmm.gr
+      } else {
+        grd <- NULL
+      }
+      
+      # Fit model
       fit <- optimr::optimr(method       = optim.method,
                             fn           = aldvmm.ll,
                             par          = tmp,
@@ -165,7 +173,7 @@ aldvmm.init <- function(X,
                             lcmp         = lcmp,
                             lcpar        = lcpar,
                             optim.method = optim.method,
-                            gr           = aldvmm.gr,
+                            gr           = grd,
                             hessian      = FALSE,
                             control      = optim.control)
       
