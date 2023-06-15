@@ -28,3 +28,7 @@
   * data: A data frame of the estimation data.
   * contrasts: A nested list of character values of contrasts.
   * na.action: An object indicating the na.action used in stats::model.frame()
+  
+# aldvmm 0.8.7
+* The package "aldvmm" now uses analytical gradients instead of numerical approximations during optimization and in methods used for sandwich::sandwich() and sandwich::vcovCL() leading to significant reductions of computation time.
+* Objects of class "aldvmm" now include predicted probabilities of component membership for all observations in the estimation data.

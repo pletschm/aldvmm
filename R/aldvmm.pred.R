@@ -182,6 +182,11 @@ aldvmm.pred <- function(par,
             call. = FALSE)
   }
   
+  if (any(is.na(pred[["yhat"]]))) {
+    warning("fitted values include missing values\n",
+            call. = FALSE)
+  }
+  
   return(pred)
   
 }

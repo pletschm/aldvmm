@@ -1147,7 +1147,7 @@ We obtain expected values of observations in the estimation data using the gener
 
 Expected values of observations in the estimation data can also be used to calculate average incremental effects or average treatment effects on the treated. Average treatment effects on the treated compare predictions for treated individuals to predictions for the same individuals without the effect of the treatment indicator. Standard errors of average treatment effects on the treated can be calculated using the delta method (see example code in the appendix).
 
-We can use the 'sandwich' package [@Zeileis2006] to calculate robust or clustered standard errors from objects of class "aldvmm" (see example code in the appendix). However, the computation of robust standard errors is very slow, because the gradients of the log-likelihood with respect to parameter values are approximated numerically for each observation in the data using the function numDeriv::grad().
+We can use the 'sandwich' package [@Zeileis2006] to calculate robust or clustered standard errors from objects of class "aldvmm" (see example code in the appendix).
 
 ### Comparison of optimization methods
 
