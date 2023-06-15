@@ -17,24 +17,34 @@
 #' standard deviations of normal distributions) enter the expected value
 #' function as log-transformed values.
 #'
-#' @return a named numeric vector of predicted outcomes. The names of the
-#'   elements in the vector are identical to the row names of design matrices
-#'   in \code{'X'}.
+#' @return a list of of predicted outcomes including the following elements.
+#'   \item{\code{y}}{a numeric vector of observed outcomes in \code{'data'}.}
+#'   \item{\code{yhat}}{a numeric vector of fitted values.} \item{\code{res}}{a
+#'   numeric vector of residuals.} \item{\code{prob}}{a numeric matrix of expected 
+#'   probabilities of group membership per individual in \code{'data'}.}
 #'
 #' @export
 
 aldvmm.pred <- function(par,
-                        X,
-                        y = NULL,
-                        psi,
-                        ncmp,
-                        dist,
-                        lcoef,
-                        lcpar,
-                        lcmp) {
+                         X,
+                         y = NULL,
+                         psi,
+                         ncmp,
+                         dist,
+                         lcoef,
+                         lcpar,
+                         lcmp) {
   
-  # Prepare list of parameters
-  #---------------------------
+  psi1 <- max(psi)
+  psi2 <- min(psi)
+  
+  # Check if par has names
+  #-----------------------
+  
+  checkmate::assert_numeric(par, names = "named")
+  
+  # Create list of parameters
+  #--------------------------
   
   parlist <- aldvmm.getpar(par   = par,
                            lcoef = lcoef,
@@ -42,135 +52,133 @@ aldvmm.pred <- function(par,
                            lcpar = lcpar,
                            ncmp  = ncmp)
   
-  # Calculate elements of likelihood function for each component and obs.
-  #----------------------------------------------------------------------
-  
-  # Multinomial logit (parameters are only estimated for the first K - 1 
-  # components).
+  # Multinomial logit
+  #------------------
   
   if (ncmp > 1) {
     
-    exp_xd <- matrix(data = NA, 
-                     nrow = nrow(X[[2]]), 
-                     ncol = (ncmp - 1),
-                     dimnames = list(rownames(X[[2]]),
-                                     paste0(lcmp, 1:(ncmp - 1))))
+    # Linear predictor
+    wd <- lapply(names(parlist[[lcoef[2]]]), function (x) {
+      rowSums(sweep(X[[lcoef[2]]], 
+                    MARGIN = 2, 
+                    parlist[[lcoef[2]]][[x]], 
+                    `*`))
+    })
+    names(wd) <- names(parlist[[lcoef[2]]])
     
-    for (c in 1:(ncmp - 1)) {
-      exp_xd[, c] <- exp(X[[2]] %*% parlist[[lcoef[2]]][[c]])
-    }
+    # Denominator
+    sumexp <- 1 + Reduce("+",
+                         lapply(names(parlist[[lcoef[2]]]), function (z) {
+                           exp(rowSums(sweep(X[[lcoef[2]]], 
+                                             MARGIN = 2, 
+                                             parlist[[lcoef[2]]][[z]], 
+                                             `*`)))
+                         }))
     
-    p_c <- matrix(data = NA, 
-                  nrow = nrow(X[[2]]), 
-                  ncol = ncmp,
-                  dimnames = list(rownames(X[[2]]),
-                                  paste0(lcmp, 1:ncmp)))
-    
-    for (c in 1:(ncmp - 1)) {
-      p_c[, c] <- exp_xd[, c] / (1 + rowSums(exp_xd))
-    }
-    
-    p_c[, ncmp] <- 1 - rowSums(p_c[, 1:(ncmp - 1), drop = FALSE])
-    
+    # Probability of component membership
+    A <- lapply(names(parlist[[lcoef[2]]]), function (x) {
+      exp(wd[[x]]) / sumexp
+    })
+    A[[ncmp]] <- 1 - Reduce("+", A)
   } else {
-    p_c <- matrix(data = 1, 
-                  nrow = nrow(X[[1]]), 
-                  ncol = ncmp,
-                  dimnames = list(rownames(X[[1]]),
-                                  paste0(lcmp, 1)))
+    A <- list(
+      matrix(data = 1, 
+             nrow = nrow(X[[lcoef[1]]]), 
+             ncol = 1,
+             dimnames = list(rownames(X[[lcoef[2]]]),
+                             paste0(lcmp, 1)))
+    )
   }
+  names(A) <- names(parlist[[lcoef[1]]])
   
-  # Densities
-  #----------
+  # Component distributions
+  #------------------------
   
   if (dist == "normal") {
     
-    ev <- matrix(data = NA, 
-                      nrow = nrow(X[[1]]), 
-                      ncol = ncmp,
-                      dimnames = list(rownames(X[[1]]),
-                                      paste0(lcmp, 1:ncmp)))
+    # Linear predictor
+    xb <- lapply(parlist[[lcoef[1]]], function (x) {
+      rowSums(sweep(X[[lcoef[1]]], 
+                    MARGIN = 2, 
+                    x, 
+                    `*`))
+    })
+    names(xb) <- names(parlist[[lcoef[1]]])
     
-    for (c in 1:ncmp) {
+    # Density of values above maximum
+    C <- lapply(names(parlist[[lcoef[1]]]), function (x) {
+      1 - stats::pnorm((psi1 - xb[[x]]) / exp(parlist[[lcpar]][[x]]), 
+                       mean = 0, 
+                       sd = 1)
+    })
+    names(C) <- names(parlist[[lcoef[1]]])
+    
+    # Density of values below minimum
+    D <- lapply(names(parlist[[lcoef[1]]]), function (x) {
+      stats::pnorm((psi2 - xb[[x]]) / exp(parlist[[lcpar]][[x]]), 
+                   mean = 0, 
+                   sd = 1) * psi2
+    })
+    names(D) <- names(parlist[[lcoef[1]]])
+    
+    # Density of value within range
+    E <- lapply(names(parlist[[lcoef[1]]]), function (x) {
       
-      max <- 1 - stats::pnorm((max(psi) - X[[1]] %*% parlist[[lcoef[1]]][[c]]) /
-                                exp(parlist[[lcpar[1]]][[c]]),
-                              mean = 0, 
-                              sd   = 1)
-      
-      min <-     stats::pnorm((min(psi) - X[[1]] %*% parlist[[lcoef[1]]][[c]]) /
-                                exp(parlist[[lcpar[1]]][[c]]), 
-                              mean = 0, 
-                              sd   = 1) * min(psi)
-      
-      mid_a <-  stats::pnorm((max(psi) - X[[1]] %*% parlist[[lcoef[1]]][[c]]) /
-                                exp(parlist[[lcpar[1]]][[c]]), 
-                              mean = 0, 
-                              sd   = 1)
-      
-      mid_b <-  stats::pnorm((min(psi) - X[[1]] %*% parlist[[lcoef[1]]][[c]]) /
-                                exp(parlist[[lcpar[1]]][[c]]), 
-                              mean = 0, 
-                              sd   = 1)
-      
-      mid_c <-  stats::dnorm((max(psi) - X[[1]] %*% parlist[[lcoef[1]]][[c]]) /
-                                exp(parlist[[lcpar[1]]][[c]]), 
-                              mean = 0, 
-                              sd   = 1)
-      
-      mid_d <-  stats::dnorm((min(psi) - X[[1]] %*% parlist[[lcoef[1]]][[c]]) /
-                                exp(parlist[[lcpar[1]]][[c]]), 
-                              mean = 0, 
-                              sd   = 1)
-      
-      mid_e <-  stats::pnorm((min(psi) - X[[1]] %*% parlist[[lcoef[1]]][[c]]) /
-                                exp(parlist[[lcpar[1]]][[c]]), 
-                              mean = 0, 
-                              sd   = 1)
-      
-      mid_f <-  stats::pnorm((max(psi) - X[[1]] %*% parlist[[lcoef[1]]][[c]]) /
-                                exp(parlist[[lcpar[1]]][[c]]), 
-                              mean = 0, 
-                              sd   = 1)
-      
-      mid   <-  (mid_a - mid_b) * (X[[1]] %*% parlist[[lcoef[1]]][[c]] +
-                                        exp(parlist[[lcpar[1]]][[c]]) * 
-                                        (mid_c - mid_d) / (mid_e - mid_f))
-      
-      ev[, c] <- max + min + mid
-      
-    }
+      (stats::pnorm((psi1 - xb[[x]]) / exp(parlist[[lcpar]][[x]]), 
+                    mean = 0, 
+                    sd = 1) -
+         stats::pnorm((psi2 - xb[[x]]) / exp(parlist[[lcpar]][[x]]), 
+                      mean = 0, 
+                      sd = 1)) *
+        (xb[[x]] + exp(parlist[[lcpar]][[x]]) *
+                         (stats::dnorm((psi1 - xb[[x]]) / exp(parlist[[lcpar]][[x]]), 
+                                       mean = 0, 
+                                       sd = 1) - 
+                            stats::dnorm((psi2 - xb[[x]]) / exp(parlist[[lcpar]][[x]]), 
+                                         mean = 0, 
+                                         sd = 1)) /
+                         (stats::pnorm((psi2 - xb[[x]]) / exp(parlist[[lcpar]][[x]]), 
+                                       mean = 0, 
+                                       sd = 1) - 
+                            stats::pnorm((psi1 - xb[[x]]) / exp(parlist[[lcpar]][[x]]), 
+                                         mean = 0, 
+                                         sd = 1)))
+    })
+    names(E) <- names(parlist[[lcoef[1]]])
+    
+    # Density of observed value
+    B <- lapply(names(parlist[[lcoef[1]]]), function (x) {
+      C[[x]] + D[[x]] + E[[x]]
+    })
+    names(B) <- names(parlist[[lcoef[1]]])
     
   }
   
-  # Predict
-  #--------
+  # Expected value
+  #---------------
   
-  pred <- list()
+  V <-   Reduce("+",
+                lapply(names(A), function (x) {
+                  A[[x]] * B[[x]]
+                })
+  )
   
-  # Probabilities of group membership
-  if (any(is.na(p_c))) {
+  # Collect and return
+  #-------------------
+  
+  pred <- list(prob = do.call("cbind", A),
+               yhat = V,
+               y = if (!is.null(y)) {y} else {NULL},
+               res = if (!is.null(y)) {y - V} else {NULL})
+  
+  if (!is.null(y)){
+    names(pred[["res"]]) <- rownames(X[[1]])
+    names(pred[["y"]]) <- rownames(X[[1]])  
+  }
+  
+  if (any(is.na(pred[["prob"]]))) {
     warning("fitted probabilities of component membership include missing 
             values\n",
-            call. = FALSE)
-  }
-  
-  pred[["prob"]] <- p_c
-
-  # Outcomes
-  pred[["yhat"]] <- rowSums(p_c * ev)
-  names(pred[["yhat"]]) <- rownames(X[[1]])
-  
-  if (!is.null(y)) {
-    pred[["y"]] <- y
-    names(pred[["y"]]) <- rownames(X[[1]])
-    
-    pred[["res"]]  <- pred[["y"]] - pred[["yhat"]]
-    names(pred[["res"]]) <- rownames(X[[1]])
-  }
-
-  if (any(is.na(pred[["yhat"]]))) {
-    warning("fitted values include missing values\n",
             call. = FALSE)
   }
   

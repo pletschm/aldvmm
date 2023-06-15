@@ -146,8 +146,8 @@ in the preparation of the model matrix. The default value is
   standard error of fitted values.} \item{\code{lower.fit}}{a numeric vector
   of 95\% lower confidence limits of fitted values.}
   \item{\code{upper.fit}}{a numeric vector of 95\% upper confidence limits
-  of fitted values} \item{\code{prob}}{a numeric vector expected values of
-  the probabilities of group membership. } }}
+  of fitted values} \item{\code{prob}}{a numeric matrix of expected 
+  probabilities of group membership per individual in \code{'data'}.} }}
 
   \item{\code{init}}{a list including the following elements. \describe{
   \item{\code{est}}{a numeric vector of initial parameter estimates.}
