@@ -110,6 +110,8 @@ NULL
 #' \ifelse{html}{\code{\link[stats]{model.frame}}}{\code{stats::model.frame()}} 
 #' in the preparation of the model matrix. The default value is 
 #' \code{"na.omit"}.
+#' @param subset a numeric vector of row indices of the subset of the model 
+#' matrix used in the estimation.
 #'
 #' @details \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{ \code{aldvmm()}} fits
 #'   an adjusted limited dependent variable mixture model using the likelihood
@@ -331,7 +333,9 @@ aldvmm <- function(formula,
                    se.fit = FALSE,
                    model = TRUE,
                    level = 0.95,
-                   na.action = "na.omit") {
+                   na.action = "na.omit",
+                   subset = NULL,
+                   ...) {
   
   # Store function call
   #--------------------
@@ -438,6 +442,11 @@ aldvmm <- function(formula,
                   Formula = formula,
                   ncmp = ncmp,
                   lcoef = lcoef)
+  
+  # Select subset of data
+  if (!is.null(subset)) {
+    mm <- lapply(mm, function (x) x[subset, ])
+  }
   
   # Make list of model terms
   #-------------------------

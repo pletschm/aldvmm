@@ -20,7 +20,9 @@ aldvmm(
   se.fit = FALSE,
   model = TRUE,
   level = 0.95,
-  na.action = "na.omit"
+  na.action = "na.omit",
+  subset = NULL,
+  ...
 )
 }
 \arguments{
@@ -104,6 +106,9 @@ argument \code{'na.action'} of the function
 \ifelse{html}{\code{\link[stats]{model.frame}}}{\code{stats::model.frame()}} 
 in the preparation of the model matrix. The default value is 
 \code{"na.omit"}.}
+
+\item{subset}{a numeric vector of row indices of the subset of the model 
+matrix used in the estimation.}
 }
 \value{
 \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{ \code{aldvmm()}}
