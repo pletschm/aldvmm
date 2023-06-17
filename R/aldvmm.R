@@ -54,7 +54,9 @@ NULL
 #'   frame by \ifelse{html}{\code{\link[base]{as.data.frame}}}{\code{base::as.data.frame()}}) including data on outcomes and explanatory
 #'   variables in \code{'formula'}.
 #' @param subset a numeric vector of row indices of the subset of the model 
-#'   matrix used in the estimation.
+#'   matrix used in the estimation. \code{'subset'} can be longer than the 
+#'   number of rows in \code{data} and include repeated values for re-spamling 
+#'   purposes.
 #' @param psi a numeric vector of minimum and maximum possible utility values
 #'   smaller than or equal to 1 (e.g. \code{c(-0.594, 0.883)}). The potential
 #'   gap between the maximum value and 1 represents an area with zero density
@@ -393,6 +395,7 @@ aldvmm <- function(formula,
   
   aldvmm.check(formula = formula, 
                data = data, 
+               subset = subset,
                psi = psi, 
                ncmp = ncmp, 
                dist = dist,

@@ -8,6 +8,7 @@
 aldvmm.check(
   formula,
   data,
+  subset,
   psi,
   ncmp,
   dist,
@@ -37,6 +38,11 @@ multinomial logit model of probabilities of component membership (right).}
 \item{data}{a data frame, list or environment (or object coercible to a data
 frame by \ifelse{html}{\code{\link[base]{as.data.frame}}}{\code{base::as.data.frame()}}) including data on outcomes and explanatory
 variables in \code{'formula'}.}
+
+\item{subset}{a numeric vector of row indices of the subset of the model 
+matrix used in the estimation. \code{'subset'} can be longer than the 
+number of rows in \code{data} and include repeated values for re-spamling 
+purposes.}
 
 \item{psi}{a numeric vector of minimum and maximum possible utility values
 smaller than or equal to 1 (e.g. \code{c(-0.594, 0.883)}). The potential

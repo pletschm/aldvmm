@@ -37,7 +37,9 @@ frame by \ifelse{html}{\code{\link[base]{as.data.frame}}}{\code{base::as.data.fr
 variables in \code{'formula'}.}
 
 \item{subset}{a numeric vector of row indices of the subset of the model 
-matrix used in the estimation.}
+matrix used in the estimation. \code{'subset'} can be longer than the 
+number of rows in \code{data} and include repeated values for re-spamling 
+purposes.}
 
 \item{psi}{a numeric vector of minimum and maximum possible utility values
 smaller than or equal to 1 (e.g. \code{c(-0.594, 0.883)}). The potential
