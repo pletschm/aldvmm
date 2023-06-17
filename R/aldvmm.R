@@ -53,6 +53,8 @@ NULL
 #' @param data a data frame, list or environment (or object coercible to a data
 #'   frame by \ifelse{html}{\code{\link[base]{as.data.frame}}}{\code{base::as.data.frame()}}) including data on outcomes and explanatory
 #'   variables in \code{'formula'}.
+#' @param subset a numeric vector of row indices of the subset of the model 
+#'   matrix used in the estimation.
 #' @param psi a numeric vector of minimum and maximum possible utility values
 #'   smaller than or equal to 1 (e.g. \code{c(-0.594, 0.883)}). The potential
 #'   gap between the maximum value and 1 represents an area with zero density
@@ -110,8 +112,6 @@ NULL
 #' \ifelse{html}{\code{\link[stats]{model.frame}}}{\code{stats::model.frame()}} 
 #' in the preparation of the model matrix. The default value is 
 #' \code{"na.omit"}.
-#' @param subset a numeric vector of row indices of the subset of the model 
-#' matrix used in the estimation.
 #'
 #' @details \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{ \code{aldvmm()}} fits
 #'   an adjusted limited dependent variable mixture model using the likelihood
@@ -320,6 +320,7 @@ NULL
 
 aldvmm <- function(formula, 
                    data, 
+                   subset = NULL,
                    psi, 
                    ncmp = 2, 
                    dist = "normal", 
@@ -334,13 +335,7 @@ aldvmm <- function(formula,
                    model = TRUE,
                    level = 0.95,
                    na.action = "na.omit",
-                   subset = NULL,
                    ...) {
-  
-  # Store function call
-  #--------------------
-  
-  call <- match.call()
   
   # Labels
   #-------
@@ -422,31 +417,27 @@ aldvmm <- function(formula,
   # Convert formula to 'Formula' object
   formula <- Formula::Formula(formula)
   
+  # Convert data to model frame
+  cl <- match.call()
+  if(missing(data)) data <- environment(formula)
+  mf <- match.call(expand.dots = FALSE)
+  m <- match(c("formula", "data", "subset", "na.action"), names(mf), 0)
+  mf <- mf[c(1, m)]
+  mf$drop.unused.levels <- TRUE
+  mf$formula <- formula
+  mf[[1]] <- as.name("model.frame")
+  data <- eval(mf, parent.frame())
+  
   # Create outcome vector
-  y <- stats::model.response(
-    stats::model.frame(formula, 
-                       data = data,
-                       na.action = na.action)
-  )
+  y <- stats::model.response(data)
   
   # Make list of design matrices
   #-----------------------------
   
-  # Convert data to model frame
-  data <- stats::model.frame(formula, 
-                             data = data,
-                             na.action = na.action)
-  
-  # Make list of design matrices
   mm <- aldvmm.mm(mf = data,
                   Formula = formula,
                   ncmp = ncmp,
                   lcoef = lcoef)
-  
-  # Select subset of data
-  if (!is.null(subset)) {
-    mm <- lapply(mm, function (x) x[subset, ])
-  }
   
   # Make list of model terms
   #-------------------------
@@ -535,14 +526,14 @@ aldvmm <- function(formula,
   #-----------------------------------------------------------
   
   pred <- aldvmm.pred(par = fit[["par"]],
-                        X = mm,
-                        y = y,
-                        psi = psi,
-                        ncmp = ncmp,
-                        dist = dist,
-                        lcoef = lcoef,
-                        lcmp = lcmp,
-                        lcpar = lcpar)
+                      X = mm,
+                      y = y,
+                      psi = psi,
+                      ncmp = ncmp,
+                      dist = dist,
+                      lcoef = lcoef,
+                      lcmp = lcmp,
+                      lcpar = lcpar)
   
   # Obtain standard errors of the fit (delta method)
   #-------------------------------------------------
@@ -602,7 +593,7 @@ aldvmm <- function(formula,
                         pred = pred,
                         pred.se = pred.se,
                         init = init,
-                        call = call,
+                        call = match.call(),
                         formula = stats::formula(formula),
                         terms = terms,
                         data = if(model == TRUE) {data} else {NULL},

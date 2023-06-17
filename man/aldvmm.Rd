@@ -7,6 +7,7 @@
 aldvmm(
   formula,
   data,
+  subset = NULL,
   psi,
   ncmp = 2,
   dist = "normal",
@@ -21,7 +22,6 @@ aldvmm(
   model = TRUE,
   level = 0.95,
   na.action = "na.omit",
-  subset = NULL,
   ...
 )
 }
@@ -35,6 +35,9 @@ multinomial logit model of probabilities of component membership (right).}
 \item{data}{a data frame, list or environment (or object coercible to a data
 frame by \ifelse{html}{\code{\link[base]{as.data.frame}}}{\code{base::as.data.frame()}}) including data on outcomes and explanatory
 variables in \code{'formula'}.}
+
+\item{subset}{a numeric vector of row indices of the subset of the model 
+matrix used in the estimation.}
 
 \item{psi}{a numeric vector of minimum and maximum possible utility values
 smaller than or equal to 1 (e.g. \code{c(-0.594, 0.883)}). The potential
@@ -106,9 +109,6 @@ argument \code{'na.action'} of the function
 \ifelse{html}{\code{\link[stats]{model.frame}}}{\code{stats::model.frame()}} 
 in the preparation of the model matrix. The default value is 
 \code{"na.omit"}.}
-
-\item{subset}{a numeric vector of row indices of the subset of the model 
-matrix used in the estimation.}
 }
 \value{
 \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{ \code{aldvmm()}}

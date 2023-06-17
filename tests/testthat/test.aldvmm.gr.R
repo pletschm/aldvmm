@@ -22,7 +22,7 @@ test_that('Check calculation of gradients of log-likelihood.', {
   #---------------------------------------------
   
   reflist <- list()
-  
+  set.seed(101010101)
   i <- 1
   while(i <= 20){
     
@@ -129,6 +129,8 @@ test_that('Check calculation of gradients of log-likelihood.', {
   #----------------------------------------------
   
   errlist <- list()
+  
+  set.seed(101010101)
   i <- 1
   while(i <= 20){
     
