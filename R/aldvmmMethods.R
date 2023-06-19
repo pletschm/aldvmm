@@ -84,7 +84,7 @@ nobs.aldvmm <- function(object,
 #' \ifelse{html}{\code{\link[stats]{formula}}}{\code{stats::formula()}} returns the 
 #' formula object from an object of class "aldvmm".
 #'
-#' @param object an object inheriting from class "aldvmm".
+#' @param x an object inheriting from class "aldvmm".
 #' @param ... further arguments passed to or from other methods.
 #'
 #' @return an object of class "formula"
@@ -95,9 +95,9 @@ nobs.aldvmm <- function(object,
 #'
 #' @export 
 
-formula.aldvmm <- function(object,
+formula.aldvmm <- function(x,
                            ...) {
-  object$formula
+  x$formula
 }
 
 #' Extract Adjusted Limited Dependent Variable Mixture Model Model Matrices
@@ -477,7 +477,7 @@ summary.aldvmm <- function(object,
 #' terms object for the combined model of component means and probabilities of
 #' component membership from an object of class "aldvmm".
 #'
-#' @param object an object inheriting from class "aldvmm".
+#' @param x an object inheriting from class "aldvmm".
 #' @param ... further arguments passed to or from other methods.
 #'
 #' @return an object of class "terms"
@@ -488,9 +488,9 @@ summary.aldvmm <- function(object,
 #'
 #' @export 
 
-terms.aldvmm <- function(object,
+terms.aldvmm <- function(x,
                          ...) {
-  object$terms$full
+  x$terms$full
 }
 
 #' Update Adjusted Limited Dependent Variable Mixture Model Fit

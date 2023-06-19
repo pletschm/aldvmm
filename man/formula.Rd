@@ -4,10 +4,10 @@
 \alias{formula.aldvmm}
 \title{Extract Adjusted Limited Dependent Variable Mixture Model Formula}
 \usage{
-\method{formula}{aldvmm}(object, ...)
+\method{formula}{aldvmm}(x, ...)
 }
 \arguments{
-\item{object}{an object inheriting from class "aldvmm".}
+\item{x}{an object inheriting from class "aldvmm".}
 
 \item{...}{further arguments passed to or from other methods.}
 }

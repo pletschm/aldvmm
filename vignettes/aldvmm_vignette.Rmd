@@ -419,7 +419,7 @@ tmpdf[, "alg"] <- factor(tmpdf[, "alg"], levels = unique(tmpdf[order(tmpdf$id), 
 plot_comp_pred <- ggplot2::ggplot(tmpdf, aes(x = bl, y = out, group = alg, color = alg)) +
   geom_line(aes(linetype = alg)) +
   scale_linetype_manual(values = c("solid", "dashed", "dotted", "dotdash")) +
-  scale_color_manual(values = c("black", "blue", "green", "red")) +
+  scale_color_manual(values = c("black", "green", "blue", "red")) +
   scale_x_continuous(breaks = seq(-0.2, 1, by = 0.1)) +
   xlab("E[y|X] nlminb") +
   ylab("Difference from E[y|X] nlminb") +
@@ -1031,7 +1031,7 @@ The data includes `r format(textout$ncplt, big.mark="'")` observations with comp
 
 ## Model 1: Default settings {#sec:base}
 
-We first fit model 1 with the default "BFGS" optimization method and "zero" initial values. The values 0.883 and -0.594 in the argument 'psi' represent the maximum and minimum values smaller than 1 in the English value set [@Dolan1997]. As the data showed a bi-modal distribution (figure \@ref(fig:plot-hist-obs)), we estimate a mixture of 2 normal distributions ('ncmp' = 2). `aldvmm()` returns an object of class "aldvmm".
+We first fit model 1 with the default "BFGS" optimization method and "zero" initial values. The values 0.883 and -0.594 in the argument 'psi' represent the maximum and minimum values smaller than 1 in the English value set [@Dolan1997]. As the data shows a bi-modal distribution (figure \@ref(fig:plot-hist-obs)), we estimate a mixture of 2 normal distributions ('ncmp' = 2). `aldvmm()` returns an object of class "aldvmm".
 
 ```{r model1-fit, echo = TRUE, eval = FALSE}
 library("aldvmm")
@@ -1079,7 +1079,7 @@ textout[["mod1bfgs"]][["intp1"]] <- format(
 
 ```
 
-We obtain a summary table of regression results using the generic function `summary()`. The model converges at a log-likelihood of `r textout[["mod1bfgs"]][["ll"]]` and an Akaike information criterion value of `r textout[["mod1bfgs"]][["aic"]]` (table \@ref(tab:tab-sum-mod1bfgs)).
+We obtain a summary table of regression results using the generic function `summary()`. The model converges at a log-likelihood of `r textout[["mod1bfgs"]][["ll"]]` and an Akaike information criterion value of `r textout[["mod1bfgs"]][["aic"]]` (table \@ref(tab:tab-sum-mod1bfgs)). The function `aldvmm()` returns the negative log-likelihood and Akaike information criterion, and smaller values suggest better fit.
 
 The coefficients of the intercepts and covariates for the expected values $E[y|c, X]$ of the normal distributions can be interpreted as marginal effects on component means. 'lnsigma' denotes the natural logarithm of the estimated standard deviation $\sigma^{c}$. The coefficients of covariates in the multinomial logit model of probabilities of component membership are log-transformed relative probabilities. Our model only includes two components, and the multinomial logit model collapses to a binomial logit model. The intercept of `r textout[["mod1bfgs"]][["intp1"]]` means that the average probability of an observation in the data to belong to component 1 is $\text{exp}(`r textout[["mod1bfgs"]][["intp1"]]`)$ or `r exp(as.numeric(textout[["mod1bfgs"]][["intp1"]]))` times the probability to belong to component 2.
 
@@ -1105,10 +1105,9 @@ We obtain expected values of observations in the estimation data using the gener
 
 Expected values of observations in the estimation data can also be used to calculate average incremental effects or average treatment effects on the treated. Average treatment effects on the treated compare predictions for treated individuals to predictions for the same individuals without the effect of the treatment indicator. Standard errors of average treatment effects on the treated can be calculated using the delta method (see example code in the appendix).
 
-A visual inspection of mean residuals over deciles of expected values (see example code of the modified Hosmer-Lemeshow test in the appendix) shows that model 1 fits the data poorly (figure \@ref(fig:plot-comp-mhl-bfgs). Although the test is overpowered with large data, and confidence bands should not be interpreted directly, the absolute over-prediction among individuals with low observed values is quite large.
+A visual inspection of mean residuals over deciles of expected values (see example code of the modified Hosmer-Lemeshow test in the appendix) shows that model 1 fits the data poorly (figure \@ref(fig:plot-comp-mhl-bfgs)). Although the test is overpowered with large data, and confidence bands should not be interpreted directly, the absolute over-prediction among individuals with low expected values is quite large.
 
 ![(#fig:plot-comp-mhl-bfgs) Mean residuals over deciles of expected values, "BFGS" with "zero" starting values](./plot_comp_mhl_bfgs.eps)
-
 
 We can use the 'sandwich' package [@Zeileis2006] to calculate robust or clustered standard errors from objects of class "aldvmm" (see example code in the appendix).
 
@@ -1143,7 +1142,7 @@ for (i in init.method) {
 
 The maximum likelihood varies considerably across optimization methods and initial values which confirms the sensitivity of the model to changes in these settings (table \@ref(tab:ll)). The most frequent log-likelihood is `r format( names( which.max(table(round(tab_comp_ll, 2)) ) ), big.mark = "'")`, but the Hooke and Jeeves Pattern Search Optimization ("hjn") with "zero" initial values converges at a log-likelihood `r format(max(round(tab_comp_ll, 2)), big.mark = "'")`.
 
-The optimization methods "Nelder-Mead", "CG", "L-BFGS-B", and "Rvmmin" are particularly sensitive to changes of starting values. Only the method "nlminb" converged at the same log-likelihood of `r format( names( which.max(table(round(tab_comp_ll[, "nlminb"], 2)) ) ), big.mark = "'")` regardless of initial values. Even the "nlminb" algorithm converged at different parameters with starting values from a constant-only model than with the other starting values.
+The optimization methods "Nelder-Mead", "CG", "L-BFGS-B", and "Rvmmin" are particularly sensitive to changes of starting values. Only the method "nlminb" converge at the same log-likelihood of `r format( names( which.max(table(round(tab_comp_ll[, "nlminb"], 2)) ) ), big.mark = "'")` regardless of initial values. However, even the "nlminb" algorithm converge at different parameters with starting values from a constant-only model than with the other starting values.
 
 ```{r tab-comp-ll, echo = FALSE, results = 'asis'}
 
@@ -1169,7 +1168,7 @@ load("tab_comp_time.RData")
 
 ```
 
-The computation times of optimization routines were relatively short and did not vary considerably across methods expect for the "hjn" algorithm and simulated annealing "sann" starting values which required more computation time (table \@ref(tab:time)).
+The computation times of optimization routines were relatively short and did not vary considerably across methods expect for the "hjn" algorithm and simulated annealing "sann" starting values which requires more computation time (table \@ref(tab:time)).
 
 ```{r tab-comp-time, echo = FALSE, results = 'asis'}
 
@@ -1189,7 +1188,7 @@ rm(tab_comp_time)
 
 ```
 
-Parameter estimates differed considerably across optimization algorithms (table \@ref(tab:tab-comp-coef)). Only the "BFGS" and "nlminb" methods converged at the same parameters. The solution of the "hjn" method is rather extreme with no effect of the Oxford Hip Score and a standard deviation of almost 0 in component 1 and a very low probability of membership of component 1. The solution of the "hjn" method suggests that a single-component model should be explored as well.
+Parameter estimates differ considerably across selected optimization algorithms (table \@ref(tab:tab-comp-coef)). The default "BFGS" - "zero" approach converges at the same parameters as the "nlminb" - "zero" method. The solution of the "hjn" method is rather extreme with no effect of the Oxford Hip Score, a standard deviation of almost 0 in component 1 and a very low probability of membership of component 1. Also, the Modified Hosmer-Lemeshow test did not show better fit of the "hjn" solution compared to the other algorithms (figure \@ref(fig:plot-comp-mhl-nlminb) in the appendix). The solution of the "hjn" method suggests that a single-component model should be explored as well.
 
 ```{r tab-comp-coef, echo = FALSE, results = "asis"}
 
@@ -1212,7 +1211,7 @@ rm(tab_comp_coef, tab_sum_mod1bfgs)
 
 ```
 
-As adjusted limited dependent variable mixture models are frequently used for tasks that rely on predictions, we also compare expected values from the "BFGS", "Nelder-Mead" and "hjn" methods to expected values from the "nlminb"  method. Expected values from the "Nelder-Mead" and "hjn" methods were smaller than "nlminb" values among observations with low and high expected values, while predictions from "BFGS" matched predictions from the "nlminb" model fit closely (figure \@ref(fig:plot-comp-pred)).
+As adjusted limited dependent variable mixture models are frequently used for tasks that rely on predictions, we also compare expected values from the "BFGS", "Nelder-Mead" and "hjn" methods to expected values from the "nlminb"  method. Expected values from the "Nelder-Mead" and "hjn" methods are smaller than "nlminb" values among observations with low and high expected values, while predictions from "BFGS" match predictions from the "nlminb" model fit closely (figure \@ref(fig:plot-comp-pred)).
 
 ![(#fig:plot-comp-pred) Deviation of expected values from "BFGS", "Nelder-Mead" and "hjn" versus "nlminb" with zero starting values](./plot_comp_pred.eps)
 
@@ -1235,7 +1234,9 @@ textout[["cstr"]][["ll"]] <- format(
 
 ```
 
-We can also fit model 1 with user-defined starting values and box constraints. When constraints are imposed, the `aldvmm()` function uses the optimization method "L-BFGS-B", which showed to be very sensitive to starting values. We use zero initial values for all parameters except for the intercept in the multinomial logit which we set to the estimate from the "nlminb" optimization method with "zero" starting values (0.7283) (table \@ref(tab:tab-comp-coef)). We impose a lower limit of -3 to the log-standard deviations in both components. The `aldvmm()` function returns a warning that the covariance matrix included negative values on the diagonal. We see that these values are the variances of the intercept and the log-standard deviation in component 2 (table \@ref(tab:tab-sum-cstr)). The log-likelihood amounts to `r textout[["cstr"]][["ll"]]`, which is even lower than the log-likelihood in the solution of the "Nelder-Mead" optimization method with "zero" starting values. The parameter estimates do not resemble any of the solutions of the unconstrained "Nelder-Mead", "nlminb" or "hjn" optimization methods with "zero" values (table \@ref(tab:tab-comp-coef)), which further emphasizes the difficulties in finding a global optimum of the likelihood with English EQ-5D-3L utilities after hip replacement.
+We can also fit model 1 with user-defined starting values and box constraints. When constraints are imposed, the `aldvmm()` function uses the optimization method "L-BFGS-B", which shows to be very sensitive to starting values. We use zero initial values for all parameters except for the intercept in the multinomial logit which we set to the estimate from the "nlminb" optimization method with "zero" starting values (0.7283) (table \@ref(tab:tab-comp-coef)). We impose a lower limit of -3 to the log-standard deviations in both components. 
+
+The `aldvmm()` function returns a warning that the covariance matrix included negative values on the diagonal. We see that these values are the variances of the intercept and the log-standard deviation in component 2 (table \@ref(tab:tab-sum-cstr)). The log-likelihood amounts to `r textout[["cstr"]][["ll"]]`, which is smaller than the maximum log-likelihoods of model fits without constraints. The parameter estimates do not resemble any of the solutions of the unconstrained "BFGS", "Nelder-Mead", "nlminb" or "hjn" optimization methods with "zero" starting values (table \@ref(tab:tab-comp-coef)), which further emphasizes the difficulties in finding a global optimum of the likelihood with English EQ-5D-3L utilities after hip replacement.
 
 ```{r tab-cstr-show, echo = TRUE, eval = FALSE}
 init <- c(0,    0,   0,   0,    0,    0,    0.7283)
@@ -1273,7 +1274,7 @@ rm(tab_sum_cstr)
 
 ## Model 1: Single-component model
 
-As the solution of the "hjn" algorithm included a component with very low probability, we also estimate a single-component model.
+As the solution of the "hjn" algorithm includes a component with very low probability, we also estimate a single-component model.
 
 ```{r tobit-fit, echo = TRUE, eval = FALSE}
 fit <- aldvmm::aldvmm(eq5d ~ hr,
@@ -1407,7 +1408,7 @@ To validate the R implementation of adjusted limited dependent variable mixture 
 
 4. Model 2 with user-defined initial values
 
-The parameter estimates and standard errors obtained in R are very similar to the results from STATA\textsuperscript{\textregistered} (table \@ref(tab:tab-comp-stata) and table \@ref(tab:tab-compse-stata)). R did not obtain any standard errors in reference model 2 while STATA\textsuperscript{\textregistered} returned standard errors for the first component and the probability of belonging to component 1. Although reference models 1 and 3 yield different parameter estimates, they converged at the same log-likelihood which further supports the hypothesis of multiple local optima of the likelihood. The log-likelihood is consistently smaller in R than in STATA\textsuperscript{\textregistered}, but the relative ordering of models is consistent across platforms. 
+The parameter estimates and standard errors obtained in R are very similar to the results from STATA\textsuperscript{\textregistered} (table \@ref(tab:tab-comp-stata) and table \@ref(tab:tab-compse-stata)). R did not obtain any standard errors in reference model 2 while STATA\textsuperscript{\textregistered} returns standard errors for the first component and the probability of belonging to component 1. Although reference models 1 and 3 yield different parameter estimates, they converge at the same log-likelihood which further supports the hypothesis of multiple local optima of the likelihood. The relative ordering of models is consistent across platforms. 
 
 ```{r tab-calc-stata, echo = FALSE, results = "asis"}
 
@@ -1556,25 +1557,25 @@ rm(tab_diff_se)
 
 ```
 
-The comparison of the R and STATA\textsuperscript{\textregistered} packages showed that the R implementation sometimes behaves differently than the STATA\textsuperscript{\textregistered} package, but the results are not indicative of technical errors in the R implementation.
+The comparison of the R and STATA\textsuperscript{\textregistered} packages shows that the R implementation sometimes behaves differently than the STATA\textsuperscript{\textregistered} package, but the results are not indicative of technical errors in the R implementation.
 
 # Discussion
 
 Adjusted limited dependent variable mixture models are powerful tools for regression analysis of health state utilities. Unlike standard regression models, adjusted limited dependent variable mixture models account for limits, gaps and multi-modal distributions.
 
-The comparison of different optimization methods with EQ-5D-3L utility data from English patients after hip replacement in 2011 and 2012 [@NHSDigital2013] showed that the likelihood function can be challenging to maximize and can converge at extreme solutions. Parameter estimates vary considerably across optimization methods and even across methods with the same maximum log-likelihood. However, fitted values were very similar across the four reference cases which suggests that the model is more robust for the identification of incremental and average marginal effects than for parameter identification.
+The comparison of different optimization methods with EQ-5D-3L utility data from English patients after hip replacement in 2011 and 2012 [@NHSDigital2013] showed that the likelihood function can be challenging to maximize and can converge at local optima or extreme solutions. Parameter estimates varied considerably across optimization methods and even across methods with the same maximum log-likelihood. However, fitted values were very similar across the four reference cases which suggests that the model is more robust for the identification of incremental and average marginal effects than for parameter identification.
 
 The 'aldvmm' package offers a variety of optimization algorithms and methods for generating initial values which is an important strength in such challenging situations. It is essential to assess different optimization algorithms and methods for initial values before interpreting the parameter estimates or predictions of adjusted limited dependent variable mixture models. 
 
 The analysis of the EQ-5D-3L utility data also suggests that simpler models with fewer components should be considered when multi-component models are difficult to fit. Even single-component adjusted limited dependent variable mixture models can improve fit compared to traditional regression techniques because they account for limits and gaps.
 
-Although coefficients can be interpreted as marginal effects within each component, they cannot interpreted in terms of overall expected values. Thus, average marginal effects and average treatment effects need to be calculated from predictions using the generic function `predict()`. Standard errors of marginal effects or average treatment effects can be calculated using the delta method. 
+Although coefficients can be interpreted as marginal effects within each component, they cannot be interpreted in terms of overall expected values. Thus, average marginal effects and average treatment effects need to be calculated from predictions using the generic function `predict()`. Standard errors of marginal effects or average treatment effects can be calculated using the delta method. 
 
-When no valid covarianve matrix of parameters can be obtained, the function `sandwich::vcovBS()` can be used to obtain bootstrapped standard errors. Other functions from the 'sandwich' package can also be used to estimate robust or clustered standard errors.
+When no valid covariance matrix of parameters can be obtained or the user is in doubt of the validity of standard errors, the function `sandwich::vcovBS()` can be used to obtain bootstrapped standard errors. Due to the large variability of results across model fits, a large number of iterations might be needed which increases computation time. Other functions from the 'sandwich' package can also be used to estimate robust or clustered standard errors.
 
-In situations with repeated utility measures, the 'aldvmm' package only allows fixed effects estimations with individual/group and time fixed effects which can be an important limitation in the analysis of clinical data. However, time fixed effects can be an appropriate modeling strategy in the presence of general time trends and dynamic selection in the population, e.g. because health state utilities decrease over time and treated individuals survive longer and thus are over-represented in later measurements.
+In situations with repeated utility measures, the 'aldvmm' package only allows fixed effects estimations with group and time fixed effects which can be an important limitation in the analysis of clinical data. However, time fixed effects can be an appropriate modeling strategy in the presence of general time trends and dynamic selection in the population, e.g. because health state utilities decrease over time and treated individuals survive longer and thus are over-represented in later measurements.
 
-Possible extensions of the 'aldvmm' package could include additional component distributions, a mixed model implementation for repeated measures and an implementation of average marginal effects and their standard errors.
+Possible extensions of the 'aldvmm' package could include additional component distributions, a mixed model implementation for repeated measures and an implementation of functions for calculating average marginal effects and their standard errors.
 
 \newpage
 
@@ -1799,6 +1800,17 @@ plot <- ggplot2::ggplot(plotdat, aes(x = factor(as.numeric(group)),
                                      group = factor(outcome))) +
   geom_line(aes(linetype = factor(outcome)))
 ```  
+
+\newpage
+
+## Modified Hosmer-Lemeshow test
+
+![(#fig:plot-comp-mhl-nm) Mean residuals over deciles of expected values, "Nelder-Mead" with "zero" starting values](./plot_comp_mhl_nm.eps)
+
+![(#fig:plot-comp-mhl-nlminb) Mean residuals over deciles of expected values, "nlminb" with "zero" starting values](./plot_comp_mhl_nlminb.eps)
+
+
+![(#fig:plot-comp-mhl-hjn) Mean residuals over deciles of expected values, "hjn" with "zero" starting values](./plot_comp_mhl_hjn.eps)
 
 \newpage
 ## R code for the estimation of reference cases

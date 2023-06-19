@@ -21,8 +21,7 @@ aldvmm(
   se.fit = FALSE,
   model = TRUE,
   level = 0.95,
-  na.action = "na.omit",
-  ...
+  na.action = "na.omit"
 )
 }
 \arguments{
