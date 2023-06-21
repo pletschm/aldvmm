@@ -1,1 +1,2 @@
-11: The label(s) tab:cov not found
+In normalizePath(path.expand(path), winslash, mustWork) :
+  path[1]="./html_vignette.Rmd": The system cannot find the file specified
