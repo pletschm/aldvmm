@@ -476,119 +476,273 @@ Figure 4.1: Frequency distribution of observed EQ-5D-3L utilities
 <p>We obtain a summary table of regression results using the generic function <code>summary()</code>. The model converges at a log-likelihood of -706 and an Akaike information criterion value of -1’399 (table <a href="#tab:tab-sum-mod1-bfgs">5.1</a>). The function <code>aldvmm()</code> returns the negative log-likelihood and Akaike information criterion, and smaller values suggest better fit.</p>
 <p>The coefficients of the intercepts and covariates for the expected values <span class="math inline">\(E[y|c, X]\)</span> of the normal distributions can be interpreted as marginal effects on component means. ‘lnsigma’ denotes the natural logarithm of the estimated standard deviation <span class="math inline">\(\sigma^{c}\)</span>. The coefficients of covariates in the multinomial logit model of probabilities of component membership are log-transformed relative probabilities. Our model only includes two components, and the multinomial logit model collapses to a binomial logit model. The intercept of -0.7281 means that the average probability of an observation in the data to belong to component 1 is <span class="math inline">\(\text{exp}(-0.7281)\)</span> or 0.4828255 times the probability to belong to component 2.</p>
 <table>
-<caption><span id="tab:tab-sum-mod1-bfgs">Table 5.1: </span>Regression results from model 1 with “BFGS” optimization method and “zero” starting values</caption>
+<caption>
+<span id="tab:tab-sum-mod1-bfgs">Table 5.1: </span>Regression results from model 1 with “BFGS” optimization method and “zero” starting values
+</caption>
 <thead>
-<tr class="header">
-<th></th>
-<th></th>
-<th align="left">Estimate</th>
-<th align="left">Std. Error</th>
-<th align="left">t value</th>
-<th align="left">Pr(&gt;|t|)</th>
-<th align="left">2.5 %</th>
-<th align="left">97.5 %</th>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:left;">
+</th>
+<th style="text-align:left;">
+Estimate
+</th>
+<th style="text-align:left;">
+Std. Error
+</th>
+<th style="text-align:left;">
+t value
+</th>
+<th style="text-align:left;">
+Pr(&gt;|t|)
+</th>
+<th style="text-align:left;">
+2.5 %
+</th>
+<th style="text-align:left;">
+97.5 %
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td>E[y|X, c]</td>
-<td></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
+<tr>
+<td style="text-align:left;">
+E[y|X, c]
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
 </tr>
-<tr class="even">
-<td>Comp1</td>
-<td>(Intercept)</td>
-<td align="left">-0.4312</td>
-<td align="left">0.0224</td>
-<td align="left">-19.2471</td>
-<td align="left">0</td>
-<td align="left">-0.4751</td>
-<td align="left">-0.3873</td>
+<tr>
+<td style="text-align:left;">
+Comp1
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:left;">
+-0.4312
+</td>
+<td style="text-align:left;">
+0.0224
+</td>
+<td style="text-align:left;">
+-19.2471
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+-0.4751
+</td>
+<td style="text-align:left;">
+-0.3873
+</td>
 </tr>
-<tr class="odd">
-<td></td>
-<td>hr</td>
-<td align="left">0.3136</td>
-<td align="left">0.0065</td>
-<td align="left">47.9444</td>
-<td align="left">0</td>
-<td align="left">0.3008</td>
-<td align="left">0.3264</td>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+hr
+</td>
+<td style="text-align:left;">
+0.3136
+</td>
+<td style="text-align:left;">
+0.0065
+</td>
+<td style="text-align:left;">
+47.9444
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.3008
+</td>
+<td style="text-align:left;">
+0.3264
+</td>
 </tr>
-<tr class="even">
-<td></td>
-<td>lnsigma</td>
-<td align="left">-1.2479</td>
-<td align="left">0.0215</td>
-<td align="left">-57.9753</td>
-<td align="left">0</td>
-<td align="left">-1.2901</td>
-<td align="left">-1.2057</td>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+lnsigma
+</td>
+<td style="text-align:left;">
+-1.2479
+</td>
+<td style="text-align:left;">
+0.0215
+</td>
+<td style="text-align:left;">
+-57.9753
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+-1.2901
+</td>
+<td style="text-align:left;">
+-1.2057
+</td>
 </tr>
-<tr class="odd">
-<td>Comp2</td>
-<td>(Intercept)</td>
-<td align="left">0.2358</td>
-<td align="left">0.0069</td>
-<td align="left">34.1725</td>
-<td align="left">0</td>
-<td align="left">0.2223</td>
-<td align="left">0.2493</td>
+<tr>
+<td style="text-align:left;">
+Comp2
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:left;">
+0.2358
+</td>
+<td style="text-align:left;">
+0.0069
+</td>
+<td style="text-align:left;">
+34.1725
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.2223
+</td>
+<td style="text-align:left;">
+0.2493
+</td>
 </tr>
-<tr class="even">
-<td></td>
-<td>hr</td>
-<td align="left">0.1459</td>
-<td align="left">0.0019</td>
-<td align="left">76.359</td>
-<td align="left">0</td>
-<td align="left">0.1422</td>
-<td align="left">0.1497</td>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+hr
+</td>
+<td style="text-align:left;">
+0.1459
+</td>
+<td style="text-align:left;">
+0.0019
+</td>
+<td style="text-align:left;">
+76.359
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.1422
+</td>
+<td style="text-align:left;">
+0.1497
+</td>
 </tr>
-<tr class="odd">
-<td></td>
-<td>lnsigma</td>
-<td align="left">-2.4623</td>
-<td align="left">0.0178</td>
-<td align="left">-138.1184</td>
-<td align="left">0</td>
-<td align="left">-2.4972</td>
-<td align="left">-2.4273</td>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+lnsigma
+</td>
+<td style="text-align:left;">
+-2.4623
+</td>
+<td style="text-align:left;">
+0.0178
+</td>
+<td style="text-align:left;">
+-138.1184
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+-2.4972
+</td>
+<td style="text-align:left;">
+-2.4273
+</td>
 </tr>
-<tr class="even">
-<td>P[c|X]</td>
-<td></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
+<tr>
+<td style="text-align:left;">
+P[c|X]
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
 </tr>
-<tr class="odd">
-<td>Comp1</td>
-<td>(Intercept)</td>
-<td align="left">-0.7281</td>
-<td align="left">0.0607</td>
-<td align="left">-12.0038</td>
-<td align="left">0</td>
-<td align="left">-0.847</td>
-<td align="left">-0.6092</td>
+<tr>
+<td style="text-align:left;">
+Comp1
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:left;">
+-0.7281
+</td>
+<td style="text-align:left;">
+0.0607
+</td>
+<td style="text-align:left;">
+-12.0038
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+-0.847
+</td>
+<td style="text-align:left;">
+-0.6092
+</td>
 </tr>
-<tr class="even">
-<td>N = 10549</td>
-<td>ll = -706</td>
-<td align="left">AIC = -1399</td>
-<td align="left">BIC = -1348</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
+<tr>
+<td style="text-align:left;">
+N = 10549
+</td>
+<td style="text-align:left;">
+ll = -706
+</td>
+<td style="text-align:left;">
+AIC = -1399
+</td>
+<td style="text-align:left;">
+BIC = -1348
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
 </tr>
 </tbody>
 </table>
@@ -761,97 +915,214 @@ Figure 5.2: Mean residuals over deciles of expected values, “BFGS” with “z
 </table>
 <p>Parameter estimates differ considerably across selected optimization algorithms (table <a href="#tab:tab-comp-coef">5.4</a>). The default “BFGS” - “zero” approach converges at the same parameters as the “nlminb” - “zero” method. The solution of the “hjn” method is rather extreme with no effect of the Oxford Hip Score, a standard deviation of almost 0 in component 1 and a very low probability of membership of component 1. Also, the Modified Hosmer-Lemeshow test did not show better fit of the “hjn” solution compared to the other algorithms (figure <a href="#fig:plot-comp-mhl-nlminb">7.2</a> in the appendix). The solution of the “hjn” method suggests that a single-component model should be explored as well.</p>
 <table>
-<caption><span id="tab:tab-comp-coef">Table 5.4: </span>Regression results of model 1 with zero starting values in “BFGS”, “Nelder-Mead”, “nlminb” and “hjn” algorithms</caption>
+<caption>
+<span id="tab:tab-comp-coef">Table 5.4: </span>Regression results of model 1 with zero starting values in “BFGS”, “Nelder-Mead”, “nlminb” and “hjn” algorithms
+</caption>
 <thead>
-<tr class="header">
-<th></th>
-<th></th>
-<th align="left">BFGS</th>
-<th align="left">Nelder-Mead</th>
-<th align="left">nlminb</th>
-<th align="left">hjn</th>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:left;">
+</th>
+<th style="text-align:left;">
+BFGS
+</th>
+<th style="text-align:left;">
+Nelder-Mead
+</th>
+<th style="text-align:left;">
+nlminb
+</th>
+<th style="text-align:left;">
+hjn
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td>E[y|X, c]</td>
-<td></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
+<tr>
+<td style="text-align:left;">
+E[y|X, c]
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
 </tr>
-<tr class="even">
-<td>Comp1</td>
-<td>(Intercept)</td>
-<td align="left">-0.4312</td>
-<td align="left">-0.0575</td>
-<td align="left">-0.4307</td>
-<td align="left">0.691</td>
+<tr>
+<td style="text-align:left;">
+Comp1
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:left;">
+-0.4312
+</td>
+<td style="text-align:left;">
+-0.0575
+</td>
+<td style="text-align:left;">
+-0.4307
+</td>
+<td style="text-align:left;">
+0.691
+</td>
 </tr>
-<tr class="odd">
-<td></td>
-<td>hr</td>
-<td align="left">0.3136</td>
-<td align="left">0.2233</td>
-<td align="left">0.3135</td>
-<td align="left">0</td>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+hr
+</td>
+<td style="text-align:left;">
+0.3136
+</td>
+<td style="text-align:left;">
+0.2233
+</td>
+<td style="text-align:left;">
+0.3135
+</td>
+<td style="text-align:left;">
+0
+</td>
 </tr>
-<tr class="even">
-<td></td>
-<td>lnsigma</td>
-<td align="left">-1.2479</td>
-<td align="left">-1.8381</td>
-<td align="left">-1.2481</td>
-<td align="left">-36.737</td>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+lnsigma
+</td>
+<td style="text-align:left;">
+-1.2479
+</td>
+<td style="text-align:left;">
+-1.8381
+</td>
+<td style="text-align:left;">
+-1.2481
+</td>
+<td style="text-align:left;">
+-36.737
+</td>
 </tr>
-<tr class="odd">
-<td>Comp2</td>
-<td>(Intercept)</td>
-<td align="left">0.2358</td>
-<td align="left">4.4022</td>
-<td align="left">0.2358</td>
-<td align="left">-0.149</td>
+<tr>
+<td style="text-align:left;">
+Comp2
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:left;">
+0.2358
+</td>
+<td style="text-align:left;">
+4.4022
+</td>
+<td style="text-align:left;">
+0.2358
+</td>
+<td style="text-align:left;">
+-0.149
+</td>
 </tr>
-<tr class="even">
-<td></td>
-<td>hr</td>
-<td align="left">0.1459</td>
-<td align="left">-0.9974</td>
-<td align="left">0.1459</td>
-<td align="left">0.25</td>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+hr
+</td>
+<td style="text-align:left;">
+0.1459
+</td>
+<td style="text-align:left;">
+-0.9974
+</td>
+<td style="text-align:left;">
+0.1459
+</td>
+<td style="text-align:left;">
+0.25
+</td>
 </tr>
-<tr class="odd">
-<td></td>
-<td>lnsigma</td>
-<td align="left">-2.4623</td>
-<td align="left">0.125</td>
-<td align="left">-2.4624</td>
-<td align="left">-1.589</td>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+lnsigma
+</td>
+<td style="text-align:left;">
+-2.4623
+</td>
+<td style="text-align:left;">
+0.125
+</td>
+<td style="text-align:left;">
+-2.4624
+</td>
+<td style="text-align:left;">
+-1.589
+</td>
 </tr>
-<tr class="even">
-<td>P[c|X]</td>
-<td></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
+<tr>
+<td style="text-align:left;">
+P[c|X]
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
 </tr>
-<tr class="odd">
-<td>Comp1</td>
-<td>(Intercept)</td>
-<td align="left">-0.7281</td>
-<td align="left">3.8489</td>
-<td align="left">-0.728</td>
-<td align="left">-2.19</td>
+<tr>
+<td style="text-align:left;">
+Comp1
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:left;">
+-0.7281
+</td>
+<td style="text-align:left;">
+3.8489
+</td>
+<td style="text-align:left;">
+-0.728
+</td>
+<td style="text-align:left;">
+-2.19
+</td>
 </tr>
-<tr class="even">
-<td>ll</td>
-<td></td>
-<td align="left">-706.32</td>
-<td align="left">259.21</td>
-<td align="left">-706.32</td>
-<td align="left">-33057.43</td>
+<tr>
+<td style="text-align:left;">
+ll
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+-706.32
+</td>
+<td style="text-align:left;">
+259.21
+</td>
+<td style="text-align:left;">
+-706.32
+</td>
+<td style="text-align:left;">
+-33057.43
+</td>
 </tr>
 </tbody>
 </table>
@@ -883,119 +1154,273 @@ Figure 5.3: Deviation of expected values from “BFGS”, “Nelder-Mead” and 
 <span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a></span>
 <span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="fu">summary</span>(fit1_cstr)</span></code></pre></div>
 <table>
-<caption><span id="tab:tab-sum-cstr">Table 5.5: </span>Regression results of model 1 with the “L-BFGS-B” method, parameter constraints and user-defined starting values</caption>
+<caption>
+<span id="tab:tab-sum-cstr">Table 5.5: </span>Regression results of model 1 with the “L-BFGS-B” method, parameter constraints and user-defined starting values
+</caption>
 <thead>
-<tr class="header">
-<th></th>
-<th></th>
-<th align="left">Estimate</th>
-<th align="left">Std. Error</th>
-<th align="left">t value</th>
-<th align="left">Pr(&gt;|t|)</th>
-<th align="left">2.5 %</th>
-<th align="left">97.5 %</th>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:left;">
+</th>
+<th style="text-align:left;">
+Estimate
+</th>
+<th style="text-align:left;">
+Std. Error
+</th>
+<th style="text-align:left;">
+t value
+</th>
+<th style="text-align:left;">
+Pr(&gt;|t|)
+</th>
+<th style="text-align:left;">
+2.5 %
+</th>
+<th style="text-align:left;">
+97.5 %
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td>E[y|X, c]</td>
-<td></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
+<tr>
+<td style="text-align:left;">
+E[y|X, c]
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
 </tr>
-<tr class="even">
-<td>Comp1</td>
-<td>(Intercept)</td>
-<td align="left">-0.092</td>
-<td align="left">0.0085</td>
-<td align="left">-10.8048</td>
-<td align="left">0</td>
-<td align="left">-0.1087</td>
-<td align="left">-0.0753</td>
+<tr>
+<td style="text-align:left;">
+Comp1
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:left;">
+-0.092
+</td>
+<td style="text-align:left;">
+0.0085
+</td>
+<td style="text-align:left;">
+-10.8048
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+-0.1087
+</td>
+<td style="text-align:left;">
+-0.0753
+</td>
 </tr>
-<tr class="odd">
-<td></td>
-<td>hr</td>
-<td align="left">0.2325</td>
-<td align="left">0.0023</td>
-<td align="left">101.8493</td>
-<td align="left">0</td>
-<td align="left">0.228</td>
-<td align="left">0.237</td>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+hr
+</td>
+<td style="text-align:left;">
+0.2325
+</td>
+<td style="text-align:left;">
+0.0023
+</td>
+<td style="text-align:left;">
+101.8493
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.228
+</td>
+<td style="text-align:left;">
+0.237
+</td>
 </tr>
-<tr class="even">
-<td></td>
-<td>lnsigma</td>
-<td align="left">-1.6406</td>
-<td align="left">0.0089</td>
-<td align="left">-183.9809</td>
-<td align="left">0</td>
-<td align="left">-1.6581</td>
-<td align="left">-1.6231</td>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+lnsigma
+</td>
+<td style="text-align:left;">
+-1.6406
+</td>
+<td style="text-align:left;">
+0.0089
+</td>
+<td style="text-align:left;">
+-183.9809
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+-1.6581
+</td>
+<td style="text-align:left;">
+-1.6231
+</td>
 </tr>
-<tr class="odd">
-<td>Comp2</td>
-<td>(Intercept)</td>
-<td align="left">0.3931</td>
-<td align="left">NaN</td>
-<td align="left">NaN</td>
-<td align="left">NaN</td>
-<td align="left">NaN</td>
-<td align="left">NaN</td>
+<tr>
+<td style="text-align:left;">
+Comp2
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:left;">
+0.3931
+</td>
+<td style="text-align:left;">
+NaN
+</td>
+<td style="text-align:left;">
+NaN
+</td>
+<td style="text-align:left;">
+NaN
+</td>
+<td style="text-align:left;">
+NaN
+</td>
+<td style="text-align:left;">
+NaN
+</td>
 </tr>
-<tr class="even">
-<td></td>
-<td>hr</td>
-<td align="left">2.5249</td>
-<td align="left">7.4795</td>
-<td align="left">0.3376</td>
-<td align="left">0.7357</td>
-<td align="left">-12.1363</td>
-<td align="left">17.1861</td>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+hr
+</td>
+<td style="text-align:left;">
+2.5249
+</td>
+<td style="text-align:left;">
+7.4795
+</td>
+<td style="text-align:left;">
+0.3376
+</td>
+<td style="text-align:left;">
+0.7357
+</td>
+<td style="text-align:left;">
+-12.1363
+</td>
+<td style="text-align:left;">
+17.1861
+</td>
 </tr>
-<tr class="odd">
-<td></td>
-<td>lnsigma</td>
-<td align="left">-0.7651</td>
-<td align="left">NaN</td>
-<td align="left">NaN</td>
-<td align="left">NaN</td>
-<td align="left">NaN</td>
-<td align="left">NaN</td>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+lnsigma
+</td>
+<td style="text-align:left;">
+-0.7651
+</td>
+<td style="text-align:left;">
+NaN
+</td>
+<td style="text-align:left;">
+NaN
+</td>
+<td style="text-align:left;">
+NaN
+</td>
+<td style="text-align:left;">
+NaN
+</td>
+<td style="text-align:left;">
+NaN
+</td>
 </tr>
-<tr class="even">
-<td>P[c|X]</td>
-<td></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
+<tr>
+<td style="text-align:left;">
+P[c|X]
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
 </tr>
-<tr class="odd">
-<td>Comp1</td>
-<td>(Intercept)</td>
-<td align="left">6.852</td>
-<td align="left">0.5388</td>
-<td align="left">12.7168</td>
-<td align="left">0</td>
-<td align="left">5.7958</td>
-<td align="left">7.9082</td>
+<tr>
+<td style="text-align:left;">
+Comp1
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:left;">
+6.852
+</td>
+<td style="text-align:left;">
+0.5388
+</td>
+<td style="text-align:left;">
+12.7168
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+5.7958
+</td>
+<td style="text-align:left;">
+7.9082
+</td>
 </tr>
-<tr class="even">
-<td>N = 10549</td>
-<td>ll = 628</td>
-<td align="left">AIC = 1270</td>
-<td align="left">BIC = 1320</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
+<tr>
+<td style="text-align:left;">
+N = 10549
+</td>
+<td style="text-align:left;">
+ll = 628
+</td>
+<td style="text-align:left;">
+AIC = 1270
+</td>
+<td style="text-align:left;">
+BIC = 1320
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
 </tr>
 </tbody>
 </table>
@@ -1013,69 +1438,152 @@ Figure 5.3: Deviation of expected values from “BFGS”, “Nelder-Mead” and 
 <span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="fu">summary</span>(fit)</span></code></pre></div>
 <p>The coefficients of the single-component model are relatively similar to the parameters in the second component of model 1 from the “hjn” algorithm (table <a href="#tab:tab-sum-tobit">5.6</a>). The Akaike information criterion amounts to 1’276 which is larger than the values of the “nlminb” (-706.32) and “hjn” (-33’057.43) solutions of the two-component model and thus suggests worse fit of the single-component model.</p>
 <table>
-<caption><span id="tab:tab-sum-tobit">Table 5.6: </span>Regression results of model 1 with 1 component, zero starting values in “nlminb” algorithm</caption>
+<caption>
+<span id="tab:tab-sum-tobit">Table 5.6: </span>Regression results of model 1 with 1 component, zero starting values in “nlminb” algorithm
+</caption>
 <thead>
-<tr class="header">
-<th></th>
-<th></th>
-<th align="left">Estimate</th>
-<th align="left">Std. Error</th>
-<th align="left">t value</th>
-<th align="left">Pr(&gt;|t|)</th>
-<th align="left">2.5 %</th>
-<th align="left">97.5 %</th>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:left;">
+</th>
+<th style="text-align:left;">
+Estimate
+</th>
+<th style="text-align:left;">
+Std. Error
+</th>
+<th style="text-align:left;">
+t value
+</th>
+<th style="text-align:left;">
+Pr(&gt;|t|)
+</th>
+<th style="text-align:left;">
+2.5 %
+</th>
+<th style="text-align:left;">
+97.5 %
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td>E[y|X, c]</td>
-<td></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
+<tr>
+<td style="text-align:left;">
+E[y|X, c]
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
 </tr>
-<tr class="even">
-<td>Comp1</td>
-<td>(Intercept)</td>
-<td align="left">-0.0886</td>
-<td align="left">0.0085</td>
-<td align="left">-10.4099</td>
-<td align="left">0</td>
-<td align="left">-0.1053</td>
-<td align="left">-0.0719</td>
+<tr>
+<td style="text-align:left;">
+Comp1
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:left;">
+-0.0886
+</td>
+<td style="text-align:left;">
+0.0085
+</td>
+<td style="text-align:left;">
+-10.4099
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+-0.1053
+</td>
+<td style="text-align:left;">
+-0.0719
+</td>
 </tr>
-<tr class="odd">
-<td></td>
-<td>hr</td>
-<td align="left">0.2318</td>
-<td align="left">0.0023</td>
-<td align="left">101.4681</td>
-<td align="left">0</td>
-<td align="left">0.2273</td>
-<td align="left">0.2362</td>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+hr
+</td>
+<td style="text-align:left;">
+0.2318
+</td>
+<td style="text-align:left;">
+0.0023
+</td>
+<td style="text-align:left;">
+101.4681
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.2273
+</td>
+<td style="text-align:left;">
+0.2362
+</td>
 </tr>
-<tr class="even">
-<td></td>
-<td>lnsigma</td>
-<td align="left">-1.6363</td>
-<td align="left">0.0089</td>
-<td align="left">-184.2422</td>
-<td align="left">0</td>
-<td align="left">-1.6537</td>
-<td align="left">-1.6189</td>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+lnsigma
+</td>
+<td style="text-align:left;">
+-1.6363
+</td>
+<td style="text-align:left;">
+0.0089
+</td>
+<td style="text-align:left;">
+-184.2422
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+-1.6537
+</td>
+<td style="text-align:left;">
+-1.6189
+</td>
 </tr>
-<tr class="odd">
-<td>N = 10549</td>
-<td>ll = 635</td>
-<td align="left">AIC = 1276</td>
-<td align="left">BIC = 1297</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
+<tr>
+<td style="text-align:left;">
+N = 10549
+</td>
+<td style="text-align:left;">
+ll = 635
+</td>
+<td style="text-align:left;">
+AIC = 1276
+</td>
+<td style="text-align:left;">
+BIC = 1297
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
 </tr>
 </tbody>
 </table>
@@ -1096,129 +1604,298 @@ Figure 5.3: Deviation of expected values from “BFGS”, “Nelder-Mead” and 
 <span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="fu">summary</span>(fit2)</span></code></pre></div>
 <p>The Akaike information criterion of model 2 fitted using the “nlminb” method amounts to -1’867 which is smaller than the Akaike information criterion of model 1 (-706.32) with the same method. The smaller Akaike information criterion suggests that the increase in the log-likelihood after inclusion of a coefficient of the Oxford Hip Score on the probability of component membership is sufficiently large to justify the extra parameter.</p>
 <table>
-<caption><span id="tab:tab-sum-mod2">Table 5.7: </span>Regression results of model 2 with user-defined starting values in the “nlminb” algorithm</caption>
+<caption>
+<span id="tab:tab-sum-mod2">Table 5.7: </span>Regression results of model 2 with user-defined starting values in the “nlminb” algorithm
+</caption>
 <thead>
-<tr class="header">
-<th></th>
-<th></th>
-<th align="left">Estimate</th>
-<th align="left">Std. Error</th>
-<th align="left">t value</th>
-<th align="left">Pr(&gt;|t|)</th>
-<th align="left">2.5 %</th>
-<th align="left">97.5 %</th>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:left;">
+</th>
+<th style="text-align:left;">
+Estimate
+</th>
+<th style="text-align:left;">
+Std. Error
+</th>
+<th style="text-align:left;">
+t value
+</th>
+<th style="text-align:left;">
+Pr(&gt;|t|)
+</th>
+<th style="text-align:left;">
+2.5 %
+</th>
+<th style="text-align:left;">
+97.5 %
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td>E[y|X, c]</td>
-<td></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
+<tr>
+<td style="text-align:left;">
+E[y|X, c]
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
 </tr>
-<tr class="even">
-<td>Comp1</td>
-<td>(Intercept)</td>
-<td align="left">0.0031</td>
-<td align="left">0.0281</td>
-<td align="left">0.1084</td>
-<td align="left">0.9137</td>
-<td align="left">-0.0521</td>
-<td align="left">0.0582</td>
+<tr>
+<td style="text-align:left;">
+Comp1
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:left;">
+0.0031
+</td>
+<td style="text-align:left;">
+0.0281
+</td>
+<td style="text-align:left;">
+0.1084
+</td>
+<td style="text-align:left;">
+0.9137
+</td>
+<td style="text-align:left;">
+-0.0521
+</td>
+<td style="text-align:left;">
+0.0582
+</td>
 </tr>
-<tr class="odd">
-<td></td>
-<td>hr</td>
-<td align="left">0.0965</td>
-<td align="left">0.0116</td>
-<td align="left">8.3519</td>
-<td align="left">0</td>
-<td align="left">0.0739</td>
-<td align="left">0.1192</td>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+hr
+</td>
+<td style="text-align:left;">
+0.0965
+</td>
+<td style="text-align:left;">
+0.0116
+</td>
+<td style="text-align:left;">
+8.3519
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.0739
+</td>
+<td style="text-align:left;">
+0.1192
+</td>
 </tr>
-<tr class="even">
-<td></td>
-<td>lnsigma</td>
-<td align="left">-1.2676</td>
-<td align="left">0.0314</td>
-<td align="left">-40.4141</td>
-<td align="left">0</td>
-<td align="left">-1.3291</td>
-<td align="left">-1.2061</td>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+lnsigma
+</td>
+<td style="text-align:left;">
+-1.2676
+</td>
+<td style="text-align:left;">
+0.0314
+</td>
+<td style="text-align:left;">
+-40.4141
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+-1.3291
+</td>
+<td style="text-align:left;">
+-1.2061
+</td>
 </tr>
-<tr class="odd">
-<td>Comp2</td>
-<td>(Intercept)</td>
-<td align="left">0.1816</td>
-<td align="left">0.0074</td>
-<td align="left">24.5105</td>
-<td align="left">0</td>
-<td align="left">0.1671</td>
-<td align="left">0.1961</td>
+<tr>
+<td style="text-align:left;">
+Comp2
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:left;">
+0.1816
+</td>
+<td style="text-align:left;">
+0.0074
+</td>
+<td style="text-align:left;">
+24.5105
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.1671
+</td>
+<td style="text-align:left;">
+0.1961
+</td>
 </tr>
-<tr class="even">
-<td></td>
-<td>hr</td>
-<td align="left">0.1609</td>
-<td align="left">0.0019</td>
-<td align="left">85.4201</td>
-<td align="left">0</td>
-<td align="left">0.1573</td>
-<td align="left">0.1646</td>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+hr
+</td>
+<td style="text-align:left;">
+0.1609
+</td>
+<td style="text-align:left;">
+0.0019
+</td>
+<td style="text-align:left;">
+85.4201
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.1573
+</td>
+<td style="text-align:left;">
+0.1646
+</td>
 </tr>
-<tr class="odd">
-<td></td>
-<td>lnsigma</td>
-<td align="left">-2.2809</td>
-<td align="left">0.0126</td>
-<td align="left">-181.0789</td>
-<td align="left">0</td>
-<td align="left">-2.3056</td>
-<td align="left">-2.2563</td>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+lnsigma
+</td>
+<td style="text-align:left;">
+-2.2809
+</td>
+<td style="text-align:left;">
+0.0126
+</td>
+<td style="text-align:left;">
+-181.0789
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+-2.3056
+</td>
+<td style="text-align:left;">
+-2.2563
+</td>
 </tr>
-<tr class="even">
-<td>P[c|X]</td>
-<td></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
+<tr>
+<td style="text-align:left;">
+P[c|X]
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
 </tr>
-<tr class="odd">
-<td>Comp1</td>
-<td>(Intercept)</td>
-<td align="left">2.4455</td>
-<td align="left">0.1719</td>
-<td align="left">14.2293</td>
-<td align="left">0</td>
-<td align="left">2.1086</td>
-<td align="left">2.7824</td>
+<tr>
+<td style="text-align:left;">
+Comp1
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:left;">
+2.4455
+</td>
+<td style="text-align:left;">
+0.1719
+</td>
+<td style="text-align:left;">
+14.2293
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+2.1086
+</td>
+<td style="text-align:left;">
+2.7824
+</td>
 </tr>
-<tr class="even">
-<td></td>
-<td>hr</td>
-<td align="left">-1.3902</td>
-<td align="left">0.0566</td>
-<td align="left">-24.5697</td>
-<td align="left">0</td>
-<td align="left">-1.5011</td>
-<td align="left">-1.2793</td>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+hr
+</td>
+<td style="text-align:left;">
+-1.3902
+</td>
+<td style="text-align:left;">
+0.0566
+</td>
+<td style="text-align:left;">
+-24.5697
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+-1.5011
+</td>
+<td style="text-align:left;">
+-1.2793
+</td>
 </tr>
-<tr class="odd">
-<td>N = 10549</td>
-<td>ll = -941</td>
-<td align="left">AIC = -1867</td>
-<td align="left">BIC = -1809</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
+<tr>
+<td style="text-align:left;">
+N = 10549
+</td>
+<td style="text-align:left;">
+ll = -941
+</td>
+<td style="text-align:left;">
+AIC = -1867
+</td>
+<td style="text-align:left;">
+BIC = -1809
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
 </tr>
 </tbody>
 </table>
@@ -1233,326 +1910,785 @@ Figure 5.3: Deviation of expected values from “BFGS”, “Nelder-Mead” and 
 <li><p>Model 1 with initial values from constant-only model</p></li>
 <li><p>Model 2 with user-defined initial values</p></li>
 </ol>
-<p>The parameter estimates and standard errors obtained in R are very similar to the results from STATA (table <a href="#tab:tab-comp-stata">6.1</a> and table <a href="#tab:tab-compse-stata">6.2</a>). R did not obtain any standard errors in reference model 2 while STATA returns standard errors for the first component and the probability of belonging to component 1. Although reference models 1 and 3 yield different parameter estimates, they converge at the same log-likelihood which further supports the hypothesis of multiple local optima of the likelihood. The relative ordering of models is consistent across platforms.</p>
 <table>
-<caption><span id="tab:tab-comp-stata">Table 6.1: </span>Comparison of point estimates to the results of the STATA package</caption>
+<caption>
+<span id="tab:tab-comp-stata">Table 6.1: </span>Comparison of point estimates to the results of the STATA package
+</caption>
 <tbody>
-<tr class="odd">
-<td></td>
-<td></td>
-<td align="left">(1)</td>
-<td></td>
-<td align="left">(2)</td>
-<td></td>
-<td align="left">(3)</td>
-<td></td>
-<td align="left">(4)</td>
-<td></td>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+Ref. case 1
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+Ref. case 2
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+Ref. case 3
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+Ref. case 4
+</td>
+<td style="text-align:left;">
+</td>
 </tr>
-<tr class="even">
-<td></td>
-<td></td>
-<td align="left">R</td>
-<td>STATA</td>
-<td align="left">R</td>
-<td>STATA</td>
-<td align="left">R</td>
-<td>STATA</td>
-<td align="left">R</td>
-<td>STATA</td>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+R
+</td>
+<td style="text-align:left;">
+STATA
+</td>
+<td style="text-align:left;">
+R
+</td>
+<td style="text-align:left;">
+STATA
+</td>
+<td style="text-align:left;">
+R
+</td>
+<td style="text-align:left;">
+STATA
+</td>
+<td style="text-align:left;">
+R
+</td>
+<td style="text-align:left;">
+STATA
+</td>
 </tr>
-<tr class="odd">
-<td>E[y|X, c]</td>
-<td></td>
-<td align="left"></td>
-<td></td>
-<td align="left"></td>
-<td></td>
-<td align="left"></td>
-<td></td>
-<td align="left"></td>
-<td></td>
+<tr>
+<td style="text-align:left;">
+E[y|X, c]
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
 </tr>
-<tr class="even">
-<td>Comp1</td>
-<td>(Intercept)</td>
-<td align="left">-0.4307</td>
-<td>-0.427</td>
-<td align="left">-0.092</td>
-<td>-0.092</td>
-<td align="left">0.2358</td>
-<td>0.236</td>
-<td align="left">0.0031</td>
-<td>0.006</td>
+<tr>
+<td style="text-align:left;">
+Comp1
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:left;">
+-0.4307
+</td>
+<td style="text-align:left;">
+-0.427
+</td>
+<td style="text-align:left;">
+-0.092
+</td>
+<td style="text-align:left;">
+-0.092
+</td>
+<td style="text-align:left;">
+0.2358
+</td>
+<td style="text-align:left;">
+0.236
+</td>
+<td style="text-align:left;">
+0.0031
+</td>
+<td style="text-align:left;">
+0.006
+</td>
 </tr>
-<tr class="odd">
-<td></td>
-<td>hr</td>
-<td align="left">0.3135</td>
-<td>0.312</td>
-<td align="left">0.2325</td>
-<td>0.232</td>
-<td align="left">0.1459</td>
-<td>0.146</td>
-<td align="left">0.0965</td>
-<td>0.095</td>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+hr
+</td>
+<td style="text-align:left;">
+0.3135
+</td>
+<td style="text-align:left;">
+0.312
+</td>
+<td style="text-align:left;">
+0.2325
+</td>
+<td style="text-align:left;">
+0.232
+</td>
+<td style="text-align:left;">
+0.1459
+</td>
+<td style="text-align:left;">
+0.146
+</td>
+<td style="text-align:left;">
+0.0965
+</td>
+<td style="text-align:left;">
+0.095
+</td>
 </tr>
-<tr class="even">
-<td></td>
-<td>lnsigma</td>
-<td align="left">-1.2481</td>
-<td>-1.251</td>
-<td align="left">-1.6406</td>
-<td>-1.641</td>
-<td align="left">-2.4624</td>
-<td>-2.463</td>
-<td align="left">-1.2676</td>
-<td>-1.274</td>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+lnsigma
+</td>
+<td style="text-align:left;">
+-1.2481
+</td>
+<td style="text-align:left;">
+-1.251
+</td>
+<td style="text-align:left;">
+-1.6406
+</td>
+<td style="text-align:left;">
+-1.641
+</td>
+<td style="text-align:left;">
+-2.4624
+</td>
+<td style="text-align:left;">
+-2.463
+</td>
+<td style="text-align:left;">
+-1.2676
+</td>
+<td style="text-align:left;">
+-1.274
+</td>
 </tr>
-<tr class="odd">
-<td>Comp2</td>
-<td>(Intercept)</td>
-<td align="left">0.2358</td>
-<td>0.236</td>
-<td align="left">100</td>
-<td>100.000</td>
-<td align="left">-0.4307</td>
-<td>-0.427</td>
-<td align="left">0.1816</td>
-<td>0.182</td>
+<tr>
+<td style="text-align:left;">
+Comp2
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:left;">
+0.2358
+</td>
+<td style="text-align:left;">
+0.236
+</td>
+<td style="text-align:left;">
+100
+</td>
+<td style="text-align:left;">
+100.000
+</td>
+<td style="text-align:left;">
+-0.4307
+</td>
+<td style="text-align:left;">
+-0.427
+</td>
+<td style="text-align:left;">
+0.1816
+</td>
+<td style="text-align:left;">
+0.182
+</td>
 </tr>
-<tr class="even">
-<td></td>
-<td>hr</td>
-<td align="left">0.1459</td>
-<td>0.146</td>
-<td align="left">0</td>
-<td>0.000</td>
-<td align="left">0.3135</td>
-<td>0.312</td>
-<td align="left">0.1609</td>
-<td>0.161</td>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+hr
+</td>
+<td style="text-align:left;">
+0.1459
+</td>
+<td style="text-align:left;">
+0.146
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+0.3135
+</td>
+<td style="text-align:left;">
+0.312
+</td>
+<td style="text-align:left;">
+0.1609
+</td>
+<td style="text-align:left;">
+0.161
+</td>
 </tr>
-<tr class="odd">
-<td></td>
-<td>lnsigma</td>
-<td align="left">-2.4624</td>
-<td>-2.463</td>
-<td align="left">0</td>
-<td>0.000</td>
-<td align="left">-1.2481</td>
-<td>-1.251</td>
-<td align="left">-2.2809</td>
-<td>-2.280</td>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+lnsigma
+</td>
+<td style="text-align:left;">
+-2.4624
+</td>
+<td style="text-align:left;">
+-2.463
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+0.000
+</td>
+<td style="text-align:left;">
+-1.2481
+</td>
+<td style="text-align:left;">
+-1.251
+</td>
+<td style="text-align:left;">
+-2.2809
+</td>
+<td style="text-align:left;">
+-2.280
+</td>
 </tr>
-<tr class="even">
-<td>P[c|X]</td>
-<td></td>
-<td align="left"></td>
-<td></td>
-<td align="left"></td>
-<td></td>
-<td align="left"></td>
-<td></td>
-<td align="left"></td>
-<td></td>
+<tr>
+<td style="text-align:left;">
+P[c|X]
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
 </tr>
-<tr class="odd">
-<td>Comp1</td>
-<td>(Intercept)</td>
-<td align="left">-0.728</td>
-<td>-0.725</td>
-<td align="left">6.8564</td>
-<td>6.855</td>
-<td align="left">0.728</td>
-<td>0.725</td>
-<td align="left">2.4455</td>
-<td>2.448</td>
+<tr>
+<td style="text-align:left;">
+Comp1
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:left;">
+-0.728
+</td>
+<td style="text-align:left;">
+-0.725
+</td>
+<td style="text-align:left;">
+6.8564
+</td>
+<td style="text-align:left;">
+6.855
+</td>
+<td style="text-align:left;">
+0.728
+</td>
+<td style="text-align:left;">
+0.725
+</td>
+<td style="text-align:left;">
+2.4455
+</td>
+<td style="text-align:left;">
+2.448
+</td>
 </tr>
-<tr class="even">
-<td></td>
-<td>hr</td>
-<td align="left">NA</td>
-<td>NA</td>
-<td align="left">NA</td>
-<td>NA</td>
-<td align="left">NA</td>
-<td>NA</td>
-<td align="left">-1.3902</td>
-<td>-1.393</td>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+hr
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+-1.3902
+</td>
+<td style="text-align:left;">
+-1.393
+</td>
 </tr>
-<tr class="odd">
-<td>N = 10549</td>
-<td>ll</td>
-<td align="left">-706</td>
-<td>715.84</td>
-<td align="left">628</td>
-<td>-613.7</td>
-<td align="left">-706</td>
-<td>715.84</td>
-<td align="left">-941</td>
-<td>953.2</td>
+<tr>
+<td style="text-align:left;">
+N = 10549
+</td>
+<td style="text-align:left;">
+ll
+</td>
+<td style="text-align:left;">
+-706
+</td>
+<td style="text-align:left;">
+715.84
+</td>
+<td style="text-align:left;">
+628
+</td>
+<td style="text-align:left;">
+-613.7
+</td>
+<td style="text-align:left;">
+-706
+</td>
+<td style="text-align:left;">
+715.84
+</td>
+<td style="text-align:left;">
+-941
+</td>
+<td style="text-align:left;">
+953.2
+</td>
 </tr>
 </tbody>
 </table>
+<p>The parameter estimates and standard errors obtained in R are very similar to the results from STATA (table <a href="#tab:tab-comp-stata">6.1</a> and table <a href="#tab:tab-compse-stata">6.2</a>). R did not obtain any standard errors in reference model 2 while STATA returns standard errors for the first component and the probability of belonging to component 1. Although reference models 1 and 3 yield different parameter estimates, they converge at the same log-likelihood which further supports the hypothesis of multiple local optima of the likelihood. The relative ordering of models is consistent across platforms.</p>
 <table>
-<caption><span id="tab:tab-compse-stata">Table 6.2: </span>Comparison of standard errors to the results of the STATA package</caption>
+<caption>
+<span id="tab:tab-compse-stata">Table 6.2: </span>Comparison of standard errors to the results of the STATA package
+</caption>
 <tbody>
-<tr class="odd">
-<td></td>
-<td></td>
-<td align="left">(1)</td>
-<td></td>
-<td align="left">(2)</td>
-<td></td>
-<td align="left">(3)</td>
-<td></td>
-<td align="left">(4)</td>
-<td></td>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+Ref. case 1
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+Ref. case 2
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+Ref. case 3
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+Ref. case 4
+</td>
+<td style="text-align:left;">
+</td>
 </tr>
-<tr class="even">
-<td></td>
-<td></td>
-<td align="left">R</td>
-<td>STATA</td>
-<td align="left">R</td>
-<td>STATA</td>
-<td align="left">R</td>
-<td>STATA</td>
-<td align="left">R</td>
-<td>STATA</td>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+R
+</td>
+<td style="text-align:left;">
+STATA
+</td>
+<td style="text-align:left;">
+R
+</td>
+<td style="text-align:left;">
+STATA
+</td>
+<td style="text-align:left;">
+R
+</td>
+<td style="text-align:left;">
+STATA
+</td>
+<td style="text-align:left;">
+R
+</td>
+<td style="text-align:left;">
+STATA
+</td>
 </tr>
-<tr class="odd">
-<td>E[y|X, c]</td>
-<td></td>
-<td align="left"></td>
-<td></td>
-<td align="left"></td>
-<td></td>
-<td align="left"></td>
-<td></td>
-<td align="left"></td>
-<td></td>
+<tr>
+<td style="text-align:left;">
+E[y|X, c]
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
 </tr>
-<tr class="even">
-<td>Comp1</td>
-<td>(Intercept)</td>
-<td align="left">0.0224</td>
-<td>0.022</td>
-<td align="left">NA</td>
-<td>0.009</td>
-<td align="left">0.0069</td>
-<td>0.007</td>
-<td align="left">0.0281</td>
-<td>0.028</td>
+<tr>
+<td style="text-align:left;">
+Comp1
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:left;">
+0.0224
+</td>
+<td style="text-align:left;">
+0.022
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+0.009
+</td>
+<td style="text-align:left;">
+0.0069
+</td>
+<td style="text-align:left;">
+0.007
+</td>
+<td style="text-align:left;">
+0.0281
+</td>
+<td style="text-align:left;">
+0.028
+</td>
 </tr>
-<tr class="odd">
-<td></td>
-<td>hr</td>
-<td align="left">0.0065</td>
-<td>0.006</td>
-<td align="left">NA</td>
-<td>0.002</td>
-<td align="left">0.0019</td>
-<td>0.002</td>
-<td align="left">0.0116</td>
-<td>0.012</td>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+hr
+</td>
+<td style="text-align:left;">
+0.0065
+</td>
+<td style="text-align:left;">
+0.006
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+0.002
+</td>
+<td style="text-align:left;">
+0.0019
+</td>
+<td style="text-align:left;">
+0.002
+</td>
+<td style="text-align:left;">
+0.0116
+</td>
+<td style="text-align:left;">
+0.012
+</td>
 </tr>
-<tr class="even">
-<td></td>
-<td>lnsigma</td>
-<td align="left">0.0215</td>
-<td>0.021</td>
-<td align="left">NA</td>
-<td>0.009</td>
-<td align="left">0.0178</td>
-<td>-0.018</td>
-<td align="left">0.0314</td>
-<td>0.032</td>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+lnsigma
+</td>
+<td style="text-align:left;">
+0.0215
+</td>
+<td style="text-align:left;">
+0.021
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+0.009
+</td>
+<td style="text-align:left;">
+0.0178
+</td>
+<td style="text-align:left;">
+-0.018
+</td>
+<td style="text-align:left;">
+0.0314
+</td>
+<td style="text-align:left;">
+0.032
+</td>
 </tr>
-<tr class="odd">
-<td>Comp2</td>
-<td>(Intercept)</td>
-<td align="left">0.0069</td>
-<td>0.007</td>
-<td align="left">NA</td>
-<td></td>
-<td align="left">0.0224</td>
-<td>0.022</td>
-<td align="left">0.0074</td>
-<td>0.007</td>
+<tr>
+<td style="text-align:left;">
+Comp2
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:left;">
+0.0069
+</td>
+<td style="text-align:left;">
+0.007
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+0.0224
+</td>
+<td style="text-align:left;">
+0.022
+</td>
+<td style="text-align:left;">
+0.0074
+</td>
+<td style="text-align:left;">
+0.007
+</td>
 </tr>
-<tr class="even">
-<td></td>
-<td>hr</td>
-<td align="left">0.0019</td>
-<td>0.002</td>
-<td align="left">NA</td>
-<td></td>
-<td align="left">0.0065</td>
-<td>0.006</td>
-<td align="left">0.0019</td>
-<td>0.002</td>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+hr
+</td>
+<td style="text-align:left;">
+0.0019
+</td>
+<td style="text-align:left;">
+0.002
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+0.0065
+</td>
+<td style="text-align:left;">
+0.006
+</td>
+<td style="text-align:left;">
+0.0019
+</td>
+<td style="text-align:left;">
+0.002
+</td>
 </tr>
-<tr class="odd">
-<td></td>
-<td>lnsigma</td>
-<td align="left">0.0178</td>
-<td>0.018</td>
-<td align="left">NA</td>
-<td></td>
-<td align="left">0.0215</td>
-<td>0.021</td>
-<td align="left">0.0126</td>
-<td>0.013</td>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+lnsigma
+</td>
+<td style="text-align:left;">
+0.0178
+</td>
+<td style="text-align:left;">
+0.018
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+0.0215
+</td>
+<td style="text-align:left;">
+0.021
+</td>
+<td style="text-align:left;">
+0.0126
+</td>
+<td style="text-align:left;">
+0.013
+</td>
 </tr>
-<tr class="even">
-<td>P[c|X]</td>
-<td></td>
-<td align="left"></td>
-<td></td>
-<td align="left"></td>
-<td></td>
-<td align="left"></td>
-<td></td>
-<td align="left"></td>
-<td></td>
+<tr>
+<td style="text-align:left;">
+P[c|X]
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
 </tr>
-<tr class="odd">
-<td>Comp1</td>
-<td>(Intercept)</td>
-<td align="left">0.0607</td>
-<td>0.061</td>
-<td align="left">NA</td>
-<td>0.540</td>
-<td align="left">0.0607</td>
-<td>0.061</td>
-<td align="left">0.1719</td>
-<td>0.172</td>
+<tr>
+<td style="text-align:left;">
+Comp1
+</td>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:left;">
+0.0607
+</td>
+<td style="text-align:left;">
+0.061
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+0.540
+</td>
+<td style="text-align:left;">
+0.0607
+</td>
+<td style="text-align:left;">
+0.061
+</td>
+<td style="text-align:left;">
+0.1719
+</td>
+<td style="text-align:left;">
+0.172
+</td>
 </tr>
-<tr class="even">
-<td></td>
-<td>hr</td>
-<td align="left">NA</td>
-<td>NA</td>
-<td align="left">NA</td>
-<td>NA</td>
-<td align="left">NA</td>
-<td>NA</td>
-<td align="left">0.0566</td>
-<td>0.056</td>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+hr
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+0.0566
+</td>
+<td style="text-align:left;">
+0.056
+</td>
 </tr>
-<tr class="odd">
-<td>N = 10549</td>
-<td>ll</td>
-<td align="left">-706</td>
-<td>715.84</td>
-<td align="left">628</td>
-<td>-613.7</td>
-<td align="left">-706</td>
-<td>715.84</td>
-<td align="left">-941</td>
-<td>953.2</td>
+<tr>
+<td style="text-align:left;">
+N = 10549
+</td>
+<td style="text-align:left;">
+ll
+</td>
+<td style="text-align:left;">
+-706
+</td>
+<td style="text-align:left;">
+715.84
+</td>
+<td style="text-align:left;">
+628
+</td>
+<td style="text-align:left;">
+-613.7
+</td>
+<td style="text-align:left;">
+-706
+</td>
+<td style="text-align:left;">
+715.84
+</td>
+<td style="text-align:left;">
+-941
+</td>
+<td style="text-align:left;">
+953.2
+</td>
 </tr>
 </tbody>
 </table>

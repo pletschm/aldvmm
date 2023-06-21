@@ -1097,7 +1097,7 @@ The coefficients of the intercepts and covariates for the expected values $E[y|c
 ```{r tab-sum-mod1-bfgs, echo = FALSE, results = "asis"}
 
 knitr::kable(tab_sum_mod1bfgs$table,
-             format = "simple",
+             format = "html",
              row.names = FALSE,
              caption = 'Regression results from model 1 with "BFGS" optimization method and "zero" starting values')
 
@@ -1195,7 +1195,7 @@ Parameter estimates differ considerably across selected optimization algorithms 
 load("tab_comp_coef.RData")
 
 knitr::kable(tab_comp_coef,
-             format = "simple",
+             format = "html",
              row.names = FALSE,
              caption = 'Regression results of model 1 with zero starting values in "BFGS", "Nelder-Mead", "nlminb" and "hjn" algorithms')
 
@@ -1256,7 +1256,7 @@ summary(fit1_cstr)
 load("tab_sum_cstr.RData")
 
 knitr::kable(tab_sum_cstr$table,
-             format = "simple",
+             format = "html",
              row.names = FALSE,
              caption = 'Regression results of model 1 with the "L-BFGS-B" method, parameter constraints and user-defined starting values')
 
@@ -1320,7 +1320,7 @@ The coefficients of the single-component model are relatively similar to the par
 ```{r tab-sum-tobit, echo = FALSE, results = "asis"}
 
 knitr::kable(tab_sum_tobit$table,
-             format = "simple",
+             format = "html",
              row.names = FALSE,
              caption = 'Regression results of model 1 with 1 component, zero starting values in "nlminb" algorithm')
 
@@ -1368,7 +1368,7 @@ The Akaike information criterion of model 2 fitted using the "nlminb" method amo
 ```{r tab-sum-mod2, echo = FALSE, results = "asis"}
 
 knitr::kable(tab_sum_mod2$table,
-             format = "simple",
+             format = "html",
              row.names = FALSE,
              caption = 'Regression results of model 2 with user-defined starting values in the "nlminb" algorithm')
 
@@ -1387,8 +1387,6 @@ To validate the R implementation of adjusted limited dependent variable mixture 
 3. Model 1 with initial values from constant-only model
 
 4. Model 2 with user-defined initial values
-
-The parameter estimates and standard errors obtained in R are very similar to the results from STATA\textsuperscript{\textregistered} (table \@ref(tab:tab-comp-stata) and table \@ref(tab:tab-compse-stata)). R did not obtain any standard errors in reference model 2 while STATA\textsuperscript{\textregistered} returns standard errors for the first component and the probability of belonging to component 1. Although reference models 1 and 3 yield different parameter estimates, they converge at the same log-likelihood which further supports the hypothesis of multiple local optima of the likelihood. The relative ordering of models is consistent across platforms. 
 
 ```{r tab-calc-stata, echo = FALSE, results = "asis"}
 
@@ -1442,11 +1440,11 @@ for (i in tabvec) {
 }
 rm(i, j, lltmp)
 
-ctab <- rbind(c("", "", "(1)", "", "(2)", "", "(3)", "", "(4)", ""),
+ctab <- rbind(c("", "", "Ref. case 1", "", "Ref. case 2", "", "Ref. case 3", "", "Ref. case 4", ""),
               c("", "", "R", "STATA", "R", "STATA", "R", "STATA", "R", "STATA"),
               ctab)
 
-stab <- rbind(c("", "", "(1)", "", "(2)", "", "(3)", "", "(4)", ""),
+stab <- rbind(c("", "", "Ref. case 1", "", "Ref. case 2", "", "Ref. case 3", "", "Ref. case 4", ""),
               c("", "", "R", "STATA", "R", "STATA", "R", "STATA", "R", "STATA"),
               stab)
 
@@ -1458,17 +1456,20 @@ lindex[1] <- -1
 ```{r tab-comp-stata, echo = FALSE, results = "asis"}
 
 knitr::kable(ctab,
-             format = "simple",
+             format = "html",
              row.names = FALSE,
-             caption = 'Comparison of point estimates to the results of the STATA package')
+             caption = 'Comparison of point estimates to the results of the STATA package',
+             escape = FALSE)
 
 ```
+
+The parameter estimates and standard errors obtained in R are very similar to the results from STATA\textsuperscript{\textregistered} (table \@ref(tab:tab-comp-stata) and table \@ref(tab:tab-compse-stata)). R did not obtain any standard errors in reference model 2 while STATA\textsuperscript{\textregistered} returns standard errors for the first component and the probability of belonging to component 1. Although reference models 1 and 3 yield different parameter estimates, they converge at the same log-likelihood which further supports the hypothesis of multiple local optima of the likelihood. The relative ordering of models is consistent across platforms. 
 
 
 ```{r tab-compse-stata, echo = FALSE, results = "asis"}
 
 knitr::kable(stab,
-             format = "simple",
+             format = "html",
              row.names = FALSE,
              caption = 'Comparison of standard errors to the results of the STATA package')
 

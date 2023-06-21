@@ -72,7 +72,7 @@ devtools::check(pkg = ".", cran = TRUE)
 # Pdf vignette
 #devtools::build(args = c('--compact-vignettes=both'))
 
-# html vignette
+# Html vignette
 devtools::build()
 
 # Source check in shell
