@@ -1440,13 +1440,13 @@ for (i in tabvec) {
 }
 rm(i, j, lltmp)
 
-ctab <- rbind(c("", "", "Ref. case 1", "", "Ref. case 2", "", "Ref. case 3", "", "Ref. case 4", ""),
-              c("", "", "R", "STATA", "R", "STATA", "R", "STATA", "R", "STATA"),
-              ctab)
+ctab <- as.data.frame(rbind(c("", "", "R", "STATA", "R", "STATA", "R", "STATA", "R", "STATA"),
+              ctab))
 
-stab <- rbind(c("", "", "Ref. case 1", "", "Ref. case 2", "", "Ref. case 3", "", "Ref. case 4", ""),
-              c("", "", "R", "STATA", "R", "STATA", "R", "STATA", "R", "STATA"),
-              stab)
+stab <- as.data.frame(rbind(c("", "", "R", "STATA", "R", "STATA", "R", "STATA", "R", "STATA"),
+              stab))
+
+names(ctab) <- names(stab) <- c("", "", "Ref. case 1", "", "Ref. case 2", "", "Ref. case 3", "", "Ref. case 4", "")
 
 lindex <- tab_sum_mod2stata$lindex + 2
 lindex[1] <- -1
