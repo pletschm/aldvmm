@@ -56,6 +56,8 @@ Sys.setenv(R_GSCMD = "C:/Users/phm1/gs10.00.0/bin/gswin64c.exe")
 # Save pdf vignette in vignettes folder
 #--------------------------------------
 
+rmarkdown::render("./vignettes/pdf_vignette.Rmd")
+
 # Save html vignette in vignettes folder
 #--------------------------------------
 
