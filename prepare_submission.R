@@ -69,7 +69,11 @@ devtools::check(pkg = ".", cran = TRUE)
 # Build package
 #--------------
 
-devtools::build(args = c('--compact-vignettes=both'))
+# Pdf vignette
+#devtools::build(args = c('--compact-vignettes=both'))
+
+# html vignette
+devtools::build()
 
 # Source check in shell
 #----------------------

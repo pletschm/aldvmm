@@ -3,9 +3,8 @@
 ^doc$
 ^Meta$
 ^vignettes/fit.*$
-^vignettes/aldvmm_vignette\.pdf$
 ^vignettes/pdf_vignette\.pdf$
-^vignettes/html_vignette\.Rmd$
+^vignettes/pdf_vignette\.Rmd$
 ^vignettes/html_vignette\.html
 ^vignettes/.png$
 ^README\.Rmd$

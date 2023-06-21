@@ -1,2 +1,2 @@
-In normalizePath(path.expand(path), winslash, mustWork) :
-  path[1]="./html_vignette.Rmd": The system cannot find the file specified
+In file.copy(file.path(options$out_dir, out_file), options$dest_path,  ... :
+  problem copying C:\Users\phm1\AppData\Local\Temp\RtmpWIfv64\file46f867df430f\aldvmm_0.8.7.tar.gz to C:\Users\phm1\OneDrive - Berner Fachhochschule\rprojects\aldvmm_0.8.7.tar.gz: Permission denied
