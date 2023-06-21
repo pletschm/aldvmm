@@ -19,7 +19,7 @@ test_that('Check prediction function.', {
                                          (-Inf %in% x)))) == 0,
                      failure_message = 
                        'Predicted outcomes include non-finite values.')
-    testthat::expect(sum(pred[["prob"]]) == 1,
+    testthat::expect(all(rowSums(pred[["prob"]]) == 1),
                      failure_message = 
                        "Probabilities of group membership do not sum to 1.")
     
@@ -140,8 +140,6 @@ test_that('Check prediction function.', {
   names(init) <- names
   
   psi <- c(0.883, -0.594)
-  
-  
   
   pred <- aldvmm.pred(par = init,
                       X = mm,

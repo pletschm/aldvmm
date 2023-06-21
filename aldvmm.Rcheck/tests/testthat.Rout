@@ -19,8 +19,8 @@ Type 'q()' to quit R.
 > library(aldvmm)
 > 
 > test_check("aldvmm")
-[ FAIL 0 | WARN 0 | SKIP 0 | PASS 337 ]
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 621 ]
 > 
 > proc.time()
    user  system elapsed 
-  76.78    1.56   79.68 
+  79.34    1.43   82.78 

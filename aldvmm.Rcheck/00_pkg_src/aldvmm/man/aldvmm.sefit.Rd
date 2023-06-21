@@ -57,7 +57,7 @@ default value is 2. A value of 1 represents a tobit model with a gap
 between 1 and the maximum value in \code{'psi'}.}
 
 \item{dist}{an optional character value of the distribution used in the
-finite mixture. In this release, only the normal distribution is
+components. In this release, only the normal distribution is
 available, and the default value is set to \code{"normal"}.}
 
 \item{level}{a numeric value of the significance level for confidence bands

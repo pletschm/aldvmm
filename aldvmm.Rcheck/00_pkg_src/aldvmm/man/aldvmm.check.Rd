@@ -8,6 +8,7 @@
 aldvmm.check(
   formula,
   data,
+  subset,
   psi,
   ncmp,
   dist,
@@ -28,15 +29,21 @@ aldvmm.check(
 )
 }
 \arguments{
-\item{formula}{an object of class \code{"formula"} with a symbolic
+\item{formula}{an object of class "formula" with a symbolic
 description of the model to be fitted. The model formula takes the form
 \code{y ~ x1 + x2 | x1 + x4}, where the \code{|} delimiter separates the
 model for expected values of normal distributions (left) and the
 multinomial logit model of probabilities of component membership (right).}
 
 \item{data}{a data frame, list or environment (or object coercible to a data
-frame by \ifelse{html}{\code{\link[base]{as.data.frame}}}{\code{base::as.data.frame()}}) including data on outcomes and explanatory
-variables in \code{'formula'}.}
+frame by 
+\ifelse{html}{\code{\link[base]{as.data.frame}}}{\code{base::as.data.frame()}}) 
+including data on outcomes and explanatory variables in \code{'formula'}.}
+
+\item{subset}{an optional numeric vector of row indices of the subset of the model 
+matrix used in the estimation. \code{'subset'} can be longer than the 
+number of rows in \code{data} and include repeated values for re-sampling 
+purposes.}
 
 \item{psi}{a numeric vector of minimum and maximum possible utility values
 smaller than or equal to 1 (e.g. \code{c(-0.594, 0.883)}). The potential
@@ -49,7 +56,7 @@ default value is 2. A value of 1 represents a tobit model with a gap
 between 1 and the maximum value in \code{'psi'}.}
 
 \item{dist}{an optional character value of the distribution used in the
-finite mixture. In this release, only the normal distribution is
+components. In this release, only the normal distribution is
 available, and the default value is set to \code{"normal"}.}
 
 \item{optim.method}{an optional character value of one of the following
@@ -65,7 +72,7 @@ cannot be used in the \code{'aldvmm'} package.}
 \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
 control parameters.}
 
-\item{optim.grad}{an optional logical value indicating if a numerical
+\item{optim.grad}{an optional logical value indicating if an analytical
 gradient should be used in
 \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
 methods that can use this information. The default value is \code{TRUE}.
@@ -80,30 +87,31 @@ default value is \code{"zero"}.}
 \item{init.est}{an optional numeric vector of user-defined initial values.
 User-defined initial values override the \code{'init.method'} argument.
 Initial values have to follow the same order as parameter estimates in the
-return value \code{'par'}.}
+return value \code{'coef'}.}
 
 \item{init.lo}{an optional numeric vector of user-defined lower limits for
 constrained optimization. When \code{'init.lo'} is not \code{NULL}, the
 optimization method \code{"L-BFGS-B"} is used. Lower limits of parameters
 have to follow the same order as parameter estimates in the return value
-\code{'par'}.}
+\code{'coef'}.}
 
 \item{init.hi}{an optional numeric vector of user-defined upper limits for
 constrained optimization. When \code{'init.hi'} is not \code{NULL}, the
 optimization method \code{"L-BFGS-B"} is used. Upper limits of parameters
 have to follow the same order as parameter estimates in the return value
-\code{'par'}.}
+\code{'coef'}.}
 
 \item{se.fit}{an optional logical value indicating whether standard errors
 of fitted values are calculated. The default value is \code{FALSE}.}
 
 \item{model}{an optional logical value indicating whether the estimation 
-data frame is returned in the output object. The default value is \code{TRUE}.}
+data frame is returned in the output object. The default value is 
+\code{TRUE}.}
 
 \item{level}{a numeric value of the significance level for confidence bands
 of fitted values. The default value is 0.95.}
 
-\item{na.action}{a character value indicating the argument passed to 
+\item{na.action}{a character value passed to 
 argument \code{'na.action'} of the function 
 \ifelse{html}{\code{\link[stats]{model.frame}}}{\code{stats::model.frame()}} 
 in the preparation of the model matrix. The default value is 

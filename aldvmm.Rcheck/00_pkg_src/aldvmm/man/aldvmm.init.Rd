@@ -16,7 +16,7 @@ aldvmm.init(
   init.hi,
   optim.method,
   optim.control = list(),
-  optim.grad = TRUE,
+  optim.grad,
   lcoef,
   lcpar,
   lcmp
@@ -44,7 +44,7 @@ default value is 2. A value of 1 represents a tobit model with a gap
 between 1 and the maximum value in \code{'psi'}.}
 
 \item{dist}{an optional character value of the distribution used in the
-finite mixture. In this release, only the normal distribution is
+components. In this release, only the normal distribution is
 available, and the default value is set to \code{"normal"}.}
 
 \item{init.method}{an optional character value indicating the method for
@@ -55,19 +55,19 @@ default value is \code{"zero"}.}
 \item{init.est}{an optional numeric vector of user-defined initial values.
 User-defined initial values override the \code{'init.method'} argument.
 Initial values have to follow the same order as parameter estimates in the
-return value \code{'par'}.}
+return value \code{'coef'}.}
 
 \item{init.lo}{an optional numeric vector of user-defined lower limits for
 constrained optimization. When \code{'init.lo'} is not \code{NULL}, the
 optimization method \code{"L-BFGS-B"} is used. Lower limits of parameters
 have to follow the same order as parameter estimates in the return value
-\code{'par'}.}
+\code{'coef'}.}
 
 \item{init.hi}{an optional numeric vector of user-defined upper limits for
 constrained optimization. When \code{'init.hi'} is not \code{NULL}, the
 optimization method \code{"L-BFGS-B"} is used. Upper limits of parameters
 have to follow the same order as parameter estimates in the return value
-\code{'par'}.}
+\code{'coef'}.}
 
 \item{optim.method}{an optional character value of one of the following
 \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
@@ -82,7 +82,7 @@ cannot be used in the \code{'aldvmm'} package.}
 \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
 control parameters.}
 
-\item{optim.grad}{an optional logical value indicating if a numerical
+\item{optim.grad}{an optional logical value indicating if an analytical
 gradient should be used in
 \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
 methods that can use this information. The default value is \code{TRUE}.

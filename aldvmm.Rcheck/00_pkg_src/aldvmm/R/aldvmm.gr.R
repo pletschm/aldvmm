@@ -1,18 +1,19 @@
 #' Calculating Numeric Gradients of the Negative Log-Likelihood
 #'
 #' \ifelse{html}{\code{\link[aldvmm]{aldvmm.gr}}}{\code{aldvmm.gr()}}
-#' calculates numerical gradients of the negative log-likelihood returned by
-#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm.ll()}} with
-#' respect to parameter values in \code{'par'}.
+#' calculates numerical gradients of the negative log-likelihood of the entire
+#' estimation data with respect to parameter values in \code{'par'}.
 #'
 #' @inheritParams aldvmm
 #' @inheritParams aldvmm.cv
 #'
 #' @details \ifelse{html}{\code{\link[aldvmm]{aldvmm.gr}}}{\code{aldvmm.gr()}}
-#' uses \ifelse{html}{\code{\link[numDeriv]{grad}}}{\code{numDeriv::grad()}} to
-#' perform numerical approximation of gradients of the negative log-likelihood
-#' returned by
-#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm.ll()}}.
+#' uses \ifelse{html}{\code{\link[aldvmm]{aldvmm.sc}}}{\code{aldvmm.sc()}} to
+#' calculate analytical gradients of the negative log-likelihood.
+#' 
+#' If \code{'par'} includes infinite values 
+#' \ifelse{html}{\code{\link[aldvmm]{aldvmm.gr}}}{\code{aldvmm.gr()}} returns a 
+#' gradient of zero.
 #'
 #' @return a named numeric vector of first derivatives of the negative
 #'   log-likelihood of the data with respect to parameters in \code{'par'}.
@@ -30,17 +31,21 @@ aldvmm.gr <- function(par,
                       lcpar,
                       optim.method) {
   
-  grad <- numDeriv::grad(func = function(z) aldvmm.ll(par = z,
-                                                      X = X,
-                                                      y = y,
-                                                      psi = psi,
-                                                      dist = dist,
-                                                      ncmp = ncmp,
-                                                      lcoef = lcoef,
-                                                      lcmp = lcmp,
-                                                      lcpar = lcpar,
-                                                      optim.method = optim.method), 
-                         x = par)
+  out <- colSums(aldvmm.sc(par = par,
+                           X = X,
+                           y = y,
+                           psi = psi,
+                           ncmp = ncmp,
+                           dist = dist,
+                           lcoef = lcoef,
+                           lcmp  = lcmp,
+                           lcpar = lcpar,
+                           optim.method))
   
-  return(grad)
+  if (optim.method %in% c("L-BFGS-B", "Rcgmin")) {
+    out[!is.finite(out)] <- 0
+  }
+  
+  return(out)
+  
 }

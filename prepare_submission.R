@@ -56,6 +56,9 @@ Sys.setenv(R_GSCMD = "C:/Users/phm1/gs10.00.0/bin/gswin64c.exe")
 # Save pdf vignette in vignettes folder
 #--------------------------------------
 
+# Save html vignette in vignettes folder
+#--------------------------------------
+
 # Local check
 #------------
 
@@ -69,7 +72,7 @@ devtools::build(args = c('--compact-vignettes=both'))
 # Source check in shell
 #----------------------
 
-# R CMD check --as-cran ../aldvmm_0.8.6.tar.gz
+# R CMD check --as-cran ../aldvmm_0.8.7.tar.gz
 
 # Winbuilder
 #------------
@@ -81,5 +84,5 @@ devtools::build(args = c('--compact-vignettes=both'))
 # rhub checks
 #------------
 
-rhub::check("../aldvmm_0.8.6.tar.gz", platform = "ubuntu-gcc-release")
-rhub::check("../aldvmm_0.8.6.tar.gz", platform = "debian-gcc-devel")
+rhub::check("../aldvmm_0.8.7.tar.gz", platform = "ubuntu-gcc-release")
+rhub::check("../aldvmm_0.8.7.tar.gz", platform = "debian-gcc-devel")

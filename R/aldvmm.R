@@ -19,8 +19,7 @@
 #'
 #'  summary(fit)
 #'
-#'  yhat <- predict(fit,
-#'                  newdata = utility)
+#'  yhat <- predict(fit)
 #'
 #' @import numDeriv
 #' @import stats
@@ -45,14 +44,19 @@ NULL
 #'   likelihood and expected value functions proposed by Hernandez Alava and
 #'   Wailoo (2015) using normal component distributions and a multinomial logit
 #'   model of probabilities of component membership.
-#' @param formula an object of class \code{"formula"} with a symbolic
+#' @param formula an object of class "formula" with a symbolic
 #'   description of the model to be fitted. The model formula takes the form
 #'   \code{y ~ x1 + x2 | x1 + x4}, where the \code{|} delimiter separates the
 #'   model for expected values of normal distributions (left) and the
 #'   multinomial logit model of probabilities of component membership (right).
 #' @param data a data frame, list or environment (or object coercible to a data
-#'   frame by \ifelse{html}{\code{\link[base]{as.data.frame}}}{\code{base::as.data.frame()}}) including data on outcomes and explanatory
-#'   variables in \code{'formula'}.
+#'   frame by 
+#'   \ifelse{html}{\code{\link[base]{as.data.frame}}}{\code{base::as.data.frame()}}) 
+#'   including data on outcomes and explanatory variables in \code{'formula'}.
+#' @param subset an optional numeric vector of row indices of the subset of the model 
+#'   matrix used in the estimation. \code{'subset'} can be longer than the 
+#'   number of rows in \code{data} and include repeated values for re-sampling 
+#'   purposes.
 #' @param psi a numeric vector of minimum and maximum possible utility values
 #'   smaller than or equal to 1 (e.g. \code{c(-0.594, 0.883)}). The potential
 #'   gap between the maximum value and 1 represents an area with zero density
@@ -62,7 +66,7 @@ NULL
 #'   default value is 2. A value of 1 represents a tobit model with a gap
 #'   between 1 and the maximum value in \code{'psi'}.
 #' @param dist an optional character value of the distribution used in the
-#'   finite mixture. In this release, only the normal distribution is
+#'   components. In this release, only the normal distribution is
 #'   available, and the default value is set to \code{"normal"}.
 #' @param init.method an optional character value indicating the method for
 #'   obtaining initial values. The following values are available:
@@ -79,7 +83,7 @@ NULL
 #' @param optim.control an optional list of
 #'   \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
 #'   control parameters.
-#' @param optim.grad an optional logical value indicating if a numerical
+#' @param optim.grad an optional logical value indicating if an analytical
 #'   gradient should be used in
 #'   \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
 #'   methods that can use this information. The default value is \code{TRUE}.
@@ -88,24 +92,25 @@ NULL
 #' @param init.est an optional numeric vector of user-defined initial values.
 #'   User-defined initial values override the \code{'init.method'} argument.
 #'   Initial values have to follow the same order as parameter estimates in the
-#'   return value \code{'par'}.
+#'   return value \code{'coef'}.
 #' @param init.lo an optional numeric vector of user-defined lower limits for
 #'   constrained optimization. When \code{'init.lo'} is not \code{NULL}, the
 #'   optimization method \code{"L-BFGS-B"} is used. Lower limits of parameters
 #'   have to follow the same order as parameter estimates in the return value
-#'   \code{'par'}.
+#'   \code{'coef'}.
 #' @param init.hi an optional numeric vector of user-defined upper limits for
 #'   constrained optimization. When \code{'init.hi'} is not \code{NULL}, the
 #'   optimization method \code{"L-BFGS-B"} is used. Upper limits of parameters
 #'   have to follow the same order as parameter estimates in the return value
-#'   \code{'par'}.
+#'   \code{'coef'}.
 #' @param se.fit an optional logical value indicating whether standard errors
 #'   of fitted values are calculated. The default value is \code{FALSE}.
 #' @param model an optional logical value indicating whether the estimation 
-#' data frame is returned in the output object. The default value is \code{TRUE}.
+#' data frame is returned in the output object. The default value is 
+#' \code{TRUE}.
 #' @param level a numeric value of the significance level for confidence bands
 #'   of fitted values. The default value is 0.95.
-#' @param na.action a character value indicating the argument passed to 
+#' @param na.action a character value passed to 
 #' argument \code{'na.action'} of the function 
 #' \ifelse{html}{\code{\link[stats]{model.frame}}}{\code{stats::model.frame()}} 
 #' in the preparation of the model matrix. The default value is 
@@ -152,15 +157,12 @@ NULL
 #'   control parameters.  If \code{'optim.grad'} is set to \code{TRUE} the
 #'   function
 #'   \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}} uses
-#'   numerical gradients during the optimization procedure for all methods that
-#'   allow for this approach. If \code{'optim.grad'} is set to \code{FALSE} or
-#'   a method cannot use gradients, a finite difference approximation is used.
-#'   The numerical gradients of the likelihood function are approximated
-#'   numerically using the function
-#'   \ifelse{html}{\code{\link[numDeriv]{grad}}}{\code{numDeriv::grad()}}.  The
-#'   hessian matrix at maximum likelihood parameters is approximated
-#'   numerically using \ifelse{html}{\code{\link[numDeriv]{hessian}}}{
-#'   \code{numDeriv::hessian()}}.
+#'   analytical gradients during the optimization procedure for all methods 
+#'   that allow for this approach. If \code{'optim.grad'} is set to 
+#'   \code{FALSE} or a method cannot use gradients, a finite difference 
+#'   approximation is used. The hessian matrix at maximum likelihood parameters 
+#'   is approximated numerically using 
+#'   \ifelse{html}{\code{\link[numDeriv]{hessian}}}{\code{numDeriv::hessian()}}.
 #'
 #'   \code{'init.method'} accepts four values of methods for generating initial
 #'   values: \code{"zero"}, \code{"random"}, \code{"constant"}, \code{"sann"}.
@@ -183,6 +185,10 @@ NULL
 #'   \code{"L-BFGS-B"} is used for box-constrained optimization instead of the
 #'   user defined \code{'optim.method'}.  It is possible to only set either
 #'   maximum or minimum limits.
+#'   
+#'   The function \code{aldvmm()} returns the negative log-likelihood, Akaike 
+#'   information criterion and Bayesian information criterion. Smaller values 
+#'   of these measures indicate better fit.
 #'
 #'   If \code{'se.fit'} is set to \code{TRUE}, standard errors of fitted values
 #'   are calculated using the delta method.  The standard errors of fitted
@@ -195,21 +201,30 @@ NULL
 #'   \Sigma G}}{se_pred = (mse + t(grad)*\Sigma*grad)^0.5}, where
 #'   \eqn{MSE}{mse} is the mean squared error of fitted versus observed
 #'   outcomes in the original estimation data (Whitmore, 1986).
+#'   
+#'   The generic function
+#'   \ifelse{html}{\code{\link[base]{summary}}}{\code{base::summary()}} can be
+#'   used to obtain or print a summary of the results. The generic function
+#'   \ifelse{html}{\code{\link[stats]{predict}}}{\code{stats::predict()}} can
+#'   be used to obtain predicted values and standard errors of predictions in
+#'   new data.
+
 #'
 #' @return \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{ \code{aldvmm()}}
-#'   returns an object of class inheriting from "aldvmm". An object of class
+#'   returns an object of class "aldvmm". An object of class
 #'   "aldvmm" is a list containing the following objects. \item{\code{coef}}{a
-#'   numeric vector of parameter estimates.} \item{\code{hessian}}{a numeric matrix object with
-#'   second partial derivatives of the likelihood function.}
+#'   numeric vector of parameter estimates.} \item{\code{hessian}}{a numeric 
+#'   matrix object with second partial derivatives of the likelihood function.}
 #'
 #'   \item{\code{cov}}{a numeric matrix object with covariances of parameters.}
 #'
-#'   \item{\code{n}}{a scalar representing the number of complete observations
-#'   with no missing values that were used in the estimation.}
+#'   \item{\code{n}}{a scalar representing the number of observations that were 
+#'   used in the estimation.}
 #'   \item{\code{k}}{a scalar representing the number of components that were
 #'   mixed.}
 #'   \item{\code{df.null}}{an integer value of the residual 
-#'   degrees of freedom of a null model including intercepts and standard errors.}
+#'   degrees of freedom of a null model including intercepts and standard 
+#'   errors.}
 #'   \item{\code{df.residual}}{an integer value of the residual 
 #'   degrees of freedom..}
 #'   \item{\code{iter}}{an integer value of the number of iterations used in 
@@ -236,8 +251,8 @@ NULL
 #'   standard error of fitted values.} \item{\code{lower.fit}}{a numeric vector
 #'   of 95\% lower confidence limits of fitted values.}
 #'   \item{\code{upper.fit}}{a numeric vector of 95\% upper confidence limits
-#'   of fitted values} \item{\code{prob}}{a numeric vector expected values of
-#'   the probabilities of group membership. } }}
+#'   of fitted values} \item{\code{prob}}{a numeric matrix of expected 
+#'   probabilities of group membership per individual in \code{'data'}.} }}
 #'
 #'   \item{\code{init}}{a list including the following elements. \describe{
 #'   \item{\code{est}}{a numeric vector of initial parameter estimates.}
@@ -246,12 +261,12 @@ NULL
 #'   estimates.}} }
 #'
 #'   \item{\code{call}}{a character value including the model call captured by
-#'   \ifelse{html}{\code{\link[base]{match.call}}}{\code{base::match.call}}.}
-#'   \item{\code{formula}}{an object of class
-#'   \ifelse{html}{\code{\link[stats]{formula}}}{\code{stats::formula}}
-#'   supplied to argument \code{'formula'}.}
-#'   \item{\code{terms}}{a list of objects of class
-#'   \ifelse{html}{\code{\link[stats]{terms}}}{\code{stats::terms}} for the model of component means ("beta"), probabilities of component membership ("delta") and the full model ("full").}
+#'   \ifelse{html}{\code{\link[base]{match.call}}}{\code{base::match.call()}}.}
+#'   \item{\code{formula}}{an object of class "formula" supplied to argument 
+#'   \code{'formula'}.}
+#'   \item{\code{terms}}{a list of objects of class "terms" for the 
+#'   model of component means ("beta"), probabilities of component membership 
+#'   ("delta") and the full model ("full").}
 #'   \item{\code{contrasts}}{a nested list of character values showing 
 #'   contrasts of factors used in models of component means ("beta") and 
 #'   probabilities of component membership ("delta").}
@@ -262,7 +277,8 @@ NULL
 #'   \item{\code{psi}}{a numeric vector with the minimum and maximum utility
 #'   below 1 in \code{'data'}.}
 #'
-#'   \item{\code{dist}}{a character value indicating the used distribution.}
+#'   \item{\code{dist}}{a character value indicating the used component 
+#'   distributions.}
 #'
 #'   \item{\code{label}}{a list including the following elements. \describe{
 #'   \item{\code{lcoef}}{a character vector of labels for objects including
@@ -286,12 +302,6 @@ NULL
 #'   \ifelse{html}{\code{\link[stats]{model.frame}}}{\code{stats::model.frame}} 
 #'   in the preparation of model matrices.}
 #'
-#'   The generic function
-#'   \ifelse{html}{\code{\link[base]{summary}}}{\code{base::summary()}} can be
-#'   used to obtain or print a summary of the results. The generic function
-#'   \ifelse{html}{\code{\link[stats]{predict}}}{\code{stats::predict()}} can
-#'   be used to obtain predicted values and standard errors of predictions in
-#'   new data.
 #' @references Alava, M. H. and Wailoo, A. (2015) Fitting adjusted limited
 #'   dependent variable mixture models to EQ-5D. \emph{The Stata Journal},
 #'   \bold{15(3)}, 737--750. \doi{10.1177/1536867X1501500307}
@@ -314,13 +324,13 @@ NULL
 #'
 #'  summary(fit)
 #'
-#'  yhat <- predict(fit,
-#'                  newdata = utility)
+#'  yhat <- predict(fit)
 #'
 #' @export
 
 aldvmm <- function(formula, 
                    data, 
+                   subset = NULL,
                    psi, 
                    ncmp = 2, 
                    dist = "normal", 
@@ -335,11 +345,6 @@ aldvmm <- function(formula,
                    model = TRUE,
                    level = 0.95,
                    na.action = "na.omit") {
-  
-  # Store function call
-  #--------------------
-  
-  call <- match.call()
   
   # Labels
   #-------
@@ -362,8 +367,7 @@ aldvmm <- function(formula,
   # The optimization method will be used in aldvmm.init(), the testing of 
   # initial values and the model fitting.
   
-  if (all(init.lo == -Inf) & all(init.hi == Inf) & 
-      is.null(optim.method)) {
+  if (all(init.lo == -Inf) & all(init.hi == Inf) & is.null(optim.method)) {
     # Default optimization method
     optim.method <- "BFGS"
   } else if ((!is.null(init.lo) | !is.null(init.hi))) {
@@ -373,8 +377,8 @@ aldvmm <- function(formula,
     # User-defined optimization method
   }
   
-  # Attach gradient function for optimization if selected by the user
-  #------------------------------------------------------------------
+  # Attach gradient function based on user selection
+  #-------------------------------------------------
   
   if (optim.grad == TRUE) {
     grd <- aldvmm.gr
@@ -397,6 +401,7 @@ aldvmm <- function(formula,
   
   aldvmm.check(formula = formula, 
                data = data, 
+               subset = subset,
                psi = psi, 
                ncmp = ncmp, 
                dist = dist,
@@ -418,25 +423,26 @@ aldvmm <- function(formula,
   # Make outcome vector
   #--------------------
   
-  # Convert formula to 'Formula' object
+  # Convert formula to "Formula" object
   formula <- Formula::Formula(formula)
   
+  # Convert data to model frame
+  cl <- match.call()
+  if(missing(data)) data <- environment(formula)
+  mf <- match.call(expand.dots = FALSE)
+  m <- match(c("formula", "data", "subset", "na.action"), names(mf), 0)
+  mf <- mf[c(1, m)]
+  mf$drop.unused.levels <- TRUE
+  mf$formula <- formula
+  mf[[1]] <- as.name("model.frame")
+  data <- eval(mf, parent.frame())
+  
   # Create outcome vector
-  y <- stats::model.response(
-    stats::model.frame(formula, 
-                       data = data,
-                       na.action = na.action)
-  )
+  y <- stats::model.response(data)
   
   # Make list of design matrices
   #-----------------------------
   
-  # Convert data to model frame
-  data <- stats::model.frame(formula, 
-                             data = data,
-                             na.action = na.action)
-  
-  # Make list of design matrices
   mm <- aldvmm.mm(mf = data,
                   Formula = formula,
                   ncmp = ncmp,
@@ -596,7 +602,7 @@ aldvmm <- function(formula,
                         pred = pred,
                         pred.se = pred.se,
                         init = init,
-                        call = call,
+                        call = match.call(),
                         formula = stats::formula(formula),
                         terms = terms,
                         data = if(model == TRUE) {data} else {NULL},

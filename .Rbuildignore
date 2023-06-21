@@ -3,10 +3,14 @@
 ^doc$
 ^Meta$
 ^vignettes/fit.*$
+^vignettes/aldvmm_vignette\.pdf$
+^vignettes/pdf_vignette\.pdf$
+^vignettes/html_vignette\.Rmd$
+^vignettes/html_vignette\.html
+^vignettes/.png$
 ^README\.Rmd$
 ^cran-comments\.md$
 ^prepare_submission\.R$
-^vignettes/aldvmm_vignette\.pdf$
 ^\.travis\.yml$
 ^\.github$
 ^codecov\.yml$

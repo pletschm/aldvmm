@@ -21,7 +21,8 @@ test_that('Check prediction S3 method.', {
   suppressWarnings({
     fit <- aldvmm(eq5d ~ female | 1,
                   data = utility,
-                  psi = c(-0.594, 0.883))
+                  psi = c(-0.594, 0.883),
+                  optim.method = "Nelder-Mead")
   })
   
   testthat::expect_warning(predict(fit,
@@ -52,9 +53,10 @@ test_that('Check prediction S3 method.', {
   
   suppressWarnings({
     suppressMessages({
-      fit <- aldvmm(eq5d ~ age | female,
+      fit <- aldvmm(eq5d ~ female | 1,
                     data = utility,
-                    psi = c(-0.594, 0.883))
+                    psi = c(-0.594, 0.883),
+                    optim.method = "Nelder-Mead")
     })
   })
   

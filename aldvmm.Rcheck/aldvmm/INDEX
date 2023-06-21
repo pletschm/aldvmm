@@ -18,6 +18,8 @@ aldvmm.ll               Calculating the Negative Log-Likelihood of the
 aldvmm.mm               Creating Design Matrices
 aldvmm.pred             Predicting Expected Values from Adjusted
                         Limited Dependent Variable Mixture Models
+aldvmm.sc               Calculating analytical Gradients of the
+                        Negative Log-Likelihood for each observation
 aldvmm.sefit            Calculating Standard Errors of Fitted and
                         Predicted Outcomes
 aldvmm.sum              Creating Summary Table
@@ -27,6 +29,8 @@ coef.aldvmm             Extract Coefficients of Adjusted Limited
 estfun.aldvmm           Create Matrix of Adjusted Limited Dependent
                         Variable Mixture Model Gradients per
                         Observation
+formula.aldvmm          Extract Adjusted Limited Dependent Variable
+                        Mixture Model Formula
 model.matrix.aldvmm     Extract Adjusted Limited Dependent Variable
                         Mixture Model Model Matrices
 nobs.aldvmm             Extract Adjusted Limited Dependent Variable
@@ -37,8 +41,14 @@ print.aldvmm            Print Adjusted Limited Dependent Variable
                         Mixture Model Fits
 print.summary.aldvmm    Printing Adjusted Limited Dependent Variable
                         Mixture Model Summaries
+residuals.aldvmm        Extract Adjusted Limited Dependent Variable
+                        Mixture Model Residuals
 summary.aldvmm          Summarizing Adjusted Limited Dependent Variable
                         Mixture Model Fits
+terms.aldvmm            Extract Adjusted Limited Dependent Variable
+                        Mixture Model Terms
+update.aldvmm           Update Adjusted Limited Dependent Variable
+                        Mixture Model Fit
 utility                 Simulated Example Data of Health State
                         Utilities.
 vcov.aldvmm             Extract Adjusted Limited Dependent Variable

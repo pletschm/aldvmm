@@ -31,7 +31,7 @@ default value is 2. A value of 1 represents a tobit model with a gap
 between 1 and the maximum value in \code{'psi'}.}
 
 \item{dist}{an optional character value of the distribution used in the
-finite mixture. In this release, only the normal distribution is
+components. In this release, only the normal distribution is
 available, and the default value is set to \code{"normal"}.}
 
 \item{lcoef}{a character vector of length 2 with labels of objects including
@@ -51,9 +51,11 @@ summary tables returned by
 \ifelse{html}{\code{\link[aldvmm]{summary.aldvmm}}}{\code{summary.aldvmm()}}.}
 }
 \value{
-a named numeric vector of predicted outcomes. The names of the
-  elements in the vector are identical to the row names of design matrices
-  in \code{'X'}.
+a list of of predicted outcomes including the following elements.
+  \item{\code{y}}{a numeric vector of observed outcomes in \code{'data'}.}
+  \item{\code{yhat}}{a numeric vector of fitted values.} \item{\code{res}}{a
+  numeric vector of residuals.} \item{\code{prob}}{a numeric matrix of expected 
+  probabilities of group membership per individual in \code{'data'}.}
 }
 \description{
 \ifelse{html}{\code{\link[aldvmm]{aldvmm.pred}}}{\code{aldvmm.pred()}} makes

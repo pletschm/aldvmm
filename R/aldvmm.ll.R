@@ -72,8 +72,16 @@ aldvmm.ll <- function(par,
                       lcmp,
                       optim.method) {
   
-  # Prepare list of parameters
-  #---------------------------
+  psi1 <- max(psi)
+  psi2 <- min(psi)
+
+  # Check if par has names
+  #-----------------------
+  
+  checkmate::assert_numeric(par, names = "named")
+    
+  # Create list of parameters
+  #--------------------------
   
   parlist <- aldvmm.getpar(par   = par,
                            lcoef = lcoef,
@@ -81,96 +89,106 @@ aldvmm.ll <- function(par,
                            lcpar = lcpar,
                            ncmp  = ncmp)
   
-  # Calculate elements of likelihood function for each component and obs.
-  #----------------------------------------------------------------------
-  
-  # Mulinomial logit (parameters are only estimated for the first K - 1 
-  # components).
+  # Multinomial logit
+  #------------------
   
   if (ncmp > 1) {
-    exp_xd <- matrix(data = NA, 
-                     nrow = nrow(X[[2]]), 
-                     ncol = (ncmp - 1),
-                     dimnames = list(rownames(X[[2]]),
-                                     paste0(lcmp, 1:(ncmp - 1))))
     
-    for (c in 1:(ncmp - 1)) {
-      exp_xd[, c] <- exp(X[[2]] %*% parlist[[lcoef[2]]][[c]])
-    }
+    # Linear predictor
+    wd <- lapply(names(parlist[[lcoef[2]]]), function (x) {
+      rowSums(sweep(X[[lcoef[2]]], 
+                    MARGIN = 2, 
+                    parlist[[lcoef[2]]][[x]], 
+                    `*`))
+    })
+    names(wd) <- names(parlist[[lcoef[2]]])
     
-    p_c <- matrix(data = NA, 
-                  nrow = nrow(X[[2]]), 
-                  ncol = ncmp,
-                  dimnames = list(rownames(X[[2]]),
-                                  paste0(lcmp, 1:ncmp)))
+    # Denominator
+    sumexp <- 1 + Reduce("+",
+                         lapply(names(parlist[[lcoef[2]]]), function (z) {
+                           exp(rowSums(sweep(X[[lcoef[2]]], 
+                                             MARGIN = 2, 
+                                             parlist[[lcoef[2]]][[z]], 
+                                             `*`)))
+                         }))
     
-    for (c in 1:(ncmp - 1)) {
-      p_c[, c] <- exp_xd[, c] / (1 + rowSums(exp_xd))
-    }
-    p_c[, ncmp] <- 1 -  rowSums(p_c, na.rm = TRUE)
-    
+    # Probability of component membership
+    A <- lapply(names(parlist[[lcoef[2]]]), function (x) {
+      exp(wd[[x]]) / sumexp
+    })
+    A[[ncmp]] <- 1 - Reduce("+", A)
   } else {
-    p_c <- matrix(data = 1, 
-                  nrow = nrow(X[[1]]), 
-                  ncol = 1,
-                  dimnames = list(rownames(X[[1]]),
-                                  paste0(lcmp, 1)))
+    A <- list(
+      matrix(data = 1, 
+             nrow = nrow(X[[lcoef[1]]]), 
+             ncol = 1,
+             dimnames = list(rownames(X[[lcoef[2]]]),
+                             paste0(lcmp, 1)))
+    )
   }
+  names(A) <- names(parlist[[lcoef[1]]])
   
-  # Indicators of value range of y
-  #-------------------------------
-  
-  I <- cbind(as.numeric(y >  max(psi)),
-             as.numeric(y <= min(psi)),
-             as.numeric(y <= max(psi) & y > min(psi)))
-  
-  # Densities
-  #----------
-  
-  density <- list()
+  # Component distributions
+  #------------------------
   
   if (dist == "normal") {
     
-    for (c in 1:ncmp) {
-      
-      max  <- 1 - stats::pnorm((max(psi) - 
-                                  X[[1]] %*% parlist[[lcoef[1]]][[c]]) /
-                                 exp(parlist[[lcpar[1]]][[c]]),
-                               mean = 0,
-                               sd   = 1)
-      min  <-     stats::pnorm((min(psi) - 
-                                  X[[1]] %*% parlist[[lcoef[1]]][[c]]) /
-                                 exp(parlist[[lcpar[1]]][[c]]),
-                               mean = 0,
-                               sd   = 1)
-      prob <-     stats::dnorm((y - X[[1]] %*% parlist[[lcoef[1]]][[c]]) /
-                                 exp(parlist[[lcpar[1]]][[c]]),
-                               mean = 0,
-                               sd   = 1) / exp(parlist[[lcpar[1]]][[c]])
-      
-      density[[c]] <- cbind(max, min, prob)
-      
-    }
+    # Linear predictor
+    xb <- lapply(parlist[[lcoef[1]]], function (x) {
+      rowSums(sweep(X[[lcoef[1]]], 
+                    MARGIN = 2, 
+                    x, 
+                    `*`))
+    })
+    names(xb) <- names(parlist[[lcoef[1]]])
+    
+    # Density of values above maximum
+    C <- lapply(names(parlist[[lcoef[1]]]), function (x) {
+      1 - stats::pnorm((psi1 - xb[[x]]) / exp(parlist[[lcpar]][[x]]), 
+                       mean = 0, 
+                       sd = 1)
+    })
+    names(C) <- names(parlist[[lcoef[1]]])
+    
+    # Density of values below minimum
+    D <- lapply(names(parlist[[lcoef[1]]]), function (x) {
+      stats::pnorm((psi2 - xb[[x]]) / exp(parlist[[lcpar]][[x]]), 
+                   mean = 0, 
+                   sd = 1)
+    })
+    names(D) <- names(parlist[[lcoef[1]]])
+    
+    # Density of value within range
+    E <- lapply(names(parlist[[lcoef[1]]]), function (x) {
+      stats::dnorm((y - xb[[x]]) / exp(parlist[[lcpar]][[x]]), 
+                   mean = 0, 
+                   sd = 1) / exp(parlist[[lcpar]][[x]])
+    })
+    names(E) <- names(parlist[[lcoef[1]]])
+    
+    # Density of observed value
+    B <- lapply(names(parlist[[lcoef[1]]]), function (x) {
+      as.numeric(y >  psi1) * C[[x]] + 
+        as.numeric(y <= psi2) * D[[x]] + 
+        as.numeric(y <= psi1 & y > psi2) * E[[x]]
+    })
+    names(B) <- names(parlist[[lcoef[1]]])
     
   }
   
-  # Calculate likelihood
-  #---------------------
+  # Likelihood
+  #-----------
   
-  cont <- matrix(data = NA, 
-                 nrow = nrow(X[[1]]), 
-                 ncol = ncmp,
-                 dimnames = list(rownames(X[[1]]),
-                                 paste0(lcmp, 1:ncmp)))
+  L <- Reduce("+",
+              lapply(names(A), function (x) {
+                A[[x]] * B[[x]]
+              })
+  )
   
-  for (c in 1:ncmp) {
-    cont[, c] <- p_c[, c] * rowSums(I * density[[c]])
-  }
-  
-  ll <- sum(log(rowSums(cont)))
+  ll <- sum(log(L))
   
   if (optim.method %in% c("L-BFGS-B", "Rcgmin") & !is.finite(ll)) {
-      ll <- -1e+20 
+      ll <- -1e+20
   }
   
   return(-ll)

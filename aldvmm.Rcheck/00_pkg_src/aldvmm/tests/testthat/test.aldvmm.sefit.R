@@ -5,7 +5,7 @@ test_that("Check estimation of standard errors of fitted values.", {
   # Model with valid covariance matrix
   #-----------------------------------
   
-  formula <- eq5d ~ age + female | age + female
+  formula <- eq5d ~ age + female | 1
   
   psi <- c(0.883, -0.594)
   

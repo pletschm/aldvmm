@@ -20,7 +20,8 @@
 #' @export
 
 aldvmm.check <- function(formula, 
-                         data, 
+                         data,
+                         subset,
                          psi, 
                          ncmp, 
                          dist,
@@ -48,6 +49,12 @@ aldvmm.check <- function(formula,
     stop("'data' has no column names",
          "\n")
   }
+  if (!is.null(subset)) {
+    checkmate::assertVector(subset, strict = TRUE)
+    checkmate::assert(all(subset == as.integer(subset)))
+    checkmate::assert(all(is.numeric(subset) | is.integer(subset)))
+    checkmate::assert(all(subset %in% 1:nrow(data)))
+  }
   checkmate::assertVector(psi, strict = TRUE)
   checkmate::assertNumeric(psi)
   checkmate::assert(psi[1] != psi[2])
@@ -62,10 +69,8 @@ aldvmm.check <- function(formula,
   }
   checkmate::assertList(optim.control)
   
-  if (!is.null(optim.grad)) {
-    checkmate::assertLogical(optim.grad)
-  }
-  
+  checkmate::assertLogical(optim.grad)
+
   checkmate::assertChoice(init.method, c("zero", "random", "constant", "sann"))
   
   if (!is.null(init.est)) {
