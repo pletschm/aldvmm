@@ -25,19 +25,20 @@ aldvmm(
 )
 }
 \arguments{
-\item{formula}{an object of class \code{"formula"} with a symbolic
+\item{formula}{an object of class "formula" with a symbolic
 description of the model to be fitted. The model formula takes the form
 \code{y ~ x1 + x2 | x1 + x4}, where the \code{|} delimiter separates the
 model for expected values of normal distributions (left) and the
 multinomial logit model of probabilities of component membership (right).}
 
 \item{data}{a data frame, list or environment (or object coercible to a data
-frame by \ifelse{html}{\code{\link[base]{as.data.frame}}}{\code{base::as.data.frame()}}) including data on outcomes and explanatory
-variables in \code{'formula'}.}
+frame by 
+\ifelse{html}{\code{\link[base]{as.data.frame}}}{\code{base::as.data.frame()}}) 
+including data on outcomes and explanatory variables in \code{'formula'}.}
 
-\item{subset}{a numeric vector of row indices of the subset of the model 
+\item{subset}{an optional numeric vector of row indices of the subset of the model 
 matrix used in the estimation. \code{'subset'} can be longer than the 
-number of rows in \code{data} and include repeated values for re-spamling 
+number of rows in \code{data} and include repeated values for re-sampling 
 purposes.}
 
 \item{psi}{a numeric vector of minimum and maximum possible utility values
@@ -51,7 +52,7 @@ default value is 2. A value of 1 represents a tobit model with a gap
 between 1 and the maximum value in \code{'psi'}.}
 
 \item{dist}{an optional character value of the distribution used in the
-finite mixture. In this release, only the normal distribution is
+components. In this release, only the normal distribution is
 available, and the default value is set to \code{"normal"}.}
 
 \item{optim.method}{an optional character value of one of the following
@@ -82,30 +83,31 @@ default value is \code{"zero"}.}
 \item{init.est}{an optional numeric vector of user-defined initial values.
 User-defined initial values override the \code{'init.method'} argument.
 Initial values have to follow the same order as parameter estimates in the
-return value \code{'par'}.}
+return value \code{'coef'}.}
 
 \item{init.lo}{an optional numeric vector of user-defined lower limits for
 constrained optimization. When \code{'init.lo'} is not \code{NULL}, the
 optimization method \code{"L-BFGS-B"} is used. Lower limits of parameters
 have to follow the same order as parameter estimates in the return value
-\code{'par'}.}
+\code{'coef'}.}
 
 \item{init.hi}{an optional numeric vector of user-defined upper limits for
 constrained optimization. When \code{'init.hi'} is not \code{NULL}, the
 optimization method \code{"L-BFGS-B"} is used. Upper limits of parameters
 have to follow the same order as parameter estimates in the return value
-\code{'par'}.}
+\code{'coef'}.}
 
 \item{se.fit}{an optional logical value indicating whether standard errors
 of fitted values are calculated. The default value is \code{FALSE}.}
 
 \item{model}{an optional logical value indicating whether the estimation 
-data frame is returned in the output object. The default value is \code{TRUE}.}
+data frame is returned in the output object. The default value is 
+\code{TRUE}.}
 
 \item{level}{a numeric value of the significance level for confidence bands
 of fitted values. The default value is 0.95.}
 
-\item{na.action}{a character value indicating the argument passed to 
+\item{na.action}{a character value passed to 
 argument \code{'na.action'} of the function 
 \ifelse{html}{\code{\link[stats]{model.frame}}}{\code{stats::model.frame()}} 
 in the preparation of the model matrix. The default value is 
@@ -113,19 +115,20 @@ in the preparation of the model matrix. The default value is
 }
 \value{
 \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{ \code{aldvmm()}}
-  returns an object of class inheriting from "aldvmm". An object of class
+  returns an object of class "aldvmm". An object of class
   "aldvmm" is a list containing the following objects. \item{\code{coef}}{a
-  numeric vector of parameter estimates.} \item{\code{hessian}}{a numeric matrix object with
-  second partial derivatives of the likelihood function.}
+  numeric vector of parameter estimates.} \item{\code{hessian}}{a numeric 
+  matrix object with second partial derivatives of the likelihood function.}
 
   \item{\code{cov}}{a numeric matrix object with covariances of parameters.}
 
-  \item{\code{n}}{a scalar representing the number of complete observations
-  with no missing values that were used in the estimation.}
+  \item{\code{n}}{a scalar representing the number of observations that were 
+  used in the estimation.}
   \item{\code{k}}{a scalar representing the number of components that were
   mixed.}
   \item{\code{df.null}}{an integer value of the residual 
-  degrees of freedom of a null model including intercepts and standard errors.}
+  degrees of freedom of a null model including intercepts and standard 
+  errors.}
   \item{\code{df.residual}}{an integer value of the residual 
   degrees of freedom..}
   \item{\code{iter}}{an integer value of the number of iterations used in 
@@ -162,12 +165,12 @@ in the preparation of the model matrix. The default value is
   estimates.}} }
 
   \item{\code{call}}{a character value including the model call captured by
-  \ifelse{html}{\code{\link[base]{match.call}}}{\code{base::match.call}}.}
-  \item{\code{formula}}{an object of class
-  \ifelse{html}{\code{\link[stats]{formula}}}{\code{stats::formula}}
-  supplied to argument \code{'formula'}.}
-  \item{\code{terms}}{a list of objects of class
-  \ifelse{html}{\code{\link[stats]{terms}}}{\code{stats::terms}} for the model of component means ("beta"), probabilities of component membership ("delta") and the full model ("full").}
+  \ifelse{html}{\code{\link[base]{match.call}}}{\code{base::match.call()}}.}
+  \item{\code{formula}}{an object of class "formula" supplied to argument 
+  \code{'formula'}.}
+  \item{\code{terms}}{a list of objects of class "terms" for the 
+  model of component means ("beta"), probabilities of component membership 
+  ("delta") and the full model ("full").}
   \item{\code{contrasts}}{a nested list of character values showing 
   contrasts of factors used in models of component means ("beta") and 
   probabilities of component membership ("delta").}
@@ -178,7 +181,8 @@ in the preparation of the model matrix. The default value is
   \item{\code{psi}}{a numeric vector with the minimum and maximum utility
   below 1 in \code{'data'}.}
 
-  \item{\code{dist}}{a character value indicating the used distribution.}
+  \item{\code{dist}}{a character value indicating the used component 
+  distributions.}
 
   \item{\code{label}}{a list including the following elements. \describe{
   \item{\code{lcoef}}{a character vector of labels for objects including
@@ -201,13 +205,6 @@ in the preparation of the model matrix. The default value is
   "na.action" attribute of the data frame created by 
   \ifelse{html}{\code{\link[stats]{model.frame}}}{\code{stats::model.frame}} 
   in the preparation of model matrices.}
-
-  The generic function
-  \ifelse{html}{\code{\link[base]{summary}}}{\code{base::summary()}} can be
-  used to obtain or print a summary of the results. The generic function
-  \ifelse{html}{\code{\link[stats]{predict}}}{\code{stats::predict()}} can
-  be used to obtain predicted values and standard errors of predictions in
-  new data.
 }
 \description{
 The function \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{
@@ -262,12 +259,12 @@ The function \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{
   control parameters.  If \code{'optim.grad'} is set to \code{TRUE} the
   function
   \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}} uses
-  analytical gradients during the optimization procedure for all methods that
-  allow for this approach. If \code{'optim.grad'} is set to \code{FALSE} or
-  a method cannot use gradients, a finite difference approximation is used.
-  The hessian matrix at maximum likelihood parameters is approximated
-  numerically using \ifelse{html}{\code{\link[numDeriv]{hessian}}}{
-  \code{numDeriv::hessian()}}.
+  analytical gradients during the optimization procedure for all methods 
+  that allow for this approach. If \code{'optim.grad'} is set to 
+  \code{FALSE} or a method cannot use gradients, a finite difference 
+  approximation is used. The hessian matrix at maximum likelihood parameters 
+  is approximated numerically using 
+  \ifelse{html}{\code{\link[numDeriv]{hessian}}}{\code{numDeriv::hessian()}}.
 
   \code{'init.method'} accepts four values of methods for generating initial
   values: \code{"zero"}, \code{"random"}, \code{"constant"}, \code{"sann"}.
@@ -290,6 +287,10 @@ The function \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{
   \code{"L-BFGS-B"} is used for box-constrained optimization instead of the
   user defined \code{'optim.method'}.  It is possible to only set either
   maximum or minimum limits.
+  
+  The function \code{aldvmm()} returns the negative log-likelihood, Akaike 
+  information criterion and Bayesian information criterion. Smaller values 
+  of these measures indicate better fit.
 
   If \code{'se.fit'} is set to \code{TRUE}, standard errors of fitted values
   are calculated using the delta method.  The standard errors of fitted
@@ -302,6 +303,13 @@ The function \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{
   \Sigma G}}{se_pred = (mse + t(grad)*\Sigma*grad)^0.5}, where
   \eqn{MSE}{mse} is the mean squared error of fitted versus observed
   outcomes in the original estimation data (Whitmore, 1986).
+  
+  The generic function
+  \ifelse{html}{\code{\link[base]{summary}}}{\code{base::summary()}} can be
+  used to obtain or print a summary of the results. The generic function
+  \ifelse{html}{\code{\link[stats]{predict}}}{\code{stats::predict()}} can
+  be used to obtain predicted values and standard errors of predictions in
+  new data.
 }
 \examples{
 data(utility)
@@ -313,8 +321,7 @@ data(utility)
 
  summary(fit)
 
- yhat <- predict(fit,
-                 newdata = utility)
+ yhat <- predict(fit)
 
 }
 \references{

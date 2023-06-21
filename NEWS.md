@@ -30,6 +30,7 @@
   * na.action: An object indicating the na.action used in stats::model.frame()
   
 # aldvmm 0.8.7
-* The package "aldvmm" now uses analytical gradients instead of numerical approximations both during optimization and in methods used for estimators from the "sandwich" package leading to significant reductions of computation time.
+* The package "aldvmm" now uses analytical gradients instead of numerical approximations during optimization and in methods used for estimators from the "sandwich" package.
 * New methods for generic functions stats::formula(), stats::residuals() and stats::update(). Objects of class "aldvmm" can now be supplied to sandwich::sandwich(), sandwich::vcovCL(), sandwich::vcovPL(), sandwich::vcovHAC() and sandwich::vcovBS(). sandwich::vcovBS() allows re-restimating the covariance matrix using bootstrapping with and without clustering.
 * Objects of class "aldvmm" now include predicted probabilities of component membership for all observations in the estimation data.
+* Revised vignette.

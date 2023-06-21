@@ -37,7 +37,7 @@ in the value set from which utilities were obtained. The order of the
 minimum and maximum limits in \code{'psi'} does not matter.}
 
 \item{dist}{an optional character value of the distribution used in the
-finite mixture. In this release, only the normal distribution is
+components. In this release, only the normal distribution is
 available, and the default value is set to \code{"normal"}.}
 
 \item{ncmp}{a numeric value of the number of components that are mixed. The

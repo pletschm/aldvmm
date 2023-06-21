@@ -24,7 +24,7 @@ of group membership.}
 \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm()}}.}
 
 \item{dist}{an optional character value of the distribution used in the
-finite mixture. In this release, only the normal distribution is
+components. In this release, only the normal distribution is
 available, and the default value is set to \code{"normal"}.}
 
 \item{psi}{a numeric vector of minimum and maximum possible utility values
