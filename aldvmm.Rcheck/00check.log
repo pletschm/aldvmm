@@ -9,7 +9,7 @@
 * using option '--as-cran'
 * checking for file 'aldvmm/DESCRIPTION' ... OK
 * checking extension type ... Package
-* this is package 'aldvmm' version '0.8.6'
+* this is package 'aldvmm' version '0.8.7'
 * package encoding: UTF-8
 * checking CRAN incoming feasibility ... [13s] Note_to_CRAN_maintainers
 Maintainer: 'Mark Pletscher <pletscher.mark@gmail.com>'
@@ -62,12 +62,12 @@ Files 'README.md' or 'NEWS.md' cannot be checked without 'pandoc' being installe
 * checking files in 'vignettes' ... OK
 * checking examples ... OK
 * checking for unstated dependencies in 'tests' ... OK
-* checking tests ... [80s] OK
-  Running 'testthat.R' [80s]
+* checking tests ... [83s] OK
+  Running 'testthat.R' [83s]
 * checking for unstated dependencies in vignettes ... OK
 * checking package vignettes in 'inst/doc' ... OK
-* checking re-building of vignette outputs ... [14s] OK
-* checking PDF version of manual ... [17s] OK
+* checking re-building of vignette outputs ... [38s] OK
+* checking PDF version of manual ... [13s] OK
 * checking HTML version of manual ... OK
 * checking for non-standard things in the check directory ... OK
 * checking for detritus in the temp directory ... OK

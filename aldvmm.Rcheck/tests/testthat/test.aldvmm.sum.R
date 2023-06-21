@@ -29,9 +29,13 @@ test_that('Check generation of summary table.', {
       })
     })
     
-    regtab <- aldvmm.sum(fit,
-                         digits = max(3L, getOption("digits") - 3L),
-                         level = 0.95)
+    suppressWarnings({
+      suppressMessages({
+        regtab <- aldvmm.sum(fit,
+                             digits = max(3L, getOption("digits") - 3L),
+                             level = 0.95)
+      })
+    })
     
     testthat::expect(is.data.frame(regtab),
                      failure_message = 

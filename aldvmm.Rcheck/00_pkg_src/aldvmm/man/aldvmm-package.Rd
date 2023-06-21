@@ -25,7 +25,6 @@ data(utility)
 
  summary(fit)
 
- yhat <- predict(fit,
-                 newdata = utility)
+ yhat <- predict(fit)
 
 }

@@ -26,7 +26,7 @@ in the value set from which utilities were obtained. The order of the
 minimum and maximum limits in \code{'psi'} does not matter.}
 
 \item{dist}{an optional character value of the distribution used in the
-finite mixture. In this release, only the normal distribution is
+components. In this release, only the normal distribution is
 available, and the default value is set to \code{"normal"}.}
 
 \item{ncmp}{a numeric value of the number of components that are mixed. The
@@ -64,14 +64,15 @@ a named numeric vector of first derivatives of the negative
 }
 \description{
 \ifelse{html}{\code{\link[aldvmm]{aldvmm.gr}}}{\code{aldvmm.gr()}}
-calculates numerical gradients of the negative log-likelihood returned by
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm.ll()}} with
-respect to parameter values in \code{'par'}.
+calculates numerical gradients of the negative log-likelihood of the entire
+estimation data with respect to parameter values in \code{'par'}.
 }
 \details{
 \ifelse{html}{\code{\link[aldvmm]{aldvmm.gr}}}{\code{aldvmm.gr()}}
-uses \ifelse{html}{\code{\link[numDeriv]{grad}}}{\code{numDeriv::grad()}} to
-perform numerical approximation of gradients of the negative log-likelihood
-returned by
-\ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm.ll()}}.
+uses \ifelse{html}{\code{\link[aldvmm]{aldvmm.sc}}}{\code{aldvmm.sc()}} to
+calculate analytical gradients of the negative log-likelihood.
+
+If \code{'par'} includes infinite values 
+\ifelse{html}{\code{\link[aldvmm]{aldvmm.gr}}}{\code{aldvmm.gr()}} returns a 
+gradient of zero.
 }

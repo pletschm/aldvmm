@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.7.30) (preloaded format=pdflatex 2022.8.7)  4 JUN 2023 16:37
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.7.30) (preloaded format=pdflatex 2022.8.7)  21 JUN 2023 13:14
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**C:/Users/phm1/AppData/Local/Temp/Rtmp021BM9/Rd2pdf878455f218d/Rd2.tex
-(C:/Users/phm1/AppData/Local/Temp/Rtmp021BM9/Rd2pdf878455f218d/Rd2.tex
+**C:/Users/phm1/AppData/Local/Temp/RtmpGMI1Mb/Rd2pdf36b470f31b3a/Rd2.tex
+(C:/Users/phm1/AppData/Local/Temp/RtmpGMI1Mb/Rd2pdf36b470f31b3a/Rd2.tex
 LaTeX2e <2022-06-01> patch level 5
 L3 programming layer <2022-07-15>
 (C:\Users\phm1\MiKTeX\tex/latex/base\book.cls
@@ -428,7 +428,7 @@ LaTeX Font Info:    Trying to load font information for U+rsfs on input line 38
 (C:\Users\phm1\MiKTeX\tex/latex/jknappen\ursfs.fd
 File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
 )
-LaTeX Font Info:    Trying to load font information for T1+phv on input line 48
+LaTeX Font Info:    Trying to load font information for T1+phv on input line 49
 .
 
 (C:\Users\phm1\MiKTeX\tex/latex/psnfss\t1phv.fd
@@ -441,31 +441,38 @@ File: t1phv.fd 2020/03/25 scalable font definitions for T1/phv.
 \openout5 = `Rd2.toc'.
 
 LaTeX Font Info:    Font shape `T1/zi4/m/n' will be
-(Font)              scaled to size 9.0pt on input line 65.
+(Font)              scaled to size 9.0pt on input line 66.
  [2]
 LaTeX Font Info:    Trying to load font information for TS1+zi4 on input line 1
-28.
+30.
 
 (C:\Users\phm1\MiKTeX\tex/latex/inconsolata\ts1zi4.fd
 File: ts1zi4.fd 2018/01/14 TS1/zi4 (Inconsolata)
 )
 LaTeX Font Info:    Font shape `TS1/zi4/m/n' will be
-(Font)              scaled to size 10.0pt on input line 128.
+(Font)              scaled to size 10.0pt on input line 130.
 
-Overfull \hbox (69.67807pt too wide) in paragraph at lines 126--129
+Overfull \hbox (69.67807pt too wide) in paragraph at lines 127--131
 []\T1/ptm/m/n/10 a data frame, list or en-vi-ron-ment (or ob-ject co-ercible to
  a data frame by []\T1/zi4/m/n/10 base::as.data.frame()[]\T1/ptm/m/n/10 )
  []
 
 [3]
-Overfull \hbox (2.3594pt too wide) in paragraph at lines 164--168
+Overfull \hbox (2.3594pt too wide) in paragraph at lines 171--175
 \T1/ptm/m/n/10 The fol-low-ing val-ues are avail-able: []\T1/zi4/m/n/10 "zero"[
 ]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 "random"[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 
 "constant" []\T1/ptm/m/n/10 and []\T1/zi4/m/n/10 "sann"[]\T1/ptm/m/n/10 .
  []
 
+
+Overfull \hbox (44.44907pt too wide) in paragraph at lines 203--208
+[]\T1/ptm/m/n/10 a char-ac-ter value passed to ar-gu-ment []\TS1/zi4/m/n/10 '\T
+1/zi4/m/n/10 na.action\TS1/zi4/m/n/10 ' []\T1/ptm/m/n/10 of the func-tion []\T1
+/zi4/m/n/10 stats::model.frame()
+ []
+
 [4]
-Overfull \hbox (22.68924pt too wide) in paragraph at lines 231--254
+Overfull \hbox (22.68924pt too wide) in paragraph at lines 239--259
 \T1/ptm/m/n/10 ar-gu-ment []\TS1/zi4/m/n/10 '\T1/zi4/m/n/10 optim.method\TS1/zi
 4/m/n/10 ' []\T1/ptm/m/n/10 ac-cepts the fol-low-ing meth-ods: []\T1/zi4/m/n/10
  "Nelder-Mead"[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 "BFGS"[]\T1/ptm/m/n/10 , []\T
@@ -474,89 +481,96 @@ Overfull \hbox (22.68924pt too wide) in paragraph at lines 231--254
  []
 
 
-Overfull \hbox (8.21799pt too wide) in paragraph at lines 255--267
+Overfull \hbox (8.21799pt too wide) in paragraph at lines 260--272
 []\T1/zi4/m/n/10 "random" []\T1/ptm/m/n/10 draws ran-dom start-ing val-ues from
  a stan-dard nor-mal dis-tri-bu-tion. The method []\T1/zi4/m/n/10 "constant"
  []
 
+
+Overfull \hbox (7.99757pt too wide) in paragraph at lines 282--285
+[]\T1/ptm/m/n/10 The func-tion []\T1/zi4/m/n/10 aldvmm() []\T1/ptm/m/n/10 re-tu
+rns the neg-a-tive log-likelihood, Akaike in-for-ma-tion cri-te-rion and Bayesi
+an
+ []
+
 [5]
-Overfull \hbox (2.12766pt too wide) in paragraph at lines 357--360
+Overfull \hbox (2.12766pt too wide) in paragraph at lines 374--377
 \T1/ptm/m/n/10 com-po-nent means ("beta") and prob-a-bil-i-ties of com-po-nent 
 mem-ber-ship ("delta"). 
  []
 
 [6] [7]
-Overfull \hbox (69.67807pt too wide) in paragraph at lines 476--479
+Overfull \hbox (69.67807pt too wide) in paragraph at lines 487--491
 []\T1/ptm/m/n/10 a data frame, list or en-vi-ron-ment (or ob-ject co-ercible to
  a data frame by []\T1/zi4/m/n/10 base::as.data.frame()[]\T1/ptm/m/n/10 )
  []
 
-
-Overfull \hbox (2.3594pt too wide) in paragraph at lines 514--518
+[8]
+Overfull \hbox (2.3594pt too wide) in paragraph at lines 531--535
 \T1/ptm/m/n/10 The fol-low-ing val-ues are avail-able: []\T1/zi4/m/n/10 "zero"[
 ]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 "random"[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 
 "constant" []\T1/ptm/m/n/10 and []\T1/zi4/m/n/10 "sann"[]\T1/ptm/m/n/10 .
  []
 
-[8]
-Overfull \hbox (3.448pt too wide) in paragraph at lines 561--566
+
+Overfull \hbox (44.44907pt too wide) in paragraph at lines 563--568
+[]\T1/ptm/m/n/10 a char-ac-ter value passed to ar-gu-ment []\TS1/zi4/m/n/10 '\T
+1/zi4/m/n/10 na.action\TS1/zi4/m/n/10 ' []\T1/ptm/m/n/10 of the func-tion []\T1
+/zi4/m/n/10 stats::model.frame()
+ []
+
+
+Overfull \hbox (3.448pt too wide) in paragraph at lines 579--584
 \T1/ptm/m/n/10 clud-ing re-gres-sion co-ef-fi-cients in dif-fer-ent com-po-nent
 s (e.g. "Comp1", "Comp2",
  []
 
 [9]
-Overfull \hbox (3.448pt too wide) in paragraph at lines 636--641
+Overfull \hbox (3.448pt too wide) in paragraph at lines 654--659
 \T1/ptm/m/n/10 clud-ing re-gres-sion co-ef-fi-cients in dif-fer-ent com-po-nent
 s (e.g. "Comp1", "Comp2",
  []
 
 [10]
-Overfull \hbox (3.448pt too wide) in paragraph at lines 719--724
+Overfull \hbox (3.448pt too wide) in paragraph at lines 737--742
 \T1/ptm/m/n/10 clud-ing re-gres-sion co-ef-fi-cients in dif-fer-ent com-po-nent
 s (e.g. "Comp1", "Comp2",
  []
 
 [11]
-Overfull \hbox (3.448pt too wide) in paragraph at lines 758--763
+Overfull \hbox (3.448pt too wide) in paragraph at lines 776--781
 \T1/ptm/m/n/10 clud-ing re-gres-sion co-ef-fi-cients in dif-fer-ent com-po-nent
 s (e.g. "Comp1", "Comp2",
  []
 
 
-Overfull \hbox (22.53798pt too wide) in paragraph at lines 776--784
+Overfull \hbox (22.53798pt too wide) in paragraph at lines 794--802
 \T1/ptm/m/n/10 (la-bel []\T1/zi4/m/n/10 "delta"[]\T1/ptm/m/n/10 ), con-stant pa
 -ram-e-ters of com-po-nent dis-tri-bu-tions (la-bel []\T1/zi4/m/n/10 "lnsigma" 
 []\T1/ptm/m/n/10 for []\T1/zi4/m/n/10 dist=="normal"[]\T1/ptm/m/n/10 ),
  []
 
-[12]
-Overfull \hbox (3.57808pt too wide) in paragraph at lines 846--850
-[]\T1/zi4/m/n/10 aldvmm.gr() []\T1/ptm/m/n/10 cal-cu-lates nu-mer-i-cal gra-di-
-ents of the neg-a-tive log-likelihood re-turned by []\T1/zi4/m/n/10 aldvmm.ll()
-
- []
-
-[13]
-Overfull \hbox (3.448pt too wide) in paragraph at lines 891--896
+[12] [13]
+Overfull \hbox (3.448pt too wide) in paragraph at lines 908--913
 \T1/ptm/m/n/10 clud-ing re-gres-sion co-ef-fi-cients in dif-fer-ent com-po-nent
 s (e.g. "Comp1", "Comp2",
  []
 
 [14]
-Overfull \hbox (2.3594pt too wide) in paragraph at lines 984--988
+Overfull \hbox (2.3594pt too wide) in paragraph at lines 1003--1007
 \T1/ptm/m/n/10 The fol-low-ing val-ues are avail-able: []\T1/zi4/m/n/10 "zero"[
 ]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 "random"[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 
 "constant" []\T1/ptm/m/n/10 and []\T1/zi4/m/n/10 "sann"[]\T1/ptm/m/n/10 .
  []
 
 [15]
-Overfull \hbox (3.448pt too wide) in paragraph at lines 1036--1041
+Overfull \hbox (3.448pt too wide) in paragraph at lines 1055--1060
 \T1/ptm/m/n/10 clud-ing re-gres-sion co-ef-fi-cients in dif-fer-ent com-po-nent
 s (e.g. "Comp1", "Comp2",
  []
 
 
-Overfull \hbox (2.6886pt too wide) in paragraph at lines 1045--1056
+Overfull \hbox (2.6886pt too wide) in paragraph at lines 1064--1075
 []\TS1/zi4/m/n/10 '\T1/zi4/m/n/10 init.method\TS1/zi4/m/n/10 ' []\T1/ptm/m/n/10
  ac-cepts four meth-ods for gen-er-at-ing ini-tial val-ues: []\T1/zi4/m/n/10 "z
 ero"[]\T1/ptm/m/n/10 , []\T1/zi4/m/n/10 "random"[]\T1/ptm/m/n/10 , []\T1/zi4/m/
@@ -564,50 +578,47 @@ n/10 "constant"[]\T1/ptm/m/n/10 ,
  []
 
 [16]
-Overfull \hbox (3.448pt too wide) in paragraph at lines 1130--1135
+Overfull \hbox (3.448pt too wide) in paragraph at lines 1149--1154
 \T1/ptm/m/n/10 clud-ing re-gres-sion co-ef-fi-cients in dif-fer-ent com-po-nent
 s (e.g. "Comp1", "Comp2",
  []
 
 [17]
-Underfull \hbox (badness 10000) in paragraph at lines 1175--1178
+Underfull \hbox (badness 10000) in paragraph at lines 1194--1197
 
  []
 
 
-Overfull \hbox (8.45949pt too wide) in paragraph at lines 1199--1201
-[]\T1/ptm/m/n/10 an ob-ject of class []\T1/zi4/m/n/10 "Formula" []\T1/ptm/m/n/1
-0 cre-ated by []\T1/zi4/m/n/10 Formula::Formula []\T1/ptm/m/n/10 based on the [
-]\T1/zi4/m/n/10 formula
- []
-
-
-Overfull \hbox (2.6681pt too wide) in paragraph at lines 1214--1222
-\T1/ptm/m/n/10 dis-tri-bu-tions ([]\T1/zi4/m/n/10 "beta"[]\T1/ptm/m/n/10 ) and 
-prob-a-bil-i-ties of com-po-nent mem-ber-ship ([]\T1/zi4/m/n/10 "delta"[]\T1/pt
-m/m/n/10 ) based on a []\TS1/zi4/m/n/10 '\T1/zi4/m/n/10 Formula\TS1/zi4/m/n/10 
-'
+Overfull \hbox (5.35912pt too wide) in paragraph at lines 1223--1227
+[]\T1/ptm/m/n/10 an ob-ject of class "For-mula" cre-ated by []\T1/zi4/m/n/10 Fo
+rmula::Formula []\T1/ptm/m/n/10 based on the []\T1/zi4/m/n/10 formula
  []
 
 [18] [19]
-Overfull \hbox (3.448pt too wide) in paragraph at lines 1286--1291
+Overfull \hbox (3.448pt too wide) in paragraph at lines 1315--1320
 \T1/ptm/m/n/10 clud-ing re-gres-sion co-ef-fi-cients in dif-fer-ent com-po-nent
 s (e.g. "Comp1", "Comp2",
  []
 
 [20]
-Overfull \hbox (3.448pt too wide) in paragraph at lines 1385--1390
+Overfull \hbox (3.448pt too wide) in paragraph at lines 1401--1406
+\T1/ptm/m/n/10 clud-ing re-gres-sion co-ef-fi-cients in dif-fer-ent com-po-nent
+s (e.g. "Comp1", "Comp2",
+ []
+
+[21] [22]
+Overfull \hbox (3.448pt too wide) in paragraph at lines 1509--1514
 \T1/ptm/m/n/10 clud-ing re-gres-sion co-ef-fi-cients in dif-fer-ent com-po-nent
 s (e.g. "Comp1", "Comp2",
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1421--1424
+Underfull \hbox (badness 10000) in paragraph at lines 1545--1548
 
  []
 
-[21]
-Overfull \hbox (16.03882pt too wide) in paragraph at lines 1476--1481
+[23]
+Overfull \hbox (16.03882pt too wide) in paragraph at lines 1600--1605
 []\TS1/zi4/m/n/10 '\T1/zi4/m/n/10 formula\TS1/zi4/m/n/10 ' []\T1/ptm/m/n/10 sup
 -plied to []\T1/zi4/m/n/10 aldvmm() []\T1/ptm/m/n/10 plus ad-di-tional at-tribu
 tes de-rived from []\TS1/zi4/m/n/10 '\T1/zi4/m/n/10 formula\TS1/zi4/m/n/10 '[]\
@@ -615,37 +626,36 @@ T1/ptm/m/n/10 .
  []
 
 
-Overfull \hbox (18.45949pt too wide) in paragraph at lines 1482--1486
-[]\T1/ptm/m/n/10 an ob-ject of class []\TS1/zi4/m/n/10 '\T1/zi4/m/n/10 Formula\
-TS1/zi4/m/n/10 ' []\T1/ptm/m/n/10 cre-ated by []\T1/zi4/m/n/10 Formula::Formula
- []\T1/ptm/m/n/10 based on the []\TS1/zi4/m/n/10 '\T1/zi4/m/n/10 formula\TS1/zi
-4/m/n/10 '
+Overfull \hbox (15.35912pt too wide) in paragraph at lines 1606--1610
+[]\T1/ptm/m/n/10 an ob-ject of class "For-mula" cre-ated by []\T1/zi4/m/n/10 Fo
+rmula::Formula []\T1/ptm/m/n/10 based on the []\TS1/zi4/m/n/10 '\T1/zi4/m/n/10 
+formula\TS1/zi4/m/n/10 '
  []
 
-[22] [23] [24] [25] [26]
-Overfull \hbox (2.12766pt too wide) in paragraph at lines 1776--1779
+[24] [25] [26] [27] [28] [29]
+Overfull \hbox (2.12766pt too wide) in paragraph at lines 1959--1962
 \T1/ptm/m/n/10 com-po-nent means ("beta") and prob-a-bil-i-ties of com-po-nent 
 mem-ber-ship ("delta"). 
  []
 
-[27]
+[30] [31]
 LaTeX Font Info:    Font shape `TS1/zi4/m/n' will be
-(Font)              scaled to size 9.0pt on input line 1841.
- [28] (Rd2.ind [29] [30
+(Font)              scaled to size 9.0pt on input line 2084.
+ [32] (Rd2.ind [33] [34
 
 
 ]) (Rd2.aux)
 Package rerunfilecheck Info: File `Rd2.out' has not changed.
-(rerunfilecheck)             Checksum: 87878B73D41EC2552B3D8CCA3DAAE9D3;2835.
+(rerunfilecheck)             Checksum: 2FDE230DDADEDB7CC281102C203E7F80;3424.
  ) 
 Here is how much of TeX's memory you used:
- 10625 strings out of 478337
- 161630 string characters out of 2847926
- 466174 words of memory out of 3000000
- 28663 multiletter control sequences out of 15000+600000
+ 10665 strings out of 478337
+ 162203 string characters out of 2847926
+ 465174 words of memory out of 3000000
+ 28668 multiletter control sequences out of 15000+600000
  506594 words of font info for 75 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 89i,6n,93p,333b,694s stack positions out of 10000i,1000n,20000p,200000b,80000s
+ 89i,6n,93p,316b,728s stack positions out of 10000i,1000n,20000p,200000b,80000s
 {C:/Users/phm1/MiKTeX/fonts/enc/dvips/inconsolata/i4-ts1.enc}{C:/Users/phm1/M
 iKTeX/fonts/enc/dvips/base/8r.enc}{C:/Users/phm1/MiKTeX/fonts/enc/dvips/inconso
 lata/i4-t1-0.enc}<C:/Users/phm1/MiKTeX/fonts/type1/public/inconsolata/Inconsola
@@ -661,9 +671,9 @@ ts/cm/cmsy7.pfb><C:/Users/phm1/MiKTeX/fonts/type1/urw/helvetic/uhvr8a.pfb><C:/U
 sers/phm1/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Users/phm1/MiKTeX/fonts/t
 ype1/urw/times/utmr8a.pfb><C:/Users/phm1/MiKTeX/fonts/type1/urw/times/utmr8a.pf
 b><C:/Users/phm1/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
-Output written on Rd2.pdf (30 pages, 305884 bytes).
+Output written on Rd2.pdf (34 pages, 321086 bytes).
 PDF statistics:
- 562 PDF objects out of 1000 (max. 8388607)
- 197 named destinations out of 1000 (max. 500000)
- 209 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 645 PDF objects out of 1000 (max. 8388607)
+ 232 named destinations out of 1000 (max. 500000)
+ 249 words of extra memory for PDF output out of 10000 (max. 10000000)
 

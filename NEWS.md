@@ -14,7 +14,7 @@
 * Update of vignette: Include figures as .eps files to avoid loading ggplot objects from previous versions of ggplot2
 
 # aldvmm 0.8.6
-* Default optimzation method was changed to "BFGS".
+* Default optimization method was changed to "BFGS".
 * New methods for generic functions print(), summary(), stats::predict(), stats::coef(), stats::nobs(), stats::vcov(), stats::model.matrix() and sandwich::estfun() are available. Objects of class "aldvmm" can now be supplied to sandwich::sandwich(), sandwich::vcovCL(), lmtest::coeftest(), lmtest::coefci() and other functions.
 * New workflow using the function Formula::formula() to handle models with two right-hand sides.
 * Objects of class "aldvmm" include new elements:
@@ -31,6 +31,6 @@
   
 # aldvmm 0.8.7
 * The package "aldvmm" now uses analytical gradients instead of numerical approximations during optimization and in methods used for estimators from the "sandwich" package.
-* New methods for generic functions stats::formula(), stats::residuals() and stats::update(). Objects of class "aldvmm" can now be supplied to sandwich::sandwich(), sandwich::vcovCL(), sandwich::vcovPL(), sandwich::vcovHAC() and sandwich::vcovBS(). sandwich::vcovBS() allows re-restimating the covariance matrix using bootstrapping with and without clustering.
+* New methods for generic functions stats::formula(), stats::residuals() and stats::update(). Objects of class "aldvmm" can now be supplied to sandwich::sandwich(), sandwich::vcovCL(), sandwich::vcovPL(), sandwich::vcovHAC() and sandwich::vcovBS(). sandwich::vcovBS() allows re-estimating the covariance matrix using bootstrapping with and without clustering.
 * Objects of class "aldvmm" now include predicted probabilities of component membership for all observations in the estimation data.
 * Revised vignette and published html vignette on github.

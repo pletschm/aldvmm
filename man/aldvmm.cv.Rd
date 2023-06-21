@@ -72,7 +72,7 @@ cannot be used in the \code{'aldvmm'} package.}
   in \code{'par'}.} \item{\code{p}}{a numeric vector of p-values of
   parameter estimates.} \item{\code{upper}}{a numeric vector of upper 95\%
   confidence limits of parameter estimates in \code{'par'}.}
-  \item{\code{lower}}{a numeric vector of lower 95\% confindence limits of
+  \item{\code{lower}}{a numeric vector of lower 95\% confidence limits of
   parameter estimates in \code{'par'}.}
 }
 \description{

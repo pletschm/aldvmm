@@ -4,6 +4,7 @@ test_that("Check input value checks.", {
   
   aux <- function(formula = eq5d ~ female | age, 
                   data = utility,
+                  subset = c(1:180, 1:40),
                   psi = c(-0.594, 0.883),
                   ncmp = 2,
                   dist = "normal",
@@ -23,7 +24,8 @@ test_that("Check input value checks.", {
                   lcmp = c("Comp1")) {
     
     aldvmm.check(formula = formula, 
-                 data = data, 
+                 data = data,
+                 subset = subset,
                  psi = psi,
                  ncmp = ncmp,
                  dist = dist,
@@ -59,6 +61,11 @@ test_that("Check input value checks.", {
   names(testdf) <- NULL
   testthat::expect_error(aux(data = testdf))
   rm(testdf)
+  
+  testthat::expect_error(aux(subset = as.data.frame(ss = 1:200)))
+  testthat::expect_error(aux(subset = c(1, 1.5, 2)))
+  testthat::expect_error(aux(subset = c("1", "2", "3")))
+  testthat::expect_error(aux(subset = 1:500))
   
   testthat::expect_error(aux(psi = list(-0.594, 0.883)))
   testthat::expect_error(aux(psi = c("-0.594", "0.883")))
