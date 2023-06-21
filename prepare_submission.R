@@ -59,6 +59,8 @@ Sys.setenv(R_GSCMD = "C:/Users/phm1/gs10.00.0/bin/gswin64c.exe")
 # Save html vignette in vignettes folder
 #--------------------------------------
 
+rmarkdown::render("./vignettes/html_vignette.Rmd")
+
 # Local check
 #------------
 
