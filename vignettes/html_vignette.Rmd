@@ -1096,12 +1096,23 @@ The coefficients of the intercepts and covariates for the expected values $E[y|c
 
 ```{r tab-sum-mod1-bfgs, echo = FALSE, results = "asis"}
 
-knitr::kable(tab_sum_mod1bfgs$table,
-             format = "html",
-             row.names = FALSE,
-             caption = 'Regression results from model 1 with "BFGS" optimization method and "zero" starting values')
+# knitr::kable(tab_sum_mod1bfgs$table,
+#              format = "html",
+#              row.names = FALSE,
+#              caption = 'Regression results from model 1 with "BFGS" optimization method and "zero" starting values')
 
-rm(tab_sum_mod1bfgs)
+library(kableExtra)
+
+n <- nrow(tab_sum_mod1bfgs$table)
+tab_sum_mod1bfgs$table %>%
+  kableExtra::kbl(row.names = FALSE,
+      format = "html") %>%
+  kableExtra::kable_styling() %>%
+  kableExtra::row_spec(n, extra_css = "border-top: 1px solid grey; ") %>%
+  kableExtra::row_spec(n, extra_css = "border-bottom-color: white; ") %>%
+  kableExtra::row_spec(n, background = "#FFFFFF")
+
+rm(tab_sum_mod1bfgs, n)
 
 ```
 
@@ -1441,10 +1452,10 @@ for (i in tabvec) {
 rm(i, j, lltmp)
 
 ctab <- as.data.frame(rbind(c("", "", "R", "STATA", "R", "STATA", "R", "STATA", "R", "STATA"),
-              ctab))
+                            ctab))
 
 stab <- as.data.frame(rbind(c("", "", "R", "STATA", "R", "STATA", "R", "STATA", "R", "STATA"),
-              stab))
+                            stab))
 
 names(ctab) <- names(stab) <- c("", "", "Ref. case 1", "", "Ref. case 2", "", "Ref. case 3", "", "Ref. case 4", "")
 
@@ -1542,16 +1553,16 @@ In situations with repeated utility measures, the 'aldvmm' package only allows f
 
 Possible extensions of the 'aldvmm' package could include additional component distributions, a mixed model implementation for repeated measures and an implementation of functions for calculating average marginal effects and their standard errors.
 
-\newpage
+
 
 # References {-}
 
 <div id="refs"></div>
 
-\newpage
+
 # Appendix {-}
 
-## Example calculation of average treatment effects on the treated {- .unlisted .unnumbered}
+## Example calculation of average treatment effects on the treated {-}
 
 ```{r atet-example, echo = TRUE, eval = FALSE, results = 'hide'}
 
@@ -1655,8 +1666,8 @@ print(out)
 
 ```
 
-\newpage
-## Example calculation of robust and clustered standard errors {- .unlisted .unnumbered}
+
+## Example calculation of robust and clustered standard errors {-}
 
 ```{r sandwich-example, echo = TRUE, eval = FALSE, results = 'hide'}
 
@@ -1697,26 +1708,7 @@ lmtest::coeftest(fit, vcov = vc6)
 
 ```
 
-## Covariance matrices across optimization methods {- .unlisted .unnumbered}
-
-Covariance matrices were incomplete or missing entirely (`FALSE`) in multiple optimization approaches (table \@ref(tab:tab-comp-cov))
-
-```{r tab-comp-cov, echo = FALSE, results = 'asis'}
-
-load("tab_comp_cov.RData")
-
-knitr::kable(tab_comp_cov,
-             format = "simple",
-             row.names = FALSE,
-             caption = 'Covariance matrix by optimization method')
-
-rm(tab_comp_cov)
-
-```
-
-\newpage
-
-## Modified Hosmer-Lemeshow test {- .unlisted .unnumbered}
+## Example calculation of modified Hosmer-Lemeshow test {-}
 
 ```{r mhl-show, echo = TRUE, eval = FALSE}
 # Number of percentiles  
@@ -1759,9 +1751,24 @@ plot <- ggplot2::ggplot(plotdat, aes(x = factor(as.numeric(group)),
   geom_line(aes(linetype = factor(outcome)))
 ```  
 
-\newpage
+## Covariance matrices across optimization methods {-}
 
-## Results of modified Hosmer-Lemeshow test {- .unlisted .unnumbered}
+Covariance matrices were incomplete or missing entirely (`FALSE`) in multiple optimization approaches (table \@ref(tab:tab-comp-cov))
+
+```{r tab-comp-cov, echo = FALSE, results = 'asis'}
+
+load("tab_comp_cov.RData")
+
+knitr::kable(tab_comp_cov,
+             format = "simple",
+             row.names = FALSE,
+             caption = 'Covariance matrix by optimization method')
+
+rm(tab_comp_cov)
+
+```
+
+## Results of modified Hosmer-Lemeshow test {-}
 
 ```{r plot-comp-mhl-nm, out.width="90%", fig.cap = "Mean residuals over deciles of expected values, \"Nelder-Mead\" with \"zero\" starting values", echo = FALSE}
 knitr::include_graphics("plot_comp_mhl_nm.png")
@@ -1781,8 +1788,7 @@ knitr::include_graphics("plot_comp_mhl_hjn.png")
 
 <!-- ![(#fig:plot-comp-mhl-hjn) Mean residuals over deciles of expected values, "hjn" with "zero" starting values](./plot_comp_mhl_hjn.png) -->
 
-\newpage
-## R code for the estimation of reference cases {- .unlisted .unnumbered}
+## R code for the estimation of reference cases {-}
 
 ```{r tab-comp-stata-show, echo = TRUE, eval = FALSE}
 # (1) Reference case 1 with default optimization settings
@@ -1826,8 +1832,7 @@ fit2 <- aldvmm::aldvmm(eq5d ~ hr | hr,
                        optim.method = "nlminb")
 ```
 
-\newpage
-## STATA\textsuperscript{\textregistered} code for the estimation of reference cases {- .unlisted .unnumbered}
+## STATA\textsuperscript{\textregistered} code for the estimation of reference cases {-}
 
 ```{r stata_code, echo = TRUE, eval = FALSE}
 * (1) Reference case 1
