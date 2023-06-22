@@ -706,9 +706,12 @@ Figure 4.1: Frequency distribution of observed EQ-5D-3L utilities
 <span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit,</span>
 <span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>                <span class="at">se.fit =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>                <span class="at">type =</span> <span class="st">&quot;fit&quot;</span>)</span></code></pre></div>
-<p>We obtain a summary table of regression results using the generic function <code>summary()</code>. The model converges at a log-likelihood of -706 and an Akaike information criterion value of -1’399 (table <a href="#tab:tab-sum-mod1-bfgs"><strong>??</strong></a>). The function <code>aldvmm()</code> returns the negative log-likelihood and Akaike information criterion, and smaller values suggest better fit.</p>
+<p>We obtain a summary table of regression results using the generic function <code>summary()</code>. The model converges at a log-likelihood of -706 and an Akaike information criterion value of -1’399 (table <a href="#tab:tab-sum-mod1-bfgs">5.1</a>). The function <code>aldvmm()</code> returns the negative log-likelihood and Akaike information criterion, and smaller values suggest better fit.</p>
 <p>The coefficients of the intercepts and covariates for the expected values <span class="math inline">\(E[y|c, X]\)</span> of the normal distributions can be interpreted as marginal effects on component means. ‘lnsigma’ denotes the natural logarithm of the estimated standard deviation <span class="math inline">\(\sigma^{c}\)</span>. The coefficients of covariates in the multinomial logit model of probabilities of component membership are log-transformed relative probabilities. Our model only includes two components, and the multinomial logit model collapses to a binomial logit model. The intercept of -0.7281 means that the average probability of an observation in the data to belong to component 1 is <span class="math inline">\(\text{exp}(-0.7281)\)</span> or 0.4828255 times the probability to belong to component 2.</p>
-<table class="table" style="margin-left: auto; margin-right: auto;">
+<table>
+<caption>
+<span id="tab:tab-sum-mod1-bfgs">Table 5.1: </span>Regression results from model 1 with “BFGS” optimization method and “zero” starting values
+</caption>
 <thead>
 <tr>
 <th style="text-align:left;">
@@ -953,25 +956,25 @@ Comp1
 </td>
 </tr>
 <tr>
-<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; background-color: #FFFFFF !important;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 N = 10549
 </td>
-<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; background-color: #FFFFFF !important;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 ll = -706
 </td>
-<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; background-color: #FFFFFF !important;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 AIC = -1399
 </td>
-<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; background-color: #FFFFFF !important;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 BIC = -1348
 </td>
-<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; background-color: #FFFFFF !important;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 </td>
-<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; background-color: #FFFFFF !important;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 </td>
-<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; background-color: #FFFFFF !important;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 </td>
-<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; background-color: #FFFFFF !important;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 </td>
 </tr>
 </tbody>
@@ -1016,10 +1019,10 @@ Figure 5.2: Mean residuals over deciles of expected values, “BFGS” with “z
 <span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a>                                         <span class="at">optim.method =</span> j)</span>
 <span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a>  }</span>
 <span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a>}</span></code></pre></div>
-<p>The maximum likelihood varies considerably across optimization methods and initial values which confirms the sensitivity of the model to changes in these settings (table <a href="#tab:tab-comp-ll">5.1</a>). The most frequent log-likelihood is 706.32, but the Hooke and Jeeves Pattern Search Optimization (“hjn”) with “zero” initial values converges at a log-likelihood 33’057.43.</p>
+<p>The maximum likelihood varies considerably across optimization methods and initial values which confirms the sensitivity of the model to changes in these settings (table <a href="#tab:tab-comp-ll">5.2</a>). The most frequent log-likelihood is 706.32, but the Hooke and Jeeves Pattern Search Optimization (“hjn”) with “zero” initial values converges at a log-likelihood 33’057.43.</p>
 <p>The optimization methods “Nelder-Mead”, “CG”, “L-BFGS-B”, and “Rvmmin” are particularly sensitive to changes of starting values. Only the method “nlminb” converge at the same log-likelihood of 706.32 regardless of initial values. However, even the “nlminb” algorithm converge at different parameters with starting values from a constant-only model than with the other starting values.</p>
 <table>
-<caption><span id="tab:tab-comp-ll">Table 5.1: </span>Log-likelihood by optimization method</caption>
+<caption><span id="tab:tab-comp-ll">Table 5.2: </span>Log-likelihood by optimization method</caption>
 <thead>
 <tr class="header">
 <th></th>
@@ -1080,9 +1083,9 @@ Figure 5.2: Mean residuals over deciles of expected values, “BFGS” with “z
 </tr>
 </tbody>
 </table>
-<p>The computation times of optimization routines were relatively short and did not vary considerably across methods expect for the “hjn” algorithm and simulated annealing “sann” starting values which requires more computation time (table <a href="#tab:tab-comp-time">5.2</a>).</p>
+<p>The computation times of optimization routines were relatively short and did not vary considerably across methods expect for the “hjn” algorithm and simulated annealing “sann” starting values which requires more computation time (table <a href="#tab:tab-comp-time">5.3</a>).</p>
 <table>
-<caption><span id="tab:tab-comp-time">Table 5.2: </span>Estimation time [minutes] by optimization method</caption>
+<caption><span id="tab:tab-comp-time">Table 5.3: </span>Estimation time [minutes] by optimization method</caption>
 <thead>
 <tr class="header">
 <th></th>
@@ -1143,10 +1146,10 @@ Figure 5.2: Mean residuals over deciles of expected values, “BFGS” with “z
 </tr>
 </tbody>
 </table>
-<p>Parameter estimates differ considerably across selected optimization algorithms (table <a href="#tab:tab-comp-coef">5.3</a>). The default “BFGS” - “zero” approach converges at the same parameters as the “nlminb” - “zero” method. The solution of the “hjn” method is rather extreme with no effect of the Oxford Hip Score, a standard deviation of almost 0 in component 1 and a very low probability of membership of component 1. Also, the Modified Hosmer-Lemeshow test did not show better fit of the “hjn” solution compared to the other algorithms (figure <a href="#fig:plot-comp-mhl-nlminb">7.2</a> in the appendix). The solution of the “hjn” method suggests that a single-component model should be explored as well.</p>
+<p>Parameter estimates differ considerably across selected optimization algorithms (table <a href="#tab:tab-comp-coef">5.4</a>). The default “BFGS” - “zero” approach converges at the same parameters as the “nlminb” - “zero” method. The solution of the “hjn” method is rather extreme with no effect of the Oxford Hip Score, a standard deviation of almost 0 in component 1 and a very low probability of membership of component 1. Also, the Modified Hosmer-Lemeshow test did not show better fit of the “hjn” solution compared to the other algorithms (figure <a href="#fig:plot-comp-mhl-nlminb">7.2</a> in the appendix). The solution of the “hjn” method suggests that a single-component model should be explored as well.</p>
 <table>
 <caption>
-<span id="tab:tab-comp-coef">Table 5.3: </span>Regression results of model 1 with zero starting values in “BFGS”, “Nelder-Mead”, “nlminb” and “hjn” algorithms
+<span id="tab:tab-comp-coef">Table 5.4: </span>Regression results of model 1 with zero starting values in “BFGS”, “Nelder-Mead”, “nlminb” and “hjn” algorithms
 </caption>
 <thead>
 <tr>
@@ -1336,21 +1339,21 @@ Comp1
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 ll
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 -706.32
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 259.21
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 -706.32
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 -33057.43
 </td>
 </tr>
@@ -1368,8 +1371,8 @@ Figure 5.3: Deviation of expected values from “BFGS”, “Nelder-Mead” and 
 </div>
 <div id="model-1-constrained-optimization-with-user-defined-initial-values" class="section level2" number="5.3">
 <h2><span class="header-section-number">5.3</span> Model 1: Constrained optimization with user-defined initial values</h2>
-<p>We can also fit model 1 with user-defined starting values and box constraints. When constraints are imposed, the <code>aldvmm()</code> function uses the optimization method “L-BFGS-B”, which shows to be very sensitive to starting values. We use zero initial values for all parameters except for the intercept in the multinomial logit which we set to the estimate from the “nlminb” optimization method with “zero” starting values (0.7283) (table <a href="#tab:tab-comp-coef">5.3</a>). We impose a lower limit of -3 to the log-standard deviations in both components.</p>
-<p>The <code>aldvmm()</code> function returns a warning that the covariance matrix included negative values on the diagonal. We see that these values are the variances of the intercept and the log-standard deviation in component 2 (table <a href="#tab:tab-sum-cstr">5.4</a>). The log-likelihood amounts to 628, which is smaller than the maximum log-likelihoods of model fits without constraints. The parameter estimates do not resemble any of the solutions of the unconstrained “BFGS”, “Nelder-Mead”, “nlminb” or “hjn” optimization methods with “zero” starting values (table <a href="#tab:tab-comp-coef">5.3</a>), which further emphasizes the difficulties in finding a global optimum of the likelihood with English EQ-5D-3L utilities after hip replacement.</p>
+<p>We can also fit model 1 with user-defined starting values and box constraints. When constraints are imposed, the <code>aldvmm()</code> function uses the optimization method “L-BFGS-B”, which shows to be very sensitive to starting values. We use zero initial values for all parameters except for the intercept in the multinomial logit which we set to the estimate from the “nlminb” optimization method with “zero” starting values (0.7283) (table <a href="#tab:tab-comp-coef">5.4</a>). We impose a lower limit of -3 to the log-standard deviations in both components.</p>
+<p>The <code>aldvmm()</code> function returns a warning that the covariance matrix included negative values on the diagonal. We see that these values are the variances of the intercept and the log-standard deviation in component 2 (table <a href="#tab:tab-sum-cstr">5.5</a>). The log-likelihood amounts to 628, which is smaller than the maximum log-likelihoods of model fits without constraints. The parameter estimates do not resemble any of the solutions of the unconstrained “BFGS”, “Nelder-Mead”, “nlminb” or “hjn” optimization methods with “zero” starting values (table <a href="#tab:tab-comp-coef">5.4</a>), which further emphasizes the difficulties in finding a global optimum of the likelihood with English EQ-5D-3L utilities after hip replacement.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>init <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>,    <span class="dv">0</span>,   <span class="dv">0</span>,   <span class="dv">0</span>,    <span class="dv">0</span>,    <span class="dv">0</span>,    <span class="fl">0.7283</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>lo   <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="cn">Inf</span>, <span class="sc">-</span><span class="cn">Inf</span>, <span class="sc">-</span><span class="dv">3</span>,  <span class="sc">-</span><span class="cn">Inf</span>, <span class="sc">-</span><span class="cn">Inf</span>, <span class="sc">-</span><span class="dv">3</span>, <span class="sc">-</span><span class="cn">Inf</span>)</span>
 <span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>hi   <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">Inf</span>,  <span class="cn">Inf</span>,  <span class="cn">Inf</span>, <span class="cn">Inf</span>,  <span class="cn">Inf</span>,  <span class="cn">Inf</span>,  <span class="cn">Inf</span>)</span>
@@ -1385,7 +1388,7 @@ Figure 5.3: Deviation of expected values from “BFGS”, “Nelder-Mead” and 
 <span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="fu">summary</span>(fit1_cstr)</span></code></pre></div>
 <table>
 <caption>
-<span id="tab:tab-sum-cstr">Table 5.4: </span>Regression results of model 1 with the “L-BFGS-B” method, parameter constraints and user-defined starting values
+<span id="tab:tab-sum-cstr">Table 5.5: </span>Regression results of model 1 with the “L-BFGS-B” method, parameter constraints and user-defined starting values
 </caption>
 <thead>
 <tr>
@@ -1631,25 +1634,25 @@ Comp1
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 N = 10549
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 ll = 628
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 AIC = 1270
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 BIC = 1320
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 </td>
 </tr>
 </tbody>
@@ -1666,10 +1669,10 @@ BIC = 1320
 <span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>                      <span class="at">optim.method =</span> <span class="st">&quot;nlminb&quot;</span>)</span>
 <span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a></span>
 <span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="fu">summary</span>(fit)</span></code></pre></div>
-<p>The coefficients of the single-component model are relatively similar to the parameters in the second component of model 1 from the “hjn” algorithm (table <a href="#tab:tab-sum-tobit">5.5</a>). The Akaike information criterion amounts to 1’276 which is larger than the values of the “nlminb” (-706.32) and “hjn” (-33’057.43) solutions of the two-component model and thus suggests worse fit of the single-component model.</p>
+<p>The coefficients of the single-component model are relatively similar to the parameters in the second component of model 1 from the “hjn” algorithm (table <a href="#tab:tab-sum-tobit">5.6</a>). The Akaike information criterion amounts to 1’276 which is larger than the values of the “nlminb” (-706.32) and “hjn” (-33’057.43) solutions of the two-component model and thus suggests worse fit of the single-component model.</p>
 <table>
 <caption>
-<span id="tab:tab-sum-tobit">Table 5.5: </span>Regression results of model 1 with 1 component, zero starting values in “nlminb” algorithm
+<span id="tab:tab-sum-tobit">Table 5.6: </span>Regression results of model 1 with 1 component, zero starting values in “nlminb” algorithm
 </caption>
 <thead>
 <tr>
@@ -1794,25 +1797,25 @@ lnsigma
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 N = 10549
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 ll = 635
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 AIC = 1276
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 BIC = 1297
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 </td>
 </tr>
 </tbody>
@@ -1835,7 +1838,7 @@ BIC = 1297
 <p>The Akaike information criterion of model 2 fitted using the “nlminb” method amounts to -1’867 which is smaller than the Akaike information criterion of model 1 (-706.32) with the same method. The smaller Akaike information criterion suggests that the increase in the log-likelihood after inclusion of a coefficient of the Oxford Hip Score on the probability of component membership is sufficiently large to justify the extra parameter.</p>
 <table>
 <caption>
-<span id="tab:tab-sum-mod2">Table 5.6: </span>Regression results of model 2 with user-defined starting values in the “nlminb” algorithm
+<span id="tab:tab-sum-mod2">Table 5.7: </span>Regression results of model 2 with user-defined starting values in the “nlminb” algorithm
 </caption>
 <thead>
 <tr>
@@ -2106,25 +2109,25 @@ hr
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 N = 10549
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 ll = -941
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 AIC = -1867
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 BIC = -1809
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 </td>
 </tr>
 </tbody>
@@ -2501,34 +2504,34 @@ NA
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 N = 10549
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 ll
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 -706
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 715.84
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 628
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 -613.7
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 -706
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 715.84
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 -941
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 953.2
 </td>
 </tr>
@@ -2893,34 +2896,34 @@ NA
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 N = 10549
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 ll
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 -706
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 715.84
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 628
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 -613.7
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 -706
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 715.84
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 -941
 </td>
-<td style="text-align:left;">
+<td style="text-align:left;border-top: 1px solid grey; border-bottom-color: white; ">
 953.2
 </td>
 </tr>

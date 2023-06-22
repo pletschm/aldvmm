@@ -1100,19 +1100,19 @@ The coefficients of the intercepts and covariates for the expected values $E[y|c
 #              format = "html",
 #              row.names = FALSE,
 #              caption = 'Regression results from model 1 with "BFGS" optimization method and "zero" starting values')
+# 
+# rm(tab_sum_mod1bfgs)
 
 library(kableExtra)
 
-n <- nrow(tab_sum_mod1bfgs$table)
 tab_sum_mod1bfgs$table %>%
   kableExtra::kbl(row.names = FALSE,
-      format = "html") %>%
-  kableExtra::kable_styling() %>%
-  kableExtra::row_spec(n, extra_css = "border-top: 1px solid grey; ") %>%
-  kableExtra::row_spec(n, extra_css = "border-bottom-color: white; ") %>%
-  kableExtra::row_spec(n, background = "#FFFFFF")
+                  format = "html",
+                  caption = 'Regression results from model 1 with "BFGS" optimization method and "zero" starting values') %>%
+  kableExtra::row_spec(nrow(tab_sum_mod1bfgs$table), 
+                       extra_css = "border-top: 1px solid grey; border-bottom-color: white; ")
 
-rm(tab_sum_mod1bfgs, n)
+rm(tab_sum_mod1bfgs)
 
 ```
 
@@ -1205,10 +1205,19 @@ Parameter estimates differ considerably across selected optimization algorithms 
 
 load("tab_comp_coef.RData")
 
-knitr::kable(tab_comp_coef,
-             format = "html",
-             row.names = FALSE,
-             caption = 'Regression results of model 1 with zero starting values in "BFGS", "Nelder-Mead", "nlminb" and "hjn" algorithms')
+# knitr::kable(tab_comp_coef,
+#              format = "html",
+#              row.names = FALSE,
+#              caption = 'Regression results of model 1 with zero starting values in "BFGS", "Nelder-Mead", "nlminb" and "hjn" algorithms')
+
+library(kableExtra)
+
+tab_comp_coef %>%
+  kableExtra::kbl(row.names = FALSE,
+                  format = "html",
+                  caption = 'Regression results of model 1 with zero starting values in "BFGS", "Nelder-Mead", "nlminb" and "hjn" algorithms') %>%
+  kableExtra::row_spec(nrow(tab_comp_coef), 
+                       extra_css = "border-top: 1px solid grey; border-bottom-color: white; ")
 
 rm(tab_comp_coef)
 
@@ -1266,10 +1275,19 @@ summary(fit1_cstr)
 
 load("tab_sum_cstr.RData")
 
-knitr::kable(tab_sum_cstr$table,
-             format = "html",
-             row.names = FALSE,
-             caption = 'Regression results of model 1 with the "L-BFGS-B" method, parameter constraints and user-defined starting values')
+# knitr::kable(tab_sum_cstr$table,
+#              format = "html",
+#              row.names = FALSE,
+#              caption = 'Regression results of model 1 with the "L-BFGS-B" method, parameter constraints and user-defined starting values')
+
+library(kableExtra)
+
+tab_sum_cstr$table %>%
+  kableExtra::kbl(row.names = FALSE,
+                  format = "html",
+                  caption = 'Regression results of model 1 with the "L-BFGS-B" method, parameter constraints and user-defined starting values') %>%
+  kableExtra::row_spec(nrow(tab_sum_cstr$table), 
+                       extra_css = "border-top: 1px solid grey; border-bottom-color: white; ")
 
 rm(tab_sum_cstr)
 
@@ -1330,10 +1348,17 @@ The coefficients of the single-component model are relatively similar to the par
 
 ```{r tab-sum-tobit, echo = FALSE, results = "asis"}
 
-knitr::kable(tab_sum_tobit$table,
-             format = "html",
-             row.names = FALSE,
-             caption = 'Regression results of model 1 with 1 component, zero starting values in "nlminb" algorithm')
+# knitr::kable(tab_sum_tobit$table,
+#              format = "html",
+#              row.names = FALSE,
+#              caption = 'Regression results of model 1 with 1 component, zero starting values in "nlminb" algorithm')
+
+tab_sum_tobit$table %>%
+  kableExtra::kbl(row.names = FALSE,
+                  format = "html",
+                  caption = 'Regression results of model 1 with 1 component, zero starting values in "nlminb" algorithm') %>%
+  kableExtra::row_spec(nrow(tab_sum_tobit$table), 
+                       extra_css = "border-top: 1px solid grey; border-bottom-color: white; ")
 
 rm(tab_sum_tobit)
 
@@ -1378,10 +1403,17 @@ The Akaike information criterion of model 2 fitted using the "nlminb" method amo
 
 ```{r tab-sum-mod2, echo = FALSE, results = "asis"}
 
-knitr::kable(tab_sum_mod2$table,
-             format = "html",
-             row.names = FALSE,
-             caption = 'Regression results of model 2 with user-defined starting values in the "nlminb" algorithm')
+# knitr::kable(tab_sum_mod2$table,
+#              format = "html",
+#              row.names = FALSE,
+#              caption = 'Regression results of model 2 with user-defined starting values in the "nlminb" algorithm')
+
+tab_sum_mod2$table %>%
+  kableExtra::kbl(row.names = FALSE,
+                  format = "html",
+                  caption = 'Regression results of model 2 with user-defined starting values in the "nlminb" algorithm') %>%
+  kableExtra::row_spec(nrow(tab_sum_mod2$table), 
+                       extra_css = "border-top: 1px solid grey; border-bottom-color: white; ")
 
 rm(tab_sum_mod2)
 
@@ -1466,11 +1498,18 @@ lindex[1] <- -1
 
 ```{r tab-comp-stata, echo = FALSE, results = "asis"}
 
-knitr::kable(ctab,
-             format = "html",
-             row.names = FALSE,
-             caption = 'Comparison of point estimates to the results of the STATA package',
-             escape = FALSE)
+# knitr::kable(ctab,
+#              format = "html",
+#              row.names = FALSE,
+#              caption = 'Comparison of point estimates to the results of the STATA package',
+#              escape = FALSE)
+
+ctab %>%
+  kableExtra::kbl(row.names = FALSE,
+                  format = "html",
+                  caption = 'Comparison of point estimates to the results of the STATA package') %>%
+  kableExtra::row_spec(nrow(ctab), 
+                       extra_css = "border-top: 1px solid grey; border-bottom-color: white; ")
 
 ```
 
@@ -1479,10 +1518,17 @@ The parameter estimates and standard errors obtained in R are very similar to th
 
 ```{r tab-compse-stata, echo = FALSE, results = "asis"}
 
-knitr::kable(stab,
-             format = "html",
-             row.names = FALSE,
-             caption = 'Comparison of standard errors to the results of the STATA package')
+# knitr::kable(stab,
+#              format = "html",
+#              row.names = FALSE,
+#              caption = 'Comparison of standard errors to the results of the STATA package')
+
+stab %>%
+  kableExtra::kbl(row.names = FALSE,
+                  format = "html",
+                  caption = 'Comparison of standard errors to the results of the STATA package') %>%
+  kableExtra::row_spec(nrow(stab), 
+                       extra_css = "border-top: 1px solid grey; border-bottom-color: white; ")
 
 rm(tab_sum_const, tab_sum_cstata, tab_sum_mod1nlminb, tab_sum_mod2stata,
    tab_sum_stata1, tab_sum_stata2, tab_sum_stata3, tab_sum_stata4)
