@@ -27,6 +27,7 @@ library("xtable")
 library("ggplot2")
 library("scales")
 library("reshape2")
+library("kableExtra")
 
 # Load functions
 #---------------
@@ -34,6 +35,7 @@ library("reshape2")
 source("rep_tab_fit.R")
 source("rep_tab_stata.R")
 source("est_mhl.R")
+source("mk_regtab.R")
 
 # Custom ggplot theme
 #--------------------
@@ -857,6 +859,78 @@ rm(tab_diff_se, tab_diff_yhat)
 rm(stata_se, stata_yhat)
 rm(sumhat)
 
+# Comparison of R and STATA results
+#---------------------------------
+
+# Load summary tables
+load("tab_sum_mod1nlminb.RData")
+load("tab_sum_cstata.RData")
+load("tab_sum_const.RData")
+load("tab_sum_mod2stata.RData")
+load("tab_sum_stata1.RData")
+load("tab_sum_stata2.RData")
+load("tab_sum_stata3.RData")
+load("tab_sum_stata4.RData")
+
+# Model keys
+tabvec <- c("tab_sum_mod1nlminb",  "tab_sum_stata1", 
+            "tab_sum_cstata",     "tab_sum_stata2", 
+            "tab_sum_const", "tab_sum_stata3",
+            "tab_sum_mod2stata", "tab_sum_stata4")
+
+# Matrix of coefficients
+ctab <- matrix(NA, 
+               nrow = nrow(tab_sum_mod2stata$table),
+               ncol = length(tabvec) + 2)
+
+ctab[, 1:2] <- as.matrix(tab_sum_mod2stata$table[, 1:2])
+ctab[nrow(ctab), 2] <- ""
+
+# Matrix of standard errors
+stab <- ctab
+
+# Populate tables
+for (i in tabvec) {
+  nr <- nrow(get(i)$table)
+  for (j in 1:(nr - 1)) {
+    
+    lltmp <- format( 
+      as.numeric(gsub("[^0-9.-]", "", as.matrix(get(i)$table)[nr, 2])), 
+      big.mark = "'"
+    )
+    
+    ctab[j, 2 + match(i, tabvec)] <- as.matrix(get(i)$table)[j, 3]
+    ctab[nrow(ctab), 2 + match(i, tabvec)] <- lltmp
+    ctab[nrow(ctab), 2] <- "ll"
+    
+    stab[j, 2 + match(i, tabvec)] <- as.matrix(get(i)$table)[j, 4]
+    stab[nrow(stab), 2 + match(i, tabvec)] <- lltmp
+    stab[nrow(stab), 2] <- "ll"
+    
+  }
+  rm(nr)
+}
+rm(i, j, lltmp)
+
+ctab <- as.data.frame(rbind(c("", "", "R", "STATA", "R", "STATA", "R", "STATA", "R", "STATA"),
+                            ctab))
+
+stab <- as.data.frame(rbind(c("", "", "R", "STATA", "R", "STATA", "R", "STATA", "R", "STATA"),
+                            stab))
+
+names(ctab) <- names(stab) <- c("", "", "Ref. case 1", "", "Ref. case 2", "", "Ref. case 3", "", "Ref. case 4", "")
+
+save(ctab, 
+     file = "ctab.RData",
+     compress = TRUE)
+
+save(stab, 
+     file = "stab.RData",
+     compress = TRUE)
+
+rm(ctab, stab, tabvec, tab_sum_const, tab_sum_cstata, tab_sum_mod1nlminb, tab_sum_mod2stata,
+   tab_sum_stata1, tab_sum_stata2, tab_sum_stata3, tab_sum_stata4)
+
 # Remove fit objects
 #-------------------
 
@@ -1060,7 +1134,9 @@ pred <- predict(fit,
 ```
 
 ```{r tab-sum-mod1-load, echo = FALSE}
+
 load("tab_sum_mod1bfgs.RData")
+
 textout[["mod1bfgs"]][["aic"]] <- format(
   as.numeric(
     gsub("[^0-9.-]", 
@@ -1088,6 +1164,8 @@ textout[["mod1bfgs"]][["intp1"]] <- format(
   big.mark = "'"
 )
 
+rm(tab_sum_mod1bfgs)
+
 ```
 
 We obtain a summary table of regression results using the generic function `summary()`. The model converges at a log-likelihood of `r textout[["mod1bfgs"]][["ll"]]` and an Akaike information criterion value of `r textout[["mod1bfgs"]][["aic"]]` (table \@ref(tab:tab-sum-mod1-bfgs)). The function `aldvmm()` returns the negative log-likelihood and Akaike information criterion, and smaller values suggest better fit.
@@ -1096,21 +1174,10 @@ The coefficients of the intercepts and covariates for the expected values $E[y|c
 
 ```{r tab-sum-mod1-bfgs, echo = FALSE, results = "asis"}
 
-# knitr::kable(tab_sum_mod1bfgs$table,
-#              format = "html",
-#              row.names = FALSE,
-#              caption = 'Regression results from model 1 with "BFGS" optimization method and "zero" starting values')
-# 
-# rm(tab_sum_mod1bfgs)
+load("tab_sum_mod1bfgs.RData")
 
-library(kableExtra)
-
-tab_sum_mod1bfgs$table %>%
-  kableExtra::kbl(row.names = FALSE,
-                  format = "html",
-                  caption = 'Regression results from model 1 with "BFGS" optimization method and "zero" starting values') %>%
-  kableExtra::row_spec(nrow(tab_sum_mod1bfgs$table), 
-                       extra_css = "border-top: 1px solid grey; border-bottom-color: white; ")
+mk_regtab(tab_sum_mod1bfgs$table,
+          caption = 'Regression results from model 1 with "BFGS" optimization method and "zero" starting values')
 
 rm(tab_sum_mod1bfgs)
 
@@ -1167,7 +1234,7 @@ for (i in init.method) {
 
 The maximum likelihood varies considerably across optimization methods and initial values which confirms the sensitivity of the model to changes in these settings (table \@ref(tab:tab-comp-ll)). The most frequent log-likelihood is `r format( names( which.max(table(round(tab_comp_ll, 2)) ) ), big.mark = "'")`, but the Hooke and Jeeves Pattern Search Optimization ("hjn") with "zero" initial values converges at a log-likelihood `r format(max(round(tab_comp_ll, 2)), big.mark = "'")`.
 
-The optimization methods "Nelder-Mead", "CG", "L-BFGS-B", and "Rvmmin" are particularly sensitive to changes of starting values. Only the method "nlminb" converge at the same log-likelihood of `r format( names( which.max(table(round(tab_comp_ll[, "nlminb"], 2)) ) ), big.mark = "'")` regardless of initial values. However, even the "nlminb" algorithm converge at different parameters with starting values from a constant-only model than with the other starting values.
+The optimization methods "Nelder-Mead", "CG", "L-BFGS-B", and "Rvmmin" are particularly sensitive to changes of starting values. Only the method "nlminb" converge at the same log-likelihood of `r format( names( which.max(table(round(tab_comp_ll[, "nlminb"], 2)) ) ), big.mark = "'")` regardless of initial values. However, even the "nlminb" algorithm converges at different parameters with starting values from a constant-only model than with the other starting values.
 
 ```{r tab-comp-ll, echo = FALSE, results = 'asis'}
 
@@ -1205,19 +1272,8 @@ Parameter estimates differ considerably across selected optimization algorithms 
 
 load("tab_comp_coef.RData")
 
-# knitr::kable(tab_comp_coef,
-#              format = "html",
-#              row.names = FALSE,
-#              caption = 'Regression results of model 1 with zero starting values in "BFGS", "Nelder-Mead", "nlminb" and "hjn" algorithms')
-
-library(kableExtra)
-
-tab_comp_coef %>%
-  kableExtra::kbl(row.names = FALSE,
-                  format = "html",
-                  caption = 'Regression results of model 1 with zero starting values in "BFGS", "Nelder-Mead", "nlminb" and "hjn" algorithms') %>%
-  kableExtra::row_spec(nrow(tab_comp_coef), 
-                       extra_css = "border-top: 1px solid grey; border-bottom-color: white; ")
+mk_regtab(tab_comp_coef,
+          caption = 'Regression results of model 1 with zero starting values in "BFGS", "Nelder-Mead", "nlminb" and "hjn" algorithms')
 
 rm(tab_comp_coef)
 
@@ -1275,19 +1331,8 @@ summary(fit1_cstr)
 
 load("tab_sum_cstr.RData")
 
-# knitr::kable(tab_sum_cstr$table,
-#              format = "html",
-#              row.names = FALSE,
-#              caption = 'Regression results of model 1 with the "L-BFGS-B" method, parameter constraints and user-defined starting values')
-
-library(kableExtra)
-
-tab_sum_cstr$table %>%
-  kableExtra::kbl(row.names = FALSE,
-                  format = "html",
-                  caption = 'Regression results of model 1 with the "L-BFGS-B" method, parameter constraints and user-defined starting values') %>%
-  kableExtra::row_spec(nrow(tab_sum_cstr$table), 
-                       extra_css = "border-top: 1px solid grey; border-bottom-color: white; ")
+mk_regtab(tab_sum_cstr$table,
+          caption = 'Regression results of model 1 with the "L-BFGS-B" method, parameter constraints and user-defined starting values')
 
 rm(tab_sum_cstr)
 
@@ -1340,7 +1385,7 @@ textout[["comp"]][["hjn"]] <- format(
   big.mark = "'"
 )
 
-rm(tab_comp_coef)
+rm(tab_comp_coef, tab_sum_tobit)
 
 ```
 
@@ -1348,17 +1393,10 @@ The coefficients of the single-component model are relatively similar to the par
 
 ```{r tab-sum-tobit, echo = FALSE, results = "asis"}
 
-# knitr::kable(tab_sum_tobit$table,
-#              format = "html",
-#              row.names = FALSE,
-#              caption = 'Regression results of model 1 with 1 component, zero starting values in "nlminb" algorithm')
+load("tab_sum_tobit.RData")
 
-tab_sum_tobit$table %>%
-  kableExtra::kbl(row.names = FALSE,
-                  format = "html",
-                  caption = 'Regression results of model 1 with 1 component, zero starting values in "nlminb" algorithm') %>%
-  kableExtra::row_spec(nrow(tab_sum_tobit$table), 
-                       extra_css = "border-top: 1px solid grey; border-bottom-color: white; ")
+mk_regtab(tab_sum_tobit$table,
+          caption = 'Regression results of model 1 with 1 component, zero starting values in "nlminb" algorithm')
 
 rm(tab_sum_tobit)
 
@@ -1396,6 +1434,7 @@ textout[["mod2"]][["aic"]] <- format(
   big.mark = "'"
 )
 
+rm(tab_sum_mod2)
 
 ```
 
@@ -1403,17 +1442,10 @@ The Akaike information criterion of model 2 fitted using the "nlminb" method amo
 
 ```{r tab-sum-mod2, echo = FALSE, results = "asis"}
 
-# knitr::kable(tab_sum_mod2$table,
-#              format = "html",
-#              row.names = FALSE,
-#              caption = 'Regression results of model 2 with user-defined starting values in the "nlminb" algorithm')
+load("tab_sum_mod2.RData")
 
-tab_sum_mod2$table %>%
-  kableExtra::kbl(row.names = FALSE,
-                  format = "html",
-                  caption = 'Regression results of model 2 with user-defined starting values in the "nlminb" algorithm') %>%
-  kableExtra::row_spec(nrow(tab_sum_mod2$table), 
-                       extra_css = "border-top: 1px solid grey; border-bottom-color: white; ")
+mk_regtab(tab_sum_mod2$table,
+          caption = 'Regression results of model 2 with user-defined starting values in the "nlminb" algorithm')
 
 rm(tab_sum_mod2)
 
@@ -1433,83 +1465,18 @@ To validate the R implementation of adjusted limited dependent variable mixture 
 
 ```{r tab-calc-stata, echo = FALSE, results = "asis"}
 
-# Load summary tables
-load("tab_sum_mod1nlminb.RData")
-load("tab_sum_cstata.RData")
-load("tab_sum_const.RData")
-load("tab_sum_mod2stata.RData")
-load("tab_sum_stata1.RData")
-load("tab_sum_stata2.RData")
-load("tab_sum_stata3.RData")
-load("tab_sum_stata4.RData")
 
-# Model keys
-tabvec <- c("tab_sum_mod1nlminb",  "tab_sum_stata1", 
-            "tab_sum_cstata",     "tab_sum_stata2", 
-            "tab_sum_const", "tab_sum_stata3",
-            "tab_sum_mod2stata", "tab_sum_stata4")
-
-# Matrix of coefficients
-ctab <- matrix(NA, 
-               nrow = nrow(tab_sum_mod2stata$table),
-               ncol = length(tabvec) + 2)
-
-ctab[, 1:2] <- as.matrix(tab_sum_mod2stata$table[, 1:2])
-ctab[nrow(ctab), 2] <- ""
-
-# Matrix of standard errors
-stab <- ctab
-
-# Populate tables
-for (i in tabvec) {
-  nr <- nrow(get(i)$table)
-  for (j in 1:(nr - 1)) {
-    
-    lltmp <- format( 
-      as.numeric(gsub("[^0-9.-]", "", as.matrix(get(i)$table)[nr, 2])), 
-      big.mark = "'"
-    )
-    
-    ctab[j, 2 + match(i, tabvec)] <- as.matrix(get(i)$table)[j, 3]
-    ctab[nrow(ctab), 2 + match(i, tabvec)] <- lltmp
-    ctab[nrow(ctab), 2] <- "ll"
-    
-    stab[j, 2 + match(i, tabvec)] <- as.matrix(get(i)$table)[j, 4]
-    stab[nrow(stab), 2 + match(i, tabvec)] <- lltmp
-    stab[nrow(stab), 2] <- "ll"
-    
-  }
-  rm(nr)
-}
-rm(i, j, lltmp)
-
-ctab <- as.data.frame(rbind(c("", "", "R", "STATA", "R", "STATA", "R", "STATA", "R", "STATA"),
-                            ctab))
-
-stab <- as.data.frame(rbind(c("", "", "R", "STATA", "R", "STATA", "R", "STATA", "R", "STATA"),
-                            stab))
-
-names(ctab) <- names(stab) <- c("", "", "Ref. case 1", "", "Ref. case 2", "", "Ref. case 3", "", "Ref. case 4", "")
-
-lindex <- tab_sum_mod2stata$lindex + 2
-lindex[1] <- -1
 
 ```
 
 ```{r tab-comp-stata, echo = FALSE, results = "asis"}
 
-# knitr::kable(ctab,
-#              format = "html",
-#              row.names = FALSE,
-#              caption = 'Comparison of point estimates to the results of the STATA package',
-#              escape = FALSE)
+load("ctab.RData")
 
-ctab %>%
-  kableExtra::kbl(row.names = FALSE,
-                  format = "html",
-                  caption = 'Comparison of point estimates to the results of the STATA package') %>%
-  kableExtra::row_spec(nrow(ctab), 
-                       extra_css = "border-top: 1px solid grey; border-bottom-color: white; ")
+mk_regtab(ctab,
+          caption = 'Comparison of point estimates to the results of the STATA package')
+
+rm(ctab)
 
 ```
 
@@ -1518,21 +1485,12 @@ The parameter estimates and standard errors obtained in R are very similar to th
 
 ```{r tab-compse-stata, echo = FALSE, results = "asis"}
 
-# knitr::kable(stab,
-#              format = "html",
-#              row.names = FALSE,
-#              caption = 'Comparison of standard errors to the results of the STATA package')
+load("stab.RData")
 
-stab %>%
-  kableExtra::kbl(row.names = FALSE,
-                  format = "html",
-                  caption = 'Comparison of standard errors to the results of the STATA package') %>%
-  kableExtra::row_spec(nrow(stab), 
-                       extra_css = "border-top: 1px solid grey; border-bottom-color: white; ")
+mk_regtab(stab,
+          caption = 'Comparison of standard errors to the results of the STATA package')
 
-rm(tab_sum_const, tab_sum_cstata, tab_sum_mod1nlminb, tab_sum_mod2stata,
-   tab_sum_stata1, tab_sum_stata2, tab_sum_stata3, tab_sum_stata4)
-rm(ctab, stab, lindex, tabvec)
+rm(stab)
 
 ```
 
@@ -1837,7 +1795,7 @@ knitr::include_graphics("plot_comp_mhl_hjn.png")
 ## R code for the estimation of reference cases {-}
 
 ```{r tab-comp-stata-show, echo = TRUE, eval = FALSE}
-# (1) Reference case 1 with default optimization settings
+# (1) Reference case 1: Model 1 with default optimization settings
 fit1_default <- aldvmm::aldvmm(eq5d ~ hr | 1,
                                data = df,
                                psi = c(0.883, -0.594),
@@ -1845,7 +1803,7 @@ fit1_default <- aldvmm::aldvmm(eq5d ~ hr | 1,
                                init.method = "zero",
                                optim.method = "nlminb")
 
-# (2) Reference case 1 with user-defined initial values and constraints on parameters
+# (2) Reference case 2: Model 1 with user-defined initial values and constraints on parameters
 init <- c(0,    0,   0,   0,    0,    0,    0.7283)
 lo   <- c(-Inf, -Inf, -3,  -Inf, -Inf, -3, -Inf)
 hi   <- c(Inf,  Inf,  Inf, Inf,  Inf,  Inf,  Inf)
@@ -1858,7 +1816,7 @@ fit1_cstr <- aldvmm::aldvmm(eq5d ~ hr | 1,
                             init.lo = lo,
                             init.hi = hi)
 
-# (3) Reference case 1 with initial values from constant-only model
+# (3) Reference case 3: Model 1 with initial values from constant-only model
 fit1_const <- aldvmm::aldvmm(eq5d ~ hr | 1,
                              data = df,
                              psi = c(0.883, -0.594),
@@ -1866,7 +1824,7 @@ fit1_const <- aldvmm::aldvmm(eq5d ~ hr | 1,
                              init.method = "constant",
                              optim.method = "nlminb")
 
-# (4) Reference case 2 with user-defined initial values.
+# (4) Reference case 4: Model 2 with user-defined initial values
 init <- c(-.40293118, .30502755, .22614716, .14801581, -.70755741, 0, 
           -1.2632051, -2.4541401)
 
@@ -1881,20 +1839,20 @@ fit2 <- aldvmm::aldvmm(eq5d ~ hr | hr,
 ## STATA\textsuperscript{\textregistered} code for the estimation of reference cases {-}
 
 ```{r stata_code, echo = TRUE, eval = FALSE}
-* (1) Reference case 1
+* (1) Reference case 1: Model 1 with default optimization settings
 aldvmm eq5d hr, ncomponents(2)
 
-* (2) Reference case 1 with constraints
+* (2) Reference case 2: Model 1 with user-defined initial values and constraints on parameters
 matrix  input a = (0, 0, 0, 0, 0, 0, 0.7283)
 constraint 1 [Comp_2]:hr10 = 0
 constraint 2 [Comp_2]:_cons = 100
 constraint 3 [lns_2]:_cons = 1e-30
 aldvmm eq5d hr, ncomp(2) from(a) c(1 2 3)
 
-* (3) Reference case 1 initital values from constant-only model
+* (3) Reference case 3: Model 1 with initial values from constant-only model
 aldvmm eq5d hr, ncomp(2) inim(cons)
 
-* (4) Reference case 2 user-defined initial values
+* (4) Reference case 4: Model 2 with user-defined initial values
 matrix  input start = (.14801581, .22614716, .30502755, -.40293118, 0, 
                        -.70755741, -2.4541401, -1.2632051)
 aldvmm eq5d hr, ncomp(2) prob(hr) from(start)
