@@ -1,5 +1,5 @@
 
-R version 4.3.0 (2023-04-21 ucrt) -- "Already Tomorrow"
+R version 4.3.1 (2023-06-16 ucrt) -- "Beagle Scouts"
 Copyright (C) 2023 The R Foundation for Statistical Computing
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 
@@ -196,7 +196,7 @@ Degrees of Freedom (residual): 191
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  2.67 0.19 2.92 NA NA 
+Time elapsed:  1.42 0.16 1.61 NA NA 
 > grDevices::dev.off()
 null device 
           1 

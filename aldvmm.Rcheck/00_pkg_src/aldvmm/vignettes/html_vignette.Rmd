@@ -1,15 +1,13 @@
 ---
 title: "Adjusted Limited Dependent Variable Mixture Models of Health State Utilities in R"
-author: Mark Pletscher^[Institute of Health Economics and Health Policy, Bern University of Applied Sciences, mark.pletscher@bfh.ch]
-date: "`r Sys.Date()`"
+author: Mark Pletscher
+date: "last modified: 2023-06-21"
 package: aldvmm
 output:
-  bookdown::pdf_document2:
-    toc: false
-    fig_crop: false
-header-includes:
- \usepackage{float}
- \floatplacement{figure}{H}
+  bookdown::html_document2:
+    base_format: rmarkdown::html_vignette
+    highlight: monochrome
+    toc: true
 bibliography: aldvmm_bib.bib
 vignette: >
   %\VignetteIndexEntry{Adjusted Limited Dependent Variable Mixture Models of Health State Utilities in R}
@@ -64,6 +62,7 @@ ggplot_theme <- theme(panel.background = element_rect(fill = "white",
 #---------------------
 
 knitr::opts_chunk$set(fig.pos = "!H", out.extra = "")
+warnings(file = "./R-warnings.txt")
 
 ```
 
@@ -363,7 +362,7 @@ plot_hist_obs <- ggplot2::ggplot(df, aes(x = eq5d)) +
   scale_y_continuous(labels = scales::comma) +
   ggplot_theme
 
-ggsave("plot_hist_obs.eps",
+ggsave("plot_hist_obs.png",
        width = 6,
        height = 2.9)
 
@@ -383,7 +382,7 @@ plot_hist_pred <- ggplot2::ggplot(plotdf, aes(x = yhat)) +
   scale_y_continuous(labels = scales::comma) +
   ggplot_theme
 
-ggsave("plot_hist_pred.eps",
+ggsave("plot_hist_pred.png",
        width = 6,
        height = 2.9)
 
@@ -428,7 +427,7 @@ plot_comp_pred <- ggplot2::ggplot(tmpdf, aes(x = bl, y = out, group = alg, color
   theme(panel.grid.major.x = element_blank(),
         panel.grid.major.y = element_blank())
 
-ggsave("plot_comp_pred.eps",
+ggsave("plot_comp_pred.png",
        width = 6,
        height = 2.9)
 
@@ -441,9 +440,9 @@ load("fit1_all.RData")
 
 set.seed(101010101)
 plot_comp_mhl_bfgs <- est_mhl(fit1_all[["fit"]][["zero"]][["BFGS"]],
-                          ngroup = 10)
+                              ngroup = 10)
 
-ggsave("plot_comp_mhl_bfgs.eps",
+ggsave("plot_comp_mhl_bfgs.png",
        width = 6,
        height = 2.9)
 
@@ -451,9 +450,9 @@ rm(plot_comp_mhl_bfgs)
 
 set.seed(101010101)
 plot_comp_mhl_nm <- est_mhl(fit1_all[["fit"]][["zero"]][["Nelder-Mead"]],
-                          ngroup = 10)
+                            ngroup = 10)
 
-ggsave("plot_comp_mhl_nm.eps",
+ggsave("plot_comp_mhl_nm.png",
        width = 6,
        height = 2.9)
 
@@ -461,9 +460,9 @@ rm(plot_comp_mhl_nm)
 
 set.seed(101010101)
 plot_comp_mhl_nlminb <- est_mhl(fit1_all[["fit"]][["zero"]][["nlminb"]],
-                          ngroup = 10)
+                                ngroup = 10)
 
-ggsave("plot_comp_mhl_nlminb.eps",
+ggsave("plot_comp_mhl_nlminb.png",
        width = 6,
        height = 2.9)
 
@@ -471,9 +470,9 @@ rm(plot_comp_mhl_nlminb)
 
 set.seed(101010101)
 plot_comp_mhl_hjn <- est_mhl(fit1_all[["fit"]][["zero"]][["hjn"]],
-                          ngroup = 10)
+                             ngroup = 10)
 
-ggsave("plot_comp_mhl_hjn.eps",
+ggsave("plot_comp_mhl_hjn.png",
        width = 6,
        height = 2.9)
 
@@ -532,7 +531,7 @@ suppressWarnings(
     guides(fill = guide_legend(nrow = 1, byrow = TRUE))
 )
 
-ggsave("plot_box_yhat.eps",
+ggsave("plot_box_yhat.png",
        width = 6,
        height = 2.9)
 
@@ -592,7 +591,7 @@ suppressWarnings(
     guides(fill = guide_legend(nrow = 1, byrow = TRUE))
 )
 
-ggsave("plot_box_se.eps",
+ggsave("plot_box_se.png",
        width = 6,
        height = 2.9)
 
@@ -994,7 +993,7 @@ install.packages("aldvmm")
 
 # Data
 
-We analyze the same publicly available [$\text{\underline{EQ-5D-3L utility data}}$](https://digital.nhs.uk/data-and-information/publications/statistical/patient-reported-outcome-measures-proms/finalised-patient-reported-outcome-measures-proms-in-england-april-2011-to-march-2012) from English patients after hip replacement in 2011 and 2012 [@NHSDigital2013] as @HernandezAlava2015 in their description of the STATA\textsuperscript{\textregistered} ALDVMM package.
+We analyze the same publicly available [EQ-5D-3L utility data](https://digital.nhs.uk/data-and-information/publications/statistical/patient-reported-outcome-measures-proms/finalised-patient-reported-outcome-measures-proms-in-england-april-2011-to-march-2012) from English patients after hip replacement in 2011 and 2012 [@NHSDigital2013] as @HernandezAlava2015 in their description of the STATA\textsuperscript{\textregistered} ALDVMM package.
 
 ```{r data, eval = FALSE, echo = TRUE}
 temp <- tempfile()
@@ -1033,7 +1032,11 @@ load("textout.RData")
 
 The data includes `r format(textout$ncplt, big.mark="'")` observations with complete information on patients' post-operative utilities, Oxford Hip Scores, age and sex. Like @HernandezAlava2015, we draw a 30% sub-sample of `r format(textout$nspl, big.mark="'")` observations from the population of complete observations of these variables. Although we follow a similar approach in data preparation preparation as  @HernandezAlava2015, our random sample is not identical to the data used in their study. Post-operative EQ-5D-3L utilities from English value sets [@Dolan1997] show a bimodal distribution, limits at -0.594 and 1 and a gap between 1 and 0.883 (figure \@ref(fig:plot-hist-obs)).
 
-![(#fig:plot-hist-obs) Frequency distribution of observed EQ-5D-3L utilities](./plot_hist_obs.eps)
+```{r plot-hist-obs, out.width="90%", fig.cap = "Frequency distribution of observed EQ-5D-3L utilities", echo = FALSE}
+knitr::include_graphics("plot_hist_obs.png")
+```
+
+<!-- ![(#fig:plot-hist-obs) Frequency distribution of observed EQ-5D-3L utilities](./plot_hist_obs.png) -->
 
 # Examples
 
@@ -1087,21 +1090,27 @@ textout[["mod1bfgs"]][["intp1"]] <- format(
 
 ```
 
-We obtain a summary table of regression results using the generic function `summary()`. The model converges at a log-likelihood of `r textout[["mod1bfgs"]][["ll"]]` and an Akaike information criterion value of `r textout[["mod1bfgs"]][["aic"]]` (table \@ref(tab:tab-sum-mod1bfgs)). The function `aldvmm()` returns the negative log-likelihood and Akaike information criterion, and smaller values suggest better fit.
+We obtain a summary table of regression results using the generic function `summary()`. The model converges at a log-likelihood of `r textout[["mod1bfgs"]][["ll"]]` and an Akaike information criterion value of `r textout[["mod1bfgs"]][["aic"]]` (table \@ref(tab:tab-sum-mod1-bfgs)). The function `aldvmm()` returns the negative log-likelihood and Akaike information criterion, and smaller values suggest better fit.
 
 The coefficients of the intercepts and covariates for the expected values $E[y|c, X]$ of the normal distributions can be interpreted as marginal effects on component means. 'lnsigma' denotes the natural logarithm of the estimated standard deviation $\sigma^{c}$. The coefficients of covariates in the multinomial logit model of probabilities of component membership are log-transformed relative probabilities. Our model only includes two components, and the multinomial logit model collapses to a binomial logit model. The intercept of `r textout[["mod1bfgs"]][["intp1"]]` means that the average probability of an observation in the data to belong to component 1 is $\text{exp}(`r textout[["mod1bfgs"]][["intp1"]]`)$ or `r exp(as.numeric(textout[["mod1bfgs"]][["intp1"]]))` times the probability to belong to component 2.
 
-```{r tab-sum-mod1, echo = FALSE, results = "asis"}
+```{r tab-sum-mod1-bfgs, echo = FALSE, results = "asis"}
 
-print(xtable::xtable(tab_sum_mod1bfgs$table, 
-                     align = "lllrrrrrr",
-                     label = "tab:tab-sum-mod1bfgs",
-                     caption = 'Regression results from model 1 with "BFGS" optimization method and "zero" starting values'),
-      type = "latex",
-      include.rownames = FALSE,
-      hline.after = tab_sum_mod1bfgs$lindex,
-      comment = FALSE,
-      caption.placement = "top")
+# knitr::kable(tab_sum_mod1bfgs$table,
+#              format = "html",
+#              row.names = FALSE,
+#              caption = 'Regression results from model 1 with "BFGS" optimization method and "zero" starting values')
+# 
+# rm(tab_sum_mod1bfgs)
+
+library(kableExtra)
+
+tab_sum_mod1bfgs$table %>%
+  kableExtra::kbl(row.names = FALSE,
+                  format = "html",
+                  caption = 'Regression results from model 1 with "BFGS" optimization method and "zero" starting values') %>%
+  kableExtra::row_spec(nrow(tab_sum_mod1bfgs$table), 
+                       extra_css = "border-top: 1px solid grey; border-bottom-color: white; ")
 
 rm(tab_sum_mod1bfgs)
 
@@ -1109,13 +1118,21 @@ rm(tab_sum_mod1bfgs)
 
 We obtain expected values of observations in the estimation data using the generic function `predict()`. Standard errors of fitted (estimation data) or predicted (new data) values are calculated using the delta method. Expected values exhibit a smoother distribution than observed values and do not show a gap between 1 and 0.883, because they are weighted averages of component distributions and 1 (figure \@ref(fig:plot-hist-pred)).
 
-![(#fig:plot-hist-pred) Expected values from base case model](./plot_hist_pred.eps)
+```{r plot-hist-pred, out.width="90%", fig.cap = "Expected values from base case model", echo = FALSE}
+knitr::include_graphics("plot_hist_pred.png")
+```
+
+<!-- ![Expected values from base case model](./plot_hist_pred.png) -->
 
 Expected values of observations in the estimation data can also be used to calculate average incremental effects or average treatment effects on the treated. Average treatment effects on the treated compare predictions for treated individuals to predictions for the same individuals without the effect of the treatment indicator. Standard errors of average treatment effects on the treated can be calculated using the delta method (see example code in the appendix).
 
 A visual inspection of mean residuals over deciles of expected values (see example code of the modified Hosmer-Lemeshow test in the appendix) shows that model 1 fits the data poorly (figure \@ref(fig:plot-comp-mhl-bfgs)). Although the test is overpowered with large data, and confidence bands should not be interpreted directly, the absolute over-prediction among individuals with low expected values is quite large.
 
-![(#fig:plot-comp-mhl-bfgs) Mean residuals over deciles of expected values, "BFGS" with "zero" starting values](./plot_comp_mhl_bfgs.eps)
+```{r plot-comp-mhl-bfgs, out.width="90%", fig.cap = "Mean residuals over deciles of expected values, \"BFGS\" with \"zero\" starting values", echo = FALSE}
+knitr::include_graphics("plot_comp_mhl_bfgs.png")
+```
+
+<!-- ![(#fig:plot-comp-mhl-bfgs) Mean residuals over deciles of expected values, "BFGS" with "zero" starting values](./plot_comp_mhl_bfgs.png) -->
 
 We can use the 'sandwich' package [@Zeileis2006] to calculate robust or clustered standard errors from objects of class "aldvmm" (see example code in the appendix).
 
@@ -1148,23 +1165,16 @@ for (i in init.method) {
 }
 ```
 
-The maximum likelihood varies considerably across optimization methods and initial values which confirms the sensitivity of the model to changes in these settings (table \@ref(tab:ll)). The most frequent log-likelihood is `r format( names( which.max(table(round(tab_comp_ll, 2)) ) ), big.mark = "'")`, but the Hooke and Jeeves Pattern Search Optimization ("hjn") with "zero" initial values converges at a log-likelihood `r format(max(round(tab_comp_ll, 2)), big.mark = "'")`.
+The maximum likelihood varies considerably across optimization methods and initial values which confirms the sensitivity of the model to changes in these settings (table \@ref(tab:tab-comp-ll)). The most frequent log-likelihood is `r format( names( which.max(table(round(tab_comp_ll, 2)) ) ), big.mark = "'")`, but the Hooke and Jeeves Pattern Search Optimization ("hjn") with "zero" initial values converges at a log-likelihood `r format(max(round(tab_comp_ll, 2)), big.mark = "'")`.
 
 The optimization methods "Nelder-Mead", "CG", "L-BFGS-B", and "Rvmmin" are particularly sensitive to changes of starting values. Only the method "nlminb" converge at the same log-likelihood of `r format( names( which.max(table(round(tab_comp_ll[, "nlminb"], 2)) ) ), big.mark = "'")` regardless of initial values. However, even the "nlminb" algorithm converge at different parameters with starting values from a constant-only model than with the other starting values.
 
 ```{r tab-comp-ll, echo = FALSE, results = 'asis'}
 
-print(xtable::xtable(tab_comp_ll, 
-                     align = paste0("l", 
-                                    paste(rep("r", ncol(tab_comp_ll)), 
-                                          collapse = "")),
-                     label = "tab:ll",
-                     caption = "Log-likelihood by optimization method"),
-      type = "latex",
-      include.rownames = TRUE,
-      hline.after = c(-1, 0, nrow(tab_comp_ll)),
-      comment = FALSE,
-      caption.placement = "top")
+knitr::kable(round(tab_comp_ll, 1),
+             format = "simple",
+             row.names = TRUE,
+             caption = 'Log-likelihood by optimization method')
 
 rm(tab_comp_ll)
 
@@ -1176,21 +1186,14 @@ load("tab_comp_time.RData")
 
 ```
 
-The computation times of optimization routines were relatively short and did not vary considerably across methods expect for the "hjn" algorithm and simulated annealing "sann" starting values which requires more computation time (table \@ref(tab:time)).
+The computation times of optimization routines were relatively short and did not vary considerably across methods expect for the "hjn" algorithm and simulated annealing "sann" starting values which requires more computation time (table \@ref(tab:tab-comp-time)).
 
 ```{r tab-comp-time, echo = FALSE, results = 'asis'}
 
-print(xtable::xtable(tab_comp_time, 
-                     align = paste0("l", 
-                                    paste(rep("r", ncol(tab_comp_time)), 
-                                          collapse = "")),
-                     label = "tab:time",
-                     caption = "Estimation time [minutes] by optimization method"),
-      type = "latex",
-      include.rownames = TRUE,
-      hline.after = c(-1, 0, nrow(tab_comp_time)),
-      comment = FALSE,
-      caption.placement = "top")
+knitr::kable(round(tab_comp_time, 2),
+             format = "simple",
+             row.names = TRUE,
+             caption = 'Estimation time [minutes] by optimization method')
 
 rm(tab_comp_time)
 
@@ -1202,26 +1205,32 @@ Parameter estimates differ considerably across selected optimization algorithms 
 
 load("tab_comp_coef.RData")
 
-load("tab_sum_mod1bfgs.RData")
+# knitr::kable(tab_comp_coef,
+#              format = "html",
+#              row.names = FALSE,
+#              caption = 'Regression results of model 1 with zero starting values in "BFGS", "Nelder-Mead", "nlminb" and "hjn" algorithms')
 
-print(xtable::xtable(tab_comp_coef, 
-                     align = "lllrrrr",
-                     label = "tab:tab-comp-coef",
-                     caption = 'Regression results of model 1 with zero starting 
-                     values in "BFGS", "Nelder-Mead", "nlminb" and "hjn" algorithms'),
-      type = "latex",
-      include.rownames = FALSE,
-      hline.after = tab_sum_mod1bfgs$lindex,
-      comment = FALSE,
-      caption.placement = "top")
+library(kableExtra)
 
-rm(tab_comp_coef, tab_sum_mod1bfgs)
+tab_comp_coef %>%
+  kableExtra::kbl(row.names = FALSE,
+                  format = "html",
+                  caption = 'Regression results of model 1 with zero starting values in "BFGS", "Nelder-Mead", "nlminb" and "hjn" algorithms') %>%
+  kableExtra::row_spec(nrow(tab_comp_coef), 
+                       extra_css = "border-top: 1px solid grey; border-bottom-color: white; ")
+
+rm(tab_comp_coef)
 
 ```
 
 As adjusted limited dependent variable mixture models are frequently used for tasks that rely on predictions, we also compare expected values from the "BFGS", "Nelder-Mead" and "hjn" methods to expected values from the "nlminb"  method. Expected values from the "Nelder-Mead" and "hjn" methods are smaller than "nlminb" values among observations with low and high expected values, while predictions from "BFGS" match predictions from the "nlminb" model fit closely (figure \@ref(fig:plot-comp-pred)).
 
-![(#fig:plot-comp-pred) Deviation of expected values from "BFGS", "Nelder-Mead" and "hjn" versus "nlminb" with zero starting values](./plot_comp_pred.eps)
+```{r plot-comp-pred, out.width="90%", fig.cap = "Deviation of expected values from \"BFGS\", \"Nelder-Mead\" and \"hjn\" versus \"nlminb\" with \"zero\" starting values", echo = FALSE}
+knitr::include_graphics("plot_comp_pred.png")
+```
+
+
+<!-- ![(#fig:plot-comp-pred) Deviation of expected values from "BFGS", "Nelder-Mead" and "hjn" versus "nlminb" with zero starting values](./plot_comp_pred.png) -->
 
 Based on the comparison of log-likelihoods, parameter estimates and predicted values, we deem the "nlminb" optimization method with "zero" starting values the most robust approach for the used data and model. 
 
@@ -1266,15 +1275,19 @@ summary(fit1_cstr)
 
 load("tab_sum_cstr.RData")
 
-print(xtable::xtable(tab_sum_cstr$table, 
-                     align = "lllrrrrrr",
-                     label = "tab:tab-sum-cstr",
-                     caption = 'Regression results of model 1 with the "L-BFGS-B" method, parameter constraints and user-defined starting values'),
-      type = "latex",
-      include.rownames = FALSE,
-      hline.after = tab_sum_cstr$lindex,
-      comment = FALSE,
-      caption.placement = "top")
+# knitr::kable(tab_sum_cstr$table,
+#              format = "html",
+#              row.names = FALSE,
+#              caption = 'Regression results of model 1 with the "L-BFGS-B" method, parameter constraints and user-defined starting values')
+
+library(kableExtra)
+
+tab_sum_cstr$table %>%
+  kableExtra::kbl(row.names = FALSE,
+                  format = "html",
+                  caption = 'Regression results of model 1 with the "L-BFGS-B" method, parameter constraints and user-defined starting values') %>%
+  kableExtra::row_spec(nrow(tab_sum_cstr$table), 
+                       extra_css = "border-top: 1px solid grey; border-bottom-color: white; ")
 
 rm(tab_sum_cstr)
 
@@ -1335,16 +1348,17 @@ The coefficients of the single-component model are relatively similar to the par
 
 ```{r tab-sum-tobit, echo = FALSE, results = "asis"}
 
-print(xtable::xtable(tab_sum_tobit$table, 
-                     align = "lllrrrrrr",
-                     label = "tab:tab-sum-tobit",
-                     caption = 'Regression results of model 1 with 1 component, 
-                     zero starting values in "nlminb" algorithm'),
-      type = "latex",
-      include.rownames = FALSE,
-      hline.after = tab_sum_tobit$lindex,
-      comment = FALSE,
-      caption.placement = "top")
+# knitr::kable(tab_sum_tobit$table,
+#              format = "html",
+#              row.names = FALSE,
+#              caption = 'Regression results of model 1 with 1 component, zero starting values in "nlminb" algorithm')
+
+tab_sum_tobit$table %>%
+  kableExtra::kbl(row.names = FALSE,
+                  format = "html",
+                  caption = 'Regression results of model 1 with 1 component, zero starting values in "nlminb" algorithm') %>%
+  kableExtra::row_spec(nrow(tab_sum_tobit$table), 
+                       extra_css = "border-top: 1px solid grey; border-bottom-color: white; ")
 
 rm(tab_sum_tobit)
 
@@ -1389,16 +1403,17 @@ The Akaike information criterion of model 2 fitted using the "nlminb" method amo
 
 ```{r tab-sum-mod2, echo = FALSE, results = "asis"}
 
-print(xtable::xtable(tab_sum_mod2$table, 
-                     align = "lllrrrrrr",
-                     label = "tab:tab-sum-mod2",
-                     caption = 'Regression results of model 2 with user-defined 
-                     starting values in the "nlminb" algorithm'),
-      type = "latex",
-      include.rownames = FALSE,
-      hline.after = tab_sum_mod2$lindex,
-      comment = FALSE,
-      caption.placement = "top")
+# knitr::kable(tab_sum_mod2$table,
+#              format = "html",
+#              row.names = FALSE,
+#              caption = 'Regression results of model 2 with user-defined starting values in the "nlminb" algorithm')
+
+tab_sum_mod2$table %>%
+  kableExtra::kbl(row.names = FALSE,
+                  format = "html",
+                  caption = 'Regression results of model 2 with user-defined starting values in the "nlminb" algorithm') %>%
+  kableExtra::row_spec(nrow(tab_sum_mod2$table), 
+                       extra_css = "border-top: 1px solid grey; border-bottom-color: white; ")
 
 rm(tab_sum_mod2)
 
@@ -1415,8 +1430,6 @@ To validate the R implementation of adjusted limited dependent variable mixture 
 3. Model 1 with initial values from constant-only model
 
 4. Model 2 with user-defined initial values
-
-The parameter estimates and standard errors obtained in R are very similar to the results from STATA\textsuperscript{\textregistered} (table \@ref(tab:tab-comp-stata) and table \@ref(tab:tab-compse-stata)). R did not obtain any standard errors in reference model 2 while STATA\textsuperscript{\textregistered} returns standard errors for the first component and the probability of belonging to component 1. Although reference models 1 and 3 yield different parameter estimates, they converge at the same log-likelihood which further supports the hypothesis of multiple local optima of the likelihood. The relative ordering of models is consistent across platforms. 
 
 ```{r tab-calc-stata, echo = FALSE, results = "asis"}
 
@@ -1470,43 +1483,52 @@ for (i in tabvec) {
 }
 rm(i, j, lltmp)
 
-ctab <- rbind(c("", "", "(1)", "", "(2)", "", "(3)", "", "(4)", ""),
-              c("", "", "R", "STATA", "R", "STATA", "R", "STATA", "R", "STATA"),
-              ctab)
+ctab <- as.data.frame(rbind(c("", "", "R", "STATA", "R", "STATA", "R", "STATA", "R", "STATA"),
+                            ctab))
 
-stab <- rbind(c("", "", "(1)", "", "(2)", "", "(3)", "", "(4)", ""),
-              c("", "", "R", "STATA", "R", "STATA", "R", "STATA", "R", "STATA"),
-              stab)
+stab <- as.data.frame(rbind(c("", "", "R", "STATA", "R", "STATA", "R", "STATA", "R", "STATA"),
+                            stab))
+
+names(ctab) <- names(stab) <- c("", "", "Ref. case 1", "", "Ref. case 2", "", "Ref. case 3", "", "Ref. case 4", "")
 
 lindex <- tab_sum_mod2stata$lindex + 2
 lindex[1] <- -1
 
-print(xtable::xtable(ctab,
-                     align = paste0("lll", 
-                                    paste(rep("r", length(tabvec)), 
-                                          collapse = "")),
-                     label = "tab:tab-comp-stata",
-                     caption = "Comparison of point estimates to the results of the STATA package"),
-      type = "latex",
-      include.colnames = FALSE,
-      include.rownames = FALSE,
-      hline.after = lindex,
-      comment = FALSE,
-      caption.placement = "top")
+```
 
-print(xtable::xtable(stab,
-                     align = paste0("lll", 
-                                    paste(rep("r", length(tabvec)), 
-                                          collapse = "")),
-                     label = "tab:tab-compse-stata",
-                     caption = "Comparison of standard errors to the results of the STATA package."),
-      type = "latex",
-      include.colnames = FALSE,
-      include.rownames = FALSE,
-      hline.after = lindex,
-      comment = FALSE,
-      caption.placement = "top",
-      table.placement = "!ht")
+```{r tab-comp-stata, echo = FALSE, results = "asis"}
+
+# knitr::kable(ctab,
+#              format = "html",
+#              row.names = FALSE,
+#              caption = 'Comparison of point estimates to the results of the STATA package',
+#              escape = FALSE)
+
+ctab %>%
+  kableExtra::kbl(row.names = FALSE,
+                  format = "html",
+                  caption = 'Comparison of point estimates to the results of the STATA package') %>%
+  kableExtra::row_spec(nrow(ctab), 
+                       extra_css = "border-top: 1px solid grey; border-bottom-color: white; ")
+
+```
+
+The parameter estimates and standard errors obtained in R are very similar to the results from STATA\textsuperscript{\textregistered} (table \@ref(tab:tab-comp-stata) and table \@ref(tab:tab-compse-stata)). R did not obtain any standard errors in reference model 2 while STATA\textsuperscript{\textregistered} returns standard errors for the first component and the probability of belonging to component 1. Although reference models 1 and 3 yield different parameter estimates, they converge at the same log-likelihood which further supports the hypothesis of multiple local optima of the likelihood. The relative ordering of models is consistent across platforms. 
+
+
+```{r tab-compse-stata, echo = FALSE, results = "asis"}
+
+# knitr::kable(stab,
+#              format = "html",
+#              row.names = FALSE,
+#              caption = 'Comparison of standard errors to the results of the STATA package')
+
+stab %>%
+  kableExtra::kbl(row.names = FALSE,
+                  format = "html",
+                  caption = 'Comparison of standard errors to the results of the STATA package') %>%
+  kableExtra::row_spec(nrow(stab), 
+                       extra_css = "border-top: 1px solid grey; border-bottom-color: white; ")
 
 rm(tab_sum_const, tab_sum_cstata, tab_sum_mod1nlminb, tab_sum_mod2stata,
    tab_sum_stata1, tab_sum_stata2, tab_sum_stata3, tab_sum_stata4)
@@ -1514,30 +1536,30 @@ rm(ctab, stab, lindex, tabvec)
 
 ```
 
-Fitted values show very similar marginal distributions on both platforms (figure \@ref(fig:box-pred-yhat-stata)). R does not return fitted values in reference case 2. The summary statistics of differences in fitted values between R and STATA\textsuperscript{\textregistered} suggest that individual predictions are quite similar across platforms as well (table \@ref(tab:compyhat)).
+Fitted values show very similar marginal distributions on both platforms (figure \@ref(fig:box-pred-yhat-stata)). R does not return fitted values in reference case 2. The summary statistics of differences in fitted values between R and STATA\textsuperscript{\textregistered} suggest that individual predictions are quite similar across platforms as well (table \@ref(tab:tab-pred-stata-yhat)).
 
-Standard errors of fitted values differ visibly between platforms (figure \@ref(fig:box-pred-se-stata) and table \@ref(tab:compse)). The difference is particularly pronounced in reference case 1, but the standard errors from STATA\textsuperscript{\textregistered} seem quite extreme compared to all other reference cases. R does not return standard errors of fitted values in reference case 2.
+Standard errors of fitted values differ visibly between platforms (figure \@ref(fig:box-pred-se-stata) and table \@ref(tab:tab-pred-stata-se)). The difference is particularly pronounced in reference case 1, but the standard errors from STATA\textsuperscript{\textregistered} seem quite extreme compared to all other reference cases. R does not return standard errors of fitted values in reference case 2.
 
-![(#fig:box-pred-yhat-stata) Fitted values in R and STATA](./plot_box_yhat.eps)
+```{r box-pred-yhat-stata, out.width="90%", fig.cap = "Fitted values in R and STATA", echo = FALSE}
+knitr::include_graphics("plot_box_yhat.png")
+```
 
-![(#fig:box-pred-se-stata) Standard errors of fitted values in R and STATA](./plot_box_se.eps)
+<!-- ![(#fig:box-pred-yhat-stata) Fitted values in R and STATA](./plot_box_yhat.png) -->
+
+```{r box-pred-se-stata, out.width="90%", fig.cap = "Standard errors of fitted values in R and STATA", echo = FALSE}
+knitr::include_graphics("plot_box_se.png")
+```
+
+<!-- ![(#fig:box-pred-se-stata) Standard errors of fitted values in R and STATA](./plot_box_se.png) -->
 
 ```{r tab-pred-stata-yhat, echo = FALSE, results = "asis"}
 
 load("tab_diff_yhat.RData")
 
-print(xtable::xtable(tab_diff_yhat, 
-                     align = paste0("l", 
-                                    paste(rep("r", ncol(tab_diff_yhat)), 
-                                          collapse = "")),
-                     label = "tab:compyhat",
-                     caption = "Summary statistics of differences of fitted values in R and STATA (positive values suggest larger values in STATA)",
-                     digits = 6),
-      type = "latex",
-      include.rownames = TRUE,
-      hline.after = c(-1, 0, nrow(tab_diff_yhat)),
-      comment = FALSE,
-      caption.placement = "top")
+knitr::kable(tab_diff_yhat,
+             format = "simple",
+             row.names = TRUE,
+             caption = 'Summary statistics of differences of fitted values in R and STATA (positive values suggest larger values in STATA)')
 
 rm(tab_diff_yhat)
 
@@ -1548,18 +1570,10 @@ rm(tab_diff_yhat)
 
 load("tab_diff_se.RData")
 
-print(xtable::xtable(tab_diff_se, 
-                     align = paste0("l", 
-                                    paste(rep("r", ncol(tab_diff_se)), 
-                                          collapse = "")),
-                     label = "tab:compse",
-                     caption = "Summary statistics of differences of standard errors of fitted values in R and STATA (positive values suggest larger values in STATA)",
-                     digits = 6),
-      type = "latex",
-      include.rownames = TRUE,
-      hline.after = c(-1, 0, nrow(tab_diff_se)),
-      comment = FALSE,
-      caption.placement = "top")
+knitr::kable(tab_diff_se,
+             format = "simple",
+             row.names = TRUE,
+             caption = 'Summary statistics of differences in standard errors of fitted values in R and STATA (positive values suggest larger values in STATA)')
 
 rm(tab_diff_se)
 
@@ -1585,16 +1599,16 @@ In situations with repeated utility measures, the 'aldvmm' package only allows f
 
 Possible extensions of the 'aldvmm' package could include additional component distributions, a mixed model implementation for repeated measures and an implementation of functions for calculating average marginal effects and their standard errors.
 
-\newpage
+
 
 # References {-}
 
 <div id="refs"></div>
 
-\newpage
+
 # Appendix {-}
 
-## Example calculation of average treatment effects on the treated {- .unlisted .unnumbered}
+## Example calculation of average treatment effects on the treated {-}
 
 ```{r atet-example, echo = TRUE, eval = FALSE, results = 'hide'}
 
@@ -1698,8 +1712,8 @@ print(out)
 
 ```
 
-\newpage
-## Example calculation of robust and clustered standard errors {- .unlisted .unnumbered}
+
+## Example calculation of robust and clustered standard errors {-}
 
 ```{r sandwich-example, echo = TRUE, eval = FALSE, results = 'hide'}
 
@@ -1740,33 +1754,7 @@ lmtest::coeftest(fit, vcov = vc6)
 
 ```
 
-## Covariance matrices across optimization methods {- .unlisted .unnumbered}
-
-Covariance matrices were incomplete or missing entirely (`FALSE`) in multiple optimization approaches (table \@ref(tab:cov))
-
-```{r tab-comp-cov, echo = FALSE, results = 'asis'}
-
-load("tab_comp_cov.RData")
-
-print(xtable::xtable(tab_comp_cov, 
-                     align = paste0("l", 
-                                    paste(rep("r", ncol(tab_comp_cov)), 
-                                          collapse = "")),
-                     label = "tab:cov",
-                     caption = "Covariance matrix by optimization method"),
-      type = "latex",
-      include.rownames = TRUE,
-      hline.after = c(-1, 0, nrow(tab_comp_cov)),
-      comment = FALSE,
-      caption.placement = "top")
-
-rm(tab_comp_cov)
-
-```
-
-\newpage
-
-## Modified Hosmer-Lemeshow test {- .unlisted .unnumbered}
+## Example calculation of modified Hosmer-Lemeshow test {-}
 
 ```{r mhl-show, echo = TRUE, eval = FALSE}
 # Number of percentiles  
@@ -1809,19 +1797,44 @@ plot <- ggplot2::ggplot(plotdat, aes(x = factor(as.numeric(group)),
   geom_line(aes(linetype = factor(outcome)))
 ```  
 
-\newpage
+## Covariance matrices across optimization methods {-}
 
-## Results of modified Hosmer-Lemeshow test {- .unlisted .unnumbered}
+Covariance matrices were incomplete or missing entirely (`FALSE`) in multiple optimization approaches (table \@ref(tab:tab-comp-cov))
 
-![(#fig:plot-comp-mhl-nm) Mean residuals over deciles of expected values, "Nelder-Mead" with "zero" starting values](./plot_comp_mhl_nm.eps)
+```{r tab-comp-cov, echo = FALSE, results = 'asis'}
 
-![(#fig:plot-comp-mhl-nlminb) Mean residuals over deciles of expected values, "nlminb" with "zero" starting values](./plot_comp_mhl_nlminb.eps)
+load("tab_comp_cov.RData")
 
+knitr::kable(tab_comp_cov,
+             format = "simple",
+             row.names = FALSE,
+             caption = 'Covariance matrix by optimization method')
 
-![(#fig:plot-comp-mhl-hjn) Mean residuals over deciles of expected values, "hjn" with "zero" starting values](./plot_comp_mhl_hjn.eps)
+rm(tab_comp_cov)
 
-\newpage
-## R code for the estimation of reference cases {- .unlisted .unnumbered}
+```
+
+## Results of modified Hosmer-Lemeshow test {-}
+
+```{r plot-comp-mhl-nm, out.width="90%", fig.cap = "Mean residuals over deciles of expected values, \"Nelder-Mead\" with \"zero\" starting values", echo = FALSE}
+knitr::include_graphics("plot_comp_mhl_nm.png")
+```
+
+<!-- ![(#fig:plot-comp-mhl-nm) Mean residuals over deciles of expected values, "Nelder-Mead" with "zero" starting values](./plot_comp_mhl_nm.png) -->
+
+```{r plot-comp-mhl-nlminb, out.width="90%", fig.cap = "Mean residuals over deciles of expected values, \"nlminb\" with \"zero\" starting values", echo = FALSE}
+knitr::include_graphics("plot_comp_mhl_nlminb.png")
+```
+
+<!-- ![(#fig:plot-comp-mhl-nlminb) Mean residuals over deciles of expected values, "nlminb" with "zero" starting values](./plot_comp_mhl_nlminb.png) -->
+
+```{r plot-comp-mhl-hjn, out.width="90%", fig.cap = "Mean residuals over deciles of expected values, \"hjn\" with \"zero\" starting values", echo = FALSE}
+knitr::include_graphics("plot_comp_mhl_hjn.png")
+```
+
+<!-- ![(#fig:plot-comp-mhl-hjn) Mean residuals over deciles of expected values, "hjn" with "zero" starting values](./plot_comp_mhl_hjn.png) -->
+
+## R code for the estimation of reference cases {-}
 
 ```{r tab-comp-stata-show, echo = TRUE, eval = FALSE}
 # (1) Reference case 1 with default optimization settings
@@ -1865,8 +1878,7 @@ fit2 <- aldvmm::aldvmm(eq5d ~ hr | hr,
                        optim.method = "nlminb")
 ```
 
-\newpage
-## STATA\textsuperscript{\textregistered} code for the estimation of reference cases {- .unlisted .unnumbered}
+## STATA\textsuperscript{\textregistered} code for the estimation of reference cases {-}
 
 ```{r stata_code, echo = TRUE, eval = FALSE}
 * (1) Reference case 1

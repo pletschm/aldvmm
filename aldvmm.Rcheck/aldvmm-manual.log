@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.7.30) (preloaded format=pdflatex 2022.8.7)  21 JUN 2023 13:14
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.7.30) (preloaded format=pdflatex 2022.8.7)  22 JUN 2023 15:07
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**C:/Users/phm1/AppData/Local/Temp/RtmpGMI1Mb/Rd2pdf36b470f31b3a/Rd2.tex
-(C:/Users/phm1/AppData/Local/Temp/RtmpGMI1Mb/Rd2pdf36b470f31b3a/Rd2.tex
+**C:/Users/phm1/AppData/Local/Temp/Rtmp2NP6zW/Rd2pdf528c2f064cec/Rd2.tex
+(C:/Users/phm1/AppData/Local/Temp/Rtmp2NP6zW/Rd2pdf528c2f064cec/Rd2.tex
 LaTeX2e <2022-06-01> patch level 5
 L3 programming layer <2022-07-15>
 (C:\Users\phm1\MiKTeX\tex/latex/base\book.cls
@@ -24,7 +24,7 @@ File: bk10.clo 2021/10/04 v1.4n Standard LaTeX file (size option)
 \belowcaptionskip=\skip48
 \bibindent=\dimen138
 )
-(C:/Users/phm1/R-43~1.0/share/texmf/tex/latex\Rd.sty
+(C:/Users/phm1/R-43~1.1/share/texmf/tex/latex\Rd.sty
 Package: Rd 
 
 (C:\Users\phm1\MiKTeX\tex/latex/base\ifthen.sty
@@ -671,7 +671,7 @@ ts/cm/cmsy7.pfb><C:/Users/phm1/MiKTeX/fonts/type1/urw/helvetic/uhvr8a.pfb><C:/U
 sers/phm1/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Users/phm1/MiKTeX/fonts/t
 ype1/urw/times/utmr8a.pfb><C:/Users/phm1/MiKTeX/fonts/type1/urw/times/utmr8a.pf
 b><C:/Users/phm1/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
-Output written on Rd2.pdf (34 pages, 321086 bytes).
+Output written on Rd2.pdf (34 pages, 321095 bytes).
 PDF statistics:
  645 PDF objects out of 1000 (max. 8388607)
  232 named destinations out of 1000 (max. 500000)

@@ -51,8 +51,7 @@ yhat <- predict(fit,
 ## Vignette
 
 Please consult the
-[vignette](https://htmlpreview.github.io/?https://github.com/pletschm/aldvmm/blob/main/vignettes/html_vignette.html)
-for further details on the methods and the usage of the package.
+[vignette](https://htmlpreview.github.io/?https://github.com/pletschm/aldvmm/blob/main/vignettes/html_vignette.html) for further details on the methods and the usage of the package.
 
 ## References
 
