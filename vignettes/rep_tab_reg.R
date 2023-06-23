@@ -1,5 +1,5 @@
-mk_regtab <- function(object,
-                      caption) {
+rep_tab_reg <- function(object,
+                        caption) {
   tab <- object
   i_head <- grep("E\\[y\\|X, c\\]|P\\[c\\|X\\]", tab[, 1])
   i_comp <- grep("Comp", tab[, 1])

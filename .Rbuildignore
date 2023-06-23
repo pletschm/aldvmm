@@ -5,8 +5,9 @@
 ^vignettes/fit.*$
 ^vignettes/pdf_vignette\.pdf$
 ^vignettes/pdf_vignette\.Rmd$
-^vignettes/html_vignette\.html
-^vignettes/.png$
+^vignettes/html_vignette\.html$
+^vignettes/.*\.pdf$
+^vignettes/.*\.eps$
 ^README\.Rmd$
 ^cran-comments\.md$
 ^prepare_submission\.R$

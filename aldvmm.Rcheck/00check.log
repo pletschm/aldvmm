@@ -11,7 +11,7 @@
 * checking extension type ... Package
 * this is package 'aldvmm' version '0.8.7'
 * package encoding: UTF-8
-* checking CRAN incoming feasibility ... [25s] Note_to_CRAN_maintainers
+* checking CRAN incoming feasibility ... [13s] Note_to_CRAN_maintainers
 Maintainer: 'Mark Pletscher <pletscher.mark@gmail.com>'
 * checking package namespace information ... OK
 * checking package dependencies ... OK
@@ -43,7 +43,7 @@ Files 'README.md' or 'NEWS.md' cannot be checked without 'pandoc' being installe
 * checking S3 generic/method consistency ... OK
 * checking replacement functions ... OK
 * checking foreign function calls ... OK
-* checking R code for possible problems ... OK
+* checking R code for possible problems ... [11s] OK
 * checking Rd files ... OK
 * checking Rd metadata ... OK
 * checking Rd line widths ... OK
@@ -61,12 +61,12 @@ Files 'README.md' or 'NEWS.md' cannot be checked without 'pandoc' being installe
 * checking files in 'vignettes' ... OK
 * checking examples ... OK
 * checking for unstated dependencies in 'tests' ... OK
-* checking tests ... [46s] OK
-  Running 'testthat.R' [46s]
+* checking tests ... [76s] OK
+  Running 'testthat.R' [75s]
 * checking for unstated dependencies in vignettes ... OK
 * checking package vignettes in 'inst/doc' ... OK
-* checking re-building of vignette outputs ... OK
-* checking PDF version of manual ... [13s] OK
+* checking re-building of vignette outputs ... [12s] OK
+* checking PDF version of manual ... [16s] OK
 * checking HTML version of manual ... OK
 * checking for non-standard things in the check directory ... OK
 * checking for detritus in the temp directory ... OK

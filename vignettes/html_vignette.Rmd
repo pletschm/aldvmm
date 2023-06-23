@@ -35,7 +35,7 @@ library("kableExtra")
 source("rep_tab_fit.R")
 source("rep_tab_stata.R")
 source("est_mhl.R")
-source("mk_regtab.R")
+source("rep_tab_reg.R")
 
 # Custom ggplot theme
 #--------------------
@@ -366,7 +366,8 @@ plot_hist_obs <- ggplot2::ggplot(df, aes(x = eq5d)) +
 
 ggsave("plot_hist_obs.png",
        width = 6,
-       height = 2.9)
+       height = 2.9,
+       dpi = 150)
 
 rm(plot_hist_obs)
 
@@ -386,7 +387,7 @@ plot_hist_pred <- ggplot2::ggplot(plotdf, aes(x = yhat)) +
 
 ggsave("plot_hist_pred.png",
        width = 6,
-       height = 2.9)
+       height = 2.9,        dpi = 150)
 
 rm(plotdf, plot_hist_pred, fit1_all)
 
@@ -431,7 +432,7 @@ plot_comp_pred <- ggplot2::ggplot(tmpdf, aes(x = bl, y = out, group = alg, color
 
 ggsave("plot_comp_pred.png",
        width = 6,
-       height = 2.9)
+       height = 2.9,        dpi = 150)
 
 rm(fit1_all, a, b, c, tmpdf, plot_comp_pred)
 
@@ -446,7 +447,7 @@ plot_comp_mhl_bfgs <- est_mhl(fit1_all[["fit"]][["zero"]][["BFGS"]],
 
 ggsave("plot_comp_mhl_bfgs.png",
        width = 6,
-       height = 2.9)
+       height = 2.9,        dpi = 150)
 
 rm(plot_comp_mhl_bfgs)
 
@@ -456,7 +457,7 @@ plot_comp_mhl_nm <- est_mhl(fit1_all[["fit"]][["zero"]][["Nelder-Mead"]],
 
 ggsave("plot_comp_mhl_nm.png",
        width = 6,
-       height = 2.9)
+       height = 2.9,        dpi = 150)
 
 rm(plot_comp_mhl_nm)
 
@@ -466,7 +467,7 @@ plot_comp_mhl_nlminb <- est_mhl(fit1_all[["fit"]][["zero"]][["nlminb"]],
 
 ggsave("plot_comp_mhl_nlminb.png",
        width = 6,
-       height = 2.9)
+       height = 2.9,        dpi = 150)
 
 rm(plot_comp_mhl_nlminb)
 
@@ -476,7 +477,7 @@ plot_comp_mhl_hjn <- est_mhl(fit1_all[["fit"]][["zero"]][["hjn"]],
 
 ggsave("plot_comp_mhl_hjn.png",
        width = 6,
-       height = 2.9)
+       height = 2.9,        dpi = 150)
 
 rm(plot_comp_mhl_hjn)
 
@@ -535,7 +536,7 @@ suppressWarnings(
 
 ggsave("plot_box_yhat.png",
        width = 6,
-       height = 2.9)
+       height = 2.9,        dpi = 150)
 
 rm(plotdf, plot_box_yhat)
 rm(fit1_cons, fit1_cstr_stata, fit1_nlminb)
@@ -595,7 +596,7 @@ suppressWarnings(
 
 ggsave("plot_box_se.png",
        width = 6,
-       height = 2.9)
+       height = 2.9,        dpi = 150)
 
 rm(plotdf, plot_box_se)
 rm(fit1_cons, fit1_cstr_stata, fit1_nlminb)
@@ -879,15 +880,15 @@ tabvec <- c("tab_sum_mod1nlminb",  "tab_sum_stata1",
             "tab_sum_mod2stata", "tab_sum_stata4")
 
 # Matrix of coefficients
-ctab <- matrix(NA, 
+tab_rstata_coef <- matrix(NA, 
                nrow = nrow(tab_sum_mod2stata$table),
                ncol = length(tabvec) + 2)
 
-ctab[, 1:2] <- as.matrix(tab_sum_mod2stata$table[, 1:2])
-ctab[nrow(ctab), 2] <- ""
+tab_rstata_coef[, 1:2] <- as.matrix(tab_sum_mod2stata$table[, 1:2])
+tab_rstata_coef[nrow(tab_rstata_coef), 2] <- ""
 
 # Matrix of standard errors
-stab <- ctab
+tab_rstata_se <- tab_rstata_coef
 
 # Populate tables
 for (i in tabvec) {
@@ -899,36 +900,36 @@ for (i in tabvec) {
       big.mark = "'"
     )
     
-    ctab[j, 2 + match(i, tabvec)] <- as.matrix(get(i)$table)[j, 3]
-    ctab[nrow(ctab), 2 + match(i, tabvec)] <- lltmp
-    ctab[nrow(ctab), 2] <- "ll"
+    tab_rstata_coef[j, 2 + match(i, tabvec)] <- as.matrix(get(i)$table)[j, 3]
+    tab_rstata_coef[nrow(tab_rstata_coef), 2 + match(i, tabvec)] <- lltmp
+    tab_rstata_coef[nrow(tab_rstata_coef), 2] <- "ll"
     
-    stab[j, 2 + match(i, tabvec)] <- as.matrix(get(i)$table)[j, 4]
-    stab[nrow(stab), 2 + match(i, tabvec)] <- lltmp
-    stab[nrow(stab), 2] <- "ll"
+    tab_rstata_se[j, 2 + match(i, tabvec)] <- as.matrix(get(i)$table)[j, 4]
+    tab_rstata_se[nrow(tab_rstata_se), 2 + match(i, tabvec)] <- lltmp
+    tab_rstata_se[nrow(tab_rstata_se), 2] <- "ll"
     
   }
   rm(nr)
 }
 rm(i, j, lltmp)
 
-ctab <- as.data.frame(rbind(c("", "", "R", "STATA", "R", "STATA", "R", "STATA", "R", "STATA"),
-                            ctab))
+tab_rstata_coef <- as.data.frame(rbind(c("", "", "R", "STATA", "R", "STATA", "R", "STATA", "R", "STATA"),
+                            tab_rstata_coef))
 
-stab <- as.data.frame(rbind(c("", "", "R", "STATA", "R", "STATA", "R", "STATA", "R", "STATA"),
-                            stab))
+tab_rstata_se <- as.data.frame(rbind(c("", "", "R", "STATA", "R", "STATA", "R", "STATA", "R", "STATA"),
+                            tab_rstata_se))
 
-names(ctab) <- names(stab) <- c("", "", "Ref. case 1", "", "Ref. case 2", "", "Ref. case 3", "", "Ref. case 4", "")
+names(tab_rstata_coef) <- names(tab_rstata_se) <- c("", "", "Ref. case 1", "", "Ref. case 2", "", "Ref. case 3", "", "Ref. case 4", "")
 
-save(ctab, 
-     file = "ctab.RData",
+save(tab_rstata_coef, 
+     file = "tab_rstata_coef.RData",
      compress = TRUE)
 
-save(stab, 
-     file = "stab.RData",
+save(tab_rstata_se, 
+     file = "tab_rstata_se.RData",
      compress = TRUE)
 
-rm(ctab, stab, tabvec, tab_sum_const, tab_sum_cstata, tab_sum_mod1nlminb, tab_sum_mod2stata,
+rm(tab_rstata_coef, tab_rstata_se, tabvec, tab_sum_const, tab_sum_cstata, tab_sum_mod1nlminb, tab_sum_mod2stata,
    tab_sum_stata1, tab_sum_stata2, tab_sum_stata3, tab_sum_stata4)
 
 # Remove fit objects
@@ -1176,7 +1177,7 @@ The coefficients of the intercepts and covariates for the expected values $E[y|c
 
 load("tab_sum_mod1bfgs.RData")
 
-mk_regtab(tab_sum_mod1bfgs$table,
+rep_tab_reg(tab_sum_mod1bfgs$table,
           caption = 'Regression results from model 1 with "BFGS" optimization method and "zero" starting values')
 
 rm(tab_sum_mod1bfgs)
@@ -1272,7 +1273,7 @@ Parameter estimates differ considerably across selected optimization algorithms 
 
 load("tab_comp_coef.RData")
 
-mk_regtab(tab_comp_coef,
+rep_tab_reg(tab_comp_coef,
           caption = 'Regression results of model 1 with zero starting values in "BFGS", "Nelder-Mead", "nlminb" and "hjn" algorithms')
 
 rm(tab_comp_coef)
@@ -1331,7 +1332,7 @@ summary(fit1_cstr)
 
 load("tab_sum_cstr.RData")
 
-mk_regtab(tab_sum_cstr$table,
+rep_tab_reg(tab_sum_cstr$table,
           caption = 'Regression results of model 1 with the "L-BFGS-B" method, parameter constraints and user-defined starting values')
 
 rm(tab_sum_cstr)
@@ -1395,7 +1396,7 @@ The coefficients of the single-component model are relatively similar to the par
 
 load("tab_sum_tobit.RData")
 
-mk_regtab(tab_sum_tobit$table,
+rep_tab_reg(tab_sum_tobit$table,
           caption = 'Regression results of model 1 with 1 component, zero starting values in "nlminb" algorithm')
 
 rm(tab_sum_tobit)
@@ -1444,7 +1445,7 @@ The Akaike information criterion of model 2 fitted using the "nlminb" method amo
 
 load("tab_sum_mod2.RData")
 
-mk_regtab(tab_sum_mod2$table,
+rep_tab_reg(tab_sum_mod2$table,
           caption = 'Regression results of model 2 with user-defined starting values in the "nlminb" algorithm')
 
 rm(tab_sum_mod2)
@@ -1471,12 +1472,12 @@ To validate the R implementation of adjusted limited dependent variable mixture 
 
 ```{r tab-comp-stata, echo = FALSE, results = "asis"}
 
-load("ctab.RData")
+load("tab_rstata_coef.RData")
 
-mk_regtab(ctab,
+rep_tab_reg(tab_rstata_coef,
           caption = 'Comparison of point estimates to the results of the STATA package')
 
-rm(ctab)
+rm(tab_rstata_coef)
 
 ```
 
@@ -1485,12 +1486,12 @@ The parameter estimates and standard errors obtained in R are very similar to th
 
 ```{r tab-compse-stata, echo = FALSE, results = "asis"}
 
-load("stab.RData")
+load("tab_rstata_se.RData")
 
-mk_regtab(stab,
+rep_tab_reg(tab_rstata_se,
           caption = 'Comparison of standard errors to the results of the STATA package')
 
-rm(stab)
+rm(tab_rstata_se)
 
 ```
 

@@ -196,7 +196,7 @@ Degrees of Freedom (residual): 191
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  1.42 0.16 1.61 NA NA 
+Time elapsed:  1.45 0.03 1.66 NA NA 
 > grDevices::dev.off()
 null device 
           1 
