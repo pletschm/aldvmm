@@ -630,7 +630,7 @@ y_{i}|c  &amp; \text{if } \Psi_{1} &lt; y_{i}|c \leq \Psi_{2}\\
 <ol style="list-style-type: decimal">
 <li><p>“zero”: A vector of zeroes (default).</p></li>
 <li><p>“random”: A vector of standard normal random values.</p></li>
-<li><p>“constant”: Parameter estimates of a constant-only model as starting values for intercepts and standard deviations, and zeroes for all other parameters.</p></li>
+<li><p>“constant”: Parameter estimates of a constant-only model as starting values for intercepts and standard deviations, and zeroes for all other parameters. The auxiliary models for obtaining starting values are fitted using zero starting values.</p></li>
 <li><p>“sann”: Parameter estimates of a simulated annealing algorithm.</p></li>
 </ol>
 <p>The ‘aldvmm’ package obtains fitted values using the expected value function from <span class="citation">Hernández Alava and Wailoo (2015)</span>. Covariance matrices and standard errors of parameters are obtained from a numerical approximation of the hessian matrix using <code>numDeriv::hessian()</code>. Standard errors of fitted values in the estimation data <span class="math inline">\(SE^{fit}_{i}\)</span> and standard errors of predicted values in new data <span class="math inline">\(SE^{pred}_{i}\)</span> are calculated using the delta method <span class="citation">(Dowd, Greene, and Norton 2014; Whitmore 1986)</span>. <span class="math inline">\(G_{i}\)</span> denotes the gradient of a fitted value with respect to changes in parameter estimates, <span class="math inline">\(\Sigma\)</span> denotes the covariance matrix of parameters, and <span class="math inline">\(MSE\)</span> denotes the mean squared error of fitted versus observed values in the estimation data.
@@ -1669,7 +1669,7 @@ BIC = 1320
 <span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>                      <span class="at">optim.method =</span> <span class="st">&quot;nlminb&quot;</span>)</span>
 <span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a></span>
 <span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="fu">summary</span>(fit)</span></code></pre></div>
-<p>The coefficients of the single-component model are relatively similar to the parameters in the second component of model 1 from the “hjn” algorithm (table <a href="#tab:tab-sum-tobit">5.6</a>). The Akaike information criterion amounts to 1’276 which is larger than the values of the “nlminb” (-706.32) and “hjn” (-33’057.43) solutions of the two-component model and thus suggests worse fit of the single-component model.</p>
+<p>The coefficients of the single-component model are relatively similar to the parameters in the second component of model 1 from the “hjn” algorithm (table <a href="#tab:tab-sum-tobit">5.6</a>). The Akaike information criterion amounts to 1’276 which is larger than the values of the “nlminb” (-706.32) and “hjn” (-33’057.43) solutions of the two-component model and thus suggests worse fit of the single-component model. In the <code>aldvmm()</code> output, smaller values of the Akaike information criterion indicate better goodness of fit.</p>
 <table>
 <caption>
 <span id="tab:tab-sum-tobit">Table 5.6: </span>Regression results of model 1 with 1 component, zero starting values in “nlminb” algorithm
@@ -1835,7 +1835,7 @@ BIC = 1297
 <span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>                       <span class="at">optim.method =</span> <span class="st">&quot;nlminb&quot;</span>)</span>
 <span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a></span>
 <span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="fu">summary</span>(fit2)</span></code></pre></div>
-<p>The Akaike information criterion of model 2 fitted using the “nlminb” method amounts to -1’867 which is smaller than the Akaike information criterion of model 1 (-706.32) with the same method. The smaller Akaike information criterion suggests that the increase in the log-likelihood after inclusion of a coefficient of the Oxford Hip Score on the probability of component membership is sufficiently large to justify the extra parameter.</p>
+<p>The Akaike information criterion of model 2 fitted using the “nlminb” method amounts to -1’867 which is smaller than the Akaike information criterion of model 1 (-706.32) with the same method. The smaller Akaike information criterion suggests that the increase in the log-likelihood after inclusion of a coefficient of the Oxford Hip Score on the probability of component membership is sufficiently large to justify the extra parameter. In the <code>aldvmm()</code> output, smaller values of the Akaike information criterion indicate better goodness of fit.</p>
 <table>
 <caption>
 <span id="tab:tab-sum-mod2">Table 5.7: </span>Regression results of model 2 with user-defined starting values in the “nlminb” algorithm
@@ -2136,7 +2136,7 @@ BIC = -1809
 </div>
 <div id="comparison-to-stata-results" class="section level1" number="6">
 <h1><span class="header-section-number">6</span> Comparison to STATA results</h1>
-<p>To validate the R implementation of adjusted limited dependent variable mixture models, we estimate the four models presented in <span class="citation">Hernández Alava and Wailoo (2015)</span> as reference cases in R and STATA.</p>
+<p>To validate the R implementation of adjusted limited dependent variable mixture models, we estimate the four models presented in <span class="citation">Hernández Alava and Wailoo (2015)</span> as reference cases in R and STATA. The STATA and R code for model estimation is included in the appendix.</p>
 <ol style="list-style-type: decimal">
 <li><p>Model 1 with default options</p></li>
 <li><p>Model 1 with parameter constraints</p></li>

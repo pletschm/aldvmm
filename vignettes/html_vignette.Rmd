@@ -1040,7 +1040,7 @@ The 'aldvmm' package provides four options for the generation of starting values
 
 2. "random": A vector of standard normal random values.
 
-3. "constant": Parameter estimates of a constant-only model as starting values for intercepts and standard deviations, and zeroes for all other parameters.\footnote{The auxiliary models for obtaining starting values are fitted using zero starting values.}
+3. "constant": Parameter estimates of a constant-only model as starting values for intercepts and standard deviations, and zeroes for all other parameters. The auxiliary models for obtaining starting values are fitted using zero starting values.
 
 4. "sann": Parameter estimates of a simulated annealing algorithm.
 
@@ -1390,7 +1390,7 @@ rm(tab_comp_coef, tab_sum_tobit)
 
 ```
 
-The coefficients of the single-component model are relatively similar to the parameters in the second component of model 1 from the "hjn" algorithm (table \@ref(tab:tab-sum-tobit)). The Akaike information criterion amounts to `r textout[["tobit"]][["aic"]]` which is larger than the values of the "nlminb" (`r textout[["comp"]][["nlminb"]]`) and "hjn" (`r textout[["comp"]][["hjn"]]`) solutions of the two-component model and thus suggests worse fit of the single-component model.\footnote{In the `aldvmm()` output, smaller values of the Akaike information criterion indicate better goodness of fit.}
+The coefficients of the single-component model are relatively similar to the parameters in the second component of model 1 from the "hjn" algorithm (table \@ref(tab:tab-sum-tobit)). The Akaike information criterion amounts to `r textout[["tobit"]][["aic"]]` which is larger than the values of the "nlminb" (`r textout[["comp"]][["nlminb"]]`) and "hjn" (`r textout[["comp"]][["hjn"]]`) solutions of the two-component model and thus suggests worse fit of the single-component model. In the `aldvmm()` output, smaller values of the Akaike information criterion indicate better goodness of fit.
 
 ```{r tab-sum-tobit, echo = FALSE, results = "asis"}
 
@@ -1439,7 +1439,7 @@ rm(tab_sum_mod2)
 
 ```
 
-The Akaike information criterion of model 2 fitted using the "nlminb" method amounts to `r textout[["mod2"]][["aic"]]` which is smaller than the Akaike information criterion of model 1 (`r textout[["comp"]][["nlminb"]]`) with the same method. The smaller Akaike information criterion  suggests that the increase in the log-likelihood after inclusion of a coefficient of the Oxford Hip Score on the probability of component membership is sufficiently large to justify the extra parameter.\footnote{In the `aldvmm()` output, smaller values of the Akaike information criterion indicate better goodness of fit.} 
+The Akaike information criterion of model 2 fitted using the "nlminb" method amounts to `r textout[["mod2"]][["aic"]]` which is smaller than the Akaike information criterion of model 1 (`r textout[["comp"]][["nlminb"]]`) with the same method. The smaller Akaike information criterion  suggests that the increase in the log-likelihood after inclusion of a coefficient of the Oxford Hip Score on the probability of component membership is sufficiently large to justify the extra parameter. In the `aldvmm()` output, smaller values of the Akaike information criterion indicate better goodness of fit.
 
 ```{r tab-sum-mod2, echo = FALSE, results = "asis"}
 
@@ -1454,7 +1454,7 @@ rm(tab_sum_mod2)
 
 # Comparison to STATA\textsuperscript{\textregistered} results
 
-To validate the R implementation of adjusted limited dependent variable mixture models, we estimate the four models presented in @HernandezAlava2015 as reference cases in R and STATA\textsuperscript{\textregistered}.\footnote{The STATA\textsuperscript{\textregistered} and R code for model estimation is included in the appendix.}
+To validate the R implementation of adjusted limited dependent variable mixture models, we estimate the four models presented in @HernandezAlava2015 as reference cases in R and STATA\textsuperscript{\textregistered}. The STATA\textsuperscript{\textregistered} and R code for model estimation is included in the appendix.
 
 1. Model 1 with default options
 
