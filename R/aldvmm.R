@@ -420,11 +420,13 @@ aldvmm <- function(formula,
                lcpar = lcpar,
                lcmp = lcmp)
   
-  # Make outcome vector
-  #--------------------
-  
   # Convert formula to "Formula" object
+  #------------------------------------
+  
   formula <- Formula::Formula(formula)
+
+  # Create model frame
+  #-------------------
   
   mf <- match.call(expand.dots = FALSE)
   m <- match(c("formula", "data", "subset", "na.action"), names(mf), 0)
@@ -434,7 +436,9 @@ aldvmm <- function(formula,
   mf[[1]] <- as.name("model.frame")
   data <- eval(mf, parent.frame())
   
-  # Create outcome vector
+  # Make outcome vector
+  #--------------------
+  
   y <- stats::model.response(data)
   
   # Make list of design matrices
