@@ -426,9 +426,6 @@ aldvmm <- function(formula,
   # Convert formula to "Formula" object
   formula <- Formula::Formula(formula)
   
-  # Convert data to model frame
-  cl <- match.call()
-  if(missing(data)) data <- environment(formula)
   mf <- match.call(expand.dots = FALSE)
   m <- match(c("formula", "data", "subset", "na.action"), names(mf), 0)
   mf <- mf[c(1, m)]
