@@ -33,4 +33,4 @@
 * The package "aldvmm" now uses analytical gradients instead of numerical approximations during optimization and in methods used for estimators from the "sandwich" package.
 * New methods for generic functions stats::formula(), stats::residuals() and stats::update(). Objects of class "aldvmm" can now be supplied to sandwich::sandwich(), sandwich::vcovCL(), sandwich::vcovPL(), sandwich::vcovHAC() and sandwich::vcovBS(). sandwich::vcovBS() allows re-estimating the covariance matrix using bootstrapping with and without clustering.
 * Objects of class "aldvmm" now include predicted probabilities of component membership for all observations in the estimation data.
-* Revised vignette and published html vignette on github.
+* New html vignette.

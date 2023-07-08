@@ -2,10 +2,10 @@
 This is a re-submission. 
 
 It includes the following updates.
-* New methods for generic functions print(), summary(), stats::predict(), stats::coef(), stats::nobs(), stats::vcov(), stats::model.matrix() and sandwich::estfun() are available.
-* New workflow using the function Formula::formula() to handle models with two right-hand sides.
-* Default optimzation method was changed to "BFGS".
-* Objects of class "aldvmm" include new elements.
+* The package "aldvmm" now uses analytical gradients instead of numerical approximations.
+* New methods for generic functions stats::formula(), stats::residuals() and stats::update().
+* Objects of class "aldvmm" now include predicted probabilities of component membership for all observations in the estimation data.
+* New html vignette.
 
 Maintainer: 'Mark Pletscher <pletscher.mark@gmail.com>'
 
