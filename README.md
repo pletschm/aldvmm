@@ -44,8 +44,7 @@ fit <- aldvmm(eq5d ~ age + female | 1,
 
 summary(fit)
 
-yhat <- predict(fit,
-                newdata = utility)
+yhat <- predict(fit)
 ```
 
 ## Vignette
