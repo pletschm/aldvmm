@@ -1030,7 +1030,7 @@ In this vignette, we estimate the same models of post-operative EQ-5D-3L utiliti
 \end{array}
 \end{equation}
 
-The `aldvmm()` function fits an adjusted limited dependent variable mixture model using the likelihood function from @HernandezAlava2015. The function calls `optimr::optimr()` to minimize the negative log-likelihood using analytical gradients from `aldvmm.gr()`. The `aldvmm()` function accepts all optimization methods available in `optimr::optimr()` except for "nlm", which requires a different implementation of the likelihood function. The default optimization method is "BFGS".
+The `aldvmm()` function fits an adjusted limited dependent variable mixture model using the likelihood function from @HernandezAlava2015. The function calls `optimx::optimr()` to minimize the negative log-likelihood using analytical gradients from `aldvmm.gr()`. The `aldvmm()` function accepts all optimization methods available in `optimx::optimr()` except for "nlm", which requires a different implementation of the likelihood function. The default optimization method is "BFGS".
 
 The model formula in `aldvmm()` is an object of class "formula" with two parts on the right-hand side of `~`. The first part on the left of the `|` delimiter represents the model of expected values of $K$ normal distributions. The second part on the right of the `|` delimiter represents the model of probabilities of component membership from a multinomial logit model.
 

@@ -23,7 +23,7 @@ test_that('Check aldvmm fitting function.', {
   utility[34, 1] <- NA
   utility[77, 2] <- NA
   
-  # With Analytical gradients
+  # Default model
   suppressMessages({
     suppressWarnings({testthat::expect_message(
       aldvmm(eq5d ~ age | female,
@@ -59,13 +59,13 @@ test_that('Check aldvmm fitting function.', {
     })
   })
   
-  # With analytical gradients
+  # Model fit
   suppressMessages({
     suppressWarnings({
       fit <- aldvmm(eq5d ~ age | female,
                     data = utility,
                     psi = c(-0.594, 0.883),
-                    init.lo = rep(0.1, length(fit$coef)))
+                    init.lo = rep(-0.1, length(fit$coef)))
     })
   })
   

@@ -60,7 +60,7 @@ components. In this release, only the normal distribution is
 available, and the default value is set to \code{"normal"}.}
 
 \item{optim.method}{an optional character value of one of the following
-\ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
+\ifelse{html}{\code{\link[optimx]{optimr}}}{\code{optimx::optimr()}}
 methods: \code{"Nelder-Mead"}, \code{"BFGS"}, \code{"CG"},
 \code{"L-BFGS-B"}, \code{"nlminb"}, \code{"Rcgmin"}, \code{"Rvmmin"} and
 \code{"hjn"}. The default method is \code{"BFGS"}. The method
@@ -69,12 +69,12 @@ using \code{'init.lo'} and \code{'init.hi'}. The method \code{"nlm"}
 cannot be used in the \code{'aldvmm'} package.}
 
 \item{optim.control}{an optional list of
-\ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
+\ifelse{html}{\code{\link[optimx]{optimr}}}{\code{optimx::optimr()}}
 control parameters.}
 
 \item{optim.grad}{an optional logical value indicating if an analytical
 gradient should be used in
-\ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
+\ifelse{html}{\code{\link[optimx]{optimr}}}{\code{optimx::optimr()}}
 methods that can use this information. The default value is \code{TRUE}.
 If \code{'optim.grad'} is set to \code{FALSE}, a finite difference
 approximation is used.}

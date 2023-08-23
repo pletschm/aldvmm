@@ -56,7 +56,7 @@ components. In this release, only the normal distribution is
 available, and the default value is set to \code{"normal"}.}
 
 \item{optim.method}{an optional character value of one of the following
-\ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
+\ifelse{html}{\code{\link[optimx]{optimr}}}{\code{optimx::optimr()}}
 methods: \code{"Nelder-Mead"}, \code{"BFGS"}, \code{"CG"},
 \code{"L-BFGS-B"}, \code{"nlminb"}, \code{"Rcgmin"}, \code{"Rvmmin"} and
 \code{"hjn"}. The default method is \code{"BFGS"}. The method
@@ -65,12 +65,12 @@ using \code{'init.lo'} and \code{'init.hi'}. The method \code{"nlm"}
 cannot be used in the \code{'aldvmm'} package.}
 
 \item{optim.control}{an optional list of
-\ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
+\ifelse{html}{\code{\link[optimx]{optimr}}}{\code{optimx::optimr()}}
 control parameters.}
 
 \item{optim.grad}{an optional logical value indicating if an analytical
 gradient should be used in
-\ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
+\ifelse{html}{\code{\link[optimx]{optimr}}}{\code{optimx::optimr()}}
 methods that can use this information. The default value is \code{TRUE}.
 If \code{'optim.grad'} is set to \code{FALSE}, a finite difference
 approximation is used.}
@@ -197,7 +197,7 @@ in the preparation of the model matrix. The default value is
   (\code{"delta"}).} } }
 
   \item{\code{optim.method}}{a character value of the used
-  \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
+  \ifelse{html}{\code{\link[optimx]{optimr}}}{\code{optimx::optimr()}}
   method.}
   \item{\code{level}}{a numeric value of the confidence level used for 
   reporting.}
@@ -246,7 +246,7 @@ The function \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{
   membership.
 
   \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{ \code{aldvmm()}} uses
-  \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}} for
+  \ifelse{html}{\code{\link[optimx]{optimr}}}{\code{optimx::optimr()}} for
   maximum likelihood estimation of model parameters.  The argument
   \code{'optim.method'} accepts the following methods: \code{"Nelder-Mead"},
   \code{"BFGS"}, \code{"CG"}, \code{"L-BFGS-B"}, \code{"nlminb"},
@@ -255,10 +255,10 @@ The function \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{
   \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{ \code{aldvmm()}} because it
   requires a different implementation of the likelihood function. The
   argument \code{'optim.control'} accepts a list of
-  \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
+  \ifelse{html}{\code{\link[optimx]{optimr}}}{\code{optimx::optimr()}}
   control parameters.  If \code{'optim.grad'} is set to \code{TRUE} the
   function
-  \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}} uses
+  \ifelse{html}{\code{\link[optimx]{optimr}}}{\code{optimx::optimr()}} uses
   analytical gradients during the optimization procedure for all methods 
   that allow for this approach. If \code{'optim.grad'} is set to 
   \code{FALSE} or a method cannot use gradients, a finite difference 

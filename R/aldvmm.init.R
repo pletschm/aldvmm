@@ -5,7 +5,7 @@
 #' creates initial values for the minimization of the negative log-likelihood
 #' returned by
 #' \ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm.ll()}} using
-#' \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}.
+#' \ifelse{html}{\code{\link[optimx]{optimr}}}{\code{optimx::optimr()}}.
 #'
 #' @inheritParams aldvmm
 #' @inheritParams aldvmm.ll
@@ -140,7 +140,7 @@ aldvmm.init <- function(X,
                            dimnames = list(NULL, "(Intercept)")) )
         names(X0) <- lcoef[1]
       }
-
+      
       # Initial values of constant-only model
       tmp <- list()
       for (i in names(zero)) {
@@ -161,7 +161,7 @@ aldvmm.init <- function(X,
       }
       
       # Fit model
-      fit <- optimr::optimr(method       = optim.method,
+      fit <- optimx::optimr(method       = optim.method,
                             fn           = aldvmm.ll,
                             par          = tmp,
                             X            = X0,
@@ -269,6 +269,17 @@ aldvmm.init <- function(X,
     init[["hi"]] <- rep(Inf, times = length(init[["est"]]))
   }
   names(init[["hi"]]) <- names(init[["est"]])
+  
+  # Set initial values outside constraint to bounds
+  #------------------------------------------------
+  
+  bc <- optimx::bmchk(init[["est"]], 
+                      lower = init[["lo"]], 
+                      upper = init[["hi"]])
+  
+  if(bc[["parchanged"]] == TRUE) {
+    init[["est"]] <- bc[["bvec"]]
+  }
   
   return(init)
   
