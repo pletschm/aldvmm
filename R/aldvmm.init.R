@@ -29,7 +29,10 @@
 #'   are replaced with the user-specified values, and the method
 #'   \code{"L-BFGS-B"} is used for box-constrained optimization instead of the
 #'   user defined \code{'optim.method'}.  It is possible to only set either
-#'   maximum or minimum limits.
+#'   maximum or minimum limits.  When initial values supplied to 
+#'   \code{'init.est'} or from default methods lie outside the limits, the 
+#'   in-feasible values will be set to the limits using the function 
+#'   \ifelse{html}{\code{\link[optimx]{bmchk}}}{\code{optimx::bmchk()}}.
 #'
 #' @return
 #' \ifelse{html}{\code{\link[aldvmm]{aldvmm.init}}}{\code{aldvmm.init()}}
