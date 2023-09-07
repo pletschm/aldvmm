@@ -279,14 +279,17 @@ The function \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{
   are supplied in \code{'init.est'}, the argument \code{'init.method'} is
   ignored.
 
-  By default, \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{ \code{aldvmm()}}
+  By default, \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm()}}
   performs unconstrained optimization with upper and lower limits at
   \code{-Inf} and \code{Inf}.  When user-defined lower and upper limits are
-  supplied to \code{'init.lo'} and/or \code{'init-hi'}, these default limits
+  supplied to \code{'init.lo'} and/or \code{'init.hi'}, these default limits
   are replaced with the user-specified values, and the method
   \code{"L-BFGS-B"} is used for box-constrained optimization instead of the
   user defined \code{'optim.method'}.  It is possible to only set either
-  maximum or minimum limits.
+  maximum or minimum limits.  When initial values supplied to 
+  \code{'init.est'} or from default methods lie outside the limits, the 
+  in-feasible values will be set to the limits using the function 
+  \ifelse{html}{\code{\link[optimx]{bmchk}}}{\code{optimx::bmchk()}}.
   
   The function \code{aldvmm()} returns the negative log-likelihood, Akaike 
   information criterion and Bayesian information criterion. Smaller values 

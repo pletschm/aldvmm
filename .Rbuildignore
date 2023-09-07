@@ -11,6 +11,7 @@
 ^README\.Rmd$
 ^cran-comments\.md$
 ^prepare_submission\.R$
+^aldvmm_tracker\.txt$
 ^\.travis\.yml$
 ^\.github$
 ^codecov\.yml$
