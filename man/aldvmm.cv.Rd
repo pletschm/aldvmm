@@ -54,7 +54,7 @@ summary tables returned by
 \ifelse{html}{\code{\link[aldvmm]{summary.aldvmm}}}{\code{summary.aldvmm()}}.}
 
 \item{optim.method}{an optional character value of one of the following
-\ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
+\ifelse{html}{\code{\link[optimx]{optimr}}}{\code{optimx::optimr()}}
 methods: \code{"Nelder-Mead"}, \code{"BFGS"}, \code{"CG"},
 \code{"L-BFGS-B"}, \code{"nlminb"}, \code{"Rcgmin"}, \code{"Rvmmin"} and
 \code{"hjn"}. The default method is \code{"BFGS"}. The method

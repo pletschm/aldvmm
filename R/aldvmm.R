@@ -24,7 +24,7 @@
 #' @import numDeriv
 #' @import stats
 #' @import checkmate
-#' @import optimr
+#' @import optimx
 #' @import Formula
 #' @importFrom sandwich estfun
 #' @importFrom lmtest coeftest coefci
@@ -73,7 +73,7 @@ NULL
 #'   \code{"zero"}, \code{"random"}, \code{"constant"} and \code{"sann"}. The
 #'   default value is \code{"zero"}.
 #' @param optim.method an optional character value of one of the following
-#'   \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
+#'   \ifelse{html}{\code{\link[optimx]{optimr}}}{\code{optimx::optimr()}}
 #'   methods: \code{"Nelder-Mead"}, \code{"BFGS"}, \code{"CG"},
 #'   \code{"L-BFGS-B"}, \code{"nlminb"}, \code{"Rcgmin"}, \code{"Rvmmin"} and
 #'   \code{"hjn"}. The default method is \code{"BFGS"}. The method
@@ -81,11 +81,11 @@ NULL
 #'   using \code{'init.lo'} and \code{'init.hi'}. The method \code{"nlm"}
 #'   cannot be used in the \code{'aldvmm'} package.
 #' @param optim.control an optional list of
-#'   \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
+#'   \ifelse{html}{\code{\link[optimx]{optimr}}}{\code{optimx::optimr()}}
 #'   control parameters.
 #' @param optim.grad an optional logical value indicating if an analytical
 #'   gradient should be used in
-#'   \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
+#'   \ifelse{html}{\code{\link[optimx]{optimr}}}{\code{optimx::optimr()}}
 #'   methods that can use this information. The default value is \code{TRUE}.
 #'   If \code{'optim.grad'} is set to \code{FALSE}, a finite difference
 #'   approximation is used.
@@ -144,7 +144,7 @@ NULL
 #'   membership.
 #'
 #'   \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{ \code{aldvmm()}} uses
-#'   \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}} for
+#'   \ifelse{html}{\code{\link[optimx]{optimr}}}{\code{optimx::optimr()}} for
 #'   maximum likelihood estimation of model parameters.  The argument
 #'   \code{'optim.method'} accepts the following methods: \code{"Nelder-Mead"},
 #'   \code{"BFGS"}, \code{"CG"}, \code{"L-BFGS-B"}, \code{"nlminb"},
@@ -153,10 +153,10 @@ NULL
 #'   \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{ \code{aldvmm()}} because it
 #'   requires a different implementation of the likelihood function. The
 #'   argument \code{'optim.control'} accepts a list of
-#'   \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
+#'   \ifelse{html}{\code{\link[optimx]{optimr}}}{\code{optimx::optimr()}}
 #'   control parameters.  If \code{'optim.grad'} is set to \code{TRUE} the
 #'   function
-#'   \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}} uses
+#'   \ifelse{html}{\code{\link[optimx]{optimr}}}{\code{optimx::optimr()}} uses
 #'   analytical gradients during the optimization procedure for all methods 
 #'   that allow for this approach. If \code{'optim.grad'} is set to 
 #'   \code{FALSE} or a method cannot use gradients, a finite difference 
@@ -177,14 +177,17 @@ NULL
 #'   are supplied in \code{'init.est'}, the argument \code{'init.method'} is
 #'   ignored.
 #'
-#'   By default, \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{ \code{aldvmm()}}
+#'   By default, \ifelse{html}{\code{\link[aldvmm]{aldvmm}}}{\code{aldvmm()}}
 #'   performs unconstrained optimization with upper and lower limits at
 #'   \code{-Inf} and \code{Inf}.  When user-defined lower and upper limits are
-#'   supplied to \code{'init.lo'} and/or \code{'init-hi'}, these default limits
+#'   supplied to \code{'init.lo'} and/or \code{'init.hi'}, these default limits
 #'   are replaced with the user-specified values, and the method
 #'   \code{"L-BFGS-B"} is used for box-constrained optimization instead of the
 #'   user defined \code{'optim.method'}.  It is possible to only set either
-#'   maximum or minimum limits.
+#'   maximum or minimum limits.  When initial values supplied to 
+#'   \code{'init.est'} or from default methods lie outside the limits, the 
+#'   in-feasible values will be set to the limits using the function 
+#'   \ifelse{html}{\code{\link[optimx]{bmchk}}}{\code{optimx::bmchk()}}.
 #'   
 #'   The function \code{aldvmm()} returns the negative log-likelihood, Akaike 
 #'   information criterion and Bayesian information criterion. Smaller values 
@@ -293,7 +296,7 @@ NULL
 #'   (\code{"delta"}).} } }
 #'
 #'   \item{\code{optim.method}}{a character value of the used
-#'   \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
+#'   \ifelse{html}{\code{\link[optimx]{optimr}}}{\code{optimx::optimr()}}
 #'   method.}
 #'   \item{\code{level}}{a numeric value of the confidence level used for 
 #'   reporting.}
@@ -490,7 +493,7 @@ aldvmm <- function(formula,
                     lcpar = lcpar,
                     optim.method = optim.method)
   
-  if (!is.finite(test)) {
+  if (!is.finite(test) | (optim.method == "L-BFGS-B" & test >= 1e+20)) {
     stop("Starting values are not feasible.")
   } 
   
@@ -499,19 +502,19 @@ aldvmm <- function(formula,
   # Fit model
   #----------
   
-  fit <- optimr::optimr(fn = aldvmm.ll,
-                        par = init[["est"]],
+  fit <- optimx::optimr(par = init[["est"]],
+                        fn = aldvmm.ll,
                         X = mm,
                         y = y,
+                        psi = psi,
+                        ncmp = ncmp,
+                        dist = dist,
+                        lcoef = lcoef,
+                        lcpar = lcpar,
+                        lcmp = lcmp,
+                        optim.method = optim.method,
                         lower = init[["lo"]],
                         upper = init[["hi"]],
-                        psi = psi,
-                        dist = dist,
-                        ncmp = ncmp,
-                        lcoef = lcoef,
-                        lcmp = lcmp,
-                        lcpar = lcpar,
-                        optim.method = optim.method,
                         method = optim.method,
                         gr = grd,
                         hessian = FALSE,

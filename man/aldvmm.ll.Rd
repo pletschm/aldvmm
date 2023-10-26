@@ -51,7 +51,7 @@ summary tables returned by
 \ifelse{html}{\code{\link[aldvmm]{summary.aldvmm}}}{\code{summary.aldvmm()}}.}
 
 \item{optim.method}{an optional character value of one of the following
-\ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
+\ifelse{html}{\code{\link[optimx]{optimr}}}{\code{optimx::optimr()}}
 methods: \code{"Nelder-Mead"}, \code{"BFGS"}, \code{"CG"},
 \code{"L-BFGS-B"}, \code{"nlminb"}, \code{"Rcgmin"}, \code{"Rvmmin"} and
 \code{"hjn"}. The default method is \code{"BFGS"}. The method
@@ -78,7 +78,7 @@ parameter values in \code{'par'}.
   distributions) enter the likelihood function as log-transformed values.
 
   As the "L-BFGS-B" and "Rcgmin" methods in
-  \ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}} fail
+  \ifelse{html}{\code{\link[optimx]{optimr}}}{\code{optimx::optimr()}} fail
   if they encounter infinite values, the log-likelihood function takes the
   value -1e+20 if it is infinite during these algorithms.
 

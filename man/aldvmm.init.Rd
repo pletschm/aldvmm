@@ -70,7 +70,7 @@ have to follow the same order as parameter estimates in the return value
 \code{'coef'}.}
 
 \item{optim.method}{an optional character value of one of the following
-\ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
+\ifelse{html}{\code{\link[optimx]{optimr}}}{\code{optimx::optimr()}}
 methods: \code{"Nelder-Mead"}, \code{"BFGS"}, \code{"CG"},
 \code{"L-BFGS-B"}, \code{"nlminb"}, \code{"Rcgmin"}, \code{"Rvmmin"} and
 \code{"hjn"}. The default method is \code{"BFGS"}. The method
@@ -79,12 +79,12 @@ using \code{'init.lo'} and \code{'init.hi'}. The method \code{"nlm"}
 cannot be used in the \code{'aldvmm'} package.}
 
 \item{optim.control}{an optional list of
-\ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
+\ifelse{html}{\code{\link[optimx]{optimr}}}{\code{optimx::optimr()}}
 control parameters.}
 
 \item{optim.grad}{an optional logical value indicating if an analytical
 gradient should be used in
-\ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}
+\ifelse{html}{\code{\link[optimx]{optimr}}}{\code{optimx::optimr()}}
 methods that can use this information. The default value is \code{TRUE}.
 If \code{'optim.grad'} is set to \code{FALSE}, a finite difference
 approximation is used.}
@@ -117,7 +117,7 @@ vector of initial values of parameters.}
 creates initial values for the minimization of the negative log-likelihood
 returned by
 \ifelse{html}{\code{\link[aldvmm]{aldvmm.ll}}}{\code{aldvmm.ll()}} using
-\ifelse{html}{\code{\link[optimr]{optimr}}}{\code{optimr::optimr()}}.
+\ifelse{html}{\code{\link[optimx]{optimr}}}{\code{optimx::optimr()}}.
 }
 \details{
 \code{'init.method'} accepts four methods for generating initial
@@ -139,5 +139,8 @@ returned by
   are replaced with the user-specified values, and the method
   \code{"L-BFGS-B"} is used for box-constrained optimization instead of the
   user defined \code{'optim.method'}.  It is possible to only set either
-  maximum or minimum limits.
+  maximum or minimum limits.  When initial values supplied to 
+  \code{'init.est'} or from default methods lie outside the limits, the 
+  in-feasible values will be set to the limits using the function 
+  \ifelse{html}{\code{\link[optimx]{bmchk}}}{\code{optimx::bmchk()}}.
 }
