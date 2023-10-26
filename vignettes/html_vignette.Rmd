@@ -1,7 +1,7 @@
 ---
 title: "Adjusted Limited Dependent Variable Mixture Models of Health State Utilities in R"
 author: Mark Pletscher
-date: "last modified: 2023-06-21"
+date: "last modified: 2023-10-27"
 package: aldvmm
 output:
   bookdown::html_document2:
@@ -1107,7 +1107,7 @@ load("textout.RData")
 
 The data includes `r format(textout$ncplt, big.mark="'")` observations with complete information on patients' post-operative utilities, Oxford Hip Scores, age and sex. Like @HernandezAlava2015, we draw a 30% sub-sample of `r format(textout$nspl, big.mark="'")` observations from the population of complete observations of these variables. Although we follow a similar approach in data preparation preparation as  @HernandezAlava2015, our random sample is not identical to the data used in their study. Post-operative EQ-5D-3L utilities from English value sets [@Dolan1997] show a bimodal distribution, limits at -0.594 and 1 and a gap between 1 and 0.883 (figure \@ref(fig:plot-hist-obs)).
 
-```{r plot-hist-obs, out.width="90%", fig.cap = "Frequency distribution of observed EQ-5D-3L utilities", echo = FALSE}
+```{r plot-hist-obs, out.width = "90%", fig.cap = "Frequency distribution of observed EQ-5D-3L utilities", echo = FALSE}
 knitr::include_graphics("plot_hist_obs.png")
 ```
 
@@ -1186,7 +1186,7 @@ rm(tab_sum_mod1bfgs)
 
 We obtain expected values of observations in the estimation data using the generic function `predict()`. Standard errors of fitted (estimation data) or predicted (new data) values are calculated using the delta method. Expected values exhibit a smoother distribution than observed values and do not show a gap between 1 and 0.883, because they are weighted averages of component distributions and 1 (figure \@ref(fig:plot-hist-pred)).
 
-```{r plot-hist-pred, out.width="90%", fig.cap = "Expected values from base case model", echo = FALSE}
+```{r plot-hist-pred, out.width = "90%", fig.cap = "Expected values from base case model", echo = FALSE}
 knitr::include_graphics("plot_hist_pred.png")
 ```
 
@@ -1196,7 +1196,7 @@ Expected values of observations in the estimation data can also be used to calcu
 
 A visual inspection of mean residuals over deciles of expected values (see example code of the modified Hosmer-Lemeshow test in the appendix) shows that model 1 fits the data poorly (figure \@ref(fig:plot-comp-mhl-bfgs)). Although the test is overpowered with large data, and confidence bands should not be interpreted directly, the absolute over-prediction among individuals with low expected values is quite large.
 
-```{r plot-comp-mhl-bfgs, out.width="90%", fig.cap = "Mean residuals over deciles of expected values, \"BFGS\" with \"zero\" starting values", echo = FALSE}
+```{r plot-comp-mhl-bfgs, out.width = "90%", fig.cap = "Mean residuals over deciles of expected values, BFGS with zero starting values", echo = FALSE}
 knitr::include_graphics("plot_comp_mhl_bfgs.png")
 ```
 
@@ -1235,7 +1235,7 @@ for (i in init.method) {
 
 The maximum likelihood varies considerably across optimization methods and initial values which confirms the sensitivity of the model to changes in these settings (table \@ref(tab:tab-comp-ll)). The most frequent log-likelihood is `r format( names( which.max(table(round(tab_comp_ll, 2)) ) ), big.mark = "'")`, but the Hooke and Jeeves Pattern Search Optimization ("hjn") with "zero" initial values converges at a log-likelihood `r format(max(round(tab_comp_ll, 2)), big.mark = "'")`.
 
-The optimization methods "Nelder-Mead", "CG", "L-BFGS-B", and "Rvmmin" are particularly sensitive to changes of starting values. Only the method "nlminb" converge at the same log-likelihood of `r format( names( which.max(table(round(tab_comp_ll[, "nlminb"], 2)) ) ), big.mark = "'")` regardless of initial values. However, even the "nlminb" algorithm converges at different parameters with starting values from a constant-only model than with the other starting values.
+The optimization methods "Nelder-Mead", "CG", "L-BFGS-B", "Rcgmmin" and "hjn" are particularly sensitive to changes of starting values. Only the method "nlminb" converges at the same log-likelihood of `r format( names( which.max(table(round(tab_comp_ll[, "nlminb"], 2)) ) ), big.mark = "'")` regardless of initial values. However, even the "nlminb" algorithm converges at different parameters with starting values from a constant-only model than with the other starting values despite the same maximum log-likelihood.
 
 ```{r tab-comp-ll, echo = FALSE, results = 'asis'}
 
@@ -1267,22 +1267,22 @@ rm(tab_comp_time)
 
 ```
 
-Parameter estimates differ considerably across selected optimization algorithms (table \@ref(tab:tab-comp-coef)). The default "BFGS" - "zero" approach converges at the same parameters as the "nlminb" - "zero" method. The solution of the "hjn" method is rather extreme with no effect of the Oxford Hip Score, a standard deviation of almost 0 in component 1 and a very low probability of membership of component 1. Also, the Modified Hosmer-Lemeshow test did not show better fit of the "hjn" solution compared to the other algorithms (figure \@ref(fig:plot-comp-mhl-nlminb) in the appendix). The solution of the "hjn" method suggests that a single-component model should be explored as well.
+Parameter estimates differ considerably across selected optimization algorithms (table \@ref(tab:tab-comp-coef)). The default "BFGS" - "zero" approach converges at the same parameters as the "nlminb" - "zero" method. The solution of the "hjn" method is rather extreme with no effect of the Oxford Hip Score, a very small standard deviation in component 2 and a very low probability of membership of component 2. Also, the Modified Hosmer-Lemeshow test did not show better fit of the "hjn" solution compared to the other algorithms (figure \@ref(fig:plot-comp-mhl-nlminb) in the appendix). The solution of the "hjn" method suggests that a single-component model should be explored as well.
 
 ```{r tab-comp-coef, echo = FALSE, results = "asis"}
 
 load("tab_comp_coef.RData")
 
 rep_tab_reg(tab_comp_coef,
-          caption = 'Regression results of model 1 with zero starting values in "BFGS", "Nelder-Mead", "nlminb" and "hjn" algorithms')
+          caption = 'Regression results of model 1 with zero starting values in BFGS, Nelder-Mead, nlminb and hjn algorithms')
 
 rm(tab_comp_coef)
 
 ```
 
-As adjusted limited dependent variable mixture models are frequently used for tasks that rely on predictions, we also compare expected values from the "BFGS", "Nelder-Mead" and "hjn" methods to expected values from the "nlminb"  method. Expected values from the "Nelder-Mead" and "hjn" methods are smaller than "nlminb" values among observations with low and high expected values, while predictions from "BFGS" match predictions from the "nlminb" model fit closely (figure \@ref(fig:plot-comp-pred)).
+As adjusted limited dependent variable mixture models are frequently used for tasks that rely on predictions, we also compare expected values from the "BFGS", "Nelder-Mead" and "hjn" methods to expected values from the "nlminb"  method. Expected values from the "Nelder-Mead" method are smaller, and values from the "hjn" method are larger than "nlminb" values among observations with the lowest 80% of expected values. Predictions from "BFGS" match predictions from the "nlminb" model fit closely (figure \@ref(fig:plot-comp-pred)).
 
-```{r plot-comp-pred, out.width="90%", fig.cap = "Deviation of expected values from \"BFGS\", \"Nelder-Mead\" and \"hjn\" versus \"nlminb\" with \"zero\" starting values", echo = FALSE}
+```{r plot-comp-pred, out.width = "90%", fig.cap = "Deviation of expected values from BFGS, Nelder-Mead and hjn versus nlminb with zero starting values", echo = FALSE}
 knitr::include_graphics("plot_comp_pred.png")
 ```
 
@@ -1333,7 +1333,7 @@ summary(fit1_cstr)
 load("tab_sum_cstr.RData")
 
 rep_tab_reg(tab_sum_cstr$table,
-          caption = 'Regression results of model 1 with the "L-BFGS-B" method, parameter constraints and user-defined starting values')
+          caption = 'Regression results of model 1 with the L-BFGS-B method, parameter constraints and user-defined starting values')
 
 rm(tab_sum_cstr)
 
@@ -1397,7 +1397,7 @@ The coefficients of the single-component model are relatively similar to the par
 load("tab_sum_tobit.RData")
 
 rep_tab_reg(tab_sum_tobit$table,
-          caption = 'Regression results of model 1 with 1 component, zero starting values in "nlminb" algorithm')
+          caption = 'Regression results of model 1 with 1 component, zero starting values in nlminb algorithm')
 
 rm(tab_sum_tobit)
 
@@ -1446,7 +1446,7 @@ The Akaike information criterion of model 2 fitted using the "nlminb" method amo
 load("tab_sum_mod2.RData")
 
 rep_tab_reg(tab_sum_mod2$table,
-          caption = 'Regression results of model 2 with user-defined starting values in the "nlminb" algorithm')
+          caption = 'Regression results of model 2 with user-defined starting values in the nlminb algorithm')
 
 rm(tab_sum_mod2)
 
@@ -1775,19 +1775,19 @@ rm(tab_comp_cov)
 
 ## Results of modified Hosmer-Lemeshow test {-}
 
-```{r plot-comp-mhl-nm, out.width="90%", fig.cap = "Mean residuals over deciles of expected values, \"Nelder-Mead\" with \"zero\" starting values", echo = FALSE}
+```{r plot-comp-mhl-nm, out.width="90%", fig.cap = "Mean residuals over deciles of expected values, Nelder-Mead with zero starting values", echo = FALSE}
 knitr::include_graphics("plot_comp_mhl_nm.png")
 ```
 
 <!-- ![(#fig:plot-comp-mhl-nm) Mean residuals over deciles of expected values, "Nelder-Mead" with "zero" starting values](./plot_comp_mhl_nm.png) -->
 
-```{r plot-comp-mhl-nlminb, out.width="90%", fig.cap = "Mean residuals over deciles of expected values, \"nlminb\" with \"zero\" starting values", echo = FALSE}
+```{r plot-comp-mhl-nlminb, out.width="90%", fig.cap = "Mean residuals over deciles of expected values, nlminb with zero starting values", echo = FALSE}
 knitr::include_graphics("plot_comp_mhl_nlminb.png")
 ```
 
 <!-- ![(#fig:plot-comp-mhl-nlminb) Mean residuals over deciles of expected values, "nlminb" with "zero" starting values](./plot_comp_mhl_nlminb.png) -->
 
-```{r plot-comp-mhl-hjn, out.width="90%", fig.cap = "Mean residuals over deciles of expected values, \"hjn\" with \"zero\" starting values", echo = FALSE}
+```{r plot-comp-mhl-hjn, out.width="90%", fig.cap = "Mean residuals over deciles of expected values, hjn with zero starting values", echo = FALSE}
 knitr::include_graphics("plot_comp_mhl_hjn.png")
 ```
 

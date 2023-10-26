@@ -80,7 +80,7 @@ devtools::build()
 # Source check in shell
 #----------------------
 
-# R CMD check --as-cran ../aldvmm_0.8.7.tar.gz
+# R CMD check --as-cran ../aldvmm_0.8.8.tar.gz
 
 # Winbuilder
 #------------
@@ -92,5 +92,5 @@ devtools::build()
 # rhub checks
 #------------
 
-rhub::check("../aldvmm_0.8.7.tar.gz", platform = "ubuntu-gcc-release")
-rhub::check("../aldvmm_0.8.7.tar.gz", platform = "debian-gcc-devel")
+rhub::check("../aldvmm_0.8.8.tar.gz", platform = "ubuntu-gcc-release")
+rhub::check("../aldvmm_0.8.8.tar.gz", platform = "debian-gcc-devel")

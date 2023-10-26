@@ -2,10 +2,7 @@
 This is a re-submission. 
 
 It includes the following updates.
-* The package "aldvmm" now uses analytical gradients instead of numerical approximations.
-* New methods for generic functions stats::formula(), stats::residuals() and stats::update().
-* Objects of class "aldvmm" now include predicted probabilities of component membership for all observations in the estimation data.
-* New html vignette.
+* The optimizer package was changed from "optimr" to "optimx". The functionality remains identical.
 
 Maintainer: 'Mark Pletscher <pletscher.mark@gmail.com>'
 
