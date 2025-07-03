@@ -40,7 +40,7 @@ fit <- aldvmm(eq5d ~ age + female | 1,
               psi = c(0.883, -0.594),
               ncmp = 2,
               init.method = "constant",
-              optim.method = "Nelder-Mead")
+              optim.method = "BFGS")
 
 summary(fit)
 
