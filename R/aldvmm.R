@@ -29,8 +29,8 @@
 #' @importFrom sandwich estfun
 #' @importFrom lmtest coeftest coefci
 #'
-#' @docType package
 #' @name aldvmm-package
+"_PACKAGE"
 NULL
 
 #' @title Fitting Adjusted Limited Dependent Variable Mixture Models

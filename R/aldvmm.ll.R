@@ -74,12 +74,12 @@ aldvmm.ll <- function(par,
   
   psi1 <- max(psi)
   psi2 <- min(psi)
-
+  
   # Check if par has names
   #-----------------------
   
   checkmate::assert_numeric(par, names = "named")
-    
+  
   # Create list of parameters
   #--------------------------
   
@@ -89,106 +89,109 @@ aldvmm.ll <- function(par,
                            lcpar = lcpar,
                            ncmp  = ncmp)
   
+  # Create design matrices
+  #-----------------------
+  
+  # Model of expected values per component
+  X_beta  <- X[[lcoef[1]]]
+  storage.mode(X_beta)  <- "double"
+  
+  # Model of probabilities of component membership
+  if (ncmp > 1) {
+    W <- X[[lcoef[2]]]
+    storage.mode(W) <- "double"
+  } else {
+    W <- NULL
+  }
+  
+  # Number of observations
+  n <- nrow(X_beta)
+  
+  # Create matrices of parameters
+  #------------------------------
+  
+  # Model of expected values per component
+  Beta <- do.call(cbind, parlist[[lcoef[1]]])
+  storage.mode(Beta) <- "double"
+  
+  # Model of probability of component membership
+  if (ncmp > 1) {
+    Delta <- do.call(cbind, parlist[[lcoef[2]]])
+    storage.mode(Delta) <- "double"
+  }
+  
   # Multinomial logit
   #------------------
+  
+  # Last component is the baseline
   
   if (ncmp > 1) {
     
     # Linear predictor
-    wd <- lapply(names(parlist[[lcoef[2]]]), function (x) {
-      rowSums(sweep(X[[lcoef[2]]], 
-                    MARGIN = 2, 
-                    parlist[[lcoef[2]]][[x]], 
-                    `*`))
-    })
-    names(wd) <- names(parlist[[lcoef[2]]])
+    wd_mat <- W %*% Delta
     
-    # Denominator
-    sumexp <- 1 + Reduce("+",
-                         lapply(names(parlist[[lcoef[2]]]), function (z) {
-                           exp(rowSums(sweep(X[[lcoef[2]]], 
-                                             MARGIN = 2, 
-                                             parlist[[lcoef[2]]][[z]], 
-                                             `*`)))
-                         }))
+    # Softmax relative to last component
+    row_max <- do.call(pmax, as.data.frame(wd_mat)) # Maximum value within each row of wd_mat
+    wd_shift <- wd_mat - row_max # Subtract maximum in each row to make numerically stable
+    exp_wd <- exp(wd_shift)
+    sumexp <- 1 + rowSums(exp_wd)
     
     # Probability of component membership
-    A <- lapply(names(parlist[[lcoef[2]]]), function (x) {
-      exp(wd[[x]]) / sumexp
-    })
-    A[[ncmp]] <- 1 - Reduce("+", A)
+    A_tmp <- exp_wd / sumexp
+    A <- matrix(NA_real_, nrow = n, ncol = ncmp)
+    A[, seq_len(ncmp - 1)] <- A_tmp
+    A[, ncmp] <- 1 - rowSums(A_tmp)
+    
   } else {
-    A <- list(
-      matrix(data = 1, 
-             nrow = nrow(X[[lcoef[1]]]), 
-             ncol = 1,
-             dimnames = list(rownames(X[[lcoef[2]]]),
-                             paste0(lcmp, 1)))
-    )
+    
+    A <- matrix(1, nrow = n, ncol = 1)
+    
   }
-  names(A) <- names(parlist[[lcoef[1]]])
   
   # Component distributions
   #------------------------
   
   if (dist == "normal") {
     
+    # Standard deviation per component
+    sigma <- exp(unlist(parlist[[lcpar]]))
+    sigma_rep <- rep(sigma, each = n) # Repeat for each patient per component
+    
     # Linear predictor
-    xb <- lapply(parlist[[lcoef[1]]], function (x) {
-      rowSums(sweep(X[[lcoef[1]]], 
-                    MARGIN = 2, 
-                    x, 
-                    `*`))
-    })
-    names(xb) <- names(parlist[[lcoef[1]]])
+    xb_mat <- X_beta %*% Beta
+    xb_vec <- as.vector(xb_mat)
     
     # Density of values above maximum
-    C <- lapply(names(parlist[[lcoef[1]]]), function (x) {
-      1 - stats::pnorm((psi1 - xb[[x]]) / exp(parlist[[lcpar]][[x]]), 
-                       mean = 0, 
-                       sd = 1)
-    })
-    names(C) <- names(parlist[[lcoef[1]]])
+    z_C <- (psi1 - xb_vec) / sigma_rep
+    C_mat <- matrix(1 - stats::pnorm(z_C), n, ncmp)
     
     # Density of values below minimum
-    D <- lapply(names(parlist[[lcoef[1]]]), function (x) {
-      stats::pnorm((psi2 - xb[[x]]) / exp(parlist[[lcpar]][[x]]), 
-                   mean = 0, 
-                   sd = 1)
-    })
-    names(D) <- names(parlist[[lcoef[1]]])
+    z_D <- (psi2 - xb_vec) / sigma_rep
+    D_mat <- matrix(stats::pnorm(z_D), n, ncmp)
     
     # Density of value within range
-    E <- lapply(names(parlist[[lcoef[1]]]), function (x) {
-      stats::dnorm((y - xb[[x]]) / exp(parlist[[lcpar]][[x]]), 
-                   mean = 0, 
-                   sd = 1) / exp(parlist[[lcpar]][[x]])
-    })
-    names(E) <- names(parlist[[lcoef[1]]])
+    z_E   <- (rep(y, times = ncmp) - xb_vec) / sigma_rep
+    E_mat <- matrix(stats::dnorm(z_E) / sigma_rep, n, ncmp)
     
     # Density of observed value
-    B <- lapply(names(parlist[[lcoef[1]]]), function (x) {
-      as.numeric(y >  psi1) * C[[x]] + 
-        as.numeric(y <= psi2) * D[[x]] + 
-        as.numeric(y <= psi1 & y > psi2) * E[[x]]
-    })
-    names(B) <- names(parlist[[lcoef[1]]])
+    m_above  <- as.numeric(y >  psi1)
+    m_below  <- as.numeric(y <= psi2)
+    m_inside <- 1 - m_above - m_below
+    
+    B <- C_mat * m_above + D_mat * m_below + E_mat * m_inside
     
   }
   
   # Likelihood
   #-----------
   
-  L <- Reduce("+",
-              lapply(names(A), function (x) {
-                A[[x]] * B[[x]]
-              })
-  )
+  L <- rowSums(A * B)
+  L <- pmax(L, .Machine$double.xmin) # Guard against numerical underflow to zero before log
   
   ll <- sum(log(L))
   
   if (optim.method %in% c("L-BFGS-B", "Rcgmin") & !is.finite(ll)) {
-      ll <- -1e+20
+    ll <- -1e+20
   }
   
   return(-ll)

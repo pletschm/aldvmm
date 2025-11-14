@@ -1,6 +1,6 @@
 ---
 title: "Adjusted Limited Dependent Variable Mixture Models of Health State Utilities in R"
-author: Mark Pletscher^[Institute of Health Economics and Health Policy, Bern University of Applied Sciences, mark.pletscher@bfh.ch]
+author: Mark Pletscher^[Novartis Pharma AG, mark.pletscher@novartis.com]
 date: "`r Sys.Date()`"
 package: aldvmm
 output:
@@ -29,36 +29,6 @@ library("xtable")
 library("ggplot2")
 library("scales")
 library("reshape2")
-
-# Load functions
-#---------------
-
-source("rep_tab_fit.R")
-source("rep_tab_stata.R")
-source("est_mhl.R")
-
-# Custom ggplot theme
-#--------------------
-
-ggplot_theme <- theme(panel.background = element_rect(fill = "white",
-                                                      colour = "white",
-                                                      #linewidth = 0.5, 
-                                                      linetype = "solid"),
-                      panel.grid.major = element_blank(), 
-                      panel.grid.minor = element_blank(),
-                      panel.grid.major.y = element_line(#linewidth = 0.25, 
-                        linetype = 'dashed', 
-                        colour = "grey"),
-                      text = element_text(size = 11),
-                      plot.margin = margin(10, 10, 0, 10),
-                      #axis.line = element_line(linewidth = 0.25),
-                      axis.text = element_text(size = 11),
-                      #legend.title = element_text(size = 11),
-                      legend.title = element_blank(),
-                      legend.text = element_text(size = 11),
-                      legend.position = 'bottom',
-                      legend.direction = "vertical",
-                      legend.key = element_blank())
 
 # Figure position HERE
 #---------------------
@@ -353,6 +323,34 @@ rm(df)
 load("df.RData")
 load("textout.RData")
 
+# Load functions
+#---------------
+
+source("est_mhl.R")
+
+# Custom ggplot theme
+#--------------------
+
+ggplot_theme <- theme(panel.background = element_rect(fill = "white",
+                                                      colour = "white",
+                                                      #linewidth = 0.5, 
+                                                      linetype = "solid"),
+                      panel.grid.major = element_blank(), 
+                      panel.grid.minor = element_blank(),
+                      panel.grid.major.y = element_line(#linewidth = 0.25, 
+                        linetype = 'dashed', 
+                        colour = "grey"),
+                      text = element_text(size = 11),
+                      plot.margin = margin(10, 10, 0, 10),
+                      #axis.line = element_line(linewidth = 0.25),
+                      axis.text = element_text(size = 11),
+                      #legend.title = element_text(size = 11),
+                      legend.title = element_blank(),
+                      legend.text = element_text(size = 11),
+                      legend.position = 'bottom',
+                      legend.direction = "vertical",
+                      legend.key = element_blank())
+
 # Histogram of observed outcomes
 #-------------------------------
 
@@ -432,7 +430,7 @@ ggsave("plot_comp_pred.eps",
        width = 6,
        height = 2.9)
 
-rm(fit1_all, a, b, c, tmpdf, plot_comp_pred)
+rm(fit1_all, a, b, c, d, a.d, b.d, c.d, d.d, tmpdf, plot_comp_pred)
 
 # Modified Hosmer-Lemeshow test by optimization method
 #-----------------------------------------------------
@@ -602,12 +600,20 @@ rm(fit2_stata)
 rm(stata_se, stata_se_long)
 rm(r_se_long)
 rm(df)
+rm(textout)
+rm(est_mhl)
+rm(ggplot_theme)
 
 ```
 
 <!-- Make summary tables -->
 
 ```{r calc_tab, eval = FALSE, warning = FALSE, echo = FALSE, results = 'hide'}
+
+# Load functions
+#---------------
+
+source("rep_tab_fit.R")
 
 # Load data
 #----------
@@ -872,6 +878,11 @@ rm(rep_tab_fit)
 
 ```{r calc_tab_stata, eval = FALSE, warning = FALSE, echo = FALSE, results = 'hide'}
 
+# Load functions
+#---------------
+
+source("rep_tab_stata.R")
+
 # Model 1, default options
 #-------------------------
 
@@ -915,6 +926,7 @@ save(tab_sum_stata4,
      compress = TRUE)
 
 rm(tab_sum_stata4)
+rm(rep_tab_stata)
 
 ```  
 
@@ -1889,7 +1901,5 @@ aldvmm eq5d hr, ncomp(2) prob(hr) from(start)
 ```
 
 ```{r end, echo = FALSE, results = 'hide'}
-
-rm(ggplot_theme, est_mhl, rep_tab_fit, rep_tab_stata)
 
 ```

@@ -37,3 +37,6 @@
 
 # aldvmm 0.8.8
 * The optimizer package was changed from "optimr" to "optimx". The functionality remains identical.
+
+# aldvmm 0.8.9
+* The functions aldvmm.ll() and aldvmm.sc() were optimized to increase computation speed.
