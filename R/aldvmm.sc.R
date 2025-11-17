@@ -79,15 +79,14 @@ aldvmm.sc <- function(par,
     
     # Softmax relative to last component
     row_max <- do.call(pmax, as.data.frame(wd_mat)) # Maximum value within each row of wd_mat
+    row_max <- pmax(row_max, 0)
     wd_shift <- wd_mat - row_max # Subtract maximum in each row to make numerically stable
     exp_wd <- exp(wd_shift)
-    sumexp <- 1 + rowSums(exp_wd)
+    sumexp <- exp(-row_max) + rowSums(exp_wd)
     
     # Probability of component membership
     A_tmp <- exp_wd / sumexp
-    A <- matrix(NA_real_, nrow = n, ncol = ncmp)
-    A[, seq_len(ncmp - 1)] <- A_tmp
-    A[, ncmp] <- 1 - rowSums(A_tmp)
+    A <- cbind(A_tmp, exp(-row_max) / sumexp)
     
   } else {
     
@@ -132,8 +131,56 @@ aldvmm.sc <- function(par,
   # Likelihood
   #-----------
   
+  A[!is.finite(A)] <- 0
+  B[!is.finite(B)] <- 0
+  
   L <- rowSums(A * B)
-  L <- pmax(L, .Machine$double.xmin) # Guard against numerical underflow to zero before log
+  #L <- pmax(L, .Machine$double.xmin) # Guard against numerical underflow to zero before log
+  #small <- (L <= .Machine$double.xmin) # Indicator or small L
+  
+  # Derivative w.r.t. delta
+  #------------------------
+  
+  if (ncmp > 1) {
+    
+    # Number of predictors
+    k_delta <- ncol(W)
+    
+    # Empty matrix of derivatives
+    dll_dd_mat <- matrix(NA_real_, nrow = n, ncol = (ncmp - 1) * k_delta)
+    
+    col_start <- 1
+    for (k in seq_len(ncmp - 1)) { # Loop over components
+      
+      # Case r = c
+      dA_dwd_k <- matrix(0.0, n, ncmp)
+      dA_dwd_k[, k] <- A[, k] * (1 - A[, k])
+      
+      # Case r != c
+      for (r in seq_len(ncmp)) {
+        if (r != k) {
+          dA_dwd_k[, r] <- dA_dwd_k[, r] - A[, r] * A[, k]
+        }
+      }
+      
+      # Derivative of log-likelihood
+      idx <- col_start:(col_start + k_delta - 1)
+      dL_dwd_k <- rowSums(B * dA_dwd_k)
+      dll_dd_mat[, idx] <- W * (dL_dwd_k / L)
+      
+      # Update column index
+      col_start <- col_start + k_delta
+    }
+    
+    # Set gradient at small values of L (-Inf of ll) to zero
+    #dll_dd_mat[small, ] <- 0
+    
+  } else {
+    
+    # Derivative of log-likelihood
+    dll_dd_mat <- matrix(numeric(0), nrow = n, ncol = 0)
+    
+  }
   
   # Derivative w.r.t. beta
   #-----------------------
@@ -142,79 +189,29 @@ aldvmm.sc <- function(par,
   
   if (dist == "normal") {
     
-    # Derivative of density of values above maximum
+    # Density of values above maximum
     dC_dxb_vec <- stats::dnorm(z_C) / sigma_rep
     dC_dxb_mat <- matrix(dC_dxb_vec, n, ncmp)
     
-    # Derivative of density of values below minimum
+    # Density of values below minimum
     dD_dxb_vec <- -stats::dnorm(z_D) / sigma_rep
     dD_dxb_mat <- matrix(dD_dxb_vec, n, ncmp)
     
-    # Derivative of density of values within range
-    dE_dxb_vec <- stats::dnorm(z_E) * (rep(y, times = ncmp) - xb_vec) / (sigma_rep^2)
+    # Density of values within range
+    dE_dxb_vec <- stats::dnorm(z_E) * z_E / (sigma_rep^2)
     dE_dxb_mat <- matrix(dE_dxb_vec, n, ncmp)
     
     # Derivative of density of observed value
-    dB_dxb <- dC_dxb_mat * m_above + dD_dxb_mat * m_below + dE_dxb_mat * m_inside
+    dB_dxb_mat <- dC_dxb_mat * m_above + dD_dxb_mat * m_below + dE_dxb_mat * m_inside
     
     # Derivative of log-likelihood
-    # For component j: dL/dbeta_j = A[, j] * dB_dxb[, j] * X
-    # Scale each row of X by A[, j] * dB_dxb[, j] / L
-    
     dll_db_list <- vector("list", ncmp)
     for (j in seq_len(ncmp)) {
-      dll_db_list[[j]] <- X_beta * (A[, j] * dB_dxb[, j]) / L
+      dll_db_list[[j]] <- X_beta * (A[, j] * dB_dxb_mat[, j]) / L
+      #dll_db_list[[j]][small, ] <- 0 # Set gradient at small values of L (-Inf of ll) to zero
     }
     
     dll_db_mat <- do.call(cbind, dll_db_list)
-    
-  }
-  
-  # Derivative w.r.t. delta
-  #------------------------
-  
-  # wd_mat are logits for components k in 1..(ncmp-1)
-  # baseline is last component with value 0
-  # For k in 1..(ncmp-1):
-  # dA[, k]/dwd[, k] = A[, k] * (1 - A[, k])
-  # dA[, r]/dwd[, k] = -A[, r] * A[, k], for r != k
-  # dwd/d(delta_k) = W
-  
-  if (ncmp > 1) {
-    
-    p_delta <- ncol(W) # Number of predictors
-    
-    # Precompute A interactions
-    # For each k, build dA/dwd_k: n × ncmp
-    # Then dL/dwd_k = sum_j B[, j] * dA[, j]/dwd_k
-    # Finally, dL/d(delta_k) = (dL/dwd_k) * W (row-wise scaling across columns)
-    
-    dll_dd_mat <- matrix(NA_real_, nrow = n, ncol = (ncmp - 1) * p_delta)
-    
-    col_start <- 1
-    for (k in seq_len(ncmp - 1)) { # Loop over components
-      
-      dA_dwd_k <- matrix(0.0, n, ncmp)
-      
-      dA_dwd_k[, k] <- A[, k] * (1 - A[, k])
-      
-      for (r in seq_len(ncmp)) {
-        if (r != k) {
-          dA_dwd_k[, r] <- dA_dwd_k[, r] - A[, r] * A[, k]
-        }
-      }
-      
-      dL_dwd_k <- rowSums(B * dA_dwd_k)
-      
-      idx <- col_start:(col_start + p_delta - 1)
-      
-      dll_dd_mat[, idx] <- W * (dL_dwd_k / L)
-      
-      col_start <- col_start + p_delta
-    }
-  } else {
-    
-    dll_dd_mat <- matrix(numeric(0), nrow = n, ncol = 0)
     
   }
   
@@ -223,40 +220,33 @@ aldvmm.sc <- function(par,
   
   if (dist == "normal") {
     
-    # dC/dsigma = dnorm(z_C) * (psi1 - mu) / sigma^2
-    dC_ds_vec <- stats::dnorm(z_C) * (psi1 - xb_vec) / (sigma_rep^2)
+    # Density of values above maximum
+    dC_ds_vec <- stats::dnorm(z_C) * z_C / sigma_rep
+    dC_ds_mat <- matrix(dC_ds_vec, n, ncmp)
     
-    # dD/dsigma = dnorm(z_D) * (-(psi2 - mu)) / sigma^2
-    dD_ds_vec <- stats::dnorm(z_D) * (-(psi2 - xb_vec)) / (sigma_rep^2)
+    # Density of values below minimum
+    dD_ds_vec <- -stats::dnorm(z_D) * z_D / sigma_rep
+    dD_ds_mat <- matrix(dD_ds_vec, n, ncmp)
     
-    # dE/dsigma: derivative of dnorm((y - mu)/sigma)/sigma
-    # E = dnorm(z_E)/sigma, z_E = (y - mu)/sigma
-    # dE/dsigma = dnorm(z_E) * ((y - mu)^2 / sigma^4 - 1 / sigma^2)
-    res_vec <- rep(y, times = ncmp) - xb_vec
-    dE_ds_vec <- stats::dnorm(z_E) * ( (res_vec^2) / (sigma_rep^4) - 1 / (sigma_rep^2) )
+    # Derivative of density of observed value
+    dE_ds_vec <- stats::dnorm(z_E) * (z_E^2 - 1) / (sigma_rep^2)
+    dE_ds_mat <- matrix(dE_ds_vec, n, ncmp)
     
-    dC_ds <- matrix(dC_ds_vec, n, ncmp)
-    dD_ds <- matrix(dD_ds_vec, n, ncmp)
-    dE_ds <- matrix(dE_ds_vec, n, ncmp)
+    # Derivative of density of observed value
+    dB_ds_mat <- dC_ds_mat * m_above + dD_ds_mat * m_below + dE_ds_mat * m_inside
     
-    dB_ds <- dC_ds * m_above + dD_ds * m_below + dE_ds * m_inside  # n × ncmp
+    # Transform to ln(sigma)
+    sigma_mat <- matrix(sigma, nrow = n, ncol = ncmp, byrow = TRUE)
+    dB_dlns_mat <- dB_ds_mat * sigma_mat
     
-    # Convert derivative w.r.t. sigma to derivative w.r.t. log-sigma (chain rule)
-    # d/d(log_sigma) = d/dsigma * dsigma/dlog_sigma = d/dsigma * sigma
-    # Multiply each component column by sigma_j
-    
-    dB_dlogs <- sweep(dB_ds, 2, sigma, `*`)
-    
-    # dL/dlogsigma_j = A[, j] * dB_dlogs[, j]
+    # Derivative of log-likelihood
     dll_ds_list <- vector("list", ncmp)
-    
     for (j in seq_len(ncmp)) {
-      dll_ds_list[[j]] <- (A[, j] * dB_dlogs[, j])
+      dll_ds_list[[j]] <- (A[, j] * dB_dlns_mat[, j]) / L
+      #dll_ds_list[[j]][small] <- 0 # Set gradient at small values of L (-Inf of ll) to zero
     }
     
-    dL_dlogs_mat <- do.call(cbind, dll_ds_list)
-    dll_ds_mat <- dL_dlogs_mat / L
-    
+    dll_ds_mat <- do.call(cbind, dll_ds_list)
   }
   
   # Collect and return
