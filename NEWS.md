@@ -38,5 +38,5 @@
 # aldvmm 0.8.8
 * The optimizer package was changed from "optimr" to "optimx". The functionality remains identical.
 
-# aldvmm 0.8.9
-* The functions aldvmm.ll() and aldvmm.sc() were optimized to increase computation speed.
+# aldvmm 0.9.0
+* The functions aldvmm.ll() and aldvmm.sc() were vectorized to increase computation speed, and the multinomial logit is implemented in a numerically more stable manner.

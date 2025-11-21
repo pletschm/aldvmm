@@ -135,8 +135,6 @@ aldvmm.sc <- function(par,
   B[!is.finite(B)] <- 0
   
   L <- rowSums(A * B)
-  #L <- pmax(L, .Machine$double.xmin) # Guard against numerical underflow to zero before log
-  #small <- (L <= .Machine$double.xmin) # Indicator or small L
   
   # Derivative w.r.t. delta
   #------------------------
@@ -172,9 +170,6 @@ aldvmm.sc <- function(par,
       col_start <- col_start + k_delta
     }
     
-    # Set gradient at small values of L (-Inf of ll) to zero
-    #dll_dd_mat[small, ] <- 0
-    
   } else {
     
     # Derivative of log-likelihood
@@ -208,7 +203,6 @@ aldvmm.sc <- function(par,
     dll_db_list <- vector("list", ncmp)
     for (j in seq_len(ncmp)) {
       dll_db_list[[j]] <- X_beta * (A[, j] * dB_dxb_mat[, j]) / L
-      #dll_db_list[[j]][small, ] <- 0 # Set gradient at small values of L (-Inf of ll) to zero
     }
     
     dll_db_mat <- do.call(cbind, dll_db_list)
@@ -243,7 +237,6 @@ aldvmm.sc <- function(par,
     dll_ds_list <- vector("list", ncmp)
     for (j in seq_len(ncmp)) {
       dll_ds_list[[j]] <- (A[, j] * dB_dlns_mat[, j]) / L
-      #dll_ds_list[[j]][small] <- 0 # Set gradient at small values of L (-Inf of ll) to zero
     }
     
     dll_ds_mat <- do.call(cbind, dll_ds_list)

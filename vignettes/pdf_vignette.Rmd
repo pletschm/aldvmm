@@ -932,9 +932,9 @@ rm(rep_tab_stata)
 
 # Introduction
 
-Health-related quality of life is a key outcome in health technology assessments because it is patient-relevant and it is needed to calculate quality-adjusted life years. Quality of life instruments typically measure health problems in multiple domains using ordinal Likert scales. Value sets or valuation functions convert these profiles of ordinal measures into cardinal health-related utilities between 1 (perfect health) and minus infinity, where 0 represents death, and negative values represent health states worse than death. Because 100% quality of life represents perfect health, health state utilities are limited at 1. The lowest possible utility in a local value set further defines a lower limit of health state utilities in a local population. Thus, health state utilities are limited dependent variables. In addition, health state utilities often show gaps between 1 and the next smaller utility in the value set. These gaps occur more frequently in  quality of life instruments with few levels in the Likert scales such as the EQ-5D-3L [@Mulhern2018]. A last but important particularity of health state utilities is that they can be the consequence of multiple latent classes, or they can exhibit multi-modal marginal densities [@HernandezAlava2014].
+Health-related quality of life is a key outcome in health technology assessments because it is patient-relevant and it is needed to calculate quality-adjusted life years. Quality of life instruments typically measure health problems in multiple domains using ordinal Likert scales. Value sets or valuation functions convert these profiles of ordinal measures into cardinal health state utilities between 1 (perfect health) and minus infinity, where 0 represents death, and negative values represent health states worse than death. Because 100% quality of life represents perfect health, health state utilities are limited at 1. The lowest possible utility in a local value set further defines a lower limit of health state utilities in a local population. Thus, health state utilities are limited dependent variables. In addition, health state utilities often show gaps between 1 and the next smaller utility in the value set. These gaps occur more frequently in  quality of life instruments with few levels in the Likert scales such as the EQ-5D-3L [@Mulhern2018]. A last but important particularity of health state utilities is that they can be the consequence of multiple latent classes, or they can exhibit multi-modal marginal densities [@HernandezAlava2014].
 
-Adjusted limited dependent variable mixture models are finite mixtures of normal distributions that account for limits, gaps between 1 and the next smaller utility value and multi-modality [@HernandezAlava2012; @HernandezAlava2013; @HernandezAlava2014; @HernandezAlava2015; @Mukuria2019]. These features can improve empirical fit, parameter identification and predictive accuracy compared to standard regression models. Thus, adjusted limited dependent variable mixture models are particularly useful for mapping studies [@Gray2018a; @Gray2018; @Dixon2020; @Yang2019; @Xu2020; @Fuller2017; @Pennington2020].
+Adjusted limited dependent variable mixture models are finite mixtures of normal distributions that account for limits, gaps between 1 and the next smaller utility value, and multi-modality [@HernandezAlava2012; @HernandezAlava2013; @HernandezAlava2014; @HernandezAlava2015; @Mukuria2019]. These features can improve empirical fit, parameter identification and predictive accuracy compared to standard regression models. Thus, adjusted limited dependent variable mixture models are particularly useful for mapping studies [@Gray2018a; @Gray2018; @Dixon2020; @Yang2019; @Xu2020; @Fuller2017; @Pennington2020].
 
 The R 'aldvmm' package is an implementation of the adjusted limited dependent variable mixture model proposed by @HernandezAlava2015 using normal component distributions and a multinomial logit model of probabilities of component membership.
 
@@ -942,7 +942,7 @@ The objectives of this vignette are to demonstrate the usage of the 'aldvmm' pac
 
 # Methods
 
-Adjusted limited dependent variable mixture models are finite mixtures of normal distributions in $K$ components $c$ with conditional expectations $E[y|X, c] = X\beta^{c}$ and standard deviations $\sigma^{c}$. The probabilities of component membership are estimated using a multinomial logit model as $P[c|X]=exp(X\delta^{c})/\sum_{k=1}^{K}exp(X\delta^{k})$. The model accumulates the density mass of the finite mixture below a minimum value $\Psi_1$ at the value $\Psi_1$, and the density mass above a maximum value $\Psi_{2}$ at 1. If the maximum value $\Psi_2$ is smaller than 1, the model emulates a value set with a gap between 1 and the next smaller value.
+Adjusted limited dependent variable mixture models are finite mixtures of normal distributions in $C$ components $c$ with conditional expectations $E[y|X, c] = X\beta^{c}$ and standard deviations $\sigma^{c}$. The probabilities of component membership are estimated using a multinomial logit model as $P[c|X]=exp(X\delta^{c})/\sum_{k=1}^{K}exp(X\delta^{k})$. The model accumulates the density mass of the finite mixture below a minimum value $\Psi_1$ at the value $\Psi_1$, and the density mass above a maximum value $\Psi_{2}$ at 1. If the maximum value $\Psi_2$ is smaller than 1, the model emulates a value set with a gap between 1 and the next smaller value.
 
 \begin{equation}
 \label{eq:limits}
@@ -970,7 +970,7 @@ In this vignette, we estimate the same models of post-operative EQ-5D-3L utiliti
 
 The `aldvmm()` function fits an adjusted limited dependent variable mixture model using the likelihood function from @HernandezAlava2015. The function calls `optimx::optimr()` to minimize the negative log-likelihood using analytical gradients from `aldvmm.gr()`. The `aldvmm()` function accepts all optimization methods available in `optimx::optimr()` except for "nlm", which requires a different implementation of the likelihood function. The default optimization method is "BFGS".
 
-The model formula in `aldvmm()` is an object of class "formula" with two parts on the right-hand side of `~`. The first part on the left of the `|` delimiter represents the model of expected values of $K$ normal distributions. The second part on the right of the `|` delimiter represents the model of probabilities of component membership from a multinomial logit model.
+The model formula in `aldvmm()` is an object of class "formula" with two parts on the right-hand side of `~`. The first part on the left of the `|` delimiter represents the model of expected values of $C$ normal distributions. The second part on the right of the `|` delimiter represents the model of probabilities of component membership from a multinomial logit model.
 
 The 'aldvmm' package provides four options for the generation of starting values of the optimization algorithm. 
 
@@ -994,7 +994,7 @@ SE^{pred}_{i} &= \sqrt{MSE + G_{i}'\Sigma G_{i}}
 \end{array}
 \end{equation}
 
-The `aldvmm()` function returns an object of S3 class "aldvmm" for which methods for generic functions `print()`, `summary()`, `stats::predict()`, `stats::coef()`, `stats::nobs()`, `stats::vcov()`, `stats::model.matrix()`, `stats::formula()`, `stats::residuals()`, `stats::update()` and `sandwich::estfun()` are available. Objects of class "aldvmm" can be supplied to `sandwich::sandwich()`, `sandwich::vcovCL()`, `sandwich::vcovPL()`, `sandwich::vcovHAC()` and `sandwich::vcovBS()` to estimate robust or clustered standard errors (see example in the appendix). `sandwich::estfun()` calls `aldvmm.sc()` to return analytical gradients of the log-likelihood with respect to parameters for each observation, which allows fast computation of robust standard errors. `sandwich::vcovBS()` allows re-restimating the covariance matrix using bootstrapping with and without clustering, which can be particularly useful in cases with no valid covariance matrix from model fitting.
+The `aldvmm()` function returns an object of S3 class "aldvmm" for which methods for generic functions `print()`, `summary()`, `stats::predict()`, `stats::coef()`, `stats::nobs()`, `stats::vcov()`, `stats::model.matrix()`, `stats::formula()`, `stats::residuals()`, `stats::update()` and `sandwich::estfun()` are available. Objects of class "aldvmm" can be supplied to `sandwich::sandwich()`, `sandwich::vcovCL()`, `sandwich::vcovPL()`, `sandwich::vcovHAC()` and `sandwich::vcovBS()` to estimate robust or clustered standard errors (see example in the [appendix](#swcode)). `sandwich::estfun()` calls `aldvmm.sc()` to return analytical gradients of the log-likelihood with respect to parameters for each observation (see gradient function in the [appendix](#likfun)), which allows fast computation of robust standard errors. `sandwich::vcovBS()` allows re-restimating the covariance matrix using bootstrapping with and without clustering, which can be particularly useful in cases with no valid covariance matrix from model fitting.
 
 # Installation
 
@@ -1123,13 +1123,13 @@ We obtain expected values of observations in the estimation data using the gener
 
 ![(#fig:plot-hist-pred) Expected values from base case model](./plot_hist_pred.eps)
 
-Expected values of observations in the estimation data can also be used to calculate average incremental effects or average treatment effects on the treated. Average treatment effects on the treated compare predictions for treated individuals to predictions for the same individuals without the effect of the treatment indicator. Standard errors of average treatment effects on the treated can be calculated using the delta method (see example code in the appendix).
+Expected values of observations in the estimation data can also be used to calculate average incremental effects or average treatment effects on the treated. Average treatment effects on the treated compare predictions for treated individuals to predictions for the same individuals without the effect of the treatment indicator. Standard errors of average treatment effects on the treated can be calculated using the delta method (see example code in the [appendix](#atetcode)).
 
-A visual inspection of mean residuals over deciles of expected values (see example code of the modified Hosmer-Lemeshow test in the appendix) shows that model 1 fits the data poorly (figure \@ref(fig:plot-comp-mhl-bfgs)). Although the test is overpowered with large data, and confidence bands should not be interpreted directly, the absolute over-prediction among individuals with low expected values is quite large.
+A visual inspection of mean residuals over deciles of expected values (see example code of the modified Hosmer-Lemeshow test in the [appendix](#mhlcode)) shows that model 1 fits the data poorly (figure \@ref(fig:plot-comp-mhl-bfgs)). Although the test is overpowered with large data, and confidence bands should not be interpreted directly, the absolute over-prediction among individuals with low expected values is quite large.
 
 ![(#fig:plot-comp-mhl-bfgs) Mean residuals over deciles of expected values, "BFGS" with "zero" starting values](./plot_comp_mhl_bfgs.eps)
 
-We can use the 'sandwich' package [@Zeileis2006] to calculate robust or clustered standard errors from objects of class "aldvmm" (see example code in the appendix).
+We can use the 'sandwich' package [@Zeileis2006] to calculate robust or clustered standard errors from objects of class "aldvmm" (see example code in the [appendix](#swcode)).
 
 ## Model 1: Comparison of optimization methods
 
@@ -1208,7 +1208,7 @@ rm(tab_comp_time)
 
 ```
 
-Parameter estimates differ considerably across selected optimization algorithms (table \@ref(tab:tab-comp-coef)). The default "BFGS" - "zero" approach converges at the same parameters as the "nlminb" - "zero" method. The solution of the "hjn" method is rather extreme with no effect of the Oxford Hip Score, a very small standard deviation in component 2 and a very low probability of membership of component 2. Also, the Modified Hosmer-Lemeshow test did not show better fit of the "hjn" solution compared to the other algorithms (figure \@ref(fig:plot-comp-mhl-nlminb) in the appendix). The solution of the "hjn" method suggests that a single-component model should be explored as well.
+Parameter estimates differ considerably across selected optimization algorithms (table \@ref(tab:tab-comp-coef)). The default "BFGS" - "zero" approach converges at the same parameters as the "nlminb" - "zero" method. The solution of the "hjn" method is rather extreme with no effect of the Oxford Hip Score, a very small standard deviation in component 2 and a very low probability of membership of component 2. Also, the Modified Hosmer-Lemeshow test did not show better fit of the "hjn" solution compared to the other algorithms (figure \@ref(fig:plot-comp-mhl-nlminb) in the [appendix](#mhlres)). The solution of the "hjn" method suggests that a single-component model should be explored as well.
 
 ```{r tab-comp-coef, echo = FALSE, results = "asis"}
 
@@ -1418,7 +1418,7 @@ rm(tab_sum_mod2)
 
 # Comparison to STATA\textsuperscript{\textregistered} results
 
-To validate the R implementation of adjusted limited dependent variable mixture models, we estimate the four models presented in @HernandezAlava2015 as reference cases in R and STATA\textsuperscript{\textregistered}.\footnote{The STATA\textsuperscript{\textregistered} and R code for model estimation is included in the appendix.}
+To validate the R implementation of adjusted limited dependent variable mixture models, we estimate the four models presented in @HernandezAlava2015 as reference cases in R and STATA\textsuperscript{\textregistered}.\footnote{The STATA\textsuperscript{\textregistered} and R code for model estimation is included in the [appendix](#rcode).}
 
 1. Model 1 with default options
 
@@ -1606,7 +1606,7 @@ Possible extensions of the 'aldvmm' package could include additional component d
 \newpage
 # Appendix {-}
 
-## Example calculation of average treatment effects on the treated {- .unlisted .unnumbered}
+## Example calculation of average treatment effects on the treated {- .unlisted .unnumbered #atetcode}
 
 ```{r atet-example, echo = TRUE, eval = FALSE, results = 'hide'}
 
@@ -1711,7 +1711,7 @@ print(out)
 ```
 
 \newpage
-## Example calculation of robust and clustered standard errors {- .unlisted .unnumbered}
+## Example calculation of robust and clustered standard errors {- .unlisted .unnumbered #swcode}
 
 ```{r sandwich-example, echo = TRUE, eval = FALSE, results = 'hide'}
 
@@ -1752,7 +1752,7 @@ lmtest::coeftest(fit, vcov = vc6)
 
 ```
 
-## Covariance matrices across optimization methods {- .unlisted .unnumbered}
+## Covariance matrices across optimization methods {- .unlisted .unnumbered #covmat}
 
 Covariance matrices were incomplete or missing entirely (`FALSE`) in multiple optimization approaches (table \@ref(tab:cov))
 
@@ -1777,8 +1777,7 @@ rm(tab_comp_cov)
 ```
 
 \newpage
-
-## Modified Hosmer-Lemeshow test {- .unlisted .unnumbered}
+## Modified Hosmer-Lemeshow test {- .unlisted .unnumbered #mhlcode}
 
 ```{r mhl-show, echo = TRUE, eval = FALSE}
 # Number of percentiles  
@@ -1822,8 +1821,7 @@ plot <- ggplot2::ggplot(plotdat, aes(x = factor(as.numeric(group)),
 ```  
 
 \newpage
-
-## Results of modified Hosmer-Lemeshow test {- .unlisted .unnumbered}
+## Results of modified Hosmer-Lemeshow test {- .unlisted .unnumbered #mhlres}
 
 ![(#fig:plot-comp-mhl-nm) Mean residuals over deciles of expected values, "Nelder-Mead" with "zero" starting values](./plot_comp_mhl_nm.eps)
 
@@ -1833,7 +1831,7 @@ plot <- ggplot2::ggplot(plotdat, aes(x = factor(as.numeric(group)),
 ![(#fig:plot-comp-mhl-hjn) Mean residuals over deciles of expected values, "hjn" with "zero" starting values](./plot_comp_mhl_hjn.eps)
 
 \newpage
-## R code for the estimation of reference cases {- .unlisted .unnumbered}
+## R code for the estimation of reference cases {- .unlisted .unnumbered #rcode}
 
 ```{r tab-comp-stata-show, echo = TRUE, eval = FALSE}
 # (1) Reference case 1 with default optimization settings
@@ -1878,7 +1876,7 @@ fit2 <- aldvmm::aldvmm(eq5d ~ hr | hr,
 ```
 
 \newpage
-## STATA\textsuperscript{\textregistered} code for the estimation of reference cases {- .unlisted .unnumbered}
+## STATA\textsuperscript{\textregistered} code for the estimation of reference cases {- .unlisted .unnumbered #statacode}
 
 ```{r stata_code, echo = TRUE, eval = FALSE}
 * (1) Reference case 1
@@ -1899,6 +1897,107 @@ matrix  input start = (.14801581, .22614716, .30502755, -.40293118, 0,
                        -.70755741, -2.4541401, -1.2632051)
 aldvmm eq5d hr, ncomp(2) prob(hr) from(start)
 ```
+
+\newpage
+## ALDVMM likelihood and gradient functions {- .unlisted .unnumbered #likfun}
+
+We write the ALDVMM log-likelihood function [@HernandezAlava2015] as the sum across observations of the log-transformed product of the multinomial logit density of component membership $A_{ic}$ and the density of expected values per component $f_{ic}$.
+
+\begin{equation}
+\label{eq:loglik}
+ll=\sum_{i=1}^{n}\ln(A_{ic}f_{ic})
+\end{equation}
+
+We subtract the maximum linear predictor of the multinomial logit model $w_{i}\delta_{c}$ per observation across components from the observation's linear predictors per component to improve numerical stability of the likelihood function. Please note that the stabilized density function is equivalent to the original density but has better numerical properties.
+
+\begin{equation}
+\label{eq:apart}
+\begin{array}{ll}
+A_{ic}&=\frac{\exp(w_{i}\delta_{c})}{\sum_{s=1}^{C}\exp(w_{i}\delta_{s})}\\
+&=\frac{\exp(-\max_{i}(w\delta))}{\exp(-\max_{i}(w\delta))}\frac{\exp(w_{i}\delta_{c})}{\sum_{s=1}^{C}\exp(w_{i}\delta_{s})}\\
+&=\frac{\exp(w_{i}\delta_{c} - \max_{i}(w\delta))}{\sum_{s=1}^{C}\exp(w_{i}\delta_{s} - \max_{i}(w\delta))}\\
+\end{array}
+\end{equation}
+
+The normal density of expected values per component depends on the range in which $y_{i}$ falls relative to the maximum value $\Psi_{2}$ and minimum value $\Psi_{1}$ smaller than one in the value set.
+
+\begin{equation}
+\label{eq:fpart}
+\begin{array}{ll}
+f_{ic} =& \begin{cases} \begin{array}{ll}
+1 - \Phi(\frac{\Psi_{2}-x_{i}\beta_{c}}{\sigma_{c}}) & \text{if } y_{i}|c > \Psi_{2}\\
+\Phi(\frac{\Psi_{1}-x_{i}\beta_{c}}{\sigma_{c}}) & \text{if } y_{i}|c \leq \Psi_{1}\\
+\frac{\phi(\frac{y_{i} - x_{i}\beta_{c}}{\sigma_{c}})}{\sigma_{c}}  & \text{if } \Psi_{1} < y_{i}|c \leq \Psi_{2}\\
+\end{array} \end{cases}
+\end{array}
+\end{equation}
+
+The gradient of the log-likelihood function with respect to all model parameters is the vector of first derivatives. The underlying score matrix includes the first derivatives of all observations' likelihood contributions to the log-likelihood.
+
+\begin{equation}
+\label{eq:gradll}
+\Delta = \left[\frac{\partial ll}{\partial \delta_{1}}, ..., \frac{\partial ll}{\partial \delta_{C}}, \frac{\partial ll}{\partial \beta_{1}}, ..., \frac{\partial ll}{\partial \beta_{C}}, \frac{\partial ll}{\partial \sigma_{1}}, ..., \frac{\partial ll}{\partial \sigma_{C}}\right]
+\end{equation}
+
+The first derivative of the log-likelihood with respect to the parameters $delta_{c}$ must consider the first derivative of all elements of the denominator and depends on whether the elements are of the same component ($s = c$) or not ($s \neq c$).
+
+\begin{equation}
+\label{eq:dlldd}
+\begin{array}{ll}
+\frac{\partial ll}{\partial \delta_{c}} &= \sum_{i=1}^{n}\frac{1}{\sum_{c=1}^{C}A_{ic}f_{ic}}\cdot f_{ic}\cdot\frac{\partial A_{ic}}{\partial \delta_{c}}\\
+\end{array}
+\end{equation}
+
+\begin{equation}
+\label{eq:dadd}
+\begin{array}{ll}
+\frac{\partial A_{ic}}{\partial \delta_{c}} =& \begin{cases} \begin{array}{ll}
+w_{i} A_{ic}(1-A_{ic}) & \text{if } s = c\\
+w_{i} A_{is}A_{ic}& \text{if } s \neq c\\
+\end{array} \end{cases}
+\end{array}
+\end{equation}
+
+The first derivative of the log-likelihood with respect to the parameters $\beta_c$ depends on the range in which $y_{i}$ falls relative to the maximum value $\Psi_{2}$ and minimum value $\Psi_{1}$ smaller than one in the value set.
+
+\begin{equation}
+\label{eq:dllb}
+\begin{array}{ll}
+\frac{\partial ll}{\partial \beta_{c}} &=\sum_{i=1}^{n}A_{ic}\frac{\partial f_{ic}}{\partial \beta_{ic}} \\
+\end{array}
+\end{equation}
+
+\begin{equation}
+\label{eq:dfdb}
+\begin{array}{ll}
+\frac{\partial f_{ic}}{\partial \beta_{c}} =& \begin{cases} \begin{array}{ll}
+\frac{x_{i}}{\sigma_{c}}\phi (\frac{\Psi_{2} - x_{i}\beta_{c}}{\sigma_{c}}) & \text{if } y_{i}|c > \Psi_{2}\\
+-\frac{x_{i}}{\sigma_{c}}\phi (\frac{\Psi_{1} - x_{i}\beta_{c}}{\sigma_{c}})& \text{if } y_{i}|c \leq \Psi_{1}\\
+\frac{x_{i}}{\sigma_{c}} \frac{y_{i} - x_{i}\beta_{c}}{\sigma_{c}} \phi (\frac{y_{i} - x_{i}\beta_{c}}{\sigma_{c}}) & \text{if } \Psi_{1} < y_{i}|c \leq \Psi_{2}\\
+\end{array} \end{cases}
+\end{array}
+\end{equation}
+
+The first derivative of the log-likelihood with respect to the parameters $\sigma_c$ depends on the range in which $y_{i}$ falls relative to the maximum value $\Psi_{2}$ and minimum value $\Psi_{1}$ smaller than one in the value set.
+
+\begin{equation}
+\label{eq:dllds}
+\begin{array}{ll}
+\frac{\partial ll}{\partial \sigma_{c}} &=\sum_{i=1}^{n}A_{ic}\frac{\partial f_{ic}}{\partial \sigma_{ic}} \\
+\end{array}
+\end{equation}
+
+\begin{equation}
+\label{eq:dfds}
+\begin{array}{ll}
+\frac{\partial f_{ic}}{\partial \sigma_{c}} =& \begin{cases} \begin{array}{ll}
+\phi (\frac{\Psi_{2} - x_{i}\beta_{c}}{\sigma_{c}})\frac{\Psi_{2} - x_{i}\beta_{c}}{\sigma_{c}^{2}} & \text{if } y_{i}|c > \Psi_{2}\\
+-\phi (\frac{\Psi_{1} - x_{i}\beta_{c}}{\sigma_{c}})\frac{\Psi_{1} - x_{i}\beta_{c}}{\sigma_{c}^{2}} & \text{if } y_{i}|c \leq \Psi_{1}\\
+\phi (\frac{y_{i} - x_{i}\beta_{c}}{\sigma_{c}})\left[ (\frac{y_{i} - x_{i}\beta_{c}}{\sigma_{c}})^2 - 1 \right]\frac{1}{\sigma_{c}^2} & \text{if } \Psi_{1} < y_{i}|c \leq \Psi_{2}\\
+\end{array} \end{cases}
+\end{array}
+\end{equation}
+
 
 ```{r end, echo = FALSE, results = 'hide'}
 

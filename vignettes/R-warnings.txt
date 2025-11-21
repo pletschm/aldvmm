@@ -1,2 +1,2 @@
-2: In utils:::download.file(url = "https://rstudio.org/links/rtools44",  ... :
-  URL 'https://rstudio.org/links/rtools44': status was 'SSL connect error'
+In readChar(con, 5L, useBytes = TRUE) :
+  cannot open compressed file 'fit1_all_norm.RData', probable reason 'No such file or directory'

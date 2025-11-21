@@ -1,5 +1,6 @@
 rep_tab_reg <- function(object,
-                        caption) {
+                        caption,
+                        ndig = 4) {
   tab <- object
   i_head <- grep("E\\[y\\|X, c\\]|P\\[c\\|X\\]", tab[, 1])
   i_comp <- grep("Comp", tab[, 1])
@@ -8,7 +9,9 @@ rep_tab_reg <- function(object,
   tab %>%
     kableExtra::kbl(row.names = FALSE,
                     format = "html",
-                    caption = caption) %>%
+                    align = c("l", "l", rep("r", ncol(object) - 2)),
+                    caption = caption,
+                    digits = ndig) %>%
     kableExtra::row_spec(nrow(tab), 
                          extra_css = "border-top: 1px solid grey; border-bottom-color: white; ") %>%
     kableExtra::row_spec(i_head, 
