@@ -98,7 +98,7 @@ devtools::build()
 # rhub checks
 #------------
 
-rhub::list_platforms()
-rhub::rhub_check(path = "../aldvmm_0.9.0.tar.gz", platforms = "ubuntu-latest")
-rhub::check("../aldvmm_0.9.0.tar.gz", platform = "ubuntu-gcc-release")
-rhub::check("../aldvmm_0.9.0.tar.gz", platform = "debian-gcc-devel")
+rhub::rhub_setup()
+rhub::rhub_doctor()
+rhub::rhub_platforms()
+rhub::rhub_check(platforms = c("linux", "m1-san", "macos", "windows", "ubuntu-next"))
