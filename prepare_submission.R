@@ -47,6 +47,12 @@ ct <- covr::package_coverage()
 covr::report(ct)
 library("aldvmm")
 
+# Install tinytex
+#----------------
+
+# install.packages('tinytex')
+# tinytex::install_tinytex()
+
 # Register qpdf and ghostscript
 #------------------------------
 
@@ -56,7 +62,7 @@ Sys.setenv(R_GSCMD = "C:/Users/phm1/gs10.00.0/bin/gswin64c.exe")
 # Save pdf vignette in vignettes folder
 #--------------------------------------
 
-rmarkdown::render("./vignettes/pdf_vignette.Rmd")
+#rmarkdown::render("./vignettes/pdf_vignette.Rmd")
 
 # Save html vignette in vignettes folder
 #--------------------------------------
@@ -80,7 +86,7 @@ devtools::build()
 # Source check in shell
 #----------------------
 
-# R CMD check --as-cran ../aldvmm_0.8.8.tar.gz
+# R CMD check --as-cran ../aldvmm_0.9.0.tar.gz
 
 # Winbuilder
 #------------
@@ -92,5 +98,7 @@ devtools::build()
 # rhub checks
 #------------
 
-rhub::check("../aldvmm_0.8.8.tar.gz", platform = "ubuntu-gcc-release")
-rhub::check("../aldvmm_0.8.8.tar.gz", platform = "debian-gcc-devel")
+rhub::list_platforms()
+rhub::rhub_check(path = "../aldvmm_0.9.0.tar.gz", platforms = "ubuntu-latest")
+rhub::check("../aldvmm_0.9.0.tar.gz", platform = "ubuntu-gcc-release")
+rhub::check("../aldvmm_0.9.0.tar.gz", platform = "debian-gcc-devel")

@@ -103,9 +103,9 @@ test_that('Check calculation of gradients of log-likelihood.', {
     # Small differences from numDeriv:Jacobian results
     #-------------------------------------------------
     
-    testthat::expect(all((out.gr - num.grad) < tol),
+    testthat::expect(all(abs(out.gr - num.grad) < abs(tol * out.gr) | abs(out.gr - num.grad) < tol),
                      failure_message = paste0('Analytical and numerical gradients differ by more than ',
-                                              tol))
+                                              tol * 100, '%, or more than ', tol))
     
   }
   
@@ -129,14 +129,14 @@ test_that('Check calculation of gradients of log-likelihood.', {
   #----------------------------------------------
   
   errlist <- list()
-  
+
   set.seed(101010101)
   i <- 1
   while(i <= 20){
-    
+
     par <- rnorm(length(fit$coef), 0, 1)
     names(par) <- names(fit$coef)
-    
+
     tryCatch({
       grad <- numDeriv::grad(func = function(z) {
         aldvmm.ll(par = z,
@@ -151,19 +151,19 @@ test_that('Check calculation of gradients of log-likelihood.', {
                   optim.method = fit$optim.method)
       },
       x = par)
-      
+
     }, error = function (e) {
       errlist[["par"]][[i]] <<- par
       i <<- i + 1
     })
-    
+
   }
-  
+
   # Run tests
   #----------
-  
+
   for (i in 1:length(errlist[["par"]])) {
-    
+
     out.gr <- aldvmm.gr(par = errlist[["par"]][[i]],
                         X = X,
                         y = fit$pred$y,
@@ -177,9 +177,7 @@ test_that('Check calculation of gradients of log-likelihood.', {
 
     testthat::expect(sum(!is.finite(out.gr)) == 0,
                      failure_message = 'Gradient matrix includes infinite values.')
-    
+
   }
-    
-  
-  
+
 })

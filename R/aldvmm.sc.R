@@ -29,9 +29,8 @@ aldvmm.sc <- function(par,
   psi1 <- max(psi)
   psi2 <- min(psi)
   
-  #----------------------------------------------------------------------------
   # Prepare list of parameters
-  #----------------------------------------------------------------------------
+  #---------------------------
   
   parlist <- aldvmm.getpar(par   = par,
                            lcoef = lcoef,
@@ -39,9 +38,36 @@ aldvmm.sc <- function(par,
                            lcpar = lcpar,
                            ncmp  = ncmp)
   
-  #----------------------------------------------------------------------------
-  # Elements of likelihood function
-  #----------------------------------------------------------------------------
+  # Create design matrices
+  #-----------------------
+  
+  # Model of expected values per component
+  X_beta  <- X[[lcoef[1]]]
+  storage.mode(X_beta)  <- "double"
+  
+  # Model of probabilities of component membership
+  if (ncmp > 1) {
+    W <- X[[lcoef[2]]]
+    storage.mode(W) <- "double"
+  } else {
+    W <- NULL
+  }
+  
+  # Number of observations
+  n <- nrow(X_beta)
+  
+  # Create matrices of parameters
+  #------------------------------
+  
+  # Model of expected values per component
+  Beta <- do.call(cbind, parlist[[lcoef[1]]])
+  storage.mode(Beta) <- "double"
+  
+  # Model of probability of component membership
+  if (ncmp > 1) {
+    Delta <- do.call(cbind, parlist[[lcoef[2]]])
+    storage.mode(Delta) <- "double"
+  }
   
   # Multinomial logit
   #------------------
@@ -49,223 +75,139 @@ aldvmm.sc <- function(par,
   if (ncmp > 1) {
     
     # Linear predictor
-    wd <- lapply(names(parlist[[lcoef[2]]]), function (x) {
-      rowSums(sweep(X[[lcoef[2]]], 
-                    MARGIN = 2, 
-                    parlist[[lcoef[2]]][[x]], 
-                    `*`))
-    })
-    names(wd) <- names(parlist[[lcoef[2]]])
+    wd_mat <- W %*% Delta
     
-    # Denominator
-    sumexp <- 1 + Reduce("+",
-                         lapply(names(parlist[[lcoef[2]]]), function (z) {
-                           exp(rowSums(sweep(X[[lcoef[2]]], 
-                                             MARGIN = 2, 
-                                             parlist[[lcoef[2]]][[z]], 
-                                             `*`)))
-                         }))
+    # Softmax relative to last component
+    row_max <- do.call(pmax, as.data.frame(wd_mat)) # Maximum value within each row of wd_mat
+    row_max <- pmax(row_max, 0)
+    wd_shift <- wd_mat - row_max # Subtract maximum in each row to make numerically stable
+    exp_wd <- exp(wd_shift)
+    sumexp <- exp(-row_max) + rowSums(exp_wd)
     
     # Probability of component membership
-    A <- lapply(names(parlist[[lcoef[2]]]), function (x) {
-      exp(wd[[x]]) / sumexp
-    })
-    A[[ncmp]] <- 1 - Reduce("+", A)
+    A_tmp <- exp_wd / sumexp
+    A <- cbind(A_tmp, exp(-row_max) / sumexp)
+    
   } else {
-    A <- list(
-      matrix(data = 1, 
-             nrow = nrow(X[[lcoef[1]]]), 
-             ncol = 1,
-             dimnames = list(rownames(X[[lcoef[2]]]),
-                             paste0(lcmp, 1)))
-    )
+    
+    A <- matrix(1, nrow = n, ncol = 1)
+    
   }
-  names(A) <- names(parlist[[lcoef[1]]])
   
   # Component distributions
   #------------------------
   
   if (dist == "normal") {
     
+    # Standard deviation per component
+    sigma <- exp(unlist(parlist[[lcpar]]))
+    sigma_rep <- rep(sigma, each = n) # Repeat for each patient per component
+    
     # Linear predictor
-    xb <- lapply(parlist[[lcoef[1]]], function (x) {
-      rowSums(sweep(X[[lcoef[1]]], 
-                    MARGIN = 2, 
-                    x, 
-                    `*`))
-    })
-    names(xb) <- names(parlist[[lcoef[1]]])
+    xb_mat <- X_beta %*% Beta
+    xb_vec <- as.vector(xb_mat)
     
     # Density of values above maximum
-    C <- lapply(names(parlist[[lcoef[1]]]), function (x) {
-      1 - stats::pnorm((psi1 - xb[[x]]) / exp(parlist[[lcpar]][[x]]), 
-                       mean = 0, 
-                       sd = 1)
-    })
-    names(C) <- names(parlist[[lcoef[1]]])
+    z_C <- (psi1 - xb_vec) / sigma_rep
+    C_mat <- matrix(1 - stats::pnorm(z_C), n, ncmp)
     
     # Density of values below minimum
-    D <- lapply(names(parlist[[lcoef[1]]]), function (x) {
-      stats::pnorm((psi2 - xb[[x]]) / exp(parlist[[lcpar]][[x]]), 
-                   mean = 0, 
-                   sd = 1)
-    })
-    names(D) <- names(parlist[[lcoef[1]]])
+    z_D <- (psi2 - xb_vec) / sigma_rep
+    D_mat <- matrix(stats::pnorm(z_D), n, ncmp)
     
     # Density of value within range
-    E <- lapply(names(parlist[[lcoef[1]]]), function (x) {
-      stats::dnorm((y - xb[[x]]) / exp(parlist[[lcpar]][[x]]), 
-                   mean = 0, 
-                   sd = 1) / exp(parlist[[lcpar]][[x]])
-    })
-    names(E) <- names(parlist[[lcoef[1]]])
+    z_E   <- (rep(y, times = ncmp) - xb_vec) / sigma_rep
+    E_mat <- matrix(stats::dnorm(z_E) / sigma_rep, n, ncmp)
     
     # Density of observed value
-    B <- lapply(names(parlist[[lcoef[1]]]), function (x) {
-      as.numeric(y >  psi1) * C[[x]] + 
-        as.numeric(y <= psi2) * D[[x]] + 
-        as.numeric(y <= psi1 & y > psi2) * E[[x]]
-    })
-    names(B) <- names(parlist[[lcoef[1]]])
+    m_above  <- as.numeric(y >  psi1)
+    m_below  <- as.numeric(y <= psi2)
+    m_inside <- 1 - m_above - m_below
+    
+    B <- C_mat * m_above + D_mat * m_below + E_mat * m_inside
     
   }
   
   # Likelihood
   #-----------
   
-  L <- Reduce("+",
-              lapply(names(A), function (x) {
-                A[[x]] * B[[x]]
-              })
-  )
+  A[!is.finite(A)] <- 0
+  B[!is.finite(B)] <- 0
   
-  #----------------------------------------------------------------------------
-  # Derivative of log-likelihood
-  #----------------------------------------------------------------------------
-  
-  # Derivative w.r.t. beta
-  #-----------------------
-  
-  if (dist == "normal") {
-    # Density of values above maximum
-    dCdb <- lapply(names(parlist[[lcoef[1]]]), function (x) {
-      stats::dnorm((psi1 - xb[[x]]) / exp(parlist[[lcpar]][[x]]), 
-                   mean = 0, 
-                   sd   = 1) * X[[lcoef[1]]] / exp(parlist[[lcpar]][[x]])
-    })
-    names(dCdb) <- names(parlist[[lcoef[1]]])
-    
-    # Density of values below minimum
-    dDdb <- lapply(names(parlist[[lcoef[1]]]), function (x) {
-      stats::dnorm((psi2 - xb[[x]]) / exp(parlist[[lcpar]][[x]]), 
-                   mean = 0, 
-                   sd   = 1) * -X[[lcoef[1]]] / exp(parlist[[lcpar]][[x]])
-    })
-    names(dDdb) <- names(parlist[[lcoef[1]]])
-    
-    # Density of values within range
-    dEdb <- lapply(names(parlist[[lcoef[1]]]), function (x) {
-      stats::dnorm((y - xb[[x]]) / exp(parlist[[lcpar]][[x]]), 
-                   mean = 0, 
-                   sd   = 1) * 
-        X[[1]] * (y - xb[[x]]) / exp(parlist[[lcpar]][[x]])^3
-    })
-    names(dEdb) <- names(parlist[[lcoef[1]]])
-    
-    # Density of observed value
-    dBdb <- lapply(names(parlist[[lcoef[1]]]), function (x) {
-      as.numeric(y >  psi1) * dCdb[[x]] + 
-        as.numeric(y <= psi2) * dDdb[[x]] + 
-        as.numeric(y <= psi1 & y > psi2) * dEdb[[x]]
-    })
-    names(dBdb) <- names(parlist[[lcoef[1]]])
-    
-    # Derivative of likelihood
-    dLdb <- lapply(names(parlist[[lcoef[1]]]), function (x) {
-      sweep(matrix(dBdb[[x]], ncol = length(parlist[[lcoef[1]]][[x]])), 
-            MARGIN = 1,
-            A[[x]], 
-            `*`)
-    })
-    names(dLdb) <- names(parlist[[lcoef[1]]])
-    
-    # Derivative of log-likelihood
-    dlldb <- lapply(1:length(parlist[[lcoef[1]]]), function (x) {
-      tmpmat <- sweep(dLdb[[x]], 
-                      MARGIN = 1,
-                      L, 
-                      `/`)
-      colnames(tmpmat) <- colnames(X[[1]])
-      rownames(tmpmat) <- rownames(X[[1]])
-      return(tmpmat)
-    })
-    names(dlldb) <- names(parlist[[lcoef[1]]])
-  }
+  L <- rowSums(A * B)
   
   # Derivative w.r.t. delta
   #------------------------
   
-  # Derivative of probability of component of change variable
-  dAdd <- lapply(names(parlist[[lcoef[2]]]), function (x) {
-    (exp(wd[[x]]) * X[[lcoef[2]]] * sumexp - 
-       exp(wd[[x]]) * exp(wd[[x]]) * X[[lcoef[2]]]) /
-      sumexp^2
+  if (ncmp > 1) {
     
-  })
-  names(dAdd) <- names(parlist[[lcoef[2]]])
+    # Number of predictors
+    k_delta <- ncol(W)
+    
+    # Empty matrix of derivatives
+    dll_dd_mat <- matrix(NA_real_, nrow = n, ncol = (ncmp - 1) * k_delta)
+    
+    col_start <- 1
+    for (k in seq_len(ncmp - 1)) { # Loop over components
+      
+      # Case r = c
+      dA_dwd_k <- matrix(0.0, n, ncmp)
+      dA_dwd_k[, k] <- A[, k] * (1 - A[, k])
+      
+      # Case r != c
+      for (r in seq_len(ncmp)) {
+        if (r != k) {
+          dA_dwd_k[, r] <- dA_dwd_k[, r] - A[, r] * A[, k]
+        }
+      }
+      
+      # Derivative of log-likelihood
+      idx <- col_start:(col_start + k_delta - 1)
+      dL_dwd_k <- rowSums(B * dA_dwd_k)
+      dll_dd_mat[, idx] <- W * (dL_dwd_k / L)
+      
+      # Update column index
+      col_start <- col_start + k_delta
+    }
+    
+  } else {
+    
+    # Derivative of log-likelihood
+    dll_dd_mat <- matrix(numeric(0), nrow = n, ncol = 0)
+    
+  }
   
-  # Derivative of probability of other components
-  dAdd.inv <- lapply(names(parlist[[lcoef[2]]]), function (x) {
-    tmplist <- lapply(names(parlist[[lcoef[2]]]), function (z) {
-      (-exp(wd[[z]]) / sumexp^2) * exp(wd[[x]]) * X[[lcoef[2]]]
-    })
-    tmplist[[ncmp]] <- (-1 / sumexp^2) * exp(wd[[x]]) * X[[lcoef[2]]]
-    return(tmplist)
-  })
+  # Derivative w.r.t. beta
+  #-----------------------
   
-  names(dAdd.inv) <- names(parlist[[lcoef[2]]])
+  # Derivative w.r.t. b = derivative w.r.t. Xb multiplied by X (chain rule)
   
-  dAdd.inv <- lapply(dAdd.inv, function (x) {
-    names(x) <- names(parlist[[lcoef[1]]])
-    return(x)
-  })
-  
-  # Derivative of likelihood
-  mat <- matrix(1, 
-                ncol = length(parlist[[lcoef[1]]]),
-                nrow = length(parlist[[lcoef[1]]]),
-                dimnames = list(names(parlist[[lcoef[1]]]),
-                                names(parlist[[lcoef[1]]])))
-  diag(mat) <- 0
-  
-  dLdd <- lapply(names(dAdd), function (x) {
-    sweep(matrix(dAdd[[x]], ncol = length(parlist[[lcoef[2]]][[x]])),
-          MARGIN = 1,
-          B[[x]],
-          `*`) +
-      Reduce("+", 
-             lapply(names(dAdd.inv[[x]]), function (z) {
-               mat[z, x] * sweep(matrix(dAdd.inv[[x]][[z]], 
-                                        ncol = length(parlist[[lcoef[2]]][[x]])),
-                                 MARGIN = 1,
-                                 B[[z]],
-                                 `*`)
-             })
-      )
-  })
-  names(dLdd) <- names(parlist[[lcoef[2]]])
-  
-  # Derivative of log-likelihood
-  dlldd <- lapply(names(parlist[[lcoef[2]]]), function (x) {
-    tmpmat <- sweep(dLdd[[x]],
-                    MARGIN = 1,
-                    L,
-                    `/`)
-    colnames(tmpmat) <- colnames(X[[2]])
-    rownames(tmpmat) <- rownames(X[[2]])
-    return(tmpmat)
-  })
-  names(dlldd) <- names(parlist[[lcoef[2]]])
+  if (dist == "normal") {
+    
+    # Density of values above maximum
+    dC_dxb_vec <- stats::dnorm(z_C) / sigma_rep
+    dC_dxb_mat <- matrix(dC_dxb_vec, n, ncmp)
+    
+    # Density of values below minimum
+    dD_dxb_vec <- -stats::dnorm(z_D) / sigma_rep
+    dD_dxb_mat <- matrix(dD_dxb_vec, n, ncmp)
+    
+    # Density of values within range
+    dE_dxb_vec <- stats::dnorm(z_E) * z_E / (sigma_rep^2)
+    dE_dxb_mat <- matrix(dE_dxb_vec, n, ncmp)
+    
+    # Derivative of density of observed value
+    dB_dxb_mat <- dC_dxb_mat * m_above + dD_dxb_mat * m_below + dE_dxb_mat * m_inside
+    
+    # Derivative of log-likelihood
+    dll_db_list <- vector("list", ncmp)
+    for (j in seq_len(ncmp)) {
+      dll_db_list[[j]] <- X_beta * (A[, j] * dB_dxb_mat[, j]) / L
+    }
+    
+    dll_db_mat <- do.call(cbind, dll_db_list)
+    
+  }
   
   # Derivative w.r.t. sigma
   #------------------------
@@ -273,82 +215,47 @@ aldvmm.sc <- function(par,
   if (dist == "normal") {
     
     # Density of values above maximum
-    dCds <- lapply(names(parlist[[lcoef[1]]]), function (x) {
-      stats::dnorm((psi1 - xb[[x]]) / exp(parlist[[lcpar]][[x]]), 
-                   mean = 0, 
-                   sd   = 1) * 
-        ((psi1 - xb[[x]]) / exp(parlist[[lcpar]][[x]])^2) *
-        exp(parlist[[lcpar]][[x]])
-    })
-    names(dCds) <- names(parlist[[lcoef[1]]])
+    dC_ds_vec <- stats::dnorm(z_C) * z_C / sigma_rep
+    dC_ds_mat <- matrix(dC_ds_vec, n, ncmp)
     
     # Density of values below minimum
-    dDds <- lapply(names(parlist[[lcoef[1]]]), function (x) {
-      stats::dnorm((psi2 - xb[[x]]) / exp(parlist[[lcpar]][[x]]), 
-                   mean = 0, 
-                   sd   = 1) * 
-        (-(psi2 - xb[[x]]) / exp(parlist[[lcpar]][[x]])^2) *
-        exp(parlist[[lcpar]][[x]])
-    })
-    names(dDds) <- names(parlist[[lcoef[1]]])
+    dD_ds_vec <- -stats::dnorm(z_D) * z_D / sigma_rep
+    dD_ds_mat <- matrix(dD_ds_vec, n, ncmp)
     
-    # Density of values within range
-    dEds <- lapply(names(parlist[[lcoef[1]]]), function (x) {
-      (stats::dnorm((y - xb[[x]]) / exp(parlist[[lcpar]][[x]]), 
-                    mean = 0, 
-                    sd   = 1) * (y - xb[[x]])^2 / exp(parlist[[lcpar]][[x]])^4  - 
-         stats::dnorm((y - xb[[x]]) / exp(parlist[[lcpar]][[x]]), 
-                      mean = 0, 
-                      sd   = 1) / exp(parlist[[lcpar]][[x]])^2) *
-        exp(parlist[[lcpar]][[x]])
-    })
-    names(dEds) <- names(parlist[[lcoef[1]]])
+    # Derivative of density of observed value
+    dE_ds_vec <- stats::dnorm(z_E) * (z_E^2 - 1) / (sigma_rep^2)
+    dE_ds_mat <- matrix(dE_ds_vec, n, ncmp)
     
-    # Density of observed values
-    dBds <- lapply(names(parlist[[lcoef[1]]]), function (x) {
-      as.numeric(y >  psi1) * dCds[[x]] + 
-        as.numeric(y <= psi2) * dDds[[x]] + 
-        as.numeric(y <= psi1 & y > psi2) * dEds[[x]]
-    })
-    names(dBds) <- names(parlist[[lcoef[1]]])
+    # Derivative of density of observed value
+    dB_ds_mat <- dC_ds_mat * m_above + dD_ds_mat * m_below + dE_ds_mat * m_inside
     
-    # Derivative of likelihood
-    dLds <- lapply(names(parlist[[lcoef[1]]]), function (x) {
-      sweep(matrix(dBds[[x]], ncol = length(lcpar)), 
-            MARGIN = 1,
-            A[[x]], 
-            `*`)
-    })
-    names(dLds) <- names(parlist[[lcoef[1]]])
+    # Transform to ln(sigma)
+    sigma_mat <- matrix(sigma, nrow = n, ncol = ncmp, byrow = TRUE)
+    dB_dlns_mat <- dB_ds_mat * sigma_mat
     
     # Derivative of log-likelihood
-    dllds <- lapply(1:length(parlist[[lcoef[1]]]), function (x) {
-      tmpmat <- sweep(dLds[[x]], 
-                      MARGIN = 1,
-                      L, 
-                      `/`)
-      colnames(tmpmat) <- lcpar
-      rownames(tmpmat) <- rownames(X[[1]])
-      return(tmpmat)
-    })
-    names(dllds) <- names(parlist[[lcoef[1]]])
+    dll_ds_list <- vector("list", ncmp)
+    for (j in seq_len(ncmp)) {
+      dll_ds_list[[j]] <- (A[, j] * dB_dlns_mat[, j]) / L
+    }
     
+    dll_ds_mat <- do.call(cbind, dll_ds_list)
   }
   
-  #----------------------------------------------------------------------------
   # Collect and return
-  #----------------------------------------------------------------------------
+  #-------------------
   
-  outmat <- -cbind(do.call("cbind", dlldb), 
-                   do.call("cbind", dlldd), 
-                   do.call("cbind", dllds))
+  # Negative log-likelihood gradients
+  outmat <- -(cbind(dll_db_mat, dll_dd_mat, dll_ds_mat))
   
   colnames(outmat) <- aldvmm.getnames(X,
                                       names = c(lcoef, lcpar),
                                       lcoef = lcoef,
                                       lcmp  = lcmp,
                                       lcpar = lcpar,
-                                      ncmp = ncmp)
+                                      ncmp  = ncmp)
+  
+  rownames(outmat) <- rownames(X[[lcoef[1]]])
   
   return(outmat)
 }

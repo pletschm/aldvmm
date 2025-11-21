@@ -37,3 +37,9 @@
 
 # aldvmm 0.8.8
 * The optimizer package was changed from "optimr" to "optimx". The functionality remains identical.
+
+# aldvmm 0.9.0
+* The functions aldvmm.ll() and aldvmm.sc() were vectorized to increase readability and computation speed.
+* The functions aldvmm.ll() and aldvmm.sc() include a numerically stabilized multinomial logit density to improve convergence.
+* The pdf vignette was removed.
+* The html vignette was updated to discuss the numerical properties and results of the stabilized likelihood and gradient functions.

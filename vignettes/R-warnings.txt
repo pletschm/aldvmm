@@ -1,1 +1,2 @@
-The label(s) tab:tab-sum-mod1-bfgs not found
+In readChar(con, 5L, useBytes = TRUE) :
+  cannot open compressed file 'fit1_all_norm.RData', probable reason 'No such file or directory'
