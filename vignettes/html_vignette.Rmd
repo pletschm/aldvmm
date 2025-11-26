@@ -1389,7 +1389,7 @@ rm(tab_comp_coef, tab_sum_tobit)
 
 ```
 
-The coefficients of the single-component model (table \@ref(tab:tab-sum-tobit)) are relatively similar to the parameters in the first component of the poorly converged model 1 from the "CG" and "Rcgmin" algorithms (table \@ref(tab:tab-comp-coef)). The Akaike information criterion amounts to -`r textout[["tobit"]][["aic"]]` which is smaller than the Akaike information criterion of the "nlminb" solution of the two-component model (`r gsub("-", "", textout[["mod1bfgs"]][["aic"]])`) and thus suggests worse fit of the single-component model even when model complexity is accounted for. Larger values of the log-likelihood (ll), the Akaike information criterion (AIC), and the Bayesian information criterion (BIC) suggest better fit. The summary table returned by the generic function `summary()` reports negative goodness of fit measures.
+The coefficients of the single-component model (table \@ref(tab:tab-sum-tobit)) are relatively similar to the parameters in the first component of the poorly converged model 1 from the "CG" and "Rcgmin" algorithms (table \@ref(tab:tab-comp-coef)). The Akaike information criterion amounts to -`r textout[["tobit"]][["aic"]]` which is smaller than the Akaike information criterion of the "nlminb" solution of the two-component model (`r gsub("-", "", textout[["mod1bfgs"]][["aic"]])`) and thus suggests worse fit of the single-component model even when model complexity is accounted for.
 
 ```{r tab-sum-tobit, echo = FALSE, results = "asis"}
 
@@ -1438,7 +1438,7 @@ rm(tab_sum_mod2)
 
 ```
 
-The Akaike information criterion of model 2 fitted using the "nlminb" method and user-defined starting values amounts to `r gsub("-", "", textout[["mod2"]][["aic"]])` which is larger than the Akaike information criterion of model 1 (`r gsub("-", "", textout[["mod1bfgs"]][["aic"]])`). The larger Akaike information criterion suggests that the increase in the log-likelihood after inclusion of a coefficient of the Oxford Hip Score on the probability of component membership is sufficiently large to justify the extra parameter. Larger values of the log-likelihood (ll), the Akaike information criterion (AIC), and the Bayesian information criterion (BIC) suggest better fit. The summary table returned by the generic function `summary()` reports negative goodness of fit measures.
+The Akaike information criterion of model 2 fitted using the "nlminb" method and user-defined starting values amounts to `r gsub("-", "", textout[["mod2"]][["aic"]])` which is larger than the Akaike information criterion of model 1 (`r gsub("-", "", textout[["mod1bfgs"]][["aic"]])`). The larger Akaike information criterion suggests that the increase in the log-likelihood after inclusion of a coefficient of the Oxford Hip Score on the probability of component membership is sufficiently large to justify the extra parameter.
 
 ```{r tab-sum-mod2, echo = FALSE, results = "asis"}
 
@@ -1874,7 +1874,7 @@ The gradient of the log-likelihood function with respect to all model parameters
 \Delta = \left[\frac{\partial ll}{\partial \delta_{1}}, ..., \frac{\partial ll}{\partial \delta_{C}}, \frac{\partial ll}{\partial \beta_{1}}, ..., \frac{\partial ll}{\partial \beta_{C}}, \frac{\partial ll}{\partial \sigma_{1}}, ..., \frac{\partial ll}{\partial \sigma_{C}}\right]
 \end{equation}
 
-The first derivative of the log-likelihood with respect to the parameters $delta_{c}$ must consider the first derivative of all elements of the denominator and depends on whether the elements are of the same component ($s = c$) or not ($s \neq c$).
+The first derivative of the log-likelihood with respect to the parameters $\delta_{c}$ must consider the first derivative of all elements of the denominator and depends on whether the elements are of the same component ($s = c$) or not ($s \neq c$).
 
 \begin{equation}
 \label{eq:dlldd}
