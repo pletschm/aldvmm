@@ -39,6 +39,11 @@ Useful links:
 \author{
 \strong{Maintainer}: Mark Pletscher \email{pletscher.mark@gmail.com} [copyright holder]
 
+Authors:
+\itemize{
+  \item Mark Pletscher \email{pletscher.mark@gmail.com} [copyright holder]
+}
+
 Other contributors:
 \itemize{
   \item Achim Zeileis \email{Achim.Zeileis@R-project.org} (\href{https://orcid.org/0000-0003-0918-3766}{ORCID}) [contributor]

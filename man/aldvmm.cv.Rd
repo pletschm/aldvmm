@@ -85,4 +85,17 @@ a numerical approximation of the covariance matrix of parameter estimates.
   \ifelse{html}{\code{\link[numDeriv]{hessian}}}{\code{numDeriv::hessian()}}
   to calculate the hessian matrix of the log-likelihood function supplied to
   \code{'ll'} at parameter values supplied to \code{'par'}.
+
+  In case the Hessian matrix is near-singular and
+  \ifelse{base}{\code{\link[base]{solve}}}{\code{solve()}} is a \code{NA}
+  matrix, \ifelse{html}{\code{\link[aldvmm]{aldvmm.cv}}}{\code{aldvmm.cv()}}
+  falls back to Moore-Penrose regularization (Penrose, 1955) implemented by singular value
+  decomposition using \ifelse{base}{\code{\link[base]{svd}}}{\code{svd()}}.
+  If the Moore-Penrose regularization also fails, a \code{NA} matrix is
+  returned.
+}
+\references{
+Penrose, R. (1955, July). A generalized inverse for matrices. In
+  Mathematical proceedings of the Cambridge philosophical society (Vol. 51,
+  No. 3, pp. 406-413). Cambridge University Press.
 }

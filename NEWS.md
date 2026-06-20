@@ -43,3 +43,6 @@
 * The functions aldvmm.ll() and aldvmm.sc() include a numerically stabilized multinomial logit density to improve convergence.
 * The pdf vignette was removed.
 * The html vignette was updated to discuss the numerical properties and results of the stabilized likelihood and gradient functions.
+
+# aldvmm 0.9.1
+* The function aldvmm.cv() now uses Moore-Penrose regularization for calculating covariance matrices in case of near-singular Hessians.

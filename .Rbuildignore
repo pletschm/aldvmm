@@ -15,3 +15,5 @@
 ^\.travis\.yml$
 ^\.github$
 ^codecov\.yml$
+^\.positai$
+^\.claude$
