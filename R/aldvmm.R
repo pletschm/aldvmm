@@ -520,6 +520,16 @@ aldvmm <- function(formula,
                         hessian = FALSE,
                         control = optim.control)
   
+  # Convergence check
+  #------------------
+  
+  if (fit[["convergence"]] != 0) {
+    warning("Optimization did not converge (convergence code ",
+            fit[["convergence"]], ").\n",
+            "Message: ", fit[["message"]],
+            call. = FALSE)
+  }
+  
   # Obtain covariance matrix, standard errors, sign. levels and conf. limits
   #-------------------------------------------------------------------------
   
